@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { query } from '@/lib/db-pool';
-import { logAudit } from '@/lib/escrow';
 import { verifyWebhookSignature, isKnownRazorpayIp } from '@/lib/razorpay';
 import { handleWorkflowPaymentEvent } from '@/lib/deal-payment-events';
 
@@ -81,8 +80,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     // ---- Build-spec deal workflow (commission / advance / final) ----------
-    // Runs first and independently: a workflow order id never matches an
-    // escrow order id, so the two paths cannot both claim the same payment.
+    // Only orders this app created as workflow stages are matched, by order
+    // id, so an unrelated payment is ignored rather than mis-claimed.
     if (
       event === 'payment.captured' ||
       event === 'payment.authorized' ||
@@ -107,11 +106,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (event === 'payout.processed') {
       const transferId = payload.payout?.id || payload.payout?.entity?.id;
       if (transferId) {
-        await query(
-          `UPDATE milestone_releases SET status = 'completed', completed_at = NOW()
-           WHERE razorpay_transfer_id = $1 AND status = 'processing'`,
-          [transferId]
-        );
         // The worker leaves a sent payout PROCESSING; only this webhook
         // confirms it. Matched on reference_id too, because that is the payout
         // row's own id and survives a response we never recorded.
@@ -125,32 +119,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               AND status IN ('PENDING', 'PROCESSING')`,
           [transferId, reference]
         );
-
-        const release = await query(
-          'SELECT deal_id FROM milestone_releases WHERE razorpay_transfer_id = $1',
-          [transferId]
-        );
-        if (release.rows[0]) {
-          await logAudit(release.rows[0].deal_id, null, 'system', 'payout_completed', {
-            transferId, status: 'completed',
-          });
-        }
       }
     }
 
     // Payout failed
     if (event === 'payout.failed') {
       const transferId = payload.payout?.id || payload.payout?.entity?.id;
-      const errorMsg = payload.payout?.failure_reason || 'Unknown failure';
-      const errorCode = payload.payout?.failure_code || 'UNKNOWN';
+      const errorMsg = payload.payout?.failure_reason
+        || payload.payout?.entity?.failure_reason || 'Unknown failure';
 
       if (transferId) {
-        const release = await query(
-          `UPDATE milestone_releases SET status = 'failed', failure_reason = $2, retry_count = retry_count + 1
-           WHERE razorpay_transfer_id = $1 RETURNING deal_id`,
-          [transferId, errorMsg]
-        );
-
         const failedRef = payload.payout?.reference_id
           || payload.payout?.entity?.reference_id || '';
         await query(
@@ -160,42 +138,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                OR ($3 <> '' AND id::text = $3)`,
           [transferId, errorMsg, failedRef]
         );
-
-        await query(
-          `INSERT INTO payout_retry_log (milestone_release_id, attempt, error_message, error_code)
-           SELECT id, retry_count, $2, $3 FROM milestone_releases WHERE razorpay_transfer_id = $1`,
-          [transferId, errorMsg, errorCode]
-        );
-
-        if (release.rows[0]) {
-          await logAudit(release.rows[0].deal_id, null, 'system', 'payout_failed', {
-            transferId, error: errorMsg, errorCode,
-          });
-        }
-      }
-    }
-
-    // Payment captured — escrow fallback; primary flow is confirmEscrowFunding
-    if (event === 'payment.captured') {
-      const orderId = payload.payment?.entity?.order_id || payload.payment?.order_id;
-      const paymentId = payload.payment?.entity?.id || payload.payment?.id;
-
-      if (orderId && paymentId) {
-        const escrow = await query(
-          `SELECT deal_id FROM deal_escrow WHERE razorpay_order_id = $1 AND status = 'pending'`,
-          [orderId]
-        );
-
-        if (escrow.rows[0]) {
-          const dealId = escrow.rows[0].deal_id;
-          await query(
-            `UPDATE deal_escrow SET razorpay_payment_id = $2, status = 'completed', funded_at = NOW()
-             WHERE razorpay_order_id = $1`,
-            [orderId, paymentId]
-          );
-
-          await logAudit(dealId, null, 'system', 'escrow_funded_webhook', { orderId, paymentId });
-        }
+        console.error('[razorpay-webhook] payout failed', { transferId, errorMsg });
       }
     }
 
