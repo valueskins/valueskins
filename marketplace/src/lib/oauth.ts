@@ -167,6 +167,13 @@ export async function exchangeInstagramCode(code: string): Promise<any> {
     code,
   });
 
+  console.log('[oauth] Exchanging Instagram code', {
+    clientId: INSTAGRAM_CLIENT_ID.slice(0, 8) + '...',
+    redirectUri: INSTAGRAM_REDIRECT_URI,
+    hasCode: !!code,
+    hasSecret: !!INSTAGRAM_CLIENT_SECRET,
+  });
+
   const response = await fetch('https://api.instagram.com/oauth/access_token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -175,13 +182,24 @@ export async function exchangeInstagramCode(code: string): Promise<any> {
 
   if (!response.ok) {
     const detail = await response.text().catch(() => '');
+    let errorData = null;
+    try {
+      errorData = JSON.parse(detail)?.error;
+    } catch (e) {
+      // Detail is plain text, not JSON
+    }
+
     console.error('[oauth] Instagram token exchange failed', {
       status: response.status,
+      statusText: response.statusText,
       hasClientSecret: Boolean(INSTAGRAM_CLIENT_SECRET),
+      clientId: INSTAGRAM_CLIENT_ID.slice(0, 8) + '...',
       redirectUri: INSTAGRAM_REDIRECT_URI,
-      instagram: detail.slice(0, 500),
+      errorCode: errorData?.code,
+      errorMessage: errorData?.message || detail.slice(0, 500),
+      fullResponse: detail.slice(0, 500),
     });
-    throw new Error('Instagram token exchange failed');
+    throw new Error(`Instagram token exchange failed: ${response.status} ${errorData?.message || detail.slice(0, 100)}`);
   }
   return response.json();
 }
