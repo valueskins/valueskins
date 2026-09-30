@@ -1,0 +1,221 @@
+// The open-deal feed, with the apply control the app was missing.
+//
+// Spec: every open deal is visible to every creator, with no niche filtering
+// and no negotiation. Applying is one action; if the amount does not suit, the
+// creator simply does not apply.
+//
+// Live updates arrive over SSE, but that bus is per-process on serverless, so a
+// broadcast only reaches creators connected to the same instance. The `since`
+// cursor is what makes the feed correct: on reconnect, and on a timer, we ask
+// for anything published after the newest deal we hold. The push is an
+// optimisation, never the source of truth.
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { C, withAlpha } from '@/theme/colors';
+import { getFeed, applyToDeal, financials, isOk, type FeedDeal } from '@/lib/deal-api';
+
+const RECONCILE_MS = 30_000;
+
+export default function BrowseDealsPage() {
+  const router = useRouter();
+  const [deals, setDeals] = useState<FeedDeal[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [applying, setApplying] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+  const cursor = useRef<string | null>(null);
+
+  const loadInitial = useCallback(async () => {
+    const res = await getFeed({ limit: 50 });
+    if (!isOk(res)) {
+      setError(res.status === 401 ? 'Sign in to browse deals.' : res.error);
+      setLoading(false);
+      return;
+    }
+    setDeals(res.data.deals);
+    cursor.current = res.data.cursor;
+    setError(null);
+    setLoading(false);
+  }, []);
+
+  // Asks only for what is newer than the newest deal held, then prepends it.
+  const reconcile = useCallback(async () => {
+    if (!cursor.current) return void loadInitial();
+    const res = await getFeed({ since: cursor.current, limit: 50 });
+    if (!isOk(res) || res.data.deals.length === 0) return;
+    setDeals((prev) => {
+      const seen = new Set(prev.map((d) => d.id));
+      const fresh = res.data.deals.filter((d) => !seen.has(d.id));
+      return fresh.length ? [...fresh, ...prev] : prev;
+    });
+    if (res.data.cursor) cursor.current = res.data.cursor;
+  }, [loadInitial]);
+
+  useEffect(() => { void loadInitial(); }, [loadInitial]);
+
+  useEffect(() => {
+    const timer = setInterval(() => { void reconcile(); }, RECONCILE_MS);
+
+    // The push just triggers an early reconcile; the event body is not trusted
+    // as the new state.
+    let source: EventSource | null = null;
+    try {
+      source = new EventSource('/api/realtime/stream');
+      source.addEventListener('new-deal', () => { void reconcile(); });
+      // A dropped stream is not an error worth showing: the timer still covers it.
+      source.onerror = () => source?.close();
+    } catch {
+      /* no SSE support: the timer is enough */
+    }
+
+    return () => {
+      clearInterval(timer);
+      source?.close();
+    };
+  }, [reconcile]);
+
+  useEffect(() => {
+    if (!notice) return;
+    const t = setTimeout(() => setNotice(null), 5000);
+    return () => clearTimeout(t);
+  }, [notice]);
+
+  async function apply(deal: FeedDeal) {
+    setApplying(deal.id);
+    const res = await applyToDeal(deal.id);
+    setApplying(null);
+    if (!isOk(res)) {
+      setNotice(res.error);
+      return;
+    }
+    setNotice(`Applied to "${deal.title}".`);
+    // Reflect it immediately; the next reconcile confirms from the server.
+    setDeals((prev) =>
+      prev.map((d) => (d.id === deal.id ? { ...d, already_applied: true } : d))
+    );
+  }
+
+  const card: React.CSSProperties = {
+    background: C.surface,
+    border: `1px solid ${C.border}`,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+  };
+
+  return (
+    <>
+      <Head><title>Browse deals — ValueSkins</title></Head>
+      <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '20px 16px 48px' }}>
+        <div style={{ maxWidth: 640, margin: '0 auto' }}>
+          <h1 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 4px' }}>Open deals</h1>
+          <p style={{ fontSize: 12, color: C.outline, margin: '0 0 16px' }}>
+            Every open deal, no filtering. The amount is final — apply only if it works for you.
+          </p>
+
+          {notice && (
+            <div role="status" style={{ ...card, background: withAlpha(C.accent, 0x14), borderColor: C.accent, fontSize: 12 }}>
+              {notice}
+            </div>
+          )}
+
+          {loading && <div style={{ fontSize: 13, color: C.outline }}>Loading…</div>}
+
+          {error && (
+            <div role="alert" style={{ ...card, borderColor: C.error, fontSize: 13 }}>
+              {error}
+            </div>
+          )}
+
+          {!loading && !error && deals.length === 0 && (
+            <div style={{ ...card, fontSize: 13, color: C.outline }}>
+              No open deals right now. New ones appear here as brands post them.
+            </div>
+          )}
+
+          {deals.map((deal) => {
+            const budget = Number(deal.budget) || 0;
+            const F = financials(budget);
+            const closed = !deal.applications_open;
+            return (
+              <div key={deal.id} style={card}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginBottom: 6 }}>
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: 14, fontWeight: 700 }}>{deal.title}</div>
+                    <div style={{ fontSize: 11, color: C.outline }}>
+                      @{deal.brand_username}
+                      {deal.brand_followers ? ` · ${deal.brand_followers.toLocaleString()} followers` : ''}
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+                    {/* What the creator actually receives, not the gross budget:
+                        showing the budget alone overstates it by the commission. */}
+                    <div style={{ fontSize: 14, fontWeight: 700 }}>
+                      ₹{F.creatorTotal.toLocaleString('en-IN')}
+                    </div>
+                    <div style={{ fontSize: 10, color: C.outline }}>you receive</div>
+                  </div>
+                </div>
+
+                <div style={{ fontSize: 12, color: C.textMuted, lineHeight: 1.5, marginBottom: 10, whiteSpace: 'pre-wrap' }}>
+                  {deal.description.length > 260
+                    ? `${deal.description.slice(0, 260)}…`
+                    : deal.description}
+                </div>
+
+                <div style={{ display: 'flex', gap: 14, marginBottom: 12, flexWrap: 'wrap' }}>
+                  {[
+                    ['Apply by', deal.application_deadline],
+                    ['Deliver by', deal.content_upload_deadline],
+                  ].map(([k, v]) => (
+                    <div key={String(k)}>
+                      <div style={{ fontSize: 10, color: C.outline, textTransform: 'uppercase' }}>{k}</div>
+                      <div style={{ fontSize: 12 }}>
+                        {v ? new Date(String(v)).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : '—'}
+                      </div>
+                    </div>
+                  ))}
+                  <div>
+                    <div style={{ fontSize: 10, color: C.outline, textTransform: 'uppercase' }}>Applicants</div>
+                    <div style={{ fontSize: 12 }}>{Number(deal.application_count) || 0}</div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button
+                    disabled={deal.already_applied || closed || applying === deal.id}
+                    onClick={() => void apply(deal)}
+                    style={{
+                      flex: 1,
+                      background: deal.already_applied || closed ? C.border : C.primary,
+                      border: 'none', borderRadius: 8, padding: '10px',
+                      color: deal.already_applied || closed ? C.text : C.onPrimary,
+                      fontWeight: 600, fontSize: 13,
+                      cursor: deal.already_applied || closed ? 'not-allowed' : 'pointer',
+                      opacity: deal.already_applied || closed ? 0.6 : 1,
+                    }}
+                  >
+                    {deal.already_applied ? 'Applied'
+                      : closed ? 'Applications closed'
+                        : applying === deal.id ? 'Applying…'
+                          : 'Apply'}
+                  </button>
+                  <button
+                    onClick={() => router.push(`/deals/${deal.id}`)}
+                    style={{
+                      background: 'none', border: `1px solid ${C.border}`, borderRadius: 8,
+                      padding: '10px 14px', color: C.text, fontWeight: 600, fontSize: 13, cursor: 'pointer',
+                    }}
+                  >
+                    Details
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </>
+  );
+}
