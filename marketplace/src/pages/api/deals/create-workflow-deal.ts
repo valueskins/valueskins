@@ -67,7 +67,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     content_upload_deadline,
     deal_deadline,
   });
-  if (shouldPublish && 'error' in deadlines) {
+
+  const anyDateSupplied =
+    application_deadline || content_upload_deadline || deal_deadline;
+
+  // Validate whenever dates are given, not only when publishing. Checking only
+  // on publish let a draft be saved with a content deadline before its
+  // application deadline, and the error then surfaced much later, after the
+  // brand had moved on.
+  if ('error' in deadlines && (shouldPublish || anyDateSupplied)) {
     return res.status(400).json({ error: deadlines.error });
   }
 

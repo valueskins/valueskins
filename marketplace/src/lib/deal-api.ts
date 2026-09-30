@@ -204,6 +204,13 @@ export const getFeed = (opts?: { since?: string | null; limit?: number }) => {
   );
 };
 
+/** Takes a DRAFT live. Without this a draft could never be seen or applied to. */
+export const publishDeal = (dealId: string) =>
+  call<{ workflow_status: 'OPEN'; published_at: string }>(
+    `/api/deals/${dealId}/publish`,
+    { method: 'POST' }
+  );
+
 export const applyToDeal = (dealId: string) =>
   call<{ application_id: string; status: 'APPLIED' }>('/api/applications', {
     method: 'POST',

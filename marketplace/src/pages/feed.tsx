@@ -75,7 +75,7 @@ export default function FeedPage() {
               Discover and manage brand-creator deals with built-in messaging and collaboration tools.
             </p>
             <button
-              onClick={() => router.push('/deals/feed')}
+              onClick={() => router.push('/demo/marketplace')}
               style={buttonStyle}
             >
               View Deals

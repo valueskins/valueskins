@@ -18,20 +18,13 @@ import { useDealSync, type DealState, type DealRoomPhase, type SharedApplication
 import { useRealtimeRoom } from '@/features/valueskins/core/realtime/useRealtimeRoom';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { apiFetch, backendUrl } from '@/lib/backend';
+// Only what this page actually uses. The rest of the workflow client
+// (applyToDeal, decideApplication, uploadContent, requestRevision,
+// approveContent, cancelDeal) is deliberately not imported here: this page has
+// no UI to hang those on, because it was built for the brand-offers model and
+// has no "apply" control at all. See the gap list in Things-Commented-Out.md.
 import {
   runPaymentStage,
-  createDeal as apiCreateDeal,
-  applyToDeal as apiApplyToDeal,
-  decideApplication as apiDecideApplication,
-  uploadContent as apiUploadContent,
-  requestRevision as apiRequestRevision,
-  approveContent as apiApproveContent,
-  cancelDeal as apiCancelDeal,
-  getDealApplications as apiGetDealApplications,
-  isOk,
-  isErr,
-  nextAction as workflowNextAction,
-  canCancelDeal,
   financials as workflowFinancials,
   type WorkflowStatus,
 } from '@/lib/deal-api';
@@ -4970,10 +4963,14 @@ bio: profileBio
                                                   </div>
                                                 )}
                                                 <div style={{ background:C.bg, border:`1px solid ${C.border}`, borderRadius:'8px', padding:'10px', marginBottom:'10px', textAlign:'left' }}>
-                                                  <div style={{ fontSize:'0.75rem', fontWeight:700, color:C.textMuted, textTransform:'uppercase', letterSpacing:'0.4px', marginBottom:'6px' }}>Escrow Release</div>
+                                                  {/* Was "Escrow Release" with a two-stage release from a
+                                                      held pool. There is no pool: the brand makes three
+                                                      direct payments and the creator is paid out of each. */}
+                                                  <div style={{ fontSize:'0.75rem', fontWeight:700, color:C.textMuted, textTransform:'uppercase', letterSpacing:'0.4px', marginBottom:'6px' }}>Payment Schedule</div>
                                                   {[
-                                                    { label:'Advance', status:'Released on deal acceptance' },
-                                                    { label:'Approval milestone', status:'Released on brand approval' },
+                                                    { label:'Commission', status:'Paid by brand on confirmation' },
+                                                    { label:'Advance (30%)', status:'Paid to you after the commission' },
+                                                    { label:'Final (70%)', status:'Paid to you on approval' },
                                                   ].map(m => (
                                                     <div key={m.label} style={{ display:'flex', alignItems:'center', gap:'6px', padding:'3px 0', fontSize:'0.75rem' }}>
                                                       <div style={{ width:'8px', height:'8px', borderRadius:'50%', background:C.success }} />
