@@ -133,11 +133,32 @@ function toPayoutError(result: RawResult, context: string): PayoutError {
     return new PayoutError('Payment provider authentication failed', 'auth');
   }
 
-  // Verified against the live test API: a Razorpay account without RazorpayX
-  // returns exactly this for /payouts, with a 400 rather than a 403.
-  if (/not available|not found on the server/i.test(description)) {
+  // A missing or wrong RazorpayX account is a configuration problem, not bad
+  // caller data, so it must classify as not_enabled. This distinction decides
+  // whether the worker holds a payout or fails it permanently: Razorpay reports
+  // it as a plain 400, which would otherwise fall through to 'validation' below
+  // and mark a creator's payout FAILED for a reason a retry would fix.
+  //
+  // Verified against the live test API — these are the actual strings:
+  //   "The account number field is required."
+  //   "The RazorpayX Account number is invalid."
+  //   "Access to requested resource not available"
+  if (
+    /razorpayx account number/i.test(description) ||
+    /account number field is required/i.test(description) ||
+    /not available|not found on the server/i.test(description)
+  ) {
     return new PayoutError(
-      'Payouts are not enabled on this Razorpay account',
+      'Payouts are not available: RazorpayX is not set up on this account',
+      'not_enabled'
+    );
+  }
+
+  // Razorpay Route is a separate product and is gated by a feature flag that
+  // Razorpay support enables. Unlike payouts it needs no RazorpayX account.
+  if (/route feature not enabled/i.test(description)) {
+    return new PayoutError(
+      'Razorpay Route is not enabled on this account',
       'not_enabled'
     );
   }
@@ -314,10 +335,21 @@ export async function sendPayout(
   return { payoutId, status: String(result.body?.status || 'queued') };
 }
 
-/** True when this account can actually move money out. */
+/**
+ * True when this account can actually move money out.
+ *
+ * The account number must be included: /payouts rejects a request without it
+ * regardless of whether RazorpayX is set up, so probing bare would report
+ * "unavailable" even on a working account.
+ */
 export async function payoutsAvailable(): Promise<boolean> {
+  const sourceAccount = process.env.RAZORPAYX_ACCOUNT_NUMBER;
+  if (!sourceAccount) return false;
   try {
-    const result = await request('GET', '/payouts?count=1');
+    const result = await request(
+      'GET',
+      `/payouts?account_number=${encodeURIComponent(sourceAccount)}&count=1`
+    );
     return result.status === 200;
   } catch {
     return false;
