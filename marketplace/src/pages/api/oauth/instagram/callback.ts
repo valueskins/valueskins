@@ -1,3 +1,5 @@
+// v1 Launch: Instagram OAuth login without API calls
+// Account type auto-detected from Instagram token response
 import type { NextApiRequest, NextApiResponse } from 'next';
 import crypto from 'crypto';
 import { exchangeInstagramCode } from '@/lib/oauth';
