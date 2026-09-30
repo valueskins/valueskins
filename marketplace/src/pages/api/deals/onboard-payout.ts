@@ -76,7 +76,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     creatorId: userId,
     paymentProvider: 'razorpay',
     payoutAccountId: fundAccount.data.id,
-    verificationStatus: fundAccount.data?.status === 'verified' ? 'verified' : 'pending',
+    // Razorpay does not independently verify a new fund account, and its
+    // response has no `status` field, so a freshly linked account is always
+    // pending until a payout to it succeeds.
+    verificationStatus: 'pending',
     lastFourDigits: accountNumber.slice(-4),
     beneficiaryName: beneficiaryName || accountHolderName,
   });
@@ -92,7 +95,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   return res.status(200).json({
     success: true,
     payoutAccountId: fundAccount.data.id,
-    verificationStatus: fundAccount.data?.status === 'verified' ? 'verified' : 'pending',
+    verificationStatus: 'pending',
     isDefault,
     message: 'Bank account linked. Payouts will be sent to this account once verified.',
   });

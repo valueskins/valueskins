@@ -112,10 +112,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
            WHERE razorpay_transfer_id = $1 AND status = 'processing'`,
           [transferId]
         );
+        // The worker leaves a sent payout PROCESSING; only this webhook
+        // confirms it. Matched on reference_id too, because that is the payout
+        // row's own id and survives a response we never recorded.
+        const reference = payload.payout?.reference_id
+          || payload.payout?.entity?.reference_id || '';
         await query(
-          `UPDATE payouts SET status = 'CONFIRMED', updated_at = NOW()
-           WHERE razorpay_payout_id = $1 AND status = 'PENDING'`,
-          [transferId]
+          `UPDATE payouts SET status = 'CONFIRMED', razorpay_payout_id = $1,
+                  claimed_at = NULL, updated_at = NOW()
+            WHERE (razorpay_payout_id = $1
+                   OR ($2 <> '' AND id::text = $2))
+              AND status IN ('PENDING', 'PROCESSING')`,
+          [transferId, reference]
         );
 
         const release = await query(
@@ -143,10 +151,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           [transferId, errorMsg]
         );
 
+        const failedRef = payload.payout?.reference_id
+          || payload.payout?.entity?.reference_id || '';
         await query(
-          `UPDATE payouts SET status = 'FAILED', failure_reason = $2, updated_at = NOW()
-           WHERE razorpay_payout_id = $1`,
-          [transferId, errorMsg]
+          `UPDATE payouts SET status = 'FAILED', failure_reason = $2,
+                  claimed_at = NULL, updated_at = NOW()
+            WHERE razorpay_payout_id = $1
+               OR ($3 <> '' AND id::text = $3)`,
+          [transferId, errorMsg, failedRef]
         );
 
         await query(

@@ -74,6 +74,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
   }
 
+  // Payout processing state (007). Depends on 006's payouts table.
+  try {
+    const payoutPath = path.join(
+      process.cwd(), 'src', 'lib', 'migrations', '007_payout_processing.sql'
+    );
+    const ran = await runSqlStatements(fs.readFileSync(payoutPath, 'utf-8'));
+    results.push({
+      name: `007_payout_processing.sql (${ran} statements)`,
+      success: true,
+    });
+  } catch (err: any) {
+    allPassed = false;
+    results.push({
+      name: '007_payout_processing.sql',
+      success: false,
+      error: err.message,
+    });
+  }
+
   // Run escrow-v2 migration SQL
   try {
     const sqlPath = path.join(process.cwd(), 'src', 'lib', 'migrations-escrow-v2.sql');
