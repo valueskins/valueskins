@@ -37,54 +37,63 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // User enters username/followers/bio manually in onboarding.
     // Once Meta approves v2, replace this with getInstagramUserInfo() to auto-fetch.
 
-    // 1. Exchange auth code for access token (proves user controls the IG account)
+    // 1. Exchange auth code for access token
+    // The response includes user_id + account_type (no extra API call needed)
     const short = await exchangeInstagramCode(code);
     if (!short.access_token || !short.user_id) {
       return res.status(400).json({ error: 'invalid_instagram_response' });
     }
 
     const instagramUserId = String(short.user_id);
-    const username = `ig_${instagramUserId}`; // Placeholder; user will set real username in onboarding
 
-    console.log('[oauth] Instagram login verified', { instagramUserId });
+    // Auto-detect role from Instagram account_type (in token response, no API call)
+    const accountType = (short.account_type || '').toUpperCase().trim();
+    let detectedRole: 'brand' | 'creator' = 'creator'; // Default
+    if (accountType === 'BUSINESS') {
+      detectedRole = 'brand';
+    } else if (accountType.includes('CREATOR')) {
+      detectedRole = 'creator';
+    }
+
+    console.log('[oauth] Instagram login verified', {
+      instagramUserId,
+      accountType,
+      detectedRole,
+    });
 
     // 2. Check if user exists
     const existing = await query(
-      'SELECT id, onboarding_stage FROM users WHERE instagram_user_id = $1',
+      'SELECT id FROM users WHERE instagram_user_id = $1',
       [instagramUserId]
     );
 
-    let onboardingStage: string | null = null;
     let userId: number;
 
     if (existing.rows.length > 0) {
-      // Returning user
+      // Returning user - update last login
       userId = existing.rows[0].id;
-      onboardingStage = existing.rows[0].onboarding_stage ?? null;
       await query(
-        `UPDATE users SET last_login_at = NOW(), username = COALESCE(NULLIF(username, ''), $2)
-         WHERE id = $1`,
-        [userId, username]
+        'UPDATE users SET last_login_at = NOW() WHERE id = $1',
+        [userId]
       );
     } else {
       // New user - create account
-      // No role or account_type yet (both set manually in onboarding)
+      // Profile: only Instagram ID + email + auto-detected role
       const created = await query(
         `INSERT INTO users (instagram_user_id, email, username, display_name, is_active, role, onboarding_stage)
          VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
         [
           instagramUserId,
-          '', // Email collected in onboarding
-          username,
-          username,
+          '', // Email is empty; user provides it on first access
+          instagramUserId, // Username = Instagram ID for now
+          `IG User ${instagramUserId}`,
           true,
-          'creator', // Default; user can change in onboarding
-          'pending', // User must complete onboarding to set followers/bio/role
+          detectedRole, // Auto-set from account_type
+          'complete', // No onboarding needed; just go to app
         ]
       );
       if (!created.rows[0]) throw new Error('Failed to create user');
       userId = created.rows[0].id;
-      onboardingStage = 'pending';
     }
 
     // 3. Create session
@@ -105,10 +114,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       `oauth_state=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0`, // Clear one-time state
     ]);
 
-    // 4. Redirect based on onboarding status
-    return res.redirect(
-      onboardingStage === 'complete' ? '/demo/marketplace' : '/auth/onboarding'
-    );
+    // 4. Redirect to app (no onboarding needed)
+    return res.redirect('/demo/marketplace');
   } catch (error) {
     console.error('Instagram OAuth error:', error);
     return res.status(500).json({
