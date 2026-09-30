@@ -23,7 +23,21 @@ import { loadSharedState, subscribeSharedState } from '@/lib/shared-state';
 
 // ---- Types matching the demo page's DealState ----
 
+// Deal room phases.
+//
+// The negotiation phases ('counter', 'brand_considering', 'brand_countered',
+// 'brand_reviewing', 'last_offer') belong to the superseded offer/counter model.
+// ValueSkins runs "one shot kill": a creator who dislikes the price does not
+// apply, and there is no price conversation. They are kept in the union so the
+// commented-out negotiation UI still typechecks if it is restored — see
+// docs/COMMENTED_OUT_FEATURES.md — but nothing should transition into them.
 export type DealRoomPhase = 'brief' | 'offer' | 'pending' | 'counter' | 'brand_considering' | 'brand_countered' | 'brand_rejected' | 'brand_reviewing' | 'last_offer' | 'rejected' | 'chatroom' | 'formal_offer' | 'checklist' | 'accepted' | 'softhold';
+
+/** The server's nine-state workflow. This is the authority, not `phase`. */
+export type WorkflowStatus =
+  | 'DRAFT' | 'OPEN' | 'CONFIRMED' | 'COMMISSION_PAID' | 'ADVANCE_PAID'
+  | 'CONTENT_UPLOADED' | 'REVISION_REQUESTED' | 'APPROVED_FOR_FINAL_PAYMENT'
+  | 'COMPLETED' | 'CANCELLED';
 
 export type PaymentMilestoneStatus = 'pending' | 'released';
 
@@ -61,6 +75,18 @@ export type DealState = {
   // Backend IDs — populated when synced with API
   backendDealRoomId?: number;
   backendLastMessageId?: number;
+  // The real deal row's UUID, returned by /api/deals/create-workflow-deal.
+  // Required by every workflow call: the local `activeDealKey`
+  // ("creator|skin|index") identifies a deal in this browser only, and the
+  // server has never heard of it. Undefined means the deal is local-only and
+  // no payment can be taken for it.
+  serverDealId?: string;
+  // Mirror of deals.workflow_status, refreshed after each server call. The
+  // server decides this; the UI only displays it.
+  workflowStatus?: WorkflowStatus;
+  // Set when a payment has been handed to Razorpay but the webhook has not yet
+  // confirmed it, so the UI can show "confirming" instead of implying success.
+  pendingPaymentStage?: 'commission' | 'advance' | 'remaining';
   // Deal type differentiation — determines workflow (escrow vs goods vs content tracking)
   dealType?: 'paid' | 'barter' | 'c2c_paid' | 'c2c_collab';
   type?: string; // Generic type field for deal display

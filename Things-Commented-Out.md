@@ -102,3 +102,57 @@ not disabled ones — documented here only for completeness alongside the v1 cha
 
 Each disabled block carries the `[v1 COMMENTED OUT]` marker in code for quick grepping:
 `grep -rn "v1 COMMENTED OUT" marketplace/src`.
+---
+
+## 4. Escrow removed — direct three-stage payment (2026-10-01)
+
+Decision: **no escrow**. Money is not pooled and held; the brand pays in three
+separate Razorpay transactions and the creator is paid directly.
+
+Unlike sections 1–3, this one was **deleted, not commented out**, because the
+escrow backend and the new payment backend cannot both own a deal's money —
+two systems writing the same deal's state is how double payments happen. It is
+recoverable from git: see commit `bd7cf467` ("Delete the escrow system and dead
+code").
+
+### Deleted (recover with `git show bd7cf467 -- <path>`)
+
+| Path | What it was |
+|------|-------------|
+| `src/lib/escrow/escrow-engine.ts` | The escrow state machine, fund/release/approve |
+| `src/lib/migrations-escrow-v2.sql` | `deal_escrow`, `milestone_releases`, `payout_retry_log` |
+| `src/pages/api/deals/escrow.ts` | Legacy fund/release endpoint |
+| `src/pages/api/deals/agree-with-escrow.ts` | Agree + fund in one step |
+| `src/pages/api/deals/escrow-v2/` | v2 routes + auto-release and usage-rights crons |
+| `src/pages/api/deals/complete-with-release.ts` | Released escrow to the creator |
+| `src/pages/api/deals/onboard-payout.ts` | Escrow-era payout onboarding |
+| `src/pages/api/deals/payout-accounts.ts` | Escrow-era payout account list |
+| `src/pages/deals/[dealId].tsx` | The escrow deal page |
+| `src/pages/payout-onboarding.tsx` | Called the two deleted payout endpoints |
+
+Three of these were security holes rather than merely unused, so they should not
+be restored as they were:
+
+- `profile/complete-bank-details.ts` took `creator_id` from the request body with
+  **no authentication** — any caller could point any creator's earnings at their
+  own account. Replaced by `api/profile/setup-payout`, which takes identity only
+  from the session.
+- `payment/initiate-commission.ts` had no authentication and took the **amount**
+  from the client.
+- `payment/initiate-payout.ts` called an SDK method that does not exist.
+
+### Changed in place
+
+| File | What |
+|------|------|
+| `MarketplaceDemoPage.tsx` (~4113) | The "Deal accepted" escrow breakdown showed a **configurable** advance/approval split funded into escrow. Replaced with the fixed v1 split: flat 885 commission (750 + 18% GST), then 30% and 70% of the remainder. Figures come from `workflowFinancials()`, which is verified equal to the server's own helper at every budget. |
+| `MarketplaceDemoPage.tsx` (~5411) | The commission checkout posted `amount: commission * 100` to `/api/razorpay-test/*` with a **hardcoded** Razorpay key, and marked the deal paid in the browser. Now calls `runPaymentStage()`: the server derives the amount from the deal's stored budget, returns the key with the order, and the **webhook** advances the deal. The UI shows "confirming" until the status really moves. |
+| `useDealSync.ts` | `DealState` gained `serverDealId`, `workflowStatus` and `pendingPaymentStage`. The negotiation phases stay in the `DealRoomPhase` union so the commented-out UI in sections 1–3 still typechecks, but nothing transitions into them. |
+
+### Still present, pending a decision
+
+`/api/bids` and `src/pages/campaigns/*` implement **bidding**, which contradicts
+the no-negotiation rule in section 3. They were left alone because they are still
+wired into a working page (`campaigns/[id]` → `features/campaigns/CampaignDetail`,
+and `MarketplaceDemoPage` reads bid acceptance). Remove them once that flow is
+confirmed dead.

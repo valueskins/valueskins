@@ -18,6 +18,23 @@ import { useDealSync, type DealState, type DealRoomPhase, type SharedApplication
 import { useRealtimeRoom } from '@/features/valueskins/core/realtime/useRealtimeRoom';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { apiFetch, backendUrl } from '@/lib/backend';
+import {
+  runPaymentStage,
+  createDeal as apiCreateDeal,
+  applyToDeal as apiApplyToDeal,
+  decideApplication as apiDecideApplication,
+  uploadContent as apiUploadContent,
+  requestRevision as apiRequestRevision,
+  approveContent as apiApproveContent,
+  cancelDeal as apiCancelDeal,
+  getDealApplications as apiGetDealApplications,
+  isOk,
+  isErr,
+  nextAction as workflowNextAction,
+  canCancelDeal,
+  financials as workflowFinancials,
+  type WorkflowStatus,
+} from '@/lib/deal-api';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import {
   type ValueSkinMap,
@@ -812,6 +829,44 @@ export default function MarketplaceDemoPage(initialDealData?: {
     localUpdateDeal(key, updates);
     sharedUpdateDeal(key, updates);
   }, [localUpdateDeal, sharedUpdateDeal]);
+
+  /**
+   * Pulls the deal's real status from the server into local state.
+   *
+   * The server owns the workflow; this page only renders it. Called after any
+   * action that changes it, and after a payment — where it matters most,
+   * because Razorpay accepting a payment does not advance the deal. The
+   * webhook does, and it may not have landed yet, so the status here can still
+   * read COMMISSION_PAID one moment later. `pendingPaymentStage` is cleared
+   * only once the status actually moves, so the UI keeps saying "confirming"
+   * until the money is really recognised.
+   */
+  const refreshWorkflowStatus = useCallback(async (key: string | null, serverDealId?: string) => {
+    if (!key || !serverDealId) return;
+    try {
+      const res = await fetch(`/api/deals/${serverDealId}/applications`, { credentials: 'include' });
+      if (!res.ok) return;
+      const data = await res.json();
+      const status = data?.workflow_status as WorkflowStatus | undefined;
+      if (!status) return;
+      const paidStages: Record<string, WorkflowStatus> = {
+        commission: 'COMMISSION_PAID',
+        advance: 'ADVANCE_PAID',
+        remaining: 'COMPLETED',
+      };
+      const current = (dealStates as any)[key];
+      const pending = current?.pendingPaymentStage;
+      const settled = pending ? status === paidStages[pending] : false;
+      updateDeal(key, {
+        workflowStatus: status,
+        ...(settled ? { pendingPaymentStage: undefined } : {}),
+      });
+    } catch (err) {
+      // A failed refresh leaves the last known status in place rather than
+      // clearing it, so the UI degrades to stale instead of blank.
+      console.warn('[workflow] status refresh failed', (err as Error).message);
+    }
+  }, [dealStates, updateDeal]);
   const dealsLoaded = dealSync.loaded;
 
   // Active deal key — STABLE across creator/brand for two-device sync
@@ -4056,19 +4111,31 @@ bio: profileBio
                                               </div>
                                             </div>
                                           )}
-                                          <div style={{ padding: '12px', background: 'rgba(46,125,50,0.08)', borderRadius: '10px', marginBottom: '10px', border: '1px solid rgba(46,125,50,0.2)' }}>
-                                            <div style={{ fontSize: '13px', fontWeight: 700, color: C.success, marginBottom: '4px' }}>Deal accepted</div>
-                                            <div style={{ fontSize: '0.75rem', color: C.textSecondary, marginBottom: '8px' }}>Terms are locked and recorded. Chat remains open for coordination.</div>
-                                            <div style={{ fontSize: '12px', fontWeight: 700, color: C.text, marginBottom: '6px' }}>${totalPrice.toLocaleString()} total</div>
-                                            {[
-                                              { label: 'Advance', pct: advPct },
-                                              { label: 'On approval', pct: approvalPct },
-                                            ].map(r => (
-                                              <div key={r.label} style={{ fontSize: '0.75rem', color: C.textSecondary, display: 'flex', justifyContent: 'space-between', marginBottom: '2px' }}>
-                                                <span>{r.label}</span>
-                                                <span style={{ color: C.text, fontWeight: 600 }}>{r.pct}% (${Math.round(totalPrice * r.pct / 100).toLocaleString()})</span>
-                                              </div>
-                                            ))}
+                                          {/* v1 payment breakdown. Replaces the escrow block, which
+                                              showed a configurable advance/approval split funded into
+                                              escrow. The split is now fixed by the spec — a flat 885
+                                              commission, then 30% and 70% of what is left — and paid
+                                              directly to the creator, so there is nothing to configure
+                                              and no pool to hold. Figures come from the same helper the
+                                              server uses, verified equal at every budget. */}
+                                          <div style={{ padding: '12px', background: withAlpha(C.primary, 0x14), borderRadius: '10px', marginBottom: '10px', border: `1px solid ${C.border}` }}>
+                                            <div style={{ fontSize: '13px', fontWeight: 700, color: C.text, marginBottom: '4px' }}>Deal confirmed</div>
+                                            <div style={{ fontSize: '0.75rem', color: C.textSecondary, marginBottom: '8px' }}>Terms are locked and recorded. The amount is final.</div>
+                                            <div style={{ fontSize: '12px', fontWeight: 700, color: C.text, marginBottom: '6px' }}>₹{totalPrice.toLocaleString()} budget</div>
+                                            {(() => {
+                                              const F = workflowFinancials(totalPrice);
+                                              return [
+                                                { label: 'ValueSkins commission', amount: F.commissionTotal, note: 'incl. 18% GST' },
+                                                { label: 'You receive', amount: F.creatorTotal, note: '' },
+                                                { label: 'Advance (30%)', amount: F.advance, note: 'on confirmation' },
+                                                { label: 'Final (70%)', amount: F.final, note: 'on approval' },
+                                              ].map(r => (
+                                                <div key={r.label} style={{ fontSize: '0.75rem', color: C.textSecondary, display: 'flex', justifyContent: 'space-between', marginBottom: '2px' }}>
+                                                  <span>{r.label}{r.note ? ` · ${r.note}` : ''}</span>
+                                                  <span style={{ color: C.text, fontWeight: 600 }}>₹{r.amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                                </div>
+                                              ));
+                                            })()}
                                             <div style={{ marginTop: '8px', fontSize: '9px', color: C.primary, display: 'flex', alignItems: 'center', gap: '4px' }}>
                                               <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke={C.primary} strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                                               <span style={{ fontFamily: 'monospace' }}>{refId}</span> · {signedAt}
@@ -5410,99 +5477,54 @@ bio: profileBio
                             <button
                               disabled={brandPaymentInProgress}
                               onClick={async () => {
+                                // Wired to the real workflow. What changed and why:
+                                //  - was POST /api/razorpay-test/*, a test route
+                                //  - the amount was computed here and posted as
+                                //    `amount: commission * 100`, so the payer chose
+                                //    what they paid. The server now derives it from
+                                //    the deal's stored budget and we send none.
+                                //  - the Razorpay key was hardcoded in this file; it
+                                //    now arrives with the order, so test and live
+                                //    cannot drift apart.
+                                //  - the deal is no longer marked paid here. Razorpay
+                                //    accepting a payment is not the same as it having
+                                //    settled; the webhook advances the deal, and we
+                                //    refetch rather than assert.
+                                const serverDealId = (dealStates as any)[activeDealKey]?.serverDealId;
+                                if (!serverDealId) {
+                                  setPurchaseToast('This deal has not been published to the server yet.');
+                                  setTimeout(() => setPurchaseToast(null), 4000);
+                                  return;
+                                }
                                 setBrandPaymentInProgress(true);
                                 try {
-                                  // Load Razorpay script
-                                  if (!window.Razorpay) {
-                                    const script = document.createElement('script');
-                                    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-                                    script.async = true;
-                                    await new Promise((resolve, reject) => {
-                                      script.onload = resolve;
-                                      script.onerror = () => reject(new Error('Failed to load Razorpay'));
-                                      document.body.appendChild(script);
-                                    });
+                                  const outcome = await runPaymentStage(serverDealId, 'commission', {
+                                    description: `Deal commission for ${creatorName}`,
+                                    themeColor: C.primary,
+                                  });
+
+                                  if (outcome.status === 'dismissed') {
+                                    setPurchaseToast('Payment cancelled.');
+                                    setTimeout(() => setPurchaseToast(null), 3000);
+                                    return;
                                   }
-                                  
-                                  // Create order via API
-                                  const orderRes = await fetch('/api/razorpay-test/create-order', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-                                      amount: commission * 100,
-                                      currency: 'INR',
-                                      description: `Deal commission for ${creatorName}`,
-                                      notes: { dealKey: activeDealKey, dealAmount },
-                                    }),
-                                  });
-                                  
-                                  if (!orderRes.ok) throw new Error('Failed to create order');
-                                  const orderData = await orderRes.json();
-                                  
-                                  // Open Razorpay checkout
-                                  await new Promise<void>((resolve, reject) => {
-                                    const razorpay = new (window as any).Razorpay({
-                                      key: 'rzp_test_SsPlKVWGuc1wcY',
-                                      order_id: orderData.orderId,
-                                      amount: commission * 100,
-                                      currency: 'INR',
-                                      name: 'ValueSkins',
-                                      description: `Deal commission for ${creatorName}`,
-                                      theme: { color: C.primary },
-                                      handler: async (response: any) => {
-                                        try {
-                                          // Verify payment
-                                          const verifyRes = await fetch('/api/razorpay-test/verify', {
-                                            method: 'POST',
-                                            headers: { 'Content-Type': 'application/json' },
-                                            body: JSON.stringify({
-                                              orderId: orderData.orderId,
-                                              paymentId: response.razorpay_payment_id,
-                                              signature: response.razorpay_signature,
-                                            }),
-                                          });
-                                          
-                                          if (!verifyRes.ok) throw new Error('Payment verification failed');
-                                          
-                                          // Payment successful - update deal
-                                          recordFakeBankTransaction({
-                                            type: 'payment',
-                                            description: `Deal commission for ${creatorName}`,
-                                            amount: commission * 100,
-                                            reference: `commission_${activeDealKey}_${Date.now()}`,
-                                          });
-                                          
-                                          updateDeal(activeDealKey, {
-                                            phase: 'accepted',
-                                            brandApprovalPhase: 'accepted',
-                                            chatMessages: [...((dealStates as any)[activeDealKey]?.chatMessages || []), {
-                                              id: Date.now(),
-                                              sender: 'brand' as const,
-                                              text: `Brand accepted your offer of ₹${dealAmount.toLocaleString()} and paid commission. Work can now begin!`,
-                                              time: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: false }),
-                                              isoTime: new Date().toISOString(),
-                                              seen: false,
-                                            }],
-                                          });
-                                          
-                                          setShowBrandPaymentModal(false);
-                                          setBrandPaymentInProgress(false);
-                                          setPurchaseToast(`Payment of ₹${commission.toLocaleString()} verified. ${creatorName} has been notified.`);
-                                          setTimeout(() => setPurchaseToast(null), 4000);
-                                          resolve();
-                                        } catch (error) {
-                                          reject(error);
-                                        }
-                                      },
-                                      modal: {
-                                        ondismiss: () => reject(new Error('Payment cancelled')),
-                                      },
-                                    });
-                                    razorpay.open();
-                                  });
+                                  if (outcome.status === 'error') {
+                                    setPurchaseToast(outcome.error);
+                                    setTimeout(() => setPurchaseToast(null), 5000);
+                                    return;
+                                  }
+
+                                  // Accepted by Razorpay. The webhook confirms it, so
+                                  // this is "confirming", not "paid".
+                                  updateDeal(activeDealKey, { pendingPaymentStage: 'commission' });
+                                  setShowBrandPaymentModal(false);
+                                  setPurchaseToast('Payment submitted. Confirming with the bank...');
+                                  setTimeout(() => setPurchaseToast(null), 5000);
+                                  await refreshWorkflowStatus(activeDealKey, serverDealId);
                                 } catch (error) {
                                   console.error('Payment error:', error);
                                   setPurchaseToast(`Payment failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+                                } finally {
                                   setBrandPaymentInProgress(false);
                                 }
                               }}
