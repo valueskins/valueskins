@@ -72,6 +72,10 @@ export async function transaction<T>(fn: (client: PoolClient) => Promise<T>): Pr
   }
 }
 
+// db-pool re-exports this, so it must actually be exported: the re-export
+// previously resolved to undefined at runtime and tsc flagged it (TS2459).
+export { pool };
+
 export async function getPool(): Promise<Pool> {
   return pool;
 }
