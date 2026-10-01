@@ -186,29 +186,24 @@ export default function HomePage() {
           the creator is paid directly - 30% to start, the rest on approval.
         </p>
 
-        {/* Coming soon rather than a live CTA. Instagram login is blocked by a
-            Meta-side issue and creator payouts are not enabled yet, so "Get
-            Started" led to a journey that could not be finished. A dead end
-            after a click reads worse than an honest wait.
-            The run club is live and real, so it gets the one working link. */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '18px' }}>
-          <div style={{
-            display: 'inline-block', padding: '14px 32px',
-            border: `1px solid ${C.accent}`, color: C.text,
-            borderRadius: '8px', fontSize: '0.9375rem', fontWeight: 700,
-            letterSpacing: '0.02em',
+        {/* ONE call to action. Sign-in is OAuth only and the callback creates
+            the account on first use, so "Get Started" and "Sign In" were the
+            same journey wearing two labels. All routed to /auth/login. */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
+          <Link href="/auth/login" style={{
+            display: 'inline-block', padding: '14px 32px', background: C.text, color: C.bg,
+            borderRadius: '8px', fontSize: '0.9375rem', fontWeight: 700, textDecoration: 'none',
+            transition: 'transform 0.15s',
           }}>
-            Coming soon
-          </div>
-          <p style={{ fontSize: '0.8125rem', color: C.textSecondary, margin: 0, maxWidth: '420px', lineHeight: 1.6 }}>
-            We are finishing payouts and Instagram verification. In the meantime,
-            come for a run with us.
-          </p>
+            Get Started
+          </Link>
+          {/* The run club lives at its own URL so it needs no space here beyond
+              a quiet line. The product is not blacked out for it. */}
           <Link href="/run-club" style={{
-            display: 'inline-block', padding: '12px 26px', background: C.text, color: C.bg,
-            borderRadius: '8px', fontSize: '0.875rem', fontWeight: 700, textDecoration: 'none',
+            fontSize: '0.8125rem', color: C.textSecondary, textDecoration: 'underline',
+            textUnderlineOffset: '3px',
           }}>
-            Join the run club
+            Or join our Pune run club
           </Link>
         </div>
 
