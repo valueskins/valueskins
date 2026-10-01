@@ -63,14 +63,55 @@ export async function mockQuery(text: string, params?: any[]) {
   if (text.includes('INSERT INTO deals') && text.includes('RETURNING')) {
     const dealId = Math.random().toString(36).substr(2, 9);
     const now = new Date().toISOString();
+    const deal = {
+      id: dealId,
+      brand_id: params?.[0],
+      title: params?.[1],
+      description: params?.[2],
+      amount: params?.[3],
+      workflow_status: params?.[4] || 'DRAFT',
+      created_at: now,
+      updated_at: now,
+      application_deadline: params?.[5],
+      content_upload_deadline: params?.[6],
+      deal_deadline: params?.[7],
+      published_at: params?.[8],
+      status: params?.[9],
+      phase: params?.[10],
+    };
+    mockData.deals.set(dealId, deal);
     return {
       rows: [{
         id: dealId,
-        workflow_status: params?.[4] || 'DRAFT',
+        workflow_status: deal.workflow_status,
         created_at: now,
       }],
       rowCount: 1,
       command: 'INSERT',
+    };
+  }
+
+  // Handle SELECT FROM deals (single deal lookup)
+  if (text.includes('SELECT') && text.includes('FROM deals') && text.includes('WHERE id')) {
+    const dealId = params?.[0];
+    if (dealId && mockData.deals.has(dealId)) {
+      const deal = mockData.deals.get(dealId);
+      return {
+        rows: [deal],
+        rowCount: 1,
+        command: 'SELECT',
+      };
+    }
+    return { rows: [], rowCount: 0, command: 'SELECT' };
+  }
+
+  // Handle SELECT FROM deals (browse deals)
+  if (text.includes('SELECT') && text.includes('FROM deals') && !text.includes('WHERE id')) {
+    const deals = Array.from(mockData.deals.values());
+    return {
+      rows: deals,
+      rowCount: deals.length,
+      command: 'SELECT',
     };
   }
 
@@ -103,6 +144,34 @@ export async function mockQuery(text: string, params?: any[]) {
         command: 'SELECT',
       };
     }
+  }
+
+  // Handle INSERT INTO applications
+  if (text.includes('INSERT INTO applications') || text.includes('INSERT INTO deal_applications')) {
+    const appId = Math.random().toString(36).substr(2, 9);
+    const app = {
+      id: appId,
+      deal_id: params?.[0],
+      creator_id: params?.[1],
+      status: params?.[2] || 'pending',
+      created_at: new Date().toISOString(),
+    };
+    mockData.applications.set(appId, app);
+    return {
+      rows: [app],
+      rowCount: 1,
+      command: 'INSERT',
+    };
+  }
+
+  // Handle SELECT FROM applications
+  if (text.includes('SELECT') && text.includes('FROM applications')) {
+    const apps = Array.from(mockData.applications.values());
+    return {
+      rows: apps,
+      rowCount: apps.length,
+      command: 'SELECT',
+    };
   }
 
   // Handle UPDATE queries
