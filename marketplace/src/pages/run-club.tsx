@@ -15,6 +15,8 @@ const MAP_EMBED =
   'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783.1278892777996!2d73.84097799999999!3d18.523122!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf80b1612b0b%3A0xffbe7f54147ff1ab!2sFerguson%20College%20Main%20Gate!5e0!3m2!1sen!2sin!4v1790839028053!5m2!1sen!2sin';
 // Opens the real Maps app on a phone, which the embed cannot do.
 const MAP_LINK = 'https://maps.google.com/?q=Ferguson+College+Main+Gate,+Pune';
+const CONTACT_PHONE = '8805695324';
+const CONTACT_EMAIL = 'valueskinsfounder@gmail.com';
 
 const PRICE = 49;
 
@@ -201,7 +203,52 @@ export default function RunClubPage() {
           </div>
         </section>
 
-        <footer style={{ ...wrap, marginTop: 40, paddingTop: 20, borderTop: `1px solid ${C.border}` }}>
+        {/* Contact sits above the footer, not in it: someone who cannot find the
+            gate at 6:55 AM needs this to be the obvious thing on the page, and
+            tel:/mailto: open the dialer and mail app directly from a phone. */}
+        <section style={{ padding: '36px 0 0' }}>
+          <div style={wrap}>
+            <div
+              style={{
+                background: C.surface,
+                border: `1px solid ${C.border}`,
+                borderRadius: 12,
+                padding: 18,
+              }}
+            >
+              <h2 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 4px' }}>
+                Lost, or running late?
+              </h2>
+              <p style={{ fontSize: 13, color: C.textMuted, margin: '0 0 12px', lineHeight: 1.6 }}>
+                Call or message. We will wait a few minutes.
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                <a
+                  href={`tel:+91${CONTACT_PHONE}`}
+                  style={{
+                    display: 'inline-block', padding: '11px 18px',
+                    background: C.primary, color: C.onPrimary,
+                    borderRadius: 8, fontSize: 14, fontWeight: 700, textDecoration: 'none',
+                  }}
+                >
+                  {CONTACT_PHONE}
+                </a>
+                <a
+                  href={`mailto:${CONTACT_EMAIL}?subject=Run%20Club%20-%2011%20October`}
+                  style={{
+                    display: 'inline-block', padding: '11px 18px',
+                    border: `1px solid ${C.border}`, color: C.text,
+                    borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none',
+                  }}
+                >
+                  {CONTACT_EMAIL}
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer style={{ ...wrap, marginTop: 36, paddingTop: 20, borderTop: `1px solid ${C.border}` }}>
           <p style={{ fontSize: 11, color: C.outline, margin: 0 }}>
             ValueSkins Run Club, Pune
           </p>
