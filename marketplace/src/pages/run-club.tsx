@@ -1,4 +1,4 @@
-// Run Club — a public page, no auth, no forms.
+// Run Club: a public page, no auth, no forms.
 //
 // Registration is the payment itself: the Razorpay payment page collects the
 // name and phone, and attendance is checked against the Razorpay transaction
@@ -19,9 +19,9 @@ const MAP_LINK = 'https://maps.google.com/?q=Ferguson+College+Main+Gate,+Pune';
 const PRICE = 49;
 
 const DETAILS: [string, string][] = [
-  ['When', 'Saturday, 11 October · 7:00 AM'],
+  ['When', 'Saturday, 11 October, 7:00 AM'],
   ['Where', 'Ferguson College Main Gate, Pune'],
-  ['Distance', '5K, at your own pace'],
+  ['Distance', '3K, at your own pace'],
   ['Cost', `₹${PRICE}`],
 ];
 
@@ -31,16 +31,16 @@ export default function RunClubPage() {
   return (
     <>
       <Head>
-        <title>Run Club — ValueSkins</title>
+        <title>Run Club | ValueSkins</title>
         <meta
           name="description"
-          content="ValueSkins Run Club. Saturday 11 October, 7:00 AM, Ferguson College Main Gate, Pune. 5K at your own pace, all levels welcome."
+          content="ValueSkins Run Club. Saturday 11 October, 7:00 AM, Ferguson College Main Gate, Pune. 3K at your own pace, all levels welcome."
         />
         {/* Link previews do most of the work when this is shared on WhatsApp. */}
-        <meta property="og:title" content="ValueSkins Run Club — Saturday 11 October, 7 AM" />
+        <meta property="og:title" content="ValueSkins Run Club: Saturday 11 October, 7 AM" />
         <meta
           property="og:description"
-          content="5K at your own pace from Ferguson College Main Gate, Pune. Walkers and first-timers welcome."
+          content="3K at your own pace from Ferguson College Main Gate, Pune. Walkers and first-timers welcome."
         />
       </Head>
 
@@ -65,8 +65,8 @@ export default function RunClubPage() {
               Saturday morning run.
             </h1>
             <p style={{ fontSize: 16, color: C.textMuted, margin: 0, lineHeight: 1.6, maxWidth: 460 }}>
-              5K at your own pace. All levels welcome — walkers, first-timers, and people who
-              have not run since school.
+              3K at your own pace. All levels welcome. Walkers, first-timers, and people who have not run
+              since school.
             </p>
             <p
               style={{
@@ -74,7 +74,7 @@ export default function RunClubPage() {
                 lineHeight: 1.6, maxWidth: 460, fontStyle: 'italic',
               }}
             >
-              ₹{PRICE}. We are the cheapest run club (probably — first time, don&apos;t judge).
+              ₹{PRICE}. We are the cheapest run club (probably. First time, don&apos;t judge).
             </p>
           </div>
         </section>
@@ -129,8 +129,8 @@ export default function RunClubPage() {
                 Confirm your spot
               </h2>
               <p style={{ fontSize: 13, color: C.textMuted, margin: '0 0 16px', lineHeight: 1.6 }}>
-                ₹{PRICE}. Paying is how you register — there is no separate form. We check
-                you off at the gate, so bring the phone number you pay with.
+                ₹{PRICE}. Paying is how you register, so there is no separate form. We check you
+                off at the gate, so bring the phone number you pay with.
               </p>
 
               <a
@@ -203,7 +203,7 @@ export default function RunClubPage() {
 
         <footer style={{ ...wrap, marginTop: 40, paddingTop: 20, borderTop: `1px solid ${C.border}` }}>
           <p style={{ fontSize: 11, color: C.outline, margin: 0 }}>
-            ValueSkins Run Club · Pune
+            ValueSkins Run Club, Pune
           </p>
         </footer>
       </main>
