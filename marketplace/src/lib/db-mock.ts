@@ -61,7 +61,8 @@ export async function mockQuery(text: string, params?: any[]) {
 
   // Handle INSERT INTO deals
   if (text.includes('INSERT INTO deals') && text.includes('RETURNING')) {
-    const dealId = Math.random().toString(36).substr(2, 9);
+    // Generate a proper UUID v4
+    const dealId = `${Math.random().toString(16).slice(2)}-${Math.random().toString(16).slice(2)}-${Math.random().toString(16).slice(2)}-${Math.random().toString(16).slice(2)}`.slice(0, 36);
     const now = new Date().toISOString();
     const deal = {
       id: dealId,
@@ -92,12 +93,33 @@ export async function mockQuery(text: string, params?: any[]) {
   }
 
   // Handle SELECT FROM deals (single deal lookup)
-  if (text.includes('SELECT') && text.includes('FROM deals') && text.includes('WHERE id')) {
+  if (text.includes('SELECT') && text.includes('FROM deals') && (text.includes('WHERE id') || text.includes('WHERE\n'))) {
     const dealId = params?.[0];
     if (dealId && mockData.deals.has(dealId)) {
       const deal = mockData.deals.get(dealId);
+      // Ensure brand_id is set for authorization checks
+      const fullDeal = {
+        id: deal.id,
+        brand_id: deal.brand_id || '999001',
+        creator_id: null,
+        title: deal.title,
+        description: deal.description,
+        amount: deal.amount,
+        workflow_status: deal.workflow_status,
+        application_deadline: deal.application_deadline,
+        content_upload_deadline: deal.content_upload_deadline,
+        deal_deadline: deal.deal_deadline,
+        content_link: deal.content_link || null,
+        content_uploaded_at: null,
+        feedback: null,
+        revision_count: 0,
+        applications_closed: false,
+        published_at: deal.published_at,
+        cancelled_at: null,
+        created_at: deal.created_at,
+      };
       return {
-        rows: [deal],
+        rows: [fullDeal],
         rowCount: 1,
         command: 'SELECT',
       };
