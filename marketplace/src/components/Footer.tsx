@@ -49,7 +49,7 @@ export default function Footer() {
               lineHeight: '1.6',
               marginBottom: '12px',
             }}>
-              The marketplace for creators and brands. Every deal is backed by escrow.
+              The marketplace for creators and brands. Fixed prices, paid in stages.
             </p>
           </div>
 
