@@ -1,11 +1,8 @@
 import { Pool, PoolClient } from 'pg';
-import { mockQuery, mockQueryOne, mockTransaction } from './db-mock';
 
 const dbUrl = process.env.DATABASE_URL || '';
 const isLocal = dbUrl.includes('localhost') || dbUrl.includes('127.0.0.1') || dbUrl.includes('host.docker.internal');
 const sslConfig = isLocal ? false : { rejectUnauthorized: false };
-const isDev = process.env.NODE_ENV === 'development';
-let dbAvailable = true;
 
 // Pool sizing is a serverless problem, not a throughput one.
 //
@@ -51,56 +48,24 @@ if (!globalForPg.__vsPool) {
 }
 
 export async function query(text: string, params?: any[]) {
-  if (!dbAvailable && isDev) {
-    return await mockQuery(text, params);
-  }
-  try {
-    const result = await pool.query(text, params);
-    return result;
-  } catch (err: any) {
-    if (isDev && (err.message?.includes('role') || err.message?.includes('does not exist'))) {
-      console.warn('[DB] Database unavailable, using mock:', err.message);
-      dbAvailable = false;
-      return await mockQuery(text, params);
-    }
-    throw err;
-  }
+  const result = await pool.query(text, params);
+  return result;
 }
 
 export async function queryOne(text: string, params?: any[]) {
-  if (!dbAvailable && isDev) {
-    return await mockQueryOne(text, params);
-  }
-  try {
-    const result = await pool.query(text, params);
-    return result.rows[0] || null;
-  } catch (err: any) {
-    if (isDev && (err.message?.includes('role') || err.message?.includes('does not exist'))) {
-      console.warn('[DB] Database unavailable, using mock:', err.message);
-      dbAvailable = false;
-      return await mockQueryOne(text, params);
-    }
-    throw err;
-  }
+  const result = await pool.query(text, params);
+  return result.rows[0] || null;
 }
 
 export async function transaction<T>(fn: (client: PoolClient) => Promise<T>): Promise<T> {
-  if (!dbAvailable && isDev) {
-    return await mockTransaction(fn);
-  }
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
     const result = await fn(client);
     await client.query('COMMIT');
     return result;
-  } catch (err: any) {
+  } catch (err) {
     await client.query('ROLLBACK');
-    if (isDev && (err.message?.includes('role') || err.message?.includes('does not exist'))) {
-      console.warn('[DB] Database unavailable, using mock:', err.message);
-      dbAvailable = false;
-      return await mockTransaction(fn);
-    }
     throw err;
   } finally {
     client.release();
