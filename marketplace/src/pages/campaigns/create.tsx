@@ -1,13 +1,26 @@
+import type { GetServerSidePropsContext } from 'next';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { createDeal, isOk } from '@/lib/deal-api';
-import { useRoleGuard } from '@/hooks/useRoleGuard';
+
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const { getSessionUserId } = await import('@/lib/session');
+  const { queryOne } = await import('@/lib/db');
+  const userId = await getSessionUserId(ctx.req.headers.cookie || '');
+  if (!userId) {
+    return { redirect: { destination: '/auth/login', permanent: false } };
+  }
+  const row = await queryOne('SELECT role FROM users WHERE id = $1', [userId]);
+  // Brand surface. A creator could otherwise fill in this whole form and only
+  // discover at submit that they cannot post deals.
+  if ((row as any)?.role !== 'brand') {
+    return { redirect: { destination: '/deals/browse', permanent: false } };
+  }
+  return { props: {} };
+}
 
 export default function CreateCampaign() {
   const router = useRouter();
-  // Brand surface. A creator could fill this whole form and only discover at
-  // submit that they are not allowed to post deals.
-  const guard = useRoleGuard('brand');
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -81,10 +94,6 @@ export default function CreateCampaign() {
     }
     router.push(`/deals/${res.data.deal_id}`);
   };
-
-  // Nothing is rendered until the role is resolved: a flash of the wrong role's
-  // screen is how people conclude the product is confused about who they are.
-  if (guard.loading || !guard.allowed) return null;
 
   return (
     <div style={{ maxWidth: '800px', margin: '40px auto', padding: '20px' }}>
