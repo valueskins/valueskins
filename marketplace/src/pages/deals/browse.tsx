@@ -4,18 +4,22 @@
 // and no negotiation. Applying is one action; if the amount does not suit, the
 // creator simply does not apply.
 //
-// Live updates arrive over SSE, but that bus is per-process on serverless, so a
-// broadcast only reaches creators connected to the same instance. The `since`
-// cursor is what makes the feed correct: on reconnect, and on a timer, we ask
-// for anything published after the newest deal we hold. The push is an
-// optimisation, never the source of truth.
+// Live updates arrive over the WebSocket to the Render server, which is where
+// the connections actually live — a new deal appears without a refresh.
+//
+// The `since` cursor is still here, on a slow timer, as a safety net for the
+// cases a socket cannot cover: the tab was asleep, the connection dropped
+// mid-reconnect, or Redis lost an event. It is a backstop, not the mechanism.
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { C, withAlpha } from '@/theme/colors';
 import { getFeed, applyToDeal, financials, isOk, type FeedDeal } from '@/lib/deal-api';
+import { useWebSocket } from '@/hooks/useWebSocket';
 
-const RECONCILE_MS = 30_000;
+// Only a backstop now that the socket delivers; frequent polling would undo the
+// point of having one.
+const RECONCILE_MS = 120_000;
 
 export default function BrowseDealsPage() {
   const router = useRouter();
@@ -25,6 +29,7 @@ export default function BrowseDealsPage() {
   const [applying, setApplying] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const cursor = useRef<string | null>(null);
+  const { connected, subscribe } = useWebSocket();
 
   const loadInitial = useCallback(async () => {
     const res = await getFeed({ limit: 50 });
@@ -54,26 +59,28 @@ export default function BrowseDealsPage() {
 
   useEffect(() => { void loadInitial(); }, [loadInitial]);
 
+  // The socket tells us something changed; we then refetch rather than trusting
+  // the frame's contents. The server's own list is the authority, and a payload
+  // crafted by anything on that channel is not.
+  useEffect(() => {
+    if (!connected) return;
+    const offNew = subscribe('new-deal', () => { void reconcile(); });
+    const offMutate = subscribe('mutate', (msg) => {
+      if ((msg as any)?.collection === 'deals') void reconcile();
+    });
+    return () => { offNew(); offMutate(); };
+  }, [connected, subscribe, reconcile]);
+
+  // Backstop for a sleeping tab or a dropped socket.
   useEffect(() => {
     const timer = setInterval(() => { void reconcile(); }, RECONCILE_MS);
-
-    // The push just triggers an early reconcile; the event body is not trusted
-    // as the new state.
-    let source: EventSource | null = null;
-    try {
-      source = new EventSource('/api/realtime/stream');
-      source.addEventListener('new-deal', () => { void reconcile(); });
-      // A dropped stream is not an error worth showing: the timer still covers it.
-      source.onerror = () => source?.close();
-    } catch {
-      /* no SSE support: the timer is enough */
-    }
-
-    return () => {
-      clearInterval(timer);
-      source?.close();
-    };
+    return () => clearInterval(timer);
   }, [reconcile]);
+
+  // A reconnect may have missed events while it was down.
+  useEffect(() => {
+    if (connected) void reconcile();
+  }, [connected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!notice) return;

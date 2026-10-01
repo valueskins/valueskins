@@ -10,6 +10,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { C } from '@/theme/colors';
 import DealWorkflowPanel from '@/components/deal/DealWorkflowPanel';
+import { useWebSocket } from '@/hooks/useWebSocket';
 import type { WorkflowStatus } from '@/lib/deal-api';
 
 interface DealView {
@@ -37,6 +38,7 @@ export default function DealPage() {
   const [deal, setDeal] = useState<DealView | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const { connected, subscribe } = useWebSocket();
 
   const load = useCallback(async () => {
     if (!dealId) return;
@@ -61,19 +63,38 @@ export default function DealPage() {
 
   useEffect(() => { void load(); }, [load]);
 
-  // A payment is confirmed by the webhook, which lands after the request that
-  // started it has returned. Polling briefly while a deal sits in a
-  // payment-pending state is what turns "confirming" into the real status
-  // without the user reloading.
+  // Payment confirmation arrives from the webhook, which lands after the request
+  // that started it returned — so the page has to be told, not asked. The socket
+  // does that: the server pushes when the deal's row changes and we refetch.
+  useEffect(() => {
+    if (!connected || !dealId) return;
+    const off = subscribe('mutate', (msg) => {
+      const m = msg as any;
+      if (m?.collection !== 'deals') return;
+      // Only this deal; another deal changing is not our business.
+      if (m?.key && m.key !== dealId) return;
+      void load();
+    });
+    return () => off();
+  }, [connected, subscribe, dealId, load]);
+
+  // Backstop while a payment is in flight. Much slower than before, because the
+  // socket now carries it; this only covers a dropped connection at the exact
+  // moment the webhook fires.
   useEffect(() => {
     if (!deal) return;
     const awaitingWebhook = deal.workflow_status === 'CONFIRMED'
       || deal.workflow_status === 'COMMISSION_PAID'
       || deal.workflow_status === 'APPROVED_FOR_FINAL_PAYMENT';
     if (!awaitingWebhook) return;
-    const id = setInterval(() => { void load(); }, 5000);
+    const id = setInterval(() => { void load(); }, 20000);
     return () => clearInterval(id);
   }, [deal, load]);
+
+  // A reconnect may have missed the transition entirely.
+  useEffect(() => {
+    if (connected) void load();
+  }, [connected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const page: React.CSSProperties = {
     minHeight: '100vh',

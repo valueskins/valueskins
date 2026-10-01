@@ -1,12 +1,16 @@
 // Real-time fan-out of newly published deals to creators.
 //
-// Delivery is over the existing SSE event bus (lib/event-bus). That bus is
-// per-process, and on serverless each instance holds only the connections it
-// accepted, so a broadcast reaches the creators connected to *this* instance
-// only. The feed endpoint therefore also supports a `since` cursor: clients
-// reconcile on reconnect and never rely on the push alone for correctness.
+// Delivery is over Redis to the WebSocket server on Render, which holds the
+// client connections and fans out in the same tick. See lib/deal-events-redis.
+//
+// The in-process SSE bus (lib/event-bus) is kept as a local-development
+// fallback: it is per-process, so on serverless a broadcast reaches only the
+// clients that happen to share this Vercel instance. The feed also supports a
+// `since` cursor, so a dropped event costs a late render rather than a missing
+// deal.
 import { query } from '@/lib/db-pool';
 import { broadcast } from '@/lib/event-bus';
+import { publishDealEvent } from '@/lib/deal-events-redis';
 
 export interface NewDealEvent {
   id: string;
@@ -22,6 +26,20 @@ export interface NewDealEvent {
 const BATCH = 1000;
 
 export async function broadcastNewDeal(deal: NewDealEvent): Promise<void> {
+  // The real path: Redis -> the WebSocket server on Render -> every connected
+  // client, in the same tick. The in-process bus below only reaches clients that
+  // happen to share this Vercel instance, which is usually none of them, so it
+  // is a local-development fallback rather than the delivery mechanism.
+  await publishDealEvent({
+    dealId: deal.id,
+    event: 'new-deal',
+    title: deal.title,
+    description: deal.description,
+    budget: deal.budget,
+    brandId: deal.brand_id,
+    applicationDeadline: deal.application_deadline,
+  });
+
   try {
     let offset = 0;
     for (;;) {
@@ -62,6 +80,16 @@ export function broadcastDealUpdate(args: {
   status: string;
   event?: string;
 }): void {
+  // Fire-and-forget: a state transition must not wait on Redis. `participants`
+  // tells the client which two users this concerns, so a third party's socket
+  // ignores it.
+  void publishDealEvent({
+    dealId: args.dealId,
+    event: 'deal-updated',
+    workflowStatus: args.status,
+    participants: [args.brandId, args.creatorId],
+  });
+
   const targets = [args.brandId, args.creatorId].filter(
     (id): id is number => typeof id === 'number'
   );
