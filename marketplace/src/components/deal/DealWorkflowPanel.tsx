@@ -14,6 +14,7 @@
 //     amount actually charged is computed server-side from the deal's budget.
 import { useCallback, useEffect, useState } from 'react';
 import { C, withAlpha } from '@/theme/colors';
+import CreatorResume from './CreatorResume';
 import {
   applyToDeal,
   decideApplication,
@@ -82,6 +83,9 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
   const [feedbackInput, setFeedbackInput] = useState('');
   // A payment handed to Razorpay but not yet confirmed by the webhook.
   const [confirming, setConfirming] = useState(false);
+  // Which applicant's history is expanded. One at a time: comparing two is the
+  // job of the list, and several open panels makes the rows unscannable.
+  const [openResume, setOpenResume] = useState<string | null>(null);
 
   const F = financials(budget);
   const action = nextAction(status);
@@ -336,13 +340,8 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
             <div style={{ fontSize: 12, color: C.outline }}>No applications yet.</div>
           )}
           {applications?.map((a) => (
-            <div
-              key={a.id}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 10,
-                padding: '9px 0', borderTop: `1px solid ${C.border}`,
-              }}
-            >
+            <div key={a.id} style={{ padding: '9px 0', borderTop: `1px solid ${C.border}` }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 13, color: C.text, fontWeight: 600 }}>
                   @{a.username}
@@ -359,6 +358,14 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
               </div>
               {a.status === 'APPLIED' && status === 'OPEN' && (
                 <>
+                  {/* Look before you choose: this is a decision about who gets paid. */}
+                  <button
+                    onClick={() => setOpenResume((v) => (v === a.username ? null : a.username))}
+                    aria-expanded={openResume === a.username}
+                    style={{ ...btn(false, false), padding: '7px 11px', fontSize: 12 }}
+                  >
+                    {openResume === a.username ? 'Hide' : 'History'}
+                  </button>
                   <button
                     disabled={!!busy}
                     onClick={() =>
@@ -380,6 +387,8 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
                   </button>
                 </>
               )}
+              </div>
+              {openResume === a.username && <CreatorResume username={a.username} />}
             </div>
           ))}
           {status === 'OPEN' && (applications?.length ?? 0) > 0 && (

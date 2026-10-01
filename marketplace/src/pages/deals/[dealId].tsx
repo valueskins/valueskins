@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { C } from '@/theme/colors';
 import DealWorkflowPanel from '@/components/deal/DealWorkflowPanel';
 import { useWebSocket } from '@/hooks/useWebSocket';
+import DealCommunications from '@/components/deal/DealCommunications';
 import type { WorkflowStatus } from '@/lib/deal-api';
 
 interface DealView {
@@ -178,6 +179,8 @@ export default function DealPage() {
                 applicationsOpen={deal.applications_open}
                 onChanged={load}
               />
+
+              <DealCommunications dealId={deal.id} />
             </>
           )}
         </div>
