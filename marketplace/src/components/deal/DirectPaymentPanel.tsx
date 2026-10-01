@@ -113,7 +113,9 @@ export default function DirectPaymentPanel({
   if (!state) return null;
 
   const { expected_stage: stage, amount_due: due, destination, payments } = state;
-  const live = payments.find((p) => !p.disputed_at);
+  // Scoped to the current stage: unscoped, the confirmed advance was found
+  // first at the final stage, hiding the creator's confirm button.
+  const live = payments.find((p) => p.type === stage && !p.disputed_at);
   const pending = live && !live.confirmed_at ? live : null;
 
   const card: React.CSSProperties = {
