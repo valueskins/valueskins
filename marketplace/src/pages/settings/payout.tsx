@@ -12,29 +12,28 @@
 import { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { C, withAlpha } from '@/theme/colors';
-import { getOnboardingStatus, getPayoutStatus, setupPayout, isOk } from '@/lib/deal-api';
+import { getOnboardingStatus, isOk } from '@/lib/deal-api';
 
-type Method = 'upi' | 'bank';
 
 export default function PayoutSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [configured, setConfigured] = useState(false);
   const [hint, setHint] = useState<string | null>(null);
   const [emailReady, setEmailReady] = useState<boolean | null>(null);
-  const [method, setMethod] = useState<Method>('upi');
   const [upi, setUpi] = useState('');
-  const [accountNumber, setAccountNumber] = useState('');
-  const [ifsc, setIfsc] = useState('');
-  const [holder, setHolder] = useState('');
+  const [consent, setConsent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errorField, setErrorField] = useState<string | undefined>();
 
   const load = useCallback(async () => {
-    const [payout, onboarding] = await Promise.all([getPayoutStatus(), getOnboardingStatus()]);
-    if (isOk(payout)) {
-      setConfigured(payout.data.configured);
-      setHint(payout.data.display_hint);
+    const [payoutRes, onboarding] = await Promise.all([
+      fetch('/api/profile/payout-upi', { credentials: 'include' }).then((r) => r.json()).catch(() => null),
+      getOnboardingStatus(),
+    ]);
+    if (payoutRes) {
+      setConfigured(!!payoutRes.configured);
+      setHint(payoutRes.masked || null);
     }
     if (isOk(onboarding)) {
       // Payouts require a verified email first: it is where confirmations go.
@@ -51,30 +50,23 @@ export default function PayoutSettingsPage() {
     setError(null);
     setErrorField(undefined);
 
-    const res = await setupPayout(
-      method === 'upi'
-        ? { payment_method: 'upi', upi_id: upi.trim(), account_holder_name: holder.trim() || undefined }
-        : {
-            payment_method: 'bank',
-            account_number: accountNumber.trim(),
-            ifsc: ifsc.trim().toUpperCase(),
-            account_holder_name: holder.trim() || undefined,
-          }
-    );
+    const res = await fetch('/api/profile/payout-upi', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ upi_id: upi.trim(), share_consent: consent }),
+    });
+    const data = await res.json().catch(() => ({}));
     setBusy(false);
 
-    if (!isOk(res)) {
-      setError(res.error);
-      setErrorField(res.field);
+    if (!res.ok) {
+      setError(data.error || 'Could not save your UPI ID');
+      setErrorField(data.field);
       return;
     }
-    // Clear the raw values from component state the moment they are no longer
-    // needed; there is no reason for them to sit in memory after this.
-    setAccountNumber('');
-    setIfsc('');
     setUpi('');
     setConfigured(true);
-    setHint(res.data.display_hint);
+    setHint(data.masked || null);
   }
 
   const card: React.CSSProperties = {
@@ -128,61 +120,34 @@ export default function PayoutSettingsPage() {
 
           {!loading && !configured && emailReady !== false && (
             <form onSubmit={submit} style={card}>
-              <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
-                {(['upi', 'bank'] as Method[]).map((m) => (
-                  <button
-                    key={m}
-                    type="button"
-                    onClick={() => { setMethod(m); setError(null); }}
-                    style={{
-                      flex: 1, padding: '9px',
-                      background: method === m ? withAlpha(C.primary, 0x22) : 'transparent',
-                      border: `1px solid ${method === m ? C.primary : C.border}`,
-                      borderRadius: 8, color: C.text,
-                      fontWeight: method === m ? 700 : 500, fontSize: 13, cursor: 'pointer',
-                    }}
-                  >
-                    {m === 'upi' ? 'UPI' : 'Bank transfer'}
-                  </button>
-                ))}
-              </div>
-
-              <label style={lbl} htmlFor="holder">Account holder name</label>
+              <label style={lbl} htmlFor="upi">Your UPI ID</label>
               <input
-                id="holder" value={holder} onChange={(e) => setHolder(e.target.value)}
-                placeholder="As it appears on the account"
-                autoComplete="name"
-                style={input(errorField === 'account_holder_name')}
+                id="upi" value={upi} onChange={(e) => setUpi(e.target.value)}
+                placeholder="name@okhdfcbank"
+                inputMode="email" autoCapitalize="none" autoComplete="off"
+                style={input(errorField === 'upi_id')}
               />
 
-              {method === 'upi' ? (
-                <>
-                  <label style={lbl} htmlFor="upi">UPI ID</label>
-                  <input
-                    id="upi" value={upi} onChange={(e) => setUpi(e.target.value)}
-                    placeholder="name@bank" inputMode="email" autoCapitalize="none"
-                    style={input(errorField === 'upi_id' || errorField === 'address')}
-                  />
-                </>
-              ) : (
-                <>
-                  <label style={lbl} htmlFor="acct">Account number</label>
-                  <input
-                    id="acct" value={accountNumber}
-                    onChange={(e) => setAccountNumber(e.target.value.replace(/\D/g, ''))}
-                    placeholder="Digits only" inputMode="numeric" autoComplete="off"
-                    style={input(errorField === 'account_number')}
-                  />
-                  <label style={lbl} htmlFor="ifsc">IFSC code</label>
-                  <input
-                    id="ifsc" value={ifsc}
-                    onChange={(e) => setIfsc(e.target.value.toUpperCase())}
-                    placeholder="e.g. HDFC0000001" autoCapitalize="characters" autoComplete="off"
-                    maxLength={11}
-                    style={input(errorField === 'ifsc')}
-                  />
-                </>
-              )}
+              {/* Said plainly rather than buried: we disclose this to one brand,
+                  so the creator should know before, not discover it after. */}
+              <label
+                style={{
+                  display: 'flex', gap: 10, alignItems: 'flex-start',
+                  fontSize: 12, color: C.textMuted, lineHeight: 1.55,
+                  margin: '4px 0 12px', cursor: 'pointer',
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                  style={{ marginTop: 2, flexShrink: 0 }}
+                />
+                <span>
+                  Share my UPI ID with brands I am confirmed on, so they can pay me directly.
+                  It is never shown to anyone else.
+                </span>
+              </label>
 
               {error && (
                 <div role="alert" style={{ fontSize: 12, color: C.error, marginBottom: 10 }}>
@@ -197,22 +162,23 @@ export default function PayoutSettingsPage() {
                   borderRadius: 8, padding: 10, marginBottom: 12,
                 }}
               >
-                These details go straight to Razorpay, our payment processor. ValueSkins stores only a
-                token and the last four digits — we never keep your account number. You can enter this
-                once; changing it later goes through support.
+                UPI only. We do not accept or store bank account numbers. Brands pay you
+                directly, so your money never passes through ValueSkins, and the deal only
+                moves forward once you confirm a payment arrived.
               </div>
 
               <button
                 type="submit"
-                disabled={busy || !holder.trim() || (method === 'upi' ? !upi.trim() : !(accountNumber.trim() && ifsc.trim()))}
+                disabled={busy || !upi.trim() || !consent}
                 style={{
                   width: '100%', padding: '12px',
-                  background: busy ? C.border : C.primary, border: 'none', borderRadius: 8,
-                  color: C.onPrimary, fontWeight: 700, fontSize: 13,
-                  cursor: busy ? 'not-allowed' : 'pointer',
+                  background: busy || !upi.trim() || !consent ? C.border : C.primary,
+                  border: 'none', borderRadius: 8, color: C.onPrimary,
+                  fontWeight: 700, fontSize: 13,
+                  cursor: busy || !upi.trim() || !consent ? 'not-allowed' : 'pointer',
                 }}
               >
-                {busy ? 'Saving…' : 'Save payout details'}
+                {busy ? 'Saving…' : 'Save UPI ID'}
               </button>
             </form>
           )}

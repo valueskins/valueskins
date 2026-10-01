@@ -93,6 +93,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
   }
 
+  // Direct brand-to-creator payments (008). Depends on 006's deals columns.
+  try {
+    const dpPath = path.join(
+      process.cwd(), 'src', 'lib', 'migrations', '008_direct_payments.sql'
+    );
+    const ran = await runSqlStatements(fs.readFileSync(dpPath, 'utf-8'));
+    results.push({ name: `008_direct_payments.sql (${ran} statements)`, success: true });
+  } catch (err: any) {
+    allPassed = false;
+    results.push({ name: '008_direct_payments.sql', success: false, error: err.message });
+  }
+
   // Run escrow-v2 migration SQL
   try {
     const sqlPath = path.join(process.cwd(), 'src', 'lib', 'migrations-escrow-v2.sql');

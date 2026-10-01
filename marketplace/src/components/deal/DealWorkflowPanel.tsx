@@ -15,6 +15,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { C, withAlpha } from '@/theme/colors';
 import CreatorResume from './CreatorResume';
+import DirectPaymentPanel from './DirectPaymentPanel';
 import {
   applyToDeal,
   decideApplication,
@@ -399,39 +400,32 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
         </div>
       )}
 
-      {/* ---- BRAND: the three payments ------------------------------------ */}
-      {viewer === 'brand' &&
-        (['CONFIRMED', 'COMMISSION_PAID', 'APPROVED_FOR_FINAL_PAYMENT'] as WorkflowStatus[]).includes(status) && (
-          <div style={card}>
-            <div style={label}>
-              {status === 'CONFIRMED' ? 'Step 1 of 3 — commission'
-                : status === 'COMMISSION_PAID' ? 'Step 2 of 3 — advance'
-                  : 'Step 3 of 3 — final payment'}
-            </div>
-            <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 10 }}>
-              {status === 'CONFIRMED'
-                ? `${money(F.commissionTotal)} to ValueSkins. Non-refundable once paid, and the deal can no longer be cancelled.`
-                : status === 'COMMISSION_PAID'
-                  ? `${money(F.advance)} to the creator so work can begin.`
-                  : `${money(F.final)} to the creator. This completes the deal.`}
-            </div>
-            <button
-              disabled={!!busy || confirming}
-              onClick={() =>
-                status === 'CONFIRMED' ? pay('commission', 'Commission')
-                  : status === 'COMMISSION_PAID' ? pay('advance', 'Advance')
-                    : pay('remaining', 'Final payment')
-              }
-              style={btn(true, !!busy || confirming)}
-            >
-              {confirming ? 'Confirming…'
-                : busy ? 'Opening checkout…'
-                  : status === 'CONFIRMED' ? `Pay ${money(F.commissionTotal)}`
-                    : status === 'COMMISSION_PAID' ? `Pay ${money(F.advance)}`
-                      : `Pay ${money(F.final)}`}
-            </button>
+      {/* ---- BRAND: the commission, via Razorpay ------------------------- */}
+      {viewer === 'brand' && status === 'CONFIRMED' && (
+        <div style={card}>
+          <div style={label}>Step 1 of 3 — commission</div>
+          <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 10 }}>
+            {money(F.commissionTotal)} to ValueSkins. Non-refundable once paid, and the deal can no
+            longer be cancelled.
           </div>
-        )}
+          <button
+            disabled={!!busy || confirming}
+            onClick={() => pay('commission', 'Commission')}
+            style={btn(true, !!busy || confirming)}
+          >
+            {confirming ? 'Confirming…' : busy ? 'Opening checkout…' : `Pay ${money(F.commissionTotal)}`}
+          </button>
+        </div>
+      )}
+
+      {/* ---- The advance and final go direct, brand UPI to creator UPI ----
+           Razorpay cannot move this money for us: Route needs ₹40L of turnover
+           and RazorpayX needs a current account. So the creator's share never
+           passes through ValueSkins, and the creator's own confirmation is what
+           advances the deal. */}
+      {(status === 'COMMISSION_PAID' || status === 'APPROVED_FOR_FINAL_PAYMENT') && (
+        <DirectPaymentPanel dealId={dealId} viewer={viewer} onChanged={onChanged} />
+      )}
 
       {/* ---- CREATOR: deliver --------------------------------------------- */}
       {viewer === 'creator' && isConfirmedCreator &&
