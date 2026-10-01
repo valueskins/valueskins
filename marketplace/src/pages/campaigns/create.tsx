@@ -1,7 +1,22 @@
+// Post a deal.
+//
+// Instagram only, so there is no platform or format choice to make. Deliverables
+// are counted instead: a collab is "2 reels and 1 story", not one dropdown value.
+//
+// Two dates are asked for, because those are the two a brand actually has in
+// mind: when the content must be approved, and when it goes live. The
+// application deadline is derived from them rather than being a third field,
+// since whoever is picked needs time left to shoot.
+//
+// Styled from the theme tokens. It previously used #f5f5f5 panels, #999 text and
+// a #007AFF button, so the payment breakdown dissolved into the themed
+// background and that blue is not in the brand palette.
 import type { GetServerSidePropsContext } from 'next';
 import { useState } from 'react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { createDeal, isOk } from '@/lib/deal-api';
+import { C, withAlpha } from '@/theme/colors';
+import { createDeal, financials, isOk } from '@/lib/deal-api';
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const { getSessionUserId } = await import('@/lib/session');
@@ -19,258 +34,340 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   return { props: {} };
 }
 
+// Instagram's actual content types. A collab is usually several of them.
+const DELIVERABLE_KINDS = [
+  { key: 'reels', label: 'Reels', hint: 'Short video' },
+  { key: 'posts', label: 'Posts', hint: 'Single image' },
+  { key: 'carousels', label: 'Carousels', hint: 'Multi-image post' },
+  { key: 'stories', label: 'Stories', hint: 'Live for 24 hours' },
+] as const;
+
+type DeliverableKey = (typeof DELIVERABLE_KINDS)[number]['key'];
+
+const iso = (d: string) => new Date(`${d}T12:00:00`).toISOString();
+const todayPlus = (days: number) => {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+};
+
 export default function CreateCampaign() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    title: '',
-    budget: 1000,
-    requirements: '',
-    script: '',
-    deliverable_timeline: 3,
-    media_format: 'instagram_reel',
-  });
-  const [commission, setCommission] = useState(885);
   const [error, setError] = useState<string | null>(null);
 
-  const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const budget = parseFloat(e.target.value) || 0;
-    setFormData({ ...formData, budget });
-    // Commission is fixed at ₹885, not proportional
-    setCommission(885);
-  };
+  const [title, setTitle] = useState('');
+  const [budget, setBudget] = useState(10000);
+  const [requirements, setRequirements] = useState('');
+  const [script, setScript] = useState('');
+  const [counts, setCounts] = useState<Record<DeliverableKey, number>>({
+    reels: 1, posts: 0, carousels: 0, stories: 0,
+  });
+  const [approvalDate, setApprovalDate] = useState(todayPlus(14));
+  const [postingDate, setPostingDate] = useState(todayPlus(21));
 
-  const creatorPayout = formData.budget - commission;
-  const advance = creatorPayout * 0.3;
-  const final = creatorPayout * 0.7;
+  const F = financials(budget);
+  const totalItems = Object.values(counts).reduce((a, b) => a + b, 0);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const deliverableSummary = DELIVERABLE_KINDS
+    .filter((k) => counts[k.key] > 0)
+    .map((k) => `${counts[k.key]} ${counts[k.key] === 1 ? k.label.replace(/s$/, '') : k.label}`)
+    .join(', ');
+
+  function bump(key: DeliverableKey, by: number) {
+    setCounts((c) => ({ ...c, [key]: Math.max(0, Math.min(20, c[key] + by)) }));
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
     setError(null);
 
-    // Rewired to the real workflow. As written this page could never have
-    // worked: it posted to /api/deals/create and /api/payment/initiate-commission
-    // (neither exists — the latter was removed for having no authentication and
-    // taking the amount from the client) and sent the literal string
-    // 'current_user_id' as brand_id.
-    //
-    // It also charged the commission at creation. In this workflow the
-    // commission is paid only after a creator has been confirmed, so there is
-    // nothing to pay for yet — the brand is sent to the deal page, where the
-    // three payments appear in order.
-    const days = (n: number) => {
-      const d = new Date();
-      d.setDate(d.getDate() + n);
-      return d.toISOString();
-    };
-    // The one field the form collects is a delivery timeline in days. Applications
-    // close halfway to it so a creator still has time to produce the work, and
-    // the deal itself ends a week after delivery is due.
-    const deliverIn = Math.max(2, Number(formData.deliverable_timeline) || 3);
-    const applyIn = Math.max(1, Math.floor(deliverIn / 2));
+    if (totalItems === 0) {
+      setError('Add at least one deliverable.');
+      return;
+    }
+    const approval = new Date(`${approvalDate}T12:00:00`);
+    const posting = new Date(`${postingDate}T12:00:00`);
+    if (approval.getTime() <= Date.now()) {
+      setError('The approval date must be in the future.');
+      return;
+    }
+    if (posting.getTime() < approval.getTime()) {
+      setError('Content cannot be posted before it is approved.');
+      return;
+    }
+
+    // Applications close partway to the approval date, so whoever is picked has
+    // time left to make the content. Asking the brand for a third date would be
+    // asking them to solve that themselves.
+    const now = Date.now();
+    const applicationClose = new Date(now + Math.max((approval.getTime() - now) * 0.35, 86400000));
+    if (applicationClose.getTime() >= approval.getTime()) {
+      setError('Set the approval date at least two days out, so creators have time to apply.');
+      return;
+    }
 
     const description = [
-      formData.requirements && `Requirements:\n${formData.requirements}`,
-      formData.script && `Script / direction:\n${formData.script}`,
-      `Format: ${formData.media_format.replace(/_/g, ' ')}`,
-      `Delivery: within ${deliverIn} days of confirmation`,
+      `Deliverables: ${deliverableSummary}`,
+      requirements && `Brief:\n${requirements}`,
+      script && `Script / direction:\n${script}`,
+      `Approved by: ${approval.toDateString()}`,
+      `Posted by: ${posting.toDateString()}`,
     ].filter(Boolean).join('\n\n');
 
+    setLoading(true);
     const res = await createDeal({
-      title: formData.title.trim(),
+      title: title.trim(),
       description,
-      budget: Number(formData.budget),
-      application_deadline: days(applyIn),
-      content_upload_deadline: days(deliverIn),
-      deal_deadline: days(deliverIn + 7),
+      budget: Number(budget),
+      application_deadline: applicationClose.toISOString(),
+      content_upload_deadline: iso(approvalDate),
+      deal_deadline: iso(postingDate),
       publish: true,
     });
-
     setLoading(false);
+
     if (!isOk(res)) {
       setError(res.error);
       return;
     }
     router.push(`/deals/${res.data.deal_id}`);
+  }
+
+  const field: React.CSSProperties = { marginBottom: 20 };
+  const lbl: React.CSSProperties = {
+    display: 'block', fontSize: 12, fontWeight: 600,
+    color: C.outline, marginBottom: 6,
+  };
+  const input: React.CSSProperties = {
+    width: '100%', background: C.surfaceAlt, border: `1px solid ${C.border}`,
+    borderRadius: 8, color: C.text, padding: '10px 12px', fontSize: 14,
+    fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box',
   };
 
   return (
-    <div style={{ maxWidth: '800px', margin: '40px auto', padding: '20px' }}>
-      <h1>Create a Campaign</h1>
-      <p style={{ color: '#999', marginBottom: '30px' }}>
-        Fill out one form. No negotiations. First creator to accept gets the deal.
-      </p>
+    <>
+      <Head><title>Post a deal — ValueSkins</title></Head>
+      <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '24px 16px 48px' }}>
+        <div style={{ maxWidth: 560, margin: '0 auto' }}>
+          <button
+            onClick={() => router.push('/campaigns')}
+            style={{
+              background: 'none', border: 'none', color: C.outline,
+              fontSize: 12, cursor: 'pointer', padding: 0, marginBottom: 14,
+            }}
+          >
+            ← Your deals
+          </button>
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '20px' }}>
-          <label>
-            <div>
-              Campaign Title <span style={{ color: 'red' }}>*</span>
-            </div>
-            <input
-              type="text"
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              placeholder="e.g., Instagram Reel for Q4 Launch"
-              required
-              style={{ width: '100%', padding: '10px', marginTop: '5px' }}
-            />
-          </label>
-        </div>
+          <h1 style={{ fontSize: 20, fontWeight: 700, margin: '0 0 4px' }}>Post a deal</h1>
+          <p style={{ fontSize: 12, color: C.outline, margin: '0 0 22px' }}>
+            Instagram collabs. The amount you set is final, so creators either apply or they do not.
+          </p>
 
-        <div style={{ marginBottom: '20px' }}>
-          <label>
-            <div>
-              Budget (₹) <span style={{ color: 'red' }}>*</span>
+          <form onSubmit={handleSubmit}>
+            <div style={field}>
+              <label style={lbl} htmlFor="title">Campaign title</label>
+              <input
+                id="title" value={title} onChange={(e) => setTitle(e.target.value)}
+                placeholder="Summer collection launch" required maxLength={200} style={input}
+              />
             </div>
-            <input
-              type="number"
-              value={formData.budget}
-              onChange={handleBudgetChange}
-              min="1000"
-              max="1000000"
-              required
-              style={{ width: '100%', padding: '10px', marginTop: '5px' }}
-            />
-          </label>
-        </div>
 
-        <div style={{ marginBottom: '20px' }}>
-          <label>
-            <div>
-              Media Format <span style={{ color: 'red' }}>*</span>
+            <div style={field}>
+              <label style={lbl} htmlFor="budget">Budget (₹)</label>
+              <input
+                id="budget" type="number" value={budget}
+                onChange={(e) => setBudget(parseFloat(e.target.value) || 0)}
+                min={1000} max={1000000} required style={input}
+              />
             </div>
-            <select
-              value={formData.media_format}
-              onChange={(e) =>
-                setFormData({ ...formData, media_format: e.target.value })
-              }
-              required
-              style={{ width: '100%', padding: '10px', marginTop: '5px' }}
+
+            {/* Counts rather than a format dropdown: a collab is normally several items. */}
+            <div style={field}>
+              <label style={lbl}>Deliverables</label>
+              <div style={{ border: `1px solid ${C.border}`, borderRadius: 8, overflow: 'hidden' }}>
+                {DELIVERABLE_KINDS.map((k, i) => (
+                  <div
+                    key={k.key}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 12,
+                      padding: '10px 12px', background: C.surface,
+                      borderTop: i === 0 ? 'none' : `1px solid ${C.border}`,
+                    }}
+                  >
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 14, fontWeight: counts[k.key] > 0 ? 700 : 500 }}>
+                        {k.label}
+                      </div>
+                      <div style={{ fontSize: 11, color: C.outline }}>{k.hint}</div>
+                    </div>
+                    <button
+                      type="button" aria-label={`One fewer ${k.label}`}
+                      onClick={() => bump(k.key, -1)}
+                      disabled={counts[k.key] === 0}
+                      style={{
+                        width: 32, height: 32, borderRadius: 6,
+                        border: `1px solid ${C.border}`, background: 'transparent',
+                        color: C.text, fontSize: 16,
+                        cursor: counts[k.key] === 0 ? 'not-allowed' : 'pointer',
+                        opacity: counts[k.key] === 0 ? 0.4 : 1,
+                      }}
+                    >
+                      −
+                    </button>
+                    <div
+                      aria-live="polite"
+                      style={{
+                        minWidth: 26, textAlign: 'center', fontSize: 15,
+                        fontWeight: 700, fontVariantNumeric: 'tabular-nums',
+                        color: counts[k.key] > 0 ? C.text : C.outline,
+                      }}
+                    >
+                      {counts[k.key]}
+                    </div>
+                    <button
+                      type="button" aria-label={`One more ${k.label}`}
+                      onClick={() => bump(k.key, 1)}
+                      style={{
+                        width: 32, height: 32, borderRadius: 6, border: 'none',
+                        background: C.primary, color: C.onPrimary,
+                        fontSize: 16, cursor: 'pointer',
+                      }}
+                    >
+                      +
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div style={{ fontSize: 11, color: totalItems ? C.textMuted : C.error, marginTop: 6 }}>
+                {totalItems ? deliverableSummary : 'Add at least one deliverable.'}
+              </div>
+            </div>
+
+            {/* The two dates a brand actually has in mind. */}
+            <div style={field}>
+              <label style={lbl}>Timeline</label>
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                <div style={{ flex: 1, minWidth: 150 }}>
+                  <label htmlFor="approval" style={{ ...lbl, fontSize: 11, marginBottom: 4 }}>
+                    Final approval by
+                  </label>
+                  <input
+                    id="approval" type="date" value={approvalDate}
+                    min={todayPlus(2)}
+                    onChange={(e) => setApprovalDate(e.target.value)}
+                    required style={input}
+                  />
+                </div>
+                <div style={{ flex: 1, minWidth: 150 }}>
+                  <label htmlFor="posting" style={{ ...lbl, fontSize: 11, marginBottom: 4 }}>
+                    Final posting by
+                  </label>
+                  <input
+                    id="posting" type="date" value={postingDate}
+                    min={approvalDate}
+                    onChange={(e) => setPostingDate(e.target.value)}
+                    required style={input}
+                  />
+                </div>
+              </div>
+              <div style={{ fontSize: 11, color: C.outline, marginTop: 6 }}>
+                Applications close partway to the approval date, so whoever you pick has time to shoot.
+              </div>
+            </div>
+
+            <div style={field}>
+              <label style={lbl} htmlFor="brief">Brief</label>
+              <textarea
+                id="brief" value={requirements} onChange={(e) => setRequirements(e.target.value)}
+                placeholder="What do you need? Who is it for? What is the key message?"
+                required rows={4} style={{ ...input, resize: 'vertical' }}
+              />
+            </div>
+
+            <div style={field}>
+              <label style={lbl} htmlFor="script">Script or direction (optional)</label>
+              <textarea
+                id="script" value={script} onChange={(e) => setScript(e.target.value)}
+                placeholder="Talking points, product demo notes, anything to avoid"
+                rows={3} style={{ ...input, resize: 'vertical' }}
+              />
+            </div>
+
+            {/* Themed, with an accent border so it reads as a panel instead of
+                dissolving into the page as the old #f5f5f5 block did. */}
+            <div
+              style={{
+                background: withAlpha(C.primary, 0x12),
+                border: `1px solid ${C.accent}`,
+                borderRadius: 10, padding: 16, marginBottom: 22,
+              }}
             >
-              <option value="instagram_reel">Instagram Reel</option>
-              <option value="tiktok">TikTok Video</option>
-              <option value="youtube_short">YouTube Short</option>
-              <option value="story">Instagram Story</option>
-              <option value="post">Instagram Post</option>
-            </select>
-          </label>
-        </div>
-
-        <div style={{ marginBottom: '20px' }}>
-          <label>
-            <div>
-              Requirements/Brief <span style={{ color: 'red' }}>*</span>
-            </div>
-            <textarea
-              value={formData.requirements}
-              onChange={(e) =>
-                setFormData({ ...formData, requirements: e.target.value })
-              }
-              placeholder="Describe what you need. Who is the target audience? Key message?"
-              required
-              rows={4}
-              style={{ width: '100%', padding: '10px', marginTop: '5px' }}
-            />
-          </label>
-        </div>
-
-        <div style={{ marginBottom: '20px' }}>
-          <label>
-            <div>Script / Directions (Optional)</div>
-            <textarea
-              value={formData.script}
-              onChange={(e) => setFormData({ ...formData, script: e.target.value })}
-              placeholder="Any specific directions, talking points, or product demos?"
-              rows={3}
-              style={{ width: '100%', padding: '10px', marginTop: '5px' }}
-            />
-          </label>
-        </div>
-
-        <div style={{ marginBottom: '20px' }}>
-          <label>
-            <div>Deliverable Timeline (days)</div>
-            <input
-              type="number"
-              value={formData.deliverable_timeline}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  deliverable_timeline: parseInt(e.target.value),
-                })
-              }
-              min="1"
-              max="30"
-              style={{ width: '100%', padding: '10px', marginTop: '5px' }}
-            />
-          </label>
-        </div>
-
-        {/* Payment Breakdown */}
-        <div
-          style={{
-            background: '#f5f5f5',
-            padding: '20px',
-            borderRadius: '8px',
-            marginBottom: '30px',
-          }}
-        >
-          <h3>Payment Breakdown</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-            <div>
-              <div style={{ color: '#999', fontSize: '12px' }}>Total Budget</div>
-              <div style={{ fontSize: '20px', fontWeight: '600' }}>
-                ₹{formData.budget.toLocaleString()}
+              <div
+                style={{
+                  fontSize: 11, fontWeight: 700, color: C.text,
+                  textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 12,
+                }}
+              >
+                Payment breakdown
+              </div>
+              {([
+                ['Total budget', `₹${budget.toLocaleString('en-IN')}`, true],
+                ['ValueSkins commission', `₹${F.commissionTotal.toLocaleString('en-IN')}`, false],
+                ['Creator gets', `₹${F.creatorTotal.toLocaleString('en-IN')}`, true],
+              ] as [string, string, boolean][]).map(([k, v, strong]) => (
+                <div
+                  key={k}
+                  style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6 }}
+                >
+                  <span style={{ color: C.textMuted }}>{k}</span>
+                  <span style={{ color: C.text, fontWeight: strong ? 700 : 500 }}>{v}</span>
+                </div>
+              ))}
+              <div style={{ borderTop: `1px solid ${C.border}`, marginTop: 10, paddingTop: 10 }}>
+                <div style={{ fontSize: 11, color: C.outline, marginBottom: 6 }}>
+                  You pay the creator directly, in two parts
+                </div>
+                {([
+                  ['30% when they start', F.advance],
+                  ['70% on your approval', F.final],
+                ] as [string, number][]).map(([k, v]) => (
+                  <div
+                    key={k}
+                    style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 3 }}
+                  >
+                    <span style={{ color: C.textMuted }}>{k}</span>
+                    <span style={{ color: C.text, fontWeight: 600 }}>
+                      ₹{v.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
-            <div>
-              <div style={{ color: '#999', fontSize: '12px' }}>ValueSkins Commission</div>
-              <div style={{ fontSize: '20px', fontWeight: '600' }}>₹{commission}</div>
-            </div>
-            <div>
-              <div style={{ color: '#999', fontSize: '12px' }}>Creator Gets</div>
-              <div style={{ fontSize: '20px', fontWeight: '600' }}>
-                ₹{creatorPayout.toLocaleString()}
+
+            {error && (
+              <div role="alert" style={{ color: C.error, fontSize: 13, marginBottom: 12 }}>
+                {error}
               </div>
-            </div>
-            <div>
-              <div style={{ color: '#999', fontSize: '12px' }}>Creator Timeline</div>
-              <div style={{ fontSize: '14px' }}>
-                30% now (₹{advance.toLocaleString()})
-                <br />
-                70% on approval (₹{final.toLocaleString()})
-              </div>
-            </div>
-          </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading || totalItems === 0}
+              style={{
+                width: '100%', padding: '14px',
+                background: loading || totalItems === 0 ? C.border : C.primary,
+                color: C.onPrimary, border: 'none', borderRadius: 8,
+                fontSize: 15, fontWeight: 700,
+                cursor: loading || totalItems === 0 ? 'not-allowed' : 'pointer',
+              }}
+            >
+              {loading ? 'Publishing…' : 'Publish deal'}
+            </button>
+          </form>
         </div>
-        {error && (
-          <div role="alert" style={{ color: 'var(--c-error)', fontSize: 13, marginBottom: 12 }}>
-            {error}
-          </div>
-        )}
-
-
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            width: '100%',
-            padding: '14px',
-            background: '#007AFF',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '8px',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            opacity: loading ? 0.6 : 1,
-          }}
-        >
-          {loading ? 'Publishing…' : 'Publish deal'}
-        </button>
-      </form>
-    </div>
+      </div>
+    </>
   );
 }
