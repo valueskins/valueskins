@@ -15,7 +15,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { getSessionUserId } from '@/lib/session';
-import { query } from '@/lib/db';
+import { query, queryOne } from '@/lib/db';
 import { C, withAlpha } from '@/theme/colors';
 import { nextAction, financials, type WorkflowStatus } from '@/lib/deal-api';
 
@@ -35,6 +35,13 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const userId = await getSessionUserId(cookie);
   if (!userId) {
     return { redirect: { destination: '/auth/login', permanent: false } };
+  }
+
+  // Brand surface. A creator reaching it saw an empty "Your deals" list with a
+  // "Post a deal" button they are not allowed to use.
+  const role = await queryOne('SELECT role FROM users WHERE id = $1', [userId]);
+  if ((role as any)?.role !== 'brand') {
+    return { redirect: { destination: '/deals/browse', permanent: false } };
   }
 
   try {

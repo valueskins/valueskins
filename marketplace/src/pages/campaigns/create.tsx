@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { createDeal, isOk } from '@/lib/deal-api';
+import { useRoleGuard } from '@/hooks/useRoleGuard';
 
 export default function CreateCampaign() {
   const router = useRouter();
+  // Brand surface. A creator could fill this whole form and only discover at
+  // submit that they are not allowed to post deals.
+  const guard = useRoleGuard('brand');
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -77,6 +81,10 @@ export default function CreateCampaign() {
     }
     router.push(`/deals/${res.data.deal_id}`);
   };
+
+  // Nothing is rendered until the role is resolved: a flash of the wrong role's
+  // screen is how people conclude the product is confused about who they are.
+  if (guard.loading || !guard.allowed) return null;
 
   return (
     <div style={{ maxWidth: '800px', margin: '40px auto', padding: '20px' }}>

@@ -11,11 +11,28 @@
 // cases a socket cannot cover: the tab was asleep, the connection dropped
 // mid-reconnect, or Redis lost an event. It is a backstop, not the mechanism.
 import { useCallback, useEffect, useRef, useState } from 'react';
+import type { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { C, withAlpha } from '@/theme/colors';
 import { getFeed, applyToDeal, financials, isOk, type FeedDeal } from '@/lib/deal-api';
 import { useWebSocket } from '@/hooks/useWebSocket';
+
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const { getSessionUserId } = await import('@/lib/session');
+  const { queryOne } = await import('@/lib/db');
+  const userId = await getSessionUserId(ctx.req.headers.cookie || '');
+  if (!userId) {
+    return { redirect: { destination: '/auth/login', permanent: false } };
+  }
+  const row = await queryOne('SELECT role FROM users WHERE id = $1', [userId]);
+  // Brands have their own home. Sending them here showed deals they can never
+  // apply to, their own included, each with an Apply button.
+  if ((row as any)?.role !== 'creator') {
+    return { redirect: { destination: '/campaigns', permanent: false } };
+  }
+  return { props: {} };
+}
 
 // Only a backstop now that the socket delivers; frequent polling would undo the
 // point of having one.
