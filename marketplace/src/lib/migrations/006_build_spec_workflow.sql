@@ -159,16 +159,12 @@ CREATE TABLE IF NOT EXISTS adp_reports (
 );
 
 -- ---------------------------------------------------------------------------
--- idempotency_cache: replay protection for payment endpoints
+-- NOTE: there was an idempotency_cache table here. Nothing ever wrote to it.
+-- Replay safety comes from the partial unique indexes above
+-- (idx_dwp_one_confirmed_per_type, idx_payouts_one_per_type): the database
+-- refuses a second confirmed payment or payout for a stage outright, which is
+-- stronger than a cache a code path can forget to consult. An unused table that
+-- looks like a safeguard is worse than no table, so it is gone rather than
+-- dormant. Dropped below for databases that already ran this migration.
 -- ---------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS idempotency_cache (
-  idempotency_key TEXT PRIMARY KEY,
-  user_id BIGINT,
-  endpoint TEXT DEFAULT '',
-  response JSONB,
-  status_code INTEGER DEFAULT 200,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  expires_at TIMESTAMPTZ DEFAULT NOW() + INTERVAL '24 hours'
-);
-
-CREATE INDEX IF NOT EXISTS idx_idempotency_expiry ON idempotency_cache(expires_at);
+DROP TABLE IF EXISTS idempotency_cache;

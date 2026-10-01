@@ -2,11 +2,7 @@
 // Closes expired application windows, chases overdue content, prunes the
 // idempotency cache. Scheduled in vercel.json.
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {
-  closeExpiredApplications,
-  notifyOverdueContent,
-  pruneIdempotencyCache,
-} from '@/lib/deal-cron';
+import { closeExpiredApplications, notifyOverdueContent } from '@/lib/deal-cron';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // Vercel Cron invokes scheduled paths with GET and attaches the
@@ -34,7 +30,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   for (const [name, task] of [
     ['applications_closed', closeExpiredApplications],
     ['overdue_notified', notifyOverdueContent],
-    ['idempotency_pruned', pruneIdempotencyCache],
   ] as const) {
     try {
       results[name] = await task();

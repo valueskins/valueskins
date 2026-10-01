@@ -103,11 +103,3 @@ export async function findStaleInstagramProfiles(
 export async function markInstagramSynced(userId: number): Promise<void> {
   await query('UPDATE users SET instagram_last_synced = NOW() WHERE id = $1', [userId]);
 }
-
-/** Drops expired idempotency rows so the table does not grow without bound. */
-export async function pruneIdempotencyCache(): Promise<{ pruned: number }> {
-  const result = await query(
-    'DELETE FROM idempotency_cache WHERE expires_at < NOW() RETURNING idempotency_key'
-  );
-  return { pruned: (result.rows || []).length };
-}

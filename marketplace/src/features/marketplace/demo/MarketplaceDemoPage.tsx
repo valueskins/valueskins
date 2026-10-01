@@ -516,25 +516,10 @@ export default function MarketplaceDemoPage(initialDealData?: {
       .finally(() => setCreatorsLoading(false));
   }, [activeBrandSkin]);
 
-  // Check for pending deals from CampaignDetail bid acceptance
-  useEffect(() => {
-    fetch('/api/realtime/state')
-      .then(r => r.json())
-      .then(data => {
-        if (data?.pendingDeals?.length > 0) {
-          const deal = data.pendingDeals[0];
-          setPendingDealCreatorName(deal.creatorName);
-          setMarketplaceRole('brand');
-          fetch('/api/realtime/state', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ value: { pendingDeals: [] } }),
-          }).catch(() => {});
-        }
-      })
-      .catch(() => {});
-  }, []);
-
+  // [REMOVED] A poll of /api/realtime/state for "pending deals from
+  // CampaignDetail bid acceptance". That endpoint does not exist (it 404'd on
+  // every mount), and the bidding flow it served was deleted with the
+  // no-negotiation decision. Confirmed deals now arrive over the WebSocket.
   // Auto-open deal room when pending deal creator is found in backendCreators
   useEffect(() => {
     if (pendingDealCreatorName && backendCreators.length > 0) {
