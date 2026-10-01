@@ -5,5 +5,11 @@
   "github": {
     "silent": false,
     "autoJobCancelation": true
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/deal-maintenance",
+      "schedule": "29 18 * * *"
+    }
+  ]
 }

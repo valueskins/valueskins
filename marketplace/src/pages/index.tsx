@@ -182,22 +182,28 @@ export default function HomePage() {
           The marketplace for<br />creators and brands
         </h1>
         <p style={{ fontSize: '1.125rem', color: C.textSecondary, margin: '0 auto 40px', maxWidth: '540px', lineHeight: 1.6 }}>
-          Every deal is backed by escrow. Money moves when the work is approved.
+          Brands post deals. Creators apply. The amount is fixed up front, and
+          the creator is paid directly - 30% to start, the rest on approval.
         </p>
 
-        {/* ONE call to action. Sign-in is Google OAuth only and the callback
-            creates the account on first use, so "Get Started" and "Sign In" were
-            the same journey wearing two labels — and the third CTA at the bottom
-            of the page was a third door to it. All routed to /auth/login now.
-            The login page itself carries the "Don't have an account? Sign up"
-            line if that distinction is ever needed. */}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        {/* ONE call to action. Sign-in is OAuth only and the callback creates
+            the account on first use, so "Get Started" and "Sign In" were the
+            same journey wearing two labels. All routed to /auth/login. */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
           <Link href="/auth/login" style={{
             display: 'inline-block', padding: '14px 32px', background: C.text, color: C.bg,
             borderRadius: '8px', fontSize: '0.9375rem', fontWeight: 700, textDecoration: 'none',
             transition: 'transform 0.15s',
           }}>
             Get Started
+          </Link>
+          {/* The run club lives at its own URL so it needs no space here beyond
+              a quiet line. The product is not blacked out for it. */}
+          <Link href="/run-club" style={{
+            fontSize: '0.8125rem', color: C.textSecondary, textDecoration: 'underline',
+            textUnderlineOffset: '3px',
+          }}>
+            Or join our Pune run club
           </Link>
         </div>
 
@@ -222,7 +228,7 @@ export default function HomePage() {
           {[
             { step: '01', title: 'Create Your Profile', desc: 'Showcase your skills, portfolio, and rates. Brands find you, or you find them.' },
             { step: '02', title: 'Make a Deal', desc: 'Brands post briefs, creators negotiate terms. Deliverables, deadlines, and payment are agreed upfront.' },
-            { step: '03', title: 'Escrow Protects Both Sides', desc: 'Brand funds the deal. Money is held securely in escrow by Razorpay. Released only on approval.' },
+            { step: '03', title: 'Paid In Stages', desc: 'The creator gets 30% to start and the rest once the brand approves the work. Payments run through Razorpay.' },
             { step: '04', title: 'Deliver and Get Paid', desc: 'Creator submits work. Brand reviews and approves. Payment releases instantly. Reputation grows.' },
           ].map((item, i) => (
             <Reveal key={item.step} reduced={reduced} delay={i * 90}>
@@ -252,7 +258,7 @@ export default function HomePage() {
                   'Build a public profile with your portfolio',
                   'Get discovered by brands looking for creators',
                   'Negotiate deal terms before committing',
-                  'Guaranteed payment through escrow',
+                  'Paid 30% up front, the rest on approval',
                   'All communication documented and on-record',
                   'Build reputation with completed deals',
                 ].map((item, i) => (
@@ -271,7 +277,7 @@ export default function HomePage() {
                   'Browse verified creator profiles and portfolios',
                   'Post campaign briefs and receive pitches',
                   'Set clear deliverables, deadlines, and budgets',
-                  'Funds held in escrow until you approve',
+                  'You only pay the rest once you approve the work',
                   'Only pay for work you are satisfied with',
                   'Track every deal from start to finish',
                 ].map((item, i) => (

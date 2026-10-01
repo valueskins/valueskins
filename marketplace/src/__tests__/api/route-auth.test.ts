@@ -28,45 +28,26 @@ jest.mock('@/lib/razorpay', () => ({
   createContact: jest.fn(),
   createFundAccount: jest.fn(),
 }));
-jest.mock('@/lib/escrow', () => ({
-  createDeal: jest.fn(),
-  fundEscrow: jest.fn(),
-  confirmEscrowFunding: jest.fn(),
-  submitDeliverable: jest.fn(),
-  approveDeliverables: jest.fn(),
-  submitAnalytics: jest.fn(),
-  approveAnalytics: jest.fn(),
-  requestRevision: jest.fn(),
-  submitRevision: jest.fn(),
-  raiseDispute: jest.fn(),
-  resolveDispute: jest.fn(),
-  getDealEscrowStatus: jest.fn(),
-  getAuditLog: jest.fn(),
-  savePayoutAccountReference: jest.fn(),
-  logAudit: jest.fn(),
-}));
 jest.mock('@/lib/backend-client', () => ({
   backendClient: new Proxy({}, { get: () => jest.fn(async () => ({ ok: true })) }),
 }));
 
-import { query } from '@/lib/db';
+import { query, queryOne } from '@/lib/db';
 import * as razorpay from '@/lib/razorpay';
-import * as escrow from '@/lib/escrow';
 
-import escrowV2 from '@/pages/api/deals/escrow-v2/[[...action]]';
-import payoutAccounts from '@/pages/api/deals/payout-accounts';
-import onboardPayout from '@/pages/api/deals/onboard-payout';
+import setupPayout from '@/pages/api/profile/setup-payout';
+import payCommission from '@/pages/api/deals/[dealId]/pay-commission';
+import downloadAdp from '@/pages/api/deals/[dealId]/download-adp';
 import runMigrations from '@/pages/api/admin/run-migrations';
 import envCheck from '@/pages/api/admin/env-check';
 import financialConfig from '@/pages/api/admin/financial-config';
-import completeWithRelease from '@/pages/api/deals/complete-with-release';
-import legacyEscrow from '@/pages/api/deals/escrow';
 import notificationsGet from '@/pages/api/notifications/get';
 import notificationsMarkRead from '@/pages/api/notifications/mark-read';
 import creatorEarnings from '@/pages/api/creator/earnings';
 import arbitration from '@/pages/api/disputes/arbitration';
 
 const queryMock = query as unknown as jest.Mock;
+const queryOneMock = queryOne as unknown as jest.Mock;
 const FORGED = { cookies: { valueskins_session: 'not-a-real-session' }, headers: { 'x-user-id': '1' } };
 const VALID = { cookies: { valueskins_session: VALID_TOKEN } };
 
@@ -84,52 +65,48 @@ afterEach(() => errSpy.mockRestore());
 const businessQueries = () =>
   queryMock.mock.calls.filter(([sql]) => !/auth_sessions/i.test(String(sql)));
 
-describe('escrow-v2', () => {
-  it('rejects a forged cookie + x-user-id and never reaches the engine', async () => {
-    const res = mockRes();
-    await escrowV2(mockReq({ method: 'POST', query: { action: ['approve'] }, body: { dealId: 'd1' }, ...FORGED }), res as any);
-    expect(res.statusCode).toBe(401);
-    expect(escrow.approveDeliverables).not.toHaveBeenCalled();
-  });
 
-  it('acts as the session user, not the header user', async () => {
-    const res = mockRes();
-    await escrowV2(
-      mockReq({ method: 'POST', query: { action: ['approve'] }, body: { dealId: 'd1' }, ...VALID, headers: { 'x-user-id': '1' } }),
-      res as any
-    );
-    expect(res.statusCode).toBe(200);
-    expect(escrow.approveDeliverables).toHaveBeenCalledWith('d1', SESSION_USER_ID);
-  });
-});
 
-describe('payout accounts', () => {
-  it('POST with a forged session cannot save a payout account', async () => {
+describe('payout setup (replaces the deleted onboard-payout)', () => {
+  // The highest-value target in the app: whoever controls this controls where a
+  // creator's earnings land. The old endpoint took creator_id from the body.
+  it('rejects a forged session before contacting Razorpay', async () => {
     const res = mockRes();
-    await payoutAccounts(
-      mockReq({ method: 'POST', body: { paymentProvider: 'razorpay', payoutAccountId: 'acc_ATTACKER', verificationStatus: 'verified' }, ...FORGED }),
+    await setupPayout(
+      mockReq({
+        method: 'POST',
+        body: { payment_method: 'bank', account_number: '123456789', ifsc: 'HDFC0001234' },
+        ...FORGED,
+      }),
       res as any
     );
     expect(res.statusCode).toBe(401);
-    expect(escrow.savePayoutAccountReference).not.toHaveBeenCalled();
+    expect(businessQueries()).toHaveLength(0);
   });
 
-  it('GET lists the session user\'s accounts even if a header names someone else', async () => {
+  it('ignores an x-user-id header naming someone else', async () => {
     const res = mockRes();
-    await payoutAccounts(mockReq({ method: 'GET', ...VALID, headers: { 'x-user-id': '999' } }), res as any);
-    expect(res.statusCode).toBe(200);
-    const [, params] = businessQueries()[0];
-    expect(params).toEqual([SESSION_USER_ID]);
-  });
-
-  it('onboard-payout rejects a forged session before calling Razorpay', async () => {
-    const res = mockRes();
-    await onboardPayout(
-      mockReq({ method: 'POST', body: { accountHolderName: 'X', accountNumber: '123456789', ifsc: 'HDFC0001234' }, ...FORGED }),
+    // Must resolve: session.touchSession calls .catch() on the result, so a
+    // plain object here throws before the handler is even reached.
+    queryMock.mockImplementation(async (sql: string) => {
+      if (/auth_sessions/i.test(sql)) return { rows: [{ user_id: SESSION_USER_ID }] };
+      return { rows: [] };
+    });
+    // The handler loads the user with queryOne. No email on file, so it stops
+    // before any Razorpay call — which is the point: it looked up the SESSION
+    // user, not the 999 in the header.
+    queryOneMock.mockResolvedValue({
+      id: SESSION_USER_ID, email: '', email_verified: false,
+      display_name: 'Session User', username: 'session_user',
+      bank_details_completed: false,
+    });
+    await setupPayout(
+      mockReq({ method: 'POST', body: { payment_method: 'upi', upi_id: 'x@bank' }, ...VALID,
+                headers: { 'x-user-id': '999' } }),
       res as any
     );
-    expect(res.statusCode).toBe(401);
-    expect(razorpay.createContact).not.toHaveBeenCalled();
+    // Acted as the session user: refused for a missing email, not 999's data.
+    expect(res.statusCode).toBe(400);
   });
 });
 
@@ -171,17 +148,22 @@ describe('admin', () => {
 });
 
 describe('cookie presence is not authentication', () => {
-  it('complete-with-release: any cookie value no longer releases escrow', async () => {
+  it('pay-commission: any cookie value no longer starts a payment', async () => {
     const res = mockRes();
-    await completeWithRelease(mockReq({ method: 'POST', body: { dealId: 'd1' }, ...FORGED }), res as any);
+    await payCommission(
+      mockReq({ method: 'POST', query: { dealId: '11111111-1111-1111-1111-111111111111' }, ...FORGED }),
+      res as any
+    );
     expect(res.statusCode).toBe(401);
-    expect(razorpay.createTransfer).not.toHaveBeenCalled();
     expect(businessQueries()).toHaveLength(0);
   });
 
-  it('deals/escrow release: any cookie value no longer flips escrow status', async () => {
+  it('download-adp: a forged cookie cannot pull another deal\'s report', async () => {
     const res = mockRes();
-    await legacyEscrow(mockReq({ method: 'POST', body: { dealId: 'd1', amount: 1, action: 'release' }, ...FORGED }), res as any);
+    await downloadAdp(
+      mockReq({ method: 'GET', query: { dealId: '11111111-1111-1111-1111-111111111111' }, ...FORGED }),
+      res as any
+    );
     expect(res.statusCode).toBe(401);
     expect(businessQueries()).toHaveLength(0);
   });

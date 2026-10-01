@@ -1,262 +1,190 @@
-import React, { useState, useEffect } from 'react';
+// The deal page, rebuilt for the current workflow.
+//
+// The previous version of this file drove the escrow model — an offer hero with
+// Accept / Counter / Decline and a chat column — and was deleted with the escrow
+// engine. This one renders the nine-state workflow instead: whichever party is
+// looking sees only the actions that are theirs, and the server decides what
+// those are.
+import { useCallback, useEffect, useState } from 'react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
-import DealRoomChat from '@/components/DealRoomChat';
-import BrandVerificationBadge from '@/components/BrandVerificationBadge';
+import { C } from '@/theme/colors';
+import DealWorkflowPanel from '@/components/deal/DealWorkflowPanel';
+import { useWebSocket } from '@/hooks/useWebSocket';
+import DealCommunications from '@/components/deal/DealCommunications';
+import type { WorkflowStatus } from '@/lib/deal-api';
+
+interface DealView {
+  id: string;
+  title: string;
+  description: string;
+  budget: number;
+  workflow_status: WorkflowStatus;
+  application_deadline: string | null;
+  content_upload_deadline: string | null;
+  deal_deadline: string | null;
+  content_link: string;
+  feedback: string;
+  revision_count: number;
+  applications_open: boolean;
+  viewer: 'brand' | 'creator';
+  is_confirmed_creator: boolean;
+  counterpart: { username: string; followers_count: number | null } | null;
+}
 
 export default function DealPage() {
   const router = useRouter();
-  const { dealId } = router.query;
-  const [deal, setDeal] = useState<any>(null);
-  const [messages, setMessages] = useState<any[]>([]);
+  const dealId = typeof router.query.dealId === 'string' ? router.query.dealId : '';
+
+  const [deal, setDeal] = useState<DealView | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [agreementPhase, setAgreementPhase] = useState(false);
-  const [syncNotification, setSyncNotification] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);
+  const { connected, subscribe } = useWebSocket();
 
-  useEffect(() => {
+  const load = useCallback(async () => {
     if (!dealId) return;
-
-    fetch(`/api/deals/${dealId}`)
-      .then(r => r.json())
-      .then(d => {
-        setDeal(d.deal);
-        setMessages(d.messages || []);
-        setLoading(false);
-      });
-  }, [dealId]);
-
-  const handleAgree = async () => {
-    if (!deal) return;
-
-    setSyncNotification(null);
-
-    const res = await fetch('/api/deals/accept-and-sync-calendar', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ dealId }),
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      setAgreementPhase(true);
-      if (data.calendarEventId) {
-        setSyncNotification({
-          type: 'success',
-          text: 'Deal accepted! Synced to your Google Calendar.',
-        });
-      } else if (data.calendarError) {
-        setSyncNotification({
-          type: 'info',
-          text: data.calendarError,
-        });
-      } else {
-        setSyncNotification({
-          type: 'success',
-          text: 'Deal accepted!',
-        });
+    try {
+      const res = await fetch(`/api/deals/${dealId}`, { credentials: 'include' });
+      if (res.status === 401) {
+        router.replace('/auth/login');
+        return;
       }
-    } else {
-      setSyncNotification({
-        type: 'error',
-        text: data.error || 'Failed to accept deal',
-      });
+      if (!res.ok) {
+        setError(res.status === 404 ? 'This deal does not exist, or you do not have access to it.' : 'Could not load this deal.');
+        return;
+      }
+      setDeal(await res.json());
+      setError(null);
+    } catch {
+      setError('Could not reach the server.');
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [dealId, router]);
 
-  const handleComplete = async () => {
-    const res = await fetch('/api/deals/complete-with-release', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ dealId }),
+  useEffect(() => { void load(); }, [load]);
+
+  // Payment confirmation arrives from the webhook, which lands after the request
+  // that started it returned — so the page has to be told, not asked. The socket
+  // does that: the server pushes when the deal's row changes and we refetch.
+  useEffect(() => {
+    if (!connected || !dealId) return;
+    const off = subscribe('mutate', (msg) => {
+      const m = msg as any;
+      if (m?.collection !== 'deals') return;
+      // Only this deal; another deal changing is not our business.
+      if (m?.key && m.key !== dealId) return;
+      void load();
     });
+    return () => off();
+  }, [connected, subscribe, dealId, load]);
 
-    if (res.ok) {
-      router.push(`/deals/${dealId}/review`);
-    }
+  // Backstop while a payment is in flight. Much slower than before, because the
+  // socket now carries it; this only covers a dropped connection at the exact
+  // moment the webhook fires.
+  useEffect(() => {
+    if (!deal) return;
+    const awaitingWebhook = deal.workflow_status === 'CONFIRMED'
+      || deal.workflow_status === 'COMMISSION_PAID'
+      || deal.workflow_status === 'APPROVED_FOR_FINAL_PAYMENT';
+    if (!awaitingWebhook) return;
+    const id = setInterval(() => { void load(); }, 20000);
+    return () => clearInterval(id);
+  }, [deal, load]);
+
+  // A reconnect may have missed the transition entirely.
+  useEffect(() => {
+    if (connected) void load();
+  }, [connected]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const page: React.CSSProperties = {
+    minHeight: '100vh',
+    background: C.bg,
+    color: C.text,
+    fontFamily: 'inherit',
+    padding: '20px 16px 48px',
   };
-
-  const handleSendMessage = (text: string) => {
-    fetch(`/api/deals/${dealId}/message`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text }),
-    });
-  };
-
-
-  if (loading) return <div>Loading...</div>;
-  if (!deal) return <div>Deal not found</div>;
+  const wrap: React.CSSProperties = { maxWidth: 640, margin: '0 auto' };
 
   return (
-    <div style={{ padding: '32px', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '24px' }}>
-        <div>
-          <h1 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px' }}>
-            {deal.title}
-          </h1>
+    <>
+      <Head><title>{deal ? `${deal.title} — ValueSkins` : 'Deal — ValueSkins'}</title></Head>
+      <div style={page}>
+        <div style={wrap}>
+          <button
+            onClick={() => router.push('/demo/marketplace')}
+            style={{
+              background: 'none', border: 'none', color: C.outline,
+              fontSize: 12, cursor: 'pointer', padding: 0, marginBottom: 14,
+            }}
+          >
+            ← Back to marketplace
+          </button>
 
-          <div style={{ display: 'grid', gap: '16px' }}>
-            <div>
-              <div style={{ fontSize: '12px', color: 'var(--c-text-variant)', fontWeight: 600 }}>
-                STATUS
-              </div>
-              <div style={{ fontSize: '14px', fontWeight: 600 }}>
-                {deal.status}
-              </div>
+          {loading && <div style={{ fontSize: 13, color: C.outline }}>Loading…</div>}
+
+          {error && (
+            <div
+              role="alert"
+              style={{
+                background: C.surface, border: `1px solid ${C.error}`,
+                borderRadius: 12, padding: 16, fontSize: 13,
+              }}
+            >
+              {error}
             </div>
+          )}
 
-            <div>
-              <div style={{ fontSize: '12px', color: 'var(--c-text-variant)', fontWeight: 600 }}>
-                PHASE
-              </div>
-              <div style={{ fontSize: '14px', fontWeight: 600 }}>
-                {deal.phase}
-              </div>
-            </div>
-
-            <div>
-              <div style={{ fontSize: '12px', color: 'var(--c-text-variant)', fontWeight: 600 }}>
-                VALUE SKIN
-              </div>
-              <div style={{ fontSize: '14px', fontWeight: 600 }}>
-                {deal.value_skin}
-              </div>
-            </div>
-
-            {deal.requires_shoot_on_location && ['accepted', 'softhold', 'checklist', 'approved'].includes(deal.phase) && (
-              <>
-                <div style={{ borderTop: '1px solid var(--c-border)', paddingTop: '16px' }}>
-                  <div style={{ fontSize: '12px', color: 'var(--c-text-variant)', fontWeight: 600, marginBottom: '12px' }}>
-                    SHOOT DETAILS
-                  </div>
-                  {deal.shoot_date && (
-                    <div style={{ fontSize: '13px', marginBottom: '8px' }}>
-                      <span style={{ color: 'var(--c-text-variant)' }}>Date:</span> {new Date(deal.shoot_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                    </div>
-                  )}
-                  {deal.shoot_time && (
-                    <div style={{ fontSize: '13px', marginBottom: '8px' }}>
-                      <span style={{ color: 'var(--c-text-variant)' }}>Time:</span> {deal.shoot_time}
-                    </div>
-                  )}
-                  {deal.location && (
-                    <div style={{ fontSize: '13px', marginBottom: '12px' }}>
-                      <span style={{ color: 'var(--c-text-variant)' }}>Location:</span> {deal.location}
-                    </div>
-                  )}
-                  {deal.google_calendar_event_id && (
-                    <div style={{ fontSize: '12px', color: 'var(--c-accent)', fontWeight: 600, padding: '10px', background: 'rgba(200, 184, 154, 0.1)', borderRadius: '6px', textAlign: 'center', marginTop: '12px' }}>
-                      Synced to Google Calendar
-                    </div>
-                  )}
-                </div>
-
-                {deal.submission_deadline && (
-                  <div style={{ borderTop: '1px solid var(--c-border)', paddingTop: '16px' }}>
-                    <div style={{ fontSize: '12px', color: 'var(--c-text-variant)', fontWeight: 600, marginBottom: '8px' }}>
-                      DEADLINES
-                    </div>
-                    <div style={{ fontSize: '13px', marginBottom: '6px' }}>
-                      <span style={{ color: 'var(--c-text-variant)' }}>Submit by:</span> {new Date(deal.submission_deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                    </div>
-                    {deal.approval_deadline && (
-                      <div style={{ fontSize: '13px', marginBottom: '6px' }}>
-                        <span style={{ color: 'var(--c-text-variant)' }}>Approval by:</span> {new Date(deal.approval_deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                      </div>
-                    )}
-                    {deal.posting_deadline && (
-                      <div style={{ fontSize: '13px', marginBottom: '6px' }}>
-                        <span style={{ color: 'var(--c-text-variant)' }}>Post by:</span> {new Date(deal.posting_deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                      </div>
-                    )}
-                    {deal.payment_due_date && (
-                      <div style={{ fontSize: '13px' }}>
-                        <span style={{ color: 'var(--c-text-variant)' }}>Payment due:</span> {new Date(deal.payment_due_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </>
-            )}
-
-            <div>
-              <div style={{ fontSize: '12px', color: 'var(--c-text-variant)', fontWeight: 600 }}>
-                BUDGET
-              </div>
-              <div style={{ fontSize: '14px', fontWeight: 600 }}>
-                ${deal.budget}
-              </div>
-            </div>
-
-            {deal.brand_verified && (
-              <BrandVerificationBadge status="verified" brandName={deal.brand_name} />
-            )}
-
-            <div style={{ display: 'grid', gap: '8px' }}>
-              {!agreementPhase && (
-                <button
-                  onClick={handleAgree}
-                  style={{
-                    padding: '10px 16px',
-                    background: '#0A0A0A',
-                    color: '#ffffff',
-                    border: 'none',
-                    borderRadius: '6px',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    fontSize: '14px',
-                  }}
-                >
-                  Agree and Create Escrow
-                </button>
-              )}
-
-              {agreementPhase && !deal.completed_at && (
-                <button
-                  onClick={handleComplete}
-                  style={{
-                    padding: '10px 16px',
-                    background: 'var(--c-accent)',
-                    color: '#ffffff',
-                    border: 'none',
-                    borderRadius: '6px',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    fontSize: '14px',
-                  }}
-                >
-                  Mark Complete and Release Payment
-                </button>
-              )}
-
-              <a
-                href={`/api/deals/export-proof?dealId=${dealId}`}
+          {deal && (
+            <>
+              <div
                 style={{
-                  padding: '10px 16px',
-                  background: 'transparent',
-                  color: '#0A0A0A',
-                  border: '1px solid #0A0A0A',
-                  borderRadius: '6px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                  textAlign: 'center',
-                  textDecoration: 'none',
+                  background: C.surface, border: `1px solid ${C.border}`,
+                  borderRadius: 12, padding: 16, marginBottom: 12,
                 }}
               >
-                Download Proof
-              </a>
-            </div>
-          </div>
-        </div>
+                <div style={{ fontSize: 11, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>
+                  {deal.viewer === 'brand' ? 'Your deal' : 'Brand deal'}
+                  {deal.counterpart ? ` · @${deal.counterpart.username}` : ''}
+                </div>
+                <div style={{ fontSize: 13, color: C.textMuted, whiteSpace: 'pre-wrap', lineHeight: 1.55 }}>
+                  {deal.description}
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 12 }}>
+                  {[
+                    ['Applications close', deal.application_deadline],
+                    ['Content due', deal.content_upload_deadline],
+                    ['Deal ends', deal.deal_deadline],
+                  ].map(([k, v]) => (
+                    <div key={String(k)}>
+                      <div style={{ fontSize: 10, color: C.outline, textTransform: 'uppercase' }}>{k}</div>
+                      <div style={{ fontSize: 12, color: C.text }}>
+                        {v ? new Date(String(v)).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-        <DealRoomChat
-          dealId={dealId as string}
-          brandName={deal.brand_name}
-          initialMessages={messages}
-          onSendMessage={handleSendMessage}
-        />
+              <DealWorkflowPanel
+                dealId={deal.id}
+                viewer={deal.viewer}
+                title={deal.title}
+                budget={deal.budget}
+                status={deal.workflow_status}
+                isConfirmedCreator={deal.is_confirmed_creator}
+                contentLink={deal.content_link}
+                feedback={deal.feedback}
+                revisionCount={deal.revision_count}
+                applicationsOpen={deal.applications_open}
+                onChanged={load}
+              />
+
+              <DealCommunications dealId={deal.id} />
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

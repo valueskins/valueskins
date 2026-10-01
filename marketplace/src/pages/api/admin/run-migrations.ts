@@ -4,6 +4,47 @@ import { query } from '@/lib/db-pool';
 import fs from 'fs';
 import path from 'path';
 
+/**
+ * Runs a .sql file one statement at a time (the pg driver rejects multiple
+ * statements in a single query call) and returns how many ran.
+ *
+ * Line comments are stripped BEFORE splitting. A statement preceded by a
+ * comment block would otherwise leave a chunk starting with "--", which a
+ * naive `startsWith('--')` filter drops — silently skipping real DDL.
+ */
+async function runSqlStatements(sql: string): Promise<number> {
+  const statements = sql
+    .split('\n')
+    .map((line) => {
+      const idx = line.indexOf('--');
+      return idx === -1 ? line : line.slice(0, idx);
+    })
+    .join('\n')
+    .split(';')
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+
+  let ran = 0;
+  for (const stmt of statements) {
+    try {
+      await query(stmt);
+      ran++;
+    } catch (err: any) {
+      const msg = err?.message || '';
+      // Re-running a migration is expected and safe.
+      if (
+        msg.includes('already exists') ||
+        msg.includes('duplicate column') ||
+        msg.includes('duplicate key')
+      ) {
+        continue;
+      }
+      throw err;
+    }
+  }
+  return ran;
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -12,6 +53,45 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const results: { name: string; success: boolean; error?: string }[] = [];
   let allPassed = true;
+
+  // Build-spec deal workflow schema (006). Runs first: the workflow endpoints
+  // and the later migrations both depend on its tables.
+  try {
+    const specPath = path.join(
+      process.cwd(), 'src', 'lib', 'migrations', '006_build_spec_workflow.sql'
+    );
+    const ran = await runSqlStatements(fs.readFileSync(specPath, 'utf-8'));
+    results.push({
+      name: `006_build_spec_workflow.sql (${ran} statements)`,
+      success: true,
+    });
+  } catch (err: any) {
+    allPassed = false;
+    results.push({
+      name: '006_build_spec_workflow.sql',
+      success: false,
+      error: err.message,
+    });
+  }
+
+  // Payout processing state (007). Depends on 006's payouts table.
+  try {
+    const payoutPath = path.join(
+      process.cwd(), 'src', 'lib', 'migrations', '007_payout_processing.sql'
+    );
+    const ran = await runSqlStatements(fs.readFileSync(payoutPath, 'utf-8'));
+    results.push({
+      name: `007_payout_processing.sql (${ran} statements)`,
+      success: true,
+    });
+  } catch (err: any) {
+    allPassed = false;
+    results.push({
+      name: '007_payout_processing.sql',
+      success: false,
+      error: err.message,
+    });
+  }
 
   // Run escrow-v2 migration SQL
   try {

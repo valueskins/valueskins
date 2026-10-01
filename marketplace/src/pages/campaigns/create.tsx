@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { createDeal, isOk } from '@/lib/deal-api';
 
 export default function CreateCampaign() {
   const router = useRouter();
@@ -13,6 +14,7 @@ export default function CreateCampaign() {
     media_format: 'instagram_reel',
   });
   const [commission, setCommission] = useState(885);
+  const [error, setError] = useState<string | null>(null);
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const budget = parseFloat(e.target.value) || 0;
@@ -28,48 +30,52 @@ export default function CreateCampaign() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
-    try {
-      // Create deal
-      const dealRes = await fetch('/api/deals/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          commission_amount: commission,
-          creator_payout_amount: creatorPayout,
-          creator_advance: advance,
-          creator_final: final,
-        }),
-      });
+    // Rewired to the real workflow. As written this page could never have
+    // worked: it posted to /api/deals/create and /api/payment/initiate-commission
+    // (neither exists — the latter was removed for having no authentication and
+    // taking the amount from the client) and sent the literal string
+    // 'current_user_id' as brand_id.
+    //
+    // It also charged the commission at creation. In this workflow the
+    // commission is paid only after a creator has been confirmed, so there is
+    // nothing to pay for yet — the brand is sent to the deal page, where the
+    // three payments appear in order.
+    const days = (n: number) => {
+      const d = new Date();
+      d.setDate(d.getDate() + n);
+      return d.toISOString();
+    };
+    // The one field the form collects is a delivery timeline in days. Applications
+    // close halfway to it so a creator still has time to produce the work, and
+    // the deal itself ends a week after delivery is due.
+    const deliverIn = Math.max(2, Number(formData.deliverable_timeline) || 3);
+    const applyIn = Math.max(1, Math.floor(deliverIn / 2));
 
-      if (!dealRes.ok) throw new Error('Failed to create deal');
-      const deal = await dealRes.json();
+    const description = [
+      formData.requirements && `Requirements:\n${formData.requirements}`,
+      formData.script && `Script / direction:\n${formData.script}`,
+      `Format: ${formData.media_format.replace(/_/g, ' ')}`,
+      `Delivery: within ${deliverIn} days of confirmation`,
+    ].filter(Boolean).join('\n\n');
 
-      // Initiate commission payment
-      const paymentRes = await fetch('/api/payment/initiate-commission', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          deal_id: deal.id,
-          brand_id: 'current_user_id', // Get from auth context
-          amount: commission,
-          description: formData.title,
-        }),
-      });
+    const res = await createDeal({
+      title: formData.title.trim(),
+      description,
+      budget: Number(formData.budget),
+      application_deadline: days(applyIn),
+      content_upload_deadline: days(deliverIn),
+      deal_deadline: days(deliverIn + 7),
+      publish: true,
+    });
 
-      if (!paymentRes.ok) throw new Error('Failed to initiate payment');
-      const order = await paymentRes.json();
-
-      // Redirect to Razorpay checkout
-      // Use Razorpay checkout modal or redirect
-      window.location.href = `https://checkout.razorpay.com/?key_id=${order.key_id}&order_id=${order.order_id}`;
-    } catch (error) {
-      console.error('Campaign creation error:', error);
-      alert('Failed to create campaign');
-    } finally {
-      setLoading(false);
+    setLoading(false);
+    if (!isOk(res)) {
+      setError(res.error);
+      return;
     }
+    router.push(`/deals/${res.data.deal_id}`);
   };
 
   return (
@@ -222,6 +228,12 @@ export default function CreateCampaign() {
             </div>
           </div>
         </div>
+        {error && (
+          <div role="alert" style={{ color: 'var(--c-error)', fontSize: 13, marginBottom: 12 }}>
+            {error}
+          </div>
+        )}
+
 
         <button
           type="submit"
@@ -239,7 +251,7 @@ export default function CreateCampaign() {
             opacity: loading ? 0.6 : 1,
           }}
         >
-          {loading ? 'Creating Campaign...' : 'Proceed to Payment (₹' + commission + ')'}
+          {loading ? 'Publishing…' : 'Publish deal'}
         </button>
       </form>
     </div>
