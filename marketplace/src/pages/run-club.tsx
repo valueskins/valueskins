@@ -16,10 +16,13 @@ const MAP_EMBED =
 // Opens the real Maps app on a phone, which the embed cannot do.
 const MAP_LINK = 'https://maps.google.com/?q=Ferguson+College+Main+Gate,+Pune';
 
+const PRICE = 49;
+
 const DETAILS: [string, string][] = [
   ['When', 'Saturday, 11 October · 7:00 AM'],
   ['Where', 'Ferguson College Main Gate, Pune'],
   ['Distance', '5K, at your own pace'],
+  ['Cost', `₹${PRICE}`],
 ];
 
 export default function RunClubPage() {
@@ -64,6 +67,14 @@ export default function RunClubPage() {
             <p style={{ fontSize: 16, color: C.textMuted, margin: 0, lineHeight: 1.6, maxWidth: 460 }}>
               5K at your own pace. All levels welcome — walkers, first-timers, and people who
               have not run since school.
+            </p>
+            <p
+              style={{
+                fontSize: 13, color: C.outline, margin: '14px 0 0',
+                lineHeight: 1.6, maxWidth: 460, fontStyle: 'italic',
+              }}
+            >
+              ₹{PRICE}. We are the cheapest run club (probably — first time, don&apos;t judge).
             </p>
           </div>
         </section>
@@ -118,8 +129,8 @@ export default function RunClubPage() {
                 Confirm your spot
               </h2>
               <p style={{ fontSize: 13, color: C.textMuted, margin: '0 0 16px', lineHeight: 1.6 }}>
-                Paying is how you register — there is no separate form. We check you off
-                at the gate, so bring the phone number you pay with.
+                ₹{PRICE}. Paying is how you register — there is no separate form. We check
+                you off at the gate, so bring the phone number you pay with.
               </p>
 
               <a
@@ -137,7 +148,7 @@ export default function RunClubPage() {
                   textDecoration: 'none',
                 }}
               >
-                Pay and join the run
+                Pay ₹{PRICE} and join the run
               </a>
 
               <p style={{ fontSize: 11, color: C.outline, margin: '14px 0 0' }}>
