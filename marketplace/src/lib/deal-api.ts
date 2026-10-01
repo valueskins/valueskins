@@ -151,26 +151,27 @@ export const setEmail = (email: string) =>
     { method: 'POST', body: { email } }
   );
 
-export const getPayoutStatus = () =>
-  call<{ configured: boolean; display_hint: string | null; has_token: boolean }>(
-    '/api/profile/setup-payout'
-  );
+// Payout destination is UPI only: see /api/profile/payout-upi.
+//
+// The former setupPayout() and its endpoint accepted a bank account number and
+// IFSC. Both are gone. A brand now pays the creator's UPI directly, so a UPI
+// handle is the only destination we need — and unlike an account number, it is
+// receive-only and designed to be shared. Leaving an endpoint that still took
+// account numbers would have reintroduced exactly the data we stopped holding.
+export const getPayoutUpi = () =>
+  call<{
+    masked: string | null;
+    configured: boolean;
+    consented: boolean;
+    email_verified: boolean;
+  }>('/api/profile/payout-upi');
 
-/** Sends the payout details once. They go to Razorpay; we keep only a token. */
-export const setupPayout = (
-  input:
-    | { payment_method: 'upi'; upi_id: string; account_holder_name?: string }
-    | {
-        payment_method: 'bank';
-        account_number: string;
-        ifsc: string;
-        account_holder_name?: string;
-      }
-) =>
-  call<{ configured: true; method: 'bank' | 'upi'; display_hint: string }>(
-    '/api/profile/setup-payout',
-    { method: 'POST', body: input }
-  );
+/** Saves the UPI handle. Consent is required: it is shown to confirmed brands. */
+export const setPayoutUpi = (upiId: string, shareConsent: boolean) =>
+  call<{ configured: true; masked: string }>('/api/profile/payout-upi', {
+    method: 'POST',
+    body: { upi_id: upiId, share_consent: shareConsent },
+  });
 
 // ---------------------------------------------------------------------------
 // Deals
