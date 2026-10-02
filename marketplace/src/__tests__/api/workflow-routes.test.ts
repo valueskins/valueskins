@@ -635,6 +635,129 @@ describeDb('workflow routes (real database)', () => {
     expect(Math.round(total * 100) / 100).toBe(10000);
   });
 
+  // -- terminal states, expiry, and a passed-over creator -------------------
+  //
+  // These all passed when probed by hand. Committed so they stay that way: each
+  // is a place where a stale client or a guessed URL could act on a deal that
+  // has moved past the point of accepting the action.
+
+  it('refuses an application once the deadline has passed', async () => {
+    const expired = await queryOne(
+      `INSERT INTO deals (brand_id,title,description,amount,workflow_status,
+          application_deadline,content_upload_deadline,deal_deadline,published_at)
+       VALUES ($1,'Expired','x',10000,'OPEN',
+          NOW()-INTERVAL '1 day',NOW()+INTERVAL '5 days',NOW()+INTERVAL '10 days',NOW())
+       RETURNING id`,
+      [BRAND]
+    );
+    const res = mockRes();
+    await applications(
+      mockReq({ method: 'POST', body: { deal_id: expired.id }, ...asUser(OUTSIDER_SESSION) }),
+      res as any
+    );
+    expect(res.statusCode).toBe(409);
+
+    // Still listed, but flagged closed: the feed shows it without an apply path.
+    const feedRes = mockRes();
+    await feed(mockReq({ method: 'GET', query: {}, ...asUser(OUTSIDER_SESSION) }), feedRes as any);
+    const row = feedRes.body.deals.find((d: any) => d.id === expired.id);
+    if (row) expect(row.applications_open).toBe(false);
+  });
+
+  it('keeps a passed-over creator out of the deal they lost', async () => {
+    // OTHER_CREATOR applied earlier and was auto-rejected when CREATOR won.
+    const upload = mockRes();
+    await uploadContent(
+      mockReq({
+        method: 'POST', query: { dealId },
+        body: { content_link: 'https://drive.google.com/file/d/nope/view' },
+        ...asUser(OTHER_SESSION),
+      }),
+      upload as any
+    );
+    expect(upload.statusCode).toBe(403);
+  });
+
+  it('refuses every action on a cancelled deal', async () => {
+    const cancelled = await queryOne(
+      `INSERT INTO deals (brand_id,title,description,amount,workflow_status,
+          application_deadline,content_upload_deadline,deal_deadline,published_at,cancelled_at)
+       VALUES ($1,'Cancelled','x',10000,'CANCELLED',
+          NOW()+INTERVAL '7 days',NOW()+INTERVAL '14 days',NOW()+INTERVAL '21 days',NOW(),NOW())
+       RETURNING id`,
+      [BRAND]
+    );
+    for (const [handler, token] of [
+      [payCommission, BRAND_SESSION],
+      [cancelDeal, BRAND_SESSION],
+      [approveFinal, BRAND_SESSION],
+    ] as [any, string][]) {
+      const res = mockRes();
+      await handler(
+        mockReq({ method: 'POST', query: { dealId: cancelled.id }, body: {}, ...asUser(token) }),
+        res as any
+      );
+      expect(res.statusCode).toBe(409);
+    }
+
+    const applyRes = mockRes();
+    await applications(
+      mockReq({ method: 'POST', body: { deal_id: cancelled.id }, ...asUser(OUTSIDER_SESSION) }),
+      applyRes as any
+    );
+    expect(applyRes.statusCode).toBe(409);
+  });
+
+  it('refuses every action on a completed deal', async () => {
+    // `dealId` reached COMPLETED earlier in this file.
+    for (const [handler, token, body] of [
+      [payRemaining, BRAND_SESSION, {}],
+      [approveFinal, BRAND_SESSION, {}],
+      [cancelDeal, BRAND_SESSION, {}],
+      [suggestChanges, BRAND_SESSION, { feedback: 'more' }],
+      [uploadContent, CREATOR_SESSION, { content_link: 'https://drive.google.com/file/d/z/view' }],
+    ] as [any, string, any][]) {
+      const res = mockRes();
+      await handler(
+        mockReq({ method: 'POST', query: { dealId }, body, ...asUser(token) }),
+        res as any
+      );
+      expect(res.statusCode).toBe(409);
+    }
+  });
+
+  it('rejects budgets that are not usable money', async () => {
+    const dates = {
+      application_deadline: future(7),
+      content_upload_deadline: future(14),
+      deal_deadline: future(21),
+    };
+    for (const budget of [-10000, 0, 885, '10000; DROP TABLE deals', null, Number.NaN] as any[]) {
+      const res = mockRes();
+      await createDeal(
+        mockReq({
+          method: 'POST',
+          body: { title: 'Edge', description: 'd', budget, ...dates },
+          ...asUser(BRAND_SESSION),
+        }),
+        res as any
+      );
+      expect(res.statusCode).toBe(400);
+    }
+
+    // One rupee over the commission is the smallest viable deal.
+    const ok = mockRes();
+    await createDeal(
+      mockReq({
+        method: 'POST',
+        body: { title: 'Smallest', description: 'd', budget: 886, ...dates },
+        ...asUser(BRAND_SESSION),
+      }),
+      ok as any
+    );
+    expect(ok.statusCode).toBe(201);
+  });
+
   // -- IDOR sweep -----------------------------------------------------------
 
   // A random uuid must never leak another deal's state, whoever is asking.

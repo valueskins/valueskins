@@ -8,6 +8,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { requireUser } from '@/lib/auth/require-user';
 import { query } from '@/lib/db-pool';
 import { WORKFLOW } from '@/lib/deal-workflow';
+import { getUserRole } from '@/lib/deal-guards';
 
 const DEFAULT_LIMIT = 50;
 const MAX_LIMIT = 100;
@@ -17,6 +18,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const userId = await requireUser(req, res);
   if (!userId) return;
+
+  // Creators only. This list exists to be applied to, and a brand reading it
+  // saw deals it could never apply to, including its own.
+  const role = await getUserRole(userId);
+  if (role !== 'creator') {
+    return res.status(403).json({
+      error: 'The deal feed is for creators. Your deals are under Campaigns.',
+      role,
+    });
+  }
 
   const limit = Math.min(
     Math.max(Number(req.query.limit) || DEFAULT_LIMIT, 1),

@@ -5,12 +5,29 @@
 // they no longer had — and with SMTP unconfigured, nothing told them when a
 // brand confirmed them either.
 import { useCallback, useEffect, useState } from 'react';
+import type { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { C, withAlpha } from '@/theme/colors';
 import { getMyApplications, nextAction, financials, isOk, type WorkflowStatus } from '@/lib/deal-api';
 import { useWebSocket } from '@/hooks/useWebSocket';
+
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const { getSessionUserId } = await import('@/lib/session');
+  const { queryOne } = await import('@/lib/db');
+  const userId = await getSessionUserId(ctx.req.headers.cookie || '');
+  if (!userId) {
+    return { redirect: { destination: '/auth/login', permanent: false } };
+  }
+  const row = await queryOne('SELECT role FROM users WHERE id = $1', [userId]);
+  // Brands have their own home. Sending them here showed deals they can never
+  // apply to, their own included, each with an Apply button.
+  if ((row as any)?.role !== 'creator') {
+    return { redirect: { destination: '/campaigns', permanent: false } };
+  }
+  return { props: {} };
+}
 
 interface Row {
   id: string;

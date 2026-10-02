@@ -10,7 +10,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { requireUser } from '@/lib/auth/require-user';
 import { queryOne } from '@/lib/db-pool';
-import { loadDeal, isBrandOwner, isConfirmedCreator, dealBudget } from '@/lib/deal-guards';
+import { loadDeal, isBrandOwner, isConfirmedCreator, dealBudget, getUserRole } from '@/lib/deal-guards';
 import { applicationsOpen } from '@/lib/deal-workflow';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -36,7 +36,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     isApplicant = !!row;
   }
 
-  if (!isBrand && !isCreator && !isApplicant) {
+  // An OPEN deal is already in every creator's feed, so its page reveals
+  // nothing new; without this, Browse's "Details" button 404s before applying.
+  let isBrowsingCreator = false;
+  if (!isBrand && !isCreator && !isApplicant && deal.workflow_status === 'OPEN') {
+    isBrowsingCreator = (await getUserRole(userId)) === 'creator';
+  }
+
+  if (!isBrand && !isCreator && !isApplicant && !isBrowsingCreator) {
     return res.status(404).json({ error: 'Not found' });
   }
 

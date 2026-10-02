@@ -35,7 +35,7 @@ jest.mock('@/lib/backend-client', () => ({
 import { query, queryOne } from '@/lib/db';
 import * as razorpay from '@/lib/razorpay';
 
-import setupPayout from '@/pages/api/profile/setup-payout';
+import payoutUpi from '@/pages/api/profile/payout-upi';
 import payCommission from '@/pages/api/deals/[dealId]/pay-commission';
 import downloadAdp from '@/pages/api/deals/[dealId]/download-adp';
 import runMigrations from '@/pages/api/admin/run-migrations';
@@ -67,15 +67,15 @@ const businessQueries = () =>
 
 
 
-describe('payout setup (replaces the deleted onboard-payout)', () => {
+describe('payout UPI (the only payout destination)', () => {
   // The highest-value target in the app: whoever controls this controls where a
   // creator's earnings land. The old endpoint took creator_id from the body.
   it('rejects a forged session before contacting Razorpay', async () => {
     const res = mockRes();
-    await setupPayout(
+    await payoutUpi(
       mockReq({
         method: 'POST',
-        body: { payment_method: 'bank', account_number: '123456789', ifsc: 'HDFC0001234' },
+        body: { upi_id: 'attacker@okhdfc', share_consent: true },
         ...FORGED,
       }),
       res as any
@@ -100,8 +100,8 @@ describe('payout setup (replaces the deleted onboard-payout)', () => {
       display_name: 'Session User', username: 'session_user',
       bank_details_completed: false,
     });
-    await setupPayout(
-      mockReq({ method: 'POST', body: { payment_method: 'upi', upi_id: 'x@bank' }, ...VALID,
+    await payoutUpi(
+      mockReq({ method: 'POST', body: { upi_id: 'x@okbank', share_consent: true }, ...VALID,
                 headers: { 'x-user-id': '999' } }),
       res as any
     );
