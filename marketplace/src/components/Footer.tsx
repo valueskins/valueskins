@@ -122,7 +122,7 @@ export default function Footer() {
               }}>
                 Data Access (GDPR/CCPA)
               </Link>
-              <Link href="/account/settings" style={{
+              <Link href="/account/data" style={{
                 fontSize: '13px',
                 color: C.textSecondary,
                 textDecoration: 'none',
