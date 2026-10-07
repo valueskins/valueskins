@@ -18,6 +18,14 @@ const C = {
 };
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  // This shell keeps deals, campaigns and applications in localStorage, so two
+  // people on two devices never saw the same deal. The deal workflow now lives
+  // on server-backed pages; only the settings and store views are still served
+  // from here, and they are reached by an explicit ?view=.
+  if (typeof ctx.query.view !== 'string') {
+    return { redirect: { destination: '/deals/browse', permanent: false } };
+  }
+
   const empty = { props: { initialCampaigns: [], initialDealStates: null, initialApplications: [] } };
   try {
     const cookie = ctx.req.headers.cookie || '';

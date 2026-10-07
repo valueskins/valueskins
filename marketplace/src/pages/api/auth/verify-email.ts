@@ -49,7 +49,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     // Verify email token
     try {
       const { token } = req.query;
-      if (!token) return res.status(400).json({ error: 'Token required' });
+      if (typeof token !== 'string' || !/^[0-9a-f]{64}$/.test(token)) {
+        return res.status(400).json({ error: 'Token required' });
+      }
 
       const verification = await queryOne(
         'SELECT user_id, expires_at FROM email_verifications WHERE token = $1',

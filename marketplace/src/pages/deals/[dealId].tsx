@@ -112,13 +112,13 @@ export default function DealPage() {
       <div style={page}>
         <div style={wrap}>
           <button
-            onClick={() => router.push('/demo/marketplace')}
+            onClick={() => router.push('/deals/browse')}
             style={{
               background: 'none', border: 'none', color: C.outline,
               fontSize: 12, cursor: 'pointer', padding: 0, marginBottom: 14,
             }}
           >
-            ← Back to marketplace
+            ← Back to deals
           </button>
 
           {loading && <div style={{ fontSize: 13, color: C.outline }}>Loading…</div>}

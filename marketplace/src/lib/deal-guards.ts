@@ -64,10 +64,18 @@ export async function getUserRole(userId: string | number): Promise<string | nul
 // Spec: email must be on file and verified, and bank details entered, before a
 // user can transact. Checked at the point of use rather than trusted from the
 // client.
-export async function getTransactReadiness(userId: string | number): Promise<{
+//
+// `requirePayout` is false for the paying side: a brand pays and is never paid,
+// so it has no payout details to enter, and requiring them stopped every brand
+// at the commission step with no page on which to resolve it.
+export async function getTransactReadiness(
+  userId: string | number,
+  opts: { requirePayout?: boolean } = {}
+): Promise<{
   ready: boolean;
   reason?: string;
 }> {
+  const requirePayout = opts.requirePayout !== false;
   const row = await queryOne(
     'SELECT email, email_verified, bank_details_completed FROM users WHERE id = $1',
     [userId]
@@ -76,7 +84,9 @@ export async function getTransactReadiness(userId: string | number): Promise<{
   if (!u) return { ready: false, reason: 'user_not_found' };
   if (!u.email) return { ready: false, reason: 'email_required' };
   if (!u.email_verified) return { ready: false, reason: 'email_not_verified' };
-  if (!u.bank_details_completed) return { ready: false, reason: 'bank_details_required' };
+  if (requirePayout && !u.bank_details_completed) {
+    return { ready: false, reason: 'bank_details_required' };
+  }
   return { ready: true };
 }
 

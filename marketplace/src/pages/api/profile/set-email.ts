@@ -40,7 +40,7 @@ async function status(userId: string, res: NextApiResponse) {
       ? 'email'
       : !u.email_verified
         ? 'verify_email'
-        : !u.bank_details_completed
+        : !u.bank_details_completed && u.role === 'creator'
           ? 'bank_details'
           : 'ready',
   });
@@ -92,7 +92,9 @@ async function setEmail(req: NextApiRequest, res: NextApiResponse, userId: strin
       [userId, token, new Date(Date.now() + TOKEN_TTL_MS)]
     );
 
-    const link = `${APP_URL}/verify-email?token=${token}`;
+    // /settings/email is the page that consumes the token. This used to point
+    // at /verify-email, which does not exist, so every confirmation link 404'd.
+    const link = `${APP_URL}/settings/email?token=${token}`;
     await sendEmail({
       to: email,
       userId: Number(userId),

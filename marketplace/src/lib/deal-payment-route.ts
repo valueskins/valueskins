@@ -20,9 +20,14 @@ export function makePaymentRoute(type: StageType) {
     // Only the brand that owns the deal pays for it.
     if (!isBrandOwner(deal, userId)) return res.status(403).json({ error: 'Forbidden' });
 
-    const readiness = await getTransactReadiness(userId);
+    const readiness = await getTransactReadiness(userId, { requirePayout: false });
     if (!readiness.ready) {
-      return res.status(403).json({ error: 'Account setup incomplete', reason: readiness.reason });
+      // Says what to do: the client shows `error` as-is, and "Account setup
+      // incomplete" left the brand with nothing to act on.
+      return res.status(403).json({
+        error: 'Confirm your email address in Settings before paying.',
+        reason: readiness.reason,
+      });
     }
 
     try {

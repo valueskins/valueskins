@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import { C, withAlpha } from '@/theme/colors';
 import { getMyApplications, nextAction, financials, isOk, type WorkflowStatus } from '@/lib/deal-api';
 import { useWebSocket } from '@/hooks/useWebSocket';
+import SetupBanner from '@/components/deal/SetupBanner';
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const { getSessionUserId } = await import('@/lib/session');
@@ -23,7 +24,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const row = await queryOne('SELECT role FROM users WHERE id = $1', [userId]);
   // Brands have their own home. Sending them here showed deals they can never
   // apply to, their own included, each with an Apply button.
-  if ((row as any)?.role !== 'creator') {
+  if ((row as any)?.role === 'brand') {
     return { redirect: { destination: '/campaigns', permanent: false } };
   }
   return { props: {} };
@@ -77,6 +78,13 @@ export default function MyDealsPage() {
 
   useEffect(() => { if (connected) void load(); }, [connected]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // The socket is an accelerator, not the mechanism: without this the page
+  // never learned the creator had been picked unless they reloaded it.
+  useEffect(() => {
+    const id = setInterval(() => { void load(); }, 20000);
+    return () => clearInterval(id);
+  }, [load]);
+
   const card: React.CSSProperties = {
     background: C.surface, border: `1px solid ${C.border}`,
     borderRadius: 12, padding: 16, marginBottom: 10,
@@ -117,6 +125,8 @@ export default function MyDealsPage() {
               Browse deals
             </button>
           </div>
+
+          <SetupBanner />
 
           {!rows && !error && <div style={{ fontSize: 13, color: C.outline }}>Loading…</div>}
 
