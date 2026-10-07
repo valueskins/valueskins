@@ -19,6 +19,14 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_GOOGLE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
   },
+  // The store, the skin pages and the levelling views were removed. Old links
+  // go to the marketplace rather than to a 404.
+  redirects: async () => [
+    { source: '/valueskins/:path*', destination: '/deals/browse', permanent: false },
+    { source: '/valueskin/:path*', destination: '/deals/browse', permanent: false },
+    { source: '/demo/profile', destination: '/profile/me', permanent: false },
+    { source: '/preview', destination: '/deals/browse', permanent: false },
+  ],
   headers: async () => {
     return [
       {

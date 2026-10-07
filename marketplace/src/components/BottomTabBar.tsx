@@ -20,7 +20,6 @@ const TABS = [
   { href: '/profile/me',        label: 'Profile',  match: (p: string) => p.startsWith('/profile') },
   // /deals/browse redirects brands to /campaigns, so one href serves both roles.
   { href: '/deals/browse',      label: 'Market',   match: (p: string) => p.startsWith('/deals') || p.startsWith('/campaigns') || p.startsWith('/demo/marketplace') || p === '/marketplace' || p === '/feed' },
-  { href: '/valueskins/store',  label: 'Store',    match: (p: string) => p.startsWith('/valueskins') },
   { href: '/settings',          label: 'Settings', match: (p: string) => p.startsWith('/settings') },
 ];
 

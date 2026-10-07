@@ -8,7 +8,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { requireUser } from '@/lib/auth/require-user';
 import { query } from '@/lib/db-pool';
 import { WORKFLOW } from '@/lib/deal-workflow';
-import { getUserRole } from '@/lib/deal-guards';
+import { getUserRole, hasEmailOnFile, EMAIL_REQUIRED } from '@/lib/deal-guards';
 
 const DEFAULT_LIMIT = 50;
 const MAX_LIMIT = 100;
@@ -28,6 +28,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       role,
     });
   }
+
+  if (!(await hasEmailOnFile(userId))) return res.status(403).json(EMAIL_REQUIRED);
 
   const limit = Math.min(
     Math.max(Number(req.query.limit) || DEFAULT_LIMIT, 1),

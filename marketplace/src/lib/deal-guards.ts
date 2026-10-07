@@ -90,6 +90,18 @@ export async function getTransactReadiness(
   return { ready: true };
 }
 
+// The marketplace is closed to an account with no email address: it is how the
+// two sides of a deal reach each other, and it is shown on the virtual resume.
+export async function hasEmailOnFile(userId: string | number): Promise<boolean> {
+  const row = await queryOne('SELECT email FROM users WHERE id = $1', [userId]);
+  return !!(row as any)?.email;
+}
+
+export const EMAIL_REQUIRED = {
+  error: 'Add your email address in Settings to use the marketplace.',
+  reason: 'email_required',
+} as const;
+
 // Money never comes from the client. The deal's stored budget is the only input.
 export function dealBudget(deal: DealRow): number {
   return Number(deal.amount) || 0;

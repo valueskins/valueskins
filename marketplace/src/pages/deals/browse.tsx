@@ -18,6 +18,7 @@ import { C, withAlpha } from '@/theme/colors';
 import { getFeed, applyToDeal, financials, isOk, type FeedDeal } from '@/lib/deal-api';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import SetupBanner from '@/components/deal/SetupBanner';
+import ResumeHover from '@/components/deal/ResumeHover';
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const { getSessionUserId } = await import('@/lib/session');
@@ -26,7 +27,11 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   if (!userId) {
     return { redirect: { destination: '/auth/login', permanent: false } };
   }
-  const row = await queryOne('SELECT role FROM users WHERE id = $1', [userId]);
+  const row = await queryOne('SELECT role, email FROM users WHERE id = $1', [userId]);
+  // No email, no marketplace: it is the contact shown to the other party.
+  if (!(row as any)?.email) {
+    return { redirect: { destination: '/settings/email', permanent: false } };
+  }
   // Brands have their own home. Sending them here showed deals they can never
   // apply to, their own included, each with an Apply button.
   if ((row as any)?.role === 'brand') {
@@ -183,7 +188,7 @@ export default function BrowseDealsPage() {
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontSize: 14, fontWeight: 700 }}>{deal.title}</div>
                     <div style={{ fontSize: 11, color: C.outline }}>
-                      @{deal.brand_username}
+                      <ResumeHover username={deal.brand_username} />
                       {deal.brand_followers ? ` · ${deal.brand_followers.toLocaleString()} followers` : ''}
                     </div>
                   </div>

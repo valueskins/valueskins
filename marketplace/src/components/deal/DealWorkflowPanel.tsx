@@ -15,6 +15,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { C, withAlpha } from '@/theme/colors';
 import CreatorResume from './CreatorResume';
+import ResumeHover from './ResumeHover';
 import DirectPaymentPanel from './DirectPaymentPanel';
 import {
   applyToDeal,
@@ -345,7 +346,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 13, color: C.text, fontWeight: 600 }}>
-                  @{a.username}
+                  <ResumeHover username={a.username} />
                   {a.status === 'CONFIRMED' && (
                     <span style={{ marginLeft: 6, fontSize: 10, color: C.accent }}>CONFIRMED</span>
                   )}

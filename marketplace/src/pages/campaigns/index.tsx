@@ -40,7 +40,11 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
 
   // Brand surface. A creator reaching it saw an empty "Your deals" list with a
   // "Post a deal" button they are not allowed to use.
-  const role = await queryOne('SELECT role FROM users WHERE id = $1', [userId]);
+  const role = await queryOne('SELECT role, email FROM users WHERE id = $1', [userId]);
+  // No email, no marketplace: it is the contact shown to the other party.
+  if (!(role as any)?.email) {
+    return { redirect: { destination: '/settings/email', permanent: false } };
+  }
   if ((role as any)?.role !== 'brand') {
     return { redirect: { destination: '/deals/browse', permanent: false } };
   }

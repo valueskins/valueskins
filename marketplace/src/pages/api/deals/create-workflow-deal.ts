@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { requireUser } from '@/lib/auth/require-user';
 import { queryOne } from '@/lib/db-pool';
-import { getUserRole } from '@/lib/deal-guards';
+import { getUserRole, hasEmailOnFile, EMAIL_REQUIRED } from '@/lib/deal-guards';
 import { WORKFLOW } from '@/lib/deal-workflow';
 import { sendDealEmail } from '@/lib/deal-emails';
 import { broadcastNewDeal } from '@/lib/deal-realtime';
@@ -20,6 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (role !== 'brand') {
     return res.status(403).json({ error: 'Only brands can create deals' });
   }
+
+  if (!(await hasEmailOnFile(userId))) return res.status(403).json(EMAIL_REQUIRED);
 
   const quota = await checkDealCreationQuota(userId);
   if (!quota.allowed) {

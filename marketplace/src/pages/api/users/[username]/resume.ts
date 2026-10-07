@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const user = await queryOne(
-      `SELECT id, username, display_name, role, instagram_user_id,
+      `SELECT id, username, display_name, role, email, instagram_user_id,
               instagram_handle, instagram_bio, instagram_profile_pic_url,
               followers_count, engagement_rate, created_at
          FROM users
@@ -66,8 +66,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       [u.id, WORKFLOW.COMPLETED]
     );
 
+    // The email is for the two sides of a deal to reach each other, so it goes
+    // only to someone who shares a deal with this user (as its brand, its
+    // confirmed creator or an applicant) and to the user themselves. Any
+    // signed-in account can request any resume, and handing every address to
+    // every account would make this an email harvesting endpoint.
+    let email: string | null = null;
+    if (String(viewerId) === String(u.id)) {
+      email = u.email || null;
+    } else {
+      const shared = await queryOne(
+        `SELECT 1 AS ok
+           FROM deals d
+           LEFT JOIN applications a ON a.deal_id = d.id
+          WHERE (d.brand_id = $1 AND (d.creator_id = $2 OR a.creator_id = $2))
+             OR (d.brand_id = $2 AND (d.creator_id = $1 OR a.creator_id = $1))
+          LIMIT 1`,
+        [viewerId, u.id]
+      );
+      if (shared) email = u.email || null;
+    }
+
     return res.status(200).json({
       username: u.username,
+      email,
       display_name: u.display_name,
       role: u.role,
       instagram: {

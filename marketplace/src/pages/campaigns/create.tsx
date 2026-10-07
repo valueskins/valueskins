@@ -25,7 +25,11 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   if (!userId) {
     return { redirect: { destination: '/auth/login', permanent: false } };
   }
-  const row = await queryOne('SELECT role FROM users WHERE id = $1', [userId]);
+  const row = await queryOne('SELECT role, email FROM users WHERE id = $1', [userId]);
+  // No email, no marketplace: it is the contact shown to the other party.
+  if (!(row as any)?.email) {
+    return { redirect: { destination: '/settings/email', permanent: false } };
+  }
   // Brand surface. A creator could otherwise fill in this whole form and only
   // discover at submit that they cannot post deals.
   if ((row as any)?.role !== 'brand') {
