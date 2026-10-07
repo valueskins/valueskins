@@ -16,6 +16,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { C, withAlpha } from '@/theme/colors';
 import CreatorResume from './CreatorResume';
 import ResumeHover from './ResumeHover';
+import { handleLabel } from '@/lib/handle';
 import DirectPaymentPanel from './DirectPaymentPanel';
 import {
   applyToDeal,
@@ -371,7 +372,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
                   <button
                     disabled={!!busy}
                     onClick={() =>
-                      run('confirm', () => decideApplication(a.id, 'confirm'), `Confirmed @${a.username}.`)
+                      run('confirm', () => decideApplication(a.id, 'confirm'), `Confirmed ${handleLabel(a.username)}.`)
                         .then(loadApplications)
                     }
                     style={{ ...btn(true, !!busy), padding: '7px 11px', fontSize: 12 }}

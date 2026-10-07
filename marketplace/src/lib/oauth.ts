@@ -313,6 +313,40 @@ export async function getInstagramUserInfo(accessToken: string): Promise<any> {
   throw new Error(`Failed to fetch Instagram user info (${lastError.slice(0, 300)})`);
 }
 
+// The Instagram username, or '' when Instagram will not say.
+//
+// getInstagramUserInfo starts with the richest field set and walks down, so a
+// token without the analytics scope spends several failed round trips before it
+// reaches the fields it is allowed to read. Login only needs the username, so
+// this asks for exactly that, bounds each attempt, and tries twice: a single
+// slow response from Instagram was enough to leave an account without one.
+export async function getInstagramUsername(accessToken: string): Promise<string> {
+  const ATTEMPT_MS = 3500;
+  for (const fields of ['user_id,username', 'username']) {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const params = new URLSearchParams({ fields, access_token: accessToken });
+        const response = await fetch(`https://graph.instagram.com/me?${params.toString()}`, {
+          signal: AbortSignal.timeout(ATTEMPT_MS),
+        });
+        if (response.ok) {
+          const body: any = await response.json();
+          if (typeof body?.username === 'string' && /^[A-Za-z0-9._]{1,30}$/.test(body.username)) {
+            return body.username;
+          }
+          return '';
+        }
+        // A 4xx is Meta refusing this token, and asking again will not change
+        // its mind. Only a 5xx or a timeout is worth the second attempt.
+        if (response.status < 500) break;
+      } catch {
+        // timed out or network error: retry
+      }
+    }
+  }
+  return '';
+}
+
 export function parseOAuthState(state: string): { role: string; csrf: string } {
   const parts = state.split('_');
   const role = parts[0] === 'brand' ? 'brand' : 'creator';

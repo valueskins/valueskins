@@ -19,6 +19,7 @@ import { query, queryOne } from '@/lib/db';
 import { C, withAlpha } from '@/theme/colors';
 import { nextAction, financials, type WorkflowStatus } from '@/lib/deal-api';
 import SetupBanner from '@/components/deal/SetupBanner';
+import { handleLabel } from '@/lib/handle';
 
 interface DealRow {
   id: string;
@@ -138,7 +139,7 @@ export default function BrandDealsPage({ deals = [] }: { deals: DealRow[] }) {
                       <div style={{ fontSize: 14, fontWeight: 700, color: C.text }}>{d.title}</div>
                       <div style={{ fontSize: 11, color: C.outline, marginTop: 2 }}>
                         {STATUS_LABEL[d.workflow_status] || d.workflow_status}
-                        {d.creator_username ? ` · @${d.creator_username}` : ''}
+                        {d.creator_username ? ` · ${handleLabel(d.creator_username)}` : ''}
                         {d.workflow_status === 'OPEN'
                           ? ` · ${d.application_count} applicant${d.application_count === 1 ? '' : 's'}`
                           : ''}

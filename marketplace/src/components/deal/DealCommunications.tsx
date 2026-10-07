@@ -8,6 +8,7 @@
 // record, it is a claim. Delivery failures are shown too rather than hidden,
 // because "the brand says they emailed me" is exactly what this resolves.
 import { useEffect, useState } from 'react';
+import { handleLabel } from '@/lib/handle';
 import { C, withAlpha } from '@/theme/colors';
 import { getCommunications, isOk } from '@/lib/deal-api';
 
@@ -117,7 +118,7 @@ export default function DealCommunications({ dealId }: { dealId: string }) {
                     {TYPE_LABEL[e.email_type] || e.email_type}
                   </span>
                   {e.recipient_username && (
-                    <span style={{ fontSize: 10, color: C.outline }}> → @{e.recipient_username}</span>
+                    <span style={{ fontSize: 10, color: C.outline }}> → {handleLabel(e.recipient_username)}</span>
                   )}
                 </span>
                 {failed && (

@@ -5,6 +5,7 @@
 // only fetched the first time it is opened.
 import { useRef, useState } from 'react';
 import CreatorResume from './CreatorResume';
+import { handleLabel } from '@/lib/handle';
 
 export default function ResumeHover({ username }: { username: string }) {
   const [open, setOpen] = useState(false);
@@ -34,12 +35,12 @@ export default function ResumeHover({ username }: { username: string }) {
         aria-expanded={open}
         style={{ cursor: 'default', textDecoration: 'underline dotted', textUnderlineOffset: 3 }}
       >
-        @{username}
+        {handleLabel(username)}
       </span>
       {open && (
         <div
           role="dialog"
-          aria-label={`Resume of @${username}`}
+          aria-label={`Resume of ${handleLabel(username)}`}
           style={{
             position: 'absolute',
             top: '100%',

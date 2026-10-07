@@ -2,7 +2,8 @@
 // Account type auto-detected from Instagram token response
 import type { NextApiRequest, NextApiResponse } from 'next';
 import crypto from 'crypto';
-import { exchangeInstagramCode, getInstagramUserInfo } from '@/lib/oauth';
+import { exchangeInstagramCode, getInstagramUsername } from '@/lib/oauth';
+import { placeholderUsername } from '@/lib/handle';
 import { query } from '@/lib/db';
 import { SESSION_IDLE_TIMEOUT_MS, SESSION_ABSOLUTE_TIMEOUT_MS } from '@/config/constants';
 
@@ -64,21 +65,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     // The profile and the virtual resume show the Instagram username, and the
-    // token response carries only a numeric id. Reading the username needs the
-    // basic scope we already hold. Best-effort and time-boxed: login must not
-    // fail or stall because this one call did.
-    let igUsername = '';
-    try {
-      const info: any = await Promise.race([
-        getInstagramUserInfo(short.access_token),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('timed out')), 4000)),
-      ]);
-      if (typeof info?.username === 'string' && /^[A-Za-z0-9._]{1,30}$/.test(info.username)) {
-        igUsername = info.username;
-      }
-    } catch (e) {
-      console.warn('[oauth] instagram username lookup failed', (e as Error).message);
-    }
+    // token response carries only a numeric id. Never throws and is bounded, so
+    // login cannot fail or stall on it; '' means Instagram would not say.
+    const igUsername = await getInstagramUsername(short.access_token);
+    if (!igUsername) console.warn('[oauth] instagram username unavailable at login');
 
     // 2. Check if user exists
     const existing = await query(
@@ -96,9 +86,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         `UPDATE users
             SET last_login_at = NOW(),
                 instagram_handle = COALESCE(NULLIF($2, ''), instagram_handle),
-                username = COALESCE(NULLIF($2, ''), username)
+                username = CASE
+                  WHEN $2 <> '' THEN $2
+                  WHEN username = instagram_user_id THEN $3
+                  ELSE username
+                END
           WHERE id = $1`,
-        [userId, igUsername]
+        [userId, igUsername, placeholderUsername(instagramUserId)]
       );
     } else {
       // New user - create account
@@ -109,8 +103,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         [
           instagramUserId,
           '', // Email is empty; user provides it on first access
-          igUsername || instagramUserId, // falls back to the id if the lookup failed
-          igUsername ? `@${igUsername}` : `IG User ${instagramUserId}`,
+          // Never the bare numeric id: it was displayed as a username and linked
+          // to whichever Instagram account happens to have that name.
+          igUsername || placeholderUsername(instagramUserId),
+          igUsername ? `@${igUsername}` : 'Instagram user',
           true,
           detectedRole, // Auto-set from account_type
           'complete', // No onboarding needed; just go to app

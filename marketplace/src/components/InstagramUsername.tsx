@@ -1,9 +1,6 @@
 // The profile, in full: the Instagram username, linking to Instagram.
 import { C } from '@/theme/colors';
-
-// Instagram handles are letters, digits, dots and underscores. Anything else is
-// not interpolated into a URL.
-const HANDLE_RE = /^[A-Za-z0-9._]{1,30}$/;
+import { isInstagramHandle, handleLabel, instagramUrl } from '@/lib/handle';
 
 export default function InstagramUsername({ handle }: { handle: string }) {
   const clean = handle.replace(/^@/, '');
@@ -24,17 +21,15 @@ export default function InstagramUsername({ handle }: { handle: string }) {
         padding: 16,
       }}
     >
-      {HANDLE_RE.test(clean) ? (
-        <a
-          href={`https://www.instagram.com/${clean}/`}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={style}
-        >
-          @{clean}
+      {isInstagramHandle(clean) ? (
+        <a href={instagramUrl(clean)} target="_blank" rel="noopener noreferrer" style={style}>
+          {handleLabel(clean)}
         </a>
       ) : (
-        <span style={style}>@{clean}</span>
+        // No link: we do not know the username, so there is nothing to link to.
+        <span style={{ ...style, fontSize: 14, fontWeight: 500, color: C.outline }}>
+          {handleLabel(clean)}
+        </span>
       )}
     </div>
   );
