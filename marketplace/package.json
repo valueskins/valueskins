@@ -14,7 +14,6 @@
     "test:integration": "jest razorpay-payouts.integration --setupFiles ./jest.env.js"
   },
   "dependencies": {
-    "@prisma/client": "^7.8.0",
     "@sentry/nextjs": "10.70.0",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
