@@ -105,6 +105,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     results.push({ name: '008_direct_payments.sql', success: false, error: err.message });
   }
 
+  // Email attempt log (009). lib/email.ts writes to it on every send.
+  try {
+    const eqPath = path.join(process.cwd(), 'src', 'lib', 'migrations', '009_email_queue.sql');
+    const ran = await runSqlStatements(fs.readFileSync(eqPath, 'utf-8'));
+    results.push({ name: `009_email_queue.sql (${ran} statements)`, success: true });
+  } catch (err: any) {
+    allPassed = false;
+    results.push({ name: '009_email_queue.sql', success: false, error: err.message });
+  }
+
   // Run escrow-v2 migration SQL
   try {
     const sqlPath = path.join(process.cwd(), 'src', 'lib', 'migrations-escrow-v2.sql');
