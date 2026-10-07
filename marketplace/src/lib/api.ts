@@ -13,8 +13,8 @@ import { logApiRequest } from './api-diagnostics';
 // In browser: use Render backend directly (CORS configured)
 // On server (SSR): use BACKEND_URL env var
 const API_BASE_URL = typeof window !== 'undefined'
-  ? (process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080')
-  : (process.env.BACKEND_URL || 'http://localhost:8080');
+  ? (process.env.NEXT_PUBLIC_BACKEND_URL || '')
+  : (process.env.BACKEND_URL || '');
 
 interface ApiResponse<T> {
     data?: T;

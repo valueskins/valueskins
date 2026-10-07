@@ -141,7 +141,7 @@ export default function HomePage() {
   useEffect(() => {
     if (loading) return;
     if (account && account.onboarding_stage === 'complete') {
-      router.replace('/demo/marketplace');
+      router.replace('/deals/browse');
     }
   }, [account, loading, router]);
 

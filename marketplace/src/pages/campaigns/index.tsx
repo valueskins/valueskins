@@ -18,6 +18,7 @@ import { getSessionUserId } from '@/lib/session';
 import { query, queryOne } from '@/lib/db';
 import { C, withAlpha } from '@/theme/colors';
 import { nextAction, financials, type WorkflowStatus } from '@/lib/deal-api';
+import SetupBanner from '@/components/deal/SetupBanner';
 
 interface DealRow {
   id: string;
@@ -111,6 +112,8 @@ export default function BrandDealsPage({ deals = [] }: { deals: DealRow[] }) {
               Post a deal
             </button>
           </div>
+
+          <SetupBanner />
 
           {deals.length === 0 && (
             <div style={{ ...card, fontSize: 13, color: C.outline }}>

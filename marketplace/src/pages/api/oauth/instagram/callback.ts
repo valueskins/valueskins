@@ -116,13 +116,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       `oauth_state=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0`, // Clear one-time state
     ]);
 
-    // 4. Redirect to app (no onboarding needed)
-    return res.redirect('/demo/marketplace');
+    // 4. Into the deal workflow. /deals/browse sends brands on to /campaigns.
+    return res.redirect('/deals/browse');
   } catch (error) {
     console.error('Instagram OAuth error:', error);
-    return res.status(500).json({
-      error: 'auth_failed',
-      details: error instanceof Error ? error.message : String(error),
-    });
+    // The cause stays in the server log. Returning error.message here put
+    // database internals (table names) in the browser.
+    return res.status(500).json({ error: 'auth_failed' });
   }
 }

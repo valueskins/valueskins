@@ -87,6 +87,13 @@ export default function DirectPaymentPanel({
 
   useEffect(() => { if (connected) void load(); }, [connected]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Same reason as the deal page's own timer: the other party's confirmation
+  // has to show up even when no socket is connected.
+  useEffect(() => {
+    const id = setInterval(() => { void load(); }, 20000);
+    return () => clearInterval(id);
+  }, [load]);
+
   async function act(url: string, body: any, method: 'POST' | 'PATCH') {
     setBusy(true);
     setError(null);

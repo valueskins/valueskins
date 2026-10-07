@@ -399,7 +399,8 @@ export default function SettingsHub({
 
           {/* Payments & Payouts */}
           <Section id="payments" title="Payments & Payouts">
-            <LinkRow href="/payout-onboarding" label="Payout method" sub="UPI or bank account for receiving deal payments" />
+            <LinkRow href="/settings/email" label="Email address" sub="Where confirmations, invoices and deal reports are sent" />
+            <LinkRow href="/settings/payout" label="Payout method" sub="UPI ID for receiving deal payments" />
             <LinkRow href="/payments/history" label="Payment history" sub="Statements, invoices, and TDS (Form 16A)" />
           </Section>
 

@@ -17,6 +17,7 @@ import { useRouter } from 'next/router';
 import { C, withAlpha } from '@/theme/colors';
 import { getFeed, applyToDeal, financials, isOk, type FeedDeal } from '@/lib/deal-api';
 import { useWebSocket } from '@/hooks/useWebSocket';
+import SetupBanner from '@/components/deal/SetupBanner';
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const { getSessionUserId } = await import('@/lib/session');
@@ -28,15 +29,15 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const row = await queryOne('SELECT role FROM users WHERE id = $1', [userId]);
   // Brands have their own home. Sending them here showed deals they can never
   // apply to, their own included, each with an Apply button.
-  if ((row as any)?.role !== 'creator') {
+  if ((row as any)?.role === 'brand') {
     return { redirect: { destination: '/campaigns', permanent: false } };
   }
   return { props: {} };
 }
 
-// Only a backstop now that the socket delivers; frequent polling would undo the
-// point of having one.
-const RECONCILE_MS = 120_000;
+// The `since` cursor makes this a cheap request, and it is the only delivery
+// path when no socket is connected, so it cannot be minutes long.
+const RECONCILE_MS = 30_000;
 
 export default function BrowseDealsPage() {
   const router = useRouter();
@@ -133,10 +134,24 @@ export default function BrowseDealsPage() {
       <Head><title>Browse deals — ValueSkins</title></Head>
       <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '20px 16px 48px' }}>
         <div style={{ maxWidth: 640, margin: '0 auto' }}>
-          <h1 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 4px' }}>Open deals</h1>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 4 }}>
+            <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Open deals</h1>
+            <button
+              onClick={() => router.push('/deals/mine')}
+              style={{
+                background: 'none', border: `1px solid ${C.border}`, borderRadius: 8,
+                padding: '8px 12px', color: C.text, fontWeight: 600,
+                fontSize: 12, cursor: 'pointer', whiteSpace: 'nowrap',
+              }}
+            >
+              Your deals
+            </button>
+          </div>
           <p style={{ fontSize: 12, color: C.outline, margin: '0 0 16px' }}>
             Every open deal, no filtering. The amount is final — apply only if it works for you.
           </p>
+
+          <SetupBanner />
 
           {notice && (
             <div role="status" style={{ ...card, background: withAlpha(C.accent, 0x14), borderColor: C.accent, fontSize: 12 }}>

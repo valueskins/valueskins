@@ -27,6 +27,15 @@ const ROUTES_WITH_TAB_BAR = [
   '/analytics',
   '/marketplace',
   '/events',
+  // The deal workflow. These rendered with no navigation at all, so a user who
+  // landed on one had no way to reach settings or their profile.
+  '/deals/browse',
+  '/deals/mine',
+  '/deals/[dealId]',
+  '/campaigns',
+  '/campaigns/create',
+  '/settings/email',
+  '/settings/payout',
 ];
 
 export default function App({ Component, pageProps }: AppProps) {
