@@ -10,6 +10,7 @@
 import { useEffect, useState } from 'react';
 import { C, withAlpha } from '@/theme/colors';
 import { getVirtualResume, isOk } from '@/lib/deal-api';
+import { isInstagramHandle, handleLabel, instagramUrl } from '@/lib/handle';
 
 interface Resume {
   username: string;
@@ -71,22 +72,22 @@ export default function CreatorResume({ username }: { username: string }) {
   const { instagram: ig, stats, recent_deals: deals } = resume;
 
   const handle = (ig.handle || resume.username).replace(/^@/, '');
-  const linkable = /^[A-Za-z0-9._]{1,30}$/.test(handle);
+  const linkable = isInstagramHandle(handle);
 
   return (
     <div style={box}>
       <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 6 }}>
         {linkable ? (
           <a
-            href={`https://www.instagram.com/${handle}/`}
+            href={instagramUrl(handle)}
             target="_blank"
             rel="noopener noreferrer"
             style={{ color: C.text, textDecoration: 'none' }}
           >
-            @{handle}
+            {handleLabel(handle)}
           </a>
         ) : (
-          <span style={{ color: C.text }}>@{handle}</span>
+          <span style={{ color: C.outline, fontWeight: 500 }}>{handleLabel(handle)}</span>
         )}
       </div>
 
@@ -135,7 +136,7 @@ export default function CreatorResume({ username }: { username: string }) {
           >
             <span style={{ color: C.textMuted, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {d.title}
-              {d.counterpart_username ? ` · @${d.counterpart_username}` : ''}
+              {isInstagramHandle(d.counterpart_username) ? ` · @${d.counterpart_username}` : ''}
             </span>
             <span style={{ color: C.text, whiteSpace: 'nowrap' }}>
               ₹{Number(d.amount || 0).toLocaleString('en-IN')}

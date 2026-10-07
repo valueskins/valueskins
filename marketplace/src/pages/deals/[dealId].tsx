@@ -6,6 +6,7 @@
 // looking sees only the actions that are theirs, and the server decides what
 // those are.
 import { useCallback, useEffect, useState } from 'react';
+import { handleLabel } from '@/lib/handle';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { C } from '@/theme/colors';
@@ -145,7 +146,7 @@ export default function DealPage() {
               >
                 <div style={{ fontSize: 11, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>
                   {deal.viewer === 'brand' ? 'Your deal' : 'Brand deal'}
-                  {deal.counterpart ? ` · @${deal.counterpart.username}` : ''}
+                  {deal.counterpart ? ` · ${handleLabel(deal.counterpart.username)}` : ''}
                 </div>
                 <div style={{ fontSize: 13, color: C.textMuted, whiteSpace: 'pre-wrap', lineHeight: 1.55 }}>
                   {deal.description}

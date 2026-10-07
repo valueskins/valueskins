@@ -21,7 +21,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
 export default function ProfileMePage({ handle }: { handle: string }) {
   return (
     <>
-      <Head><title>{`@${handle} · ValueSkins`}</title></Head>
+      <Head><title>Profile · ValueSkins</title></Head>
       <InstagramUsername handle={handle} />
     </>
   );
