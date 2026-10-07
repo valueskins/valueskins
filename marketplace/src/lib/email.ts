@@ -108,7 +108,6 @@ export async function sendEmail(options: {
   const subject = resolveSubject(template, options.data);
   const { html, text } = template.build(options.data);
 
-  const logged = true;
   let sent = false;
 
   try {
@@ -122,11 +121,20 @@ export async function sendEmail(options: {
     console.warn('[Email] Send failed (logged to queue):', (err as Error).message);
   }
 
-  await query(
-    `INSERT INTO email_queue (recipient_email, subject, body_html, body_text, email_type, user_id, sent, sent_at)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,NOW())`,
-    [options.to, subject, html, text, options.type, options.userId || null, sent]
-  );
+  // The log is a record of the attempt, not part of it. It used to be awaited
+  // bare, so when the table was missing the insert threw and took the caller's
+  // whole request down with it.
+  let logged = true;
+  try {
+    await query(
+      `INSERT INTO email_queue (recipient_email, subject, body_html, body_text, email_type, user_id, sent, sent_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,NOW())`,
+      [options.to, subject, html, text, options.type, options.userId || null, sent]
+    );
+  } catch (err) {
+    logged = false;
+    console.error('[Email] could not record the attempt', (err as Error).message);
+  }
 
   return { sent, logged };
 }
