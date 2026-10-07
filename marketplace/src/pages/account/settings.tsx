@@ -12,7 +12,7 @@ export default function SettingsRedirect() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace('/demo/marketplace?view=settings');
+    router.replace('/settings');
   }, [router]);
 
   return (

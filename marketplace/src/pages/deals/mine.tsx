@@ -21,7 +21,11 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   if (!userId) {
     return { redirect: { destination: '/auth/login', permanent: false } };
   }
-  const row = await queryOne('SELECT role FROM users WHERE id = $1', [userId]);
+  const row = await queryOne('SELECT role, email FROM users WHERE id = $1', [userId]);
+  // No email, no marketplace: it is the contact shown to the other party.
+  if (!(row as any)?.email) {
+    return { redirect: { destination: '/settings/email', permanent: false } };
+  }
   // Brands have their own home. Sending them here showed deals they can never
   // apply to, their own included, each with an Apply button.
   if ((row as any)?.role === 'brand') {

@@ -3,7 +3,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { requireUser } from '@/lib/auth/require-user';
 import { query, queryOne } from '@/lib/db-pool';
-import { loadDeal, getUserRole } from '@/lib/deal-guards';
+import { loadDeal, getUserRole, hasEmailOnFile, EMAIL_REQUIRED } from '@/lib/deal-guards';
 import { applicationsOpen } from '@/lib/deal-workflow';
 import { sendDealEmail } from '@/lib/deal-emails';
 import { checkApplicationQuota } from '@/lib/deal-quotas';
@@ -41,6 +41,8 @@ async function apply(req: NextApiRequest, res: NextApiResponse, userId: string) 
   if (role !== 'creator') {
     return res.status(403).json({ error: 'Only creators can apply to deals' });
   }
+
+  if (!(await hasEmailOnFile(userId))) return res.status(403).json(EMAIL_REQUIRED);
 
   const quota = await checkApplicationQuota(userId);
   if (!quota.allowed) {

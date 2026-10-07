@@ -13,6 +13,7 @@ import { getVirtualResume, isOk } from '@/lib/deal-api';
 
 interface Resume {
   username: string;
+  email: string | null;
   display_name: string;
   role: string;
   instagram: {
@@ -55,6 +56,7 @@ export default function CreatorResume({ username }: { username: string }) {
     borderRadius: 8,
     padding: 12,
     marginTop: 8,
+    textAlign: 'left',
   };
 
   if (loading) return <div style={{ ...box, fontSize: 11, color: C.outline }}>Loading history…</div>;
@@ -68,8 +70,34 @@ export default function CreatorResume({ username }: { username: string }) {
 
   const { instagram: ig, stats, recent_deals: deals } = resume;
 
+  const handle = (ig.handle || resume.username).replace(/^@/, '');
+  const linkable = /^[A-Za-z0-9._]{1,30}$/.test(handle);
+
   return (
     <div style={box}>
+      <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 6 }}>
+        {linkable ? (
+          <a
+            href={`https://www.instagram.com/${handle}/`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: C.text, textDecoration: 'none' }}
+          >
+            @{handle}
+          </a>
+        ) : (
+          <span style={{ color: C.text }}>@{handle}</span>
+        )}
+      </div>
+
+      {/* Present only for someone who shares a deal with this user. */}
+      {resume.email && (
+        <div style={{ fontSize: 11, marginBottom: 10 }}>
+          <span style={{ color: C.outline }}>Contact: </span>
+          <a href={`mailto:${resume.email}`} style={{ color: C.text }}>{resume.email}</a>
+        </div>
+      )}
+
       {ig.bio && (
         <div style={{ fontSize: 11, color: C.textMuted, lineHeight: 1.5, marginBottom: 10 }}>
           {ig.bio}
@@ -100,7 +128,7 @@ export default function CreatorResume({ username }: { username: string }) {
           No completed deals yet — this would be their first.
         </div>
       ) : (
-        deals.slice(0, 5).map((d) => (
+        deals.slice(0, 10).map((d) => (
           <div
             key={d.id}
             style={{ display: 'flex', justifyContent: 'space-between', gap: 8, fontSize: 11, padding: '3px 0' }}

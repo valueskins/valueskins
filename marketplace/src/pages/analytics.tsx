@@ -108,7 +108,6 @@ export default function AnalyticsPage() {
     { key: 'brands', label: 'Brands' },
     { key: 'campaigns', label: 'Campaigns' },
     { key: 'performance', label: 'Performance' },
-    { key: 'levels', label: 'Levels' },
   ];
   const brandTabs: { key: Tab; label: string }[] = [
     { key: 'overview', label: 'Overview' },
@@ -190,7 +189,7 @@ function CreatorDashboard({ data, tab }: { data: any; tab: Tab }) {
       <div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '16px', marginBottom: '24px' }}>
           <StatCard label="Lifetime Earnings" value={formatCurrency(r.lifetimeEarnings)} sub={`${r.thisMonth > 0 ? `₹${r.thisMonth.toLocaleString()} this month` : 'No activity this month'}`} color={C.success} />
-          <StatCard label="Deals Completed" value={String(dl.total || 0)} sub={`${lv.currentLevel > 0 ? `Level ${lv.currentLevel}` : 'No level yet'}`} color={C.primary} />
+          <StatCard label="Deals Completed" value={String(dl.total || 0)} color={C.primary} />
           <StatCard label="Brands Worked With" value={String(br.totalBrands || 0)} sub={`${br.repeatBrands} repeat (${br.repeatPercent}%)`} color={C.accent} />
           <StatCard label="Avg Rating" value={(pf.avgRating || 0).toFixed(1)} sub={`${pf.totalReviews} reviews`} color={C.warning} />
         </div>

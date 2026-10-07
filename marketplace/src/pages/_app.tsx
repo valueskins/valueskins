@@ -29,6 +29,8 @@ const ROUTES_WITH_TAB_BAR = [
   '/events',
   // The deal workflow. These rendered with no navigation at all, so a user who
   // landed on one had no way to reach settings or their profile.
+  '/profile/me',
+  '/profile/[id]',
   '/deals/browse',
   '/deals/mine',
   '/deals/[dealId]',
