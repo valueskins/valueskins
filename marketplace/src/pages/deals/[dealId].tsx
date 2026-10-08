@@ -109,7 +109,7 @@ export default function DealPage() {
 
   return (
     <>
-      <Head><title>{deal ? `${deal.title} — ValueSkins` : 'Deal — ValueSkins'}</title></Head>
+      <Head><title>{deal ? `${deal.title} · ValueSkins` : 'Deal · ValueSkins'}</title></Head>
       <div style={page}>
         <div style={wrap}>
           <button
@@ -160,7 +160,7 @@ export default function DealPage() {
                     <div key={String(k)}>
                       <div style={{ fontSize: 10, color: C.outline, textTransform: 'uppercase' }}>{k}</div>
                       <div style={{ fontSize: 12, color: C.text }}>
-                        {v ? new Date(String(v)).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
+                        {v ? new Date(String(v)).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}
                       </div>
                     </div>
                   ))}

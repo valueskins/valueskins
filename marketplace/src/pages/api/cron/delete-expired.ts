@@ -10,7 +10,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const authHeader = req.headers.authorization;
   const cronSecret = process.env.CRON_SECRET;
   if (!cronSecret) {
-    console.error('CRON_SECRET not set — delete-expired cron disabled');
+    console.error('CRON_SECRET not set, delete-expired cron disabled');
     return res.status(500).json({ error: 'Cron not configured' });
   }
   if (authHeader !== `Bearer ${cronSecret}`) {

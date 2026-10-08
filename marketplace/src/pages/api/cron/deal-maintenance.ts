@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Without this guard an unset CRON_SECRET makes the expected header the
   // literal "Bearer undefined", which any caller can send.
   if (!secret) {
-    console.error('[cron/deal-maintenance] CRON_SECRET not set — refusing to run');
+    console.error('[cron/deal-maintenance] CRON_SECRET not set, refusing to run');
     return res.status(500).json({ error: 'Cron not configured' });
   }
   if (req.headers.authorization !== `Bearer ${secret}`) {

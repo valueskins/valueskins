@@ -4,6 +4,8 @@ import { withAlpha } from '@/theme/colors';
 import React, { useState } from 'react';
 import PitchText from '@/components/PitchText';
 import ProfileDetails from '@/components/ProfileDetails';
+import PayoutUpi from '@/components/PayoutUpi';
+import Link from 'next/link';
 import { PROFESSION_BADGES, BRAND_CATEGORY_BADGES } from '@/features/valueskins/core/identity/AvatarOptions';
 import { STICKER_MANIFEST } from '@/features/valueskins/core/stickers/sticker-manifest';
 import { getLevel, getProgressToNext } from '@/lib/levels';
@@ -228,12 +230,28 @@ export default function SettingsView({
           <span style={{ fontSize: '11px', fontWeight: 600, color: C.textSecondary, marginLeft: '10px' }}>ValueSkins preferences</span>
         </div>
       </div>
-      <div style={{ padding: '20px' }}>
+      <div style={{ padding: '20px', maxWidth: 640, margin: '0 auto' }}>
 
         {/* Details for this account's role, saved to the account. Replaced a
             single "My Profile" form that asked a brand for a full name, an age
             range and a gender, and kept the answers in localStorage. */}
         <ProfileDetails role={role === 'brand' ? 'brand' : 'creator'} />
+
+        {/* Email: the contact shown to the other side of a deal. */}
+        <div style={{ marginBottom: '24px' }}>
+          <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '12px' }}>Email Address</div>
+          <Link href="/settings/email" style={{ display: 'block', background: C.card, border: `1px solid ${C.border}`, borderRadius: '12px', padding: '14px 16px', color: C.text, textDecoration: 'none', fontSize: '13px', fontWeight: 600 }}>
+            View or change your email address
+          </Link>
+        </div>
+
+        {/* A creator is paid on this; a brand pays and has no payout ID. */}
+        {role !== 'brand' && (
+          <div style={{ marginBottom: '24px' }}>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '12px' }}>UPI ID</div>
+            <PayoutUpi />
+          </div>
+        )}
 
         {/* A brand's own words, shown to creators on its resume. */}
         {role === 'brand' && <PitchText role="brand" />}
@@ -404,8 +422,8 @@ export default function SettingsView({
           </div>
           <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: '12px', overflow: 'hidden' }}>
             {[
-              { label: 'Download My Data', sub: 'Export all your data in JSON format', action: () => alert('Data export initiated — you will receive an email with download link within 24 hours'), color: C.primary, icon: 'DL' },
-              { label: 'Request Data Deletion', sub: 'Permanently erase your account (GDPR Art. 17) — 30 day process', action: () => alert('Data deletion request submitted.\n\nYour account will be anonymized within 30 days as required by GDPR.\nYou can cancel this request within 24 hours.'), color: C.textMuted, icon: 'DEL' },
+              { label: 'Download My Data', sub: 'Export all your data in JSON format', action: () => alert('Data export initiated, you will receive an email with download link within 24 hours'), color: C.primary, icon: 'DL' },
+              { label: 'Request Data Deletion', sub: 'Permanently erase your account (GDPR Art. 17), 30 day process', action: () => alert('Data deletion request submitted.\n\nYour account will be anonymized within 30 days as required by GDPR.\nYou can cancel this request within 24 hours.'), color: C.textMuted, icon: 'DEL' },
             ].map(({ label, sub, action, color, icon }, i) => (
               <div
                 key={label}

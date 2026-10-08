@@ -206,7 +206,7 @@ export default function SettingsHub({
   };
 
   const downloadData = () => {
-    alert('Data export initiated — you will receive an email with a download link within 24 hours.');
+    alert('Data export initiated, you will receive an email with a download link within 24 hours.');
   };
 
   // Hooks must run unconditionally and in a stable order, so this sits above
@@ -458,7 +458,7 @@ export default function SettingsHub({
             <button onClick={requestDeletion} style={{ ...rowStyle, width: '100%', textAlign: 'left', background: 'none', border: `1px solid ${T.border}`, borderRadius: '8px', cursor: 'pointer', color: T.text, fontFamily: FONT }}>
               <div>
                 <div style={{ fontSize: '0.9375rem', fontWeight: 600 }}>Request Data Deletion</div>
-                <div style={{ fontSize: '0.8125rem', color: T.muted }}>Permanently erase your account (GDPR Art. 17) — 30 day process</div>
+                <div style={{ fontSize: '0.8125rem', color: T.muted }}>Permanently erase your account (GDPR Art. 17), 30 day process</div>
               </div>
               <span style={{ color: T.muted, fontSize: '0.8125rem' }}>Request →</span>
             </button>

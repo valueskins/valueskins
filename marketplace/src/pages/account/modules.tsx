@@ -89,7 +89,7 @@ export default function Modules() {
         </div>
         <h1 style={{ fontSize: '24px', fontWeight: 700, color: C.text, marginBottom: '8px' }}>Modules</h1>
         <p style={{ fontSize: '14px', color: C.textSecondary, marginBottom: '32px' }}>
-          Enable or disable platform capabilities. Your account stays the same — no separate signups needed.
+          Enable or disable platform capabilities. Your account stays the same, no separate signups needed.
         </p>
 
         {error && <div style={{ padding: '10px 14px', background: '#fef2f2', color: C.error, borderRadius: '8px', fontSize: '13px', marginBottom: '16px', border: '1px solid #fecaca' }}>{error}</div>}

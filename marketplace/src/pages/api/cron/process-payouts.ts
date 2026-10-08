@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const secret = process.env.CRON_SECRET;
   if (!secret) {
-    console.error('[cron/process-payouts] CRON_SECRET not set — refusing to run');
+    console.error('[cron/process-payouts] CRON_SECRET not set, refusing to run');
     return res.status(500).json({ error: 'Cron not configured' });
   }
   if (req.headers.authorization !== `Bearer ${secret}`) {
@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (result.halted) {
       // Not an error in this job: the rows are safely queued. It does need to be
       // visible, because creators are not being paid until it is resolved.
-      console.error('[cron/process-payouts] HALTED — creators are not being paid', {
+      console.error('[cron/process-payouts] HALTED, creators are not being paid', {
         reason: result.halted,
         pending: queue.PENDING,
       });

@@ -282,7 +282,7 @@ export default function DirectPaymentPanel({
           <p style={{ fontSize: 12, color: C.textMuted, margin: '0 0 10px', lineHeight: 1.6 }}>
             The brand says it sent you <strong style={{ color: C.text }}>{money(pending.amount)}</strong>,
             reference <strong style={{ color: C.text }}>{pending.reference}</strong>.
-            Check your bank before confirming — this is what moves the deal forward.
+            Check your bank before confirming, this is what moves the deal forward.
           </p>
 
           {disputing === pending.id ? (

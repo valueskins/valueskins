@@ -140,14 +140,14 @@ export default function DiagnosticsPanel() {
   const cfgWarnings: string[] = [];
   if (config?.apiUrlFromDefault) {
     cfgWarnings.push(
-      'API URL is the localhost default — the build was made WITHOUT NEXT_PUBLIC_BACKEND_URL. Visitors are calling THEIR OWN machine. Set it on Vercel and redeploy.'
+      'API URL is the localhost default, the build was made WITHOUT NEXT_PUBLIC_BACKEND_URL. Visitors are calling THEIR OWN machine. Set it on Vercel and redeploy.'
     );
   }
   if (config?.mockApi) {
-    cfgWarnings.push('MOCK_API is active — calls are faked in the browser; real backend requests are not being made.');
+    cfgWarnings.push('MOCK_API is active, calls are faked in the browser; real backend requests are not being made.');
   }
   if (config?.environment === 'production' && config?.apiUrlFromDefault) {
-    cfgWarnings.push('PRODUCTION build hitting localhost — this is the "backend not working for the investor" scenario.');
+    cfgWarnings.push('PRODUCTION build hitting localhost, this is the "backend not working for the investor" scenario.');
   }
 
   return (
@@ -259,7 +259,7 @@ export default function DiagnosticsPanel() {
         >
           <div style={{ fontFamily: C.mono, marginBottom: 4 }}>
             <span style={{ color: probe.ok ? C.ok : C.bad }}>{probe.ok ? 'HEALTHY' : 'UNREACHABLE'}</span>
-            {' — '}
+            {', '}
             <span style={{ color: C.muted }}>{probe.probedUrl}</span>
             {probe.status != null && <span> → HTTP {probe.status}</span>}
             {probe.durationMs != null && <span> ({probe.durationMs}ms)</span>}
@@ -274,7 +274,7 @@ export default function DiagnosticsPanel() {
 
       <div style={{ marginTop: 10, color: C.muted, fontSize: 10 }}>
         Every API call is logged to the browser console with a <span style={{ fontFamily: C.mono }}>[diag]</span> prefix.
-        The server logs every request that reaches it — if calls never appear there, the browser is not hitting the backend.
+        The server logs every request that reaches it, if calls never appear there, the browser is not hitting the backend.
       </div>
     </div>
   );

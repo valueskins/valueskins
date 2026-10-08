@@ -80,7 +80,7 @@ function logBoot() {
   const cfg = getEffectiveConfig();
   // Deliberately a distinct banner so it is findable in any console.
   console.info(
-    `[diag] ValueSkins frontend boot — backend URL: ${cfg.apiUrl}` +
+    `[diag] ValueSkins frontend boot, backend URL: ${cfg.apiUrl}` +
       (cfg.apiUrlFromDefault ? '  ⚠️  USING LOCALHOST DEFAULT (env NOT set!)' : '') +
       ` | ws: ${cfg.wsUrl}` +
       ` | MOCK_API: ${cfg.mockApi}` +
@@ -97,7 +97,7 @@ function logBoot() {
 
   if (cfg.mockApi) {
     console.warn(
-      '[diag] MOCK_API is active — API calls are being faked locally. ' +
+      '[diag] MOCK_API is active, API calls are being faked locally. ' +
         'Real backend requests will not appear in server logs.'
     );
   }

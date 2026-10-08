@@ -34,7 +34,7 @@ const sections = [
     items: [
       'You can cancel the deletion at any time by logging back in and clicking "Cancel Deletion"',
       'Your data is preserved during this period in case you change your mind',
-      'Login again and go to Account Settings to cancel — your account will be fully restored',
+      'Login again and go to Account Settings to cancel, your account will be fully restored',
       'After 30 days, cancellation is no longer possible',
     ],
   },
@@ -52,10 +52,10 @@ const sections = [
   {
     title: 'Retained for 7 Years (tax law)',
     items: [
-      'Payment transaction records (amounts, dates, IDs) — required by IRS/UK HMRC/Indian tax law',
+      'Payment transaction records (amounts, dates, IDs), required by IRS/UK HMRC/Indian tax law',
       'Payout history and escrow release records',
       'Invoice records for tax reporting purposes',
-      'These records are anonymized — your name/email is removed but the financial data stays',
+      'These records are anonymized, your name/email is removed but the financial data stays',
       'After 7 years, these records are permanently destroyed',
     ],
   },
@@ -81,19 +81,19 @@ const sections = [
     title: 'What Happens to Your Work',
     items: [
       'Deal rooms you created or participated in remain (for other participants)',
-      'Your messages in deal rooms show as "[deleted]" — content removed',
+      'Your messages in deal rooms show as "[deleted]", content removed',
       'Reviews about you: reviews you wrote are deleted, reviews about you are anonymized',
       'Campaigns you created: frozen and removed from active rotation',
-      'Escrow amounts: any pending funds will be returned per our terms — contact support first',
+      'Escrow amounts: any pending funds will be returned per our terms, contact support first',
     ],
   },
   {
     title: 'Re-Registration',
     items: [
       'After deletion completes (30 days), you can sign up again with the same email',
-      'It will be treated as a brand new account — no history, no connections, no deals',
+      'It will be treated as a brand new account, no history, no connections, no deals',
       'You will need to re-verify your email and set up your profile from scratch',
-      'Previous payment methods are NOT retained — you will need to re-enter them',
+      'Previous payment methods are NOT retained, you will need to re-enter them',
     ],
   },
   {
@@ -111,7 +111,7 @@ const sections = [
     title: 'Timeline Summary',
     items: [
       'Today: PDF downloads, you are logged out, profile hidden, deals frozen',
-      'Days 1-30: Grace period — login to cancel anytime',
+      'Days 1-30: Grace period, login to cancel anytime',
       'Day 30: Most data permanently deleted, email freed',
       'Day 30-90: Backups overwritten, analytics purged, audit logs anonymized',
       'Year 7: Payment records permanently destroyed',
@@ -279,7 +279,7 @@ export function AccountDeletionSection() {
 
             {warningBox('A PDF will download automatically after you confirm', (
               <span>This file contains your work history, profile data, and everything we have collected about you.
-              Save it somewhere safe — it is your only record after deletion.</span>
+              Save it somewhere safe, it is your only record after deletion.</span>
             ))}
 
             {warningBox('You have 30 days to change your mind', (
@@ -289,12 +289,12 @@ export function AccountDeletionSection() {
 
             {warningBox('Your email can be reused after deletion', (
               <span>Once deletion completes (after 30 days), you can sign up again with the same email. It will be
-              treated as a brand new account — no history, no connections, no deals.</span>
+              treated as a brand new account, no history, no connections, no deals.</span>
             ))}
 
             {warningBox('Some data is retained by law', (
               <span>Payment transaction records are kept for 7 years as required by tax laws (IRS, HMRC, etc.).
-              These records are anonymized — your name and email are removed, but the financial data is retained
+              These records are anonymized, your name and email are removed, but the financial data is retained
               for legal compliance. After 7 years, everything is permanently destroyed.</span>
             ))}
 
@@ -422,7 +422,7 @@ export function AccountDeletionSection() {
                   opacity: isDeleting ? 0.6 : 1,
                 }}
               >
-                Cancel — Keep My Account
+                Cancel, Keep My Account
               </button>
               <button
                 onClick={handleDeleteAccount}

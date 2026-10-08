@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'POST') {
     const appSecret = process.env.INSTAGRAM_CLIENT_SECRET || '';
     if (!VERIFY_TOKEN || !appSecret) {
-      console.error('Instagram webhook secrets not set — webhook disabled');
+      console.error('Instagram webhook secrets not set, webhook disabled');
       return res.status(500).send('Webhook not configured');
     }
 

@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
   if (!webhookSecret) {
-    console.error('RAZORPAY_WEBHOOK_SECRET not set — webhook disabled');
+    console.error('RAZORPAY_WEBHOOK_SECRET not set, webhook disabled');
     return res.status(500).json({ error: 'Webhook not configured' });
   }
 

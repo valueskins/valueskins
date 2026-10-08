@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const secret = process.env.CRON_SECRET;
   if (!secret) {
-    console.error('[cron/instagram-sync] CRON_SECRET not set — refusing to run');
+    console.error('[cron/instagram-sync] CRON_SECRET not set, refusing to run');
     return res.status(500).json({ error: 'Cron not configured' });
   }
   if (req.headers.authorization !== `Bearer ${secret}`) {

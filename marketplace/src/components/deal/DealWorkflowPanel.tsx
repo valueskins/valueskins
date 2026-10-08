@@ -137,7 +137,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
     setNotice(null);
     try {
       const outcome = await runPaymentStage(dealId, stage, {
-        description: `${label} — ${title}`,
+        description: `${label}, ${title}`,
         themeColor: C.primary,
       });
       if (outcome.status === 'dismissed') {
@@ -297,7 +297,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
         <div style={card}>
           <div style={label}>Apply</div>
           <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 10 }}>
-            The amount is final — there is no negotiation. Apply only if {money(F.creatorTotal)} works for you.
+            The amount is final, there is no negotiation. Apply only if {money(F.creatorTotal)} works for you.
           </div>
           <button
             disabled={!!busy || alreadyApplied || applicationsOpen === false}
@@ -405,7 +405,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
       {/* ---- BRAND: the commission, via Razorpay ------------------------- */}
       {viewer === 'brand' && status === 'CONFIRMED' && (
         <div style={card}>
-          <div style={label}>Step 1 of 3 — commission</div>
+          <div style={label}>Step 1 of 3, commission</div>
           <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 10 }}>
             {money(F.commissionTotal)} to ValueSkins. Non-refundable once paid, and the deal can no
             longer be cancelled.

@@ -51,9 +51,9 @@ export default function Privacy() {
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>6. Data Sharing & Disclosure</h2>
           <p><strong>Service Providers:</strong> We share data with trusted third-party service providers who help us operate the Platform, subject to contractual obligations to protect your data:</p>
-          <p>• <strong>Payment Processing:</strong> Razorpay (INR payments) — transaction data necessary to process payments</p>
-          <p>• <strong>Hosting & Infrastructure:</strong> Vercel, Render, AWS — data hosting and storage</p>
-          <p>• <strong>Authentication:</strong> Meta (Instagram Login) — to verify your identity when you sign in</p>
+          <p>• <strong>Payment Processing:</strong> Razorpay (INR payments), transaction data necessary to process payments</p>
+          <p>• <strong>Hosting & Infrastructure:</strong> Vercel, Render, AWS, data hosting and storage</p>
+          <p>• <strong>Authentication:</strong> Meta (Instagram Login), to verify your identity when you sign in</p>
           <p>• <strong>Analytics:</strong> We do not use third-party behavioral advertising trackers. Where analytics are used, we process de-identified usage data ourselves or through a processor bound by this Policy, only with your consent where required by law.</p>
           <p>• <strong>Instagram / Meta:</strong> We interact with Meta Platforms solely to sign you in and retrieve the basic Instagram profile data described in Section 2, subject to Meta's Platform Terms. We do not otherwise share your Instagram data with any third party.</p>
           <p>• <strong>Communications:</strong> Email service providers for transactional emails</p>
