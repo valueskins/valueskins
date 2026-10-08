@@ -71,6 +71,22 @@ const RULES: Array<{ title: string; body: string }> = [
   },
 ];
 
+// What the product does not do yet, said up front.
+const LIMITS: Array<{ title: string; body: string }> = [
+  {
+    title: 'No GST on creator payments',
+    body: 'Payments to creators are plain UPI payments. We do not issue a GST invoice for them. A creator who is registered for GST has to raise their own invoice to the brand outside ValueSkins, and a brand cannot claim input tax credit on a creator payment through us.',
+  },
+  {
+    title: 'No niches',
+    body: 'For this first version we assume every creator is open to every kind of content work. Deals are not sorted or filtered by niche, and every creator sees every deal.',
+  },
+  {
+    title: 'Instagram only',
+    body: 'Every social platform needs a different kind of content. We are building for Instagram deals only, and we want to get that right before adding anything else.',
+  },
+];
+
 export default function HowItWorksPage() {
   const h2: React.CSSProperties = { fontSize: 16, fontWeight: 700, color: C.text, margin: '36px 0 14px' };
   const card: React.CSSProperties = {
@@ -125,6 +141,23 @@ export default function HowItWorksPage() {
             <div key={r.title} style={card}>
               <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{r.title}</div>
               <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6 }}>{r.body}</div>
+            </div>
+          ))}
+
+          <h2 style={h2}>Our drawbacks and assumptions</h2>
+          <p style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6, margin: '0 0 14px' }}>
+            We try to do right by both brands and creators, but we are still new. These are things
+            we cannot do yet. We plan to fix them as we go.
+          </p>
+          {LIMITS.map((r, i) => (
+            <div key={r.title} style={{ ...card, display: 'flex', gap: 14 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: C.accent, minWidth: 22 }}>
+                {String(i + 1).padStart(2, '0')}
+              </div>
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{r.title}</div>
+                <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6 }}>{r.body}</div>
+              </div>
             </div>
           ))}
 
