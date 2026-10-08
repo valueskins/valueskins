@@ -25,6 +25,7 @@ const ROUTES_WITH_NAV = [
   '/settings/payout',
   '/account/data',
   '/profile/[id]',
+  '/how-it-works',
 ];
 
 export default function App({ Component, pageProps }: AppProps) {

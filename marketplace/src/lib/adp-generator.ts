@@ -164,7 +164,7 @@ export function renderAdpPdf(snap: AdpSnapshot): Promise<Buffer> {
         .moveDown(1)
         .fontSize(8)
         .text(
-          'This report is generated from ValueSkins payment records. Disputes: valueskinsfounder@gmail.com',
+          'This report is generated from ValueSkins payment records. Disputes: founder@valueskins.com',
           { align: 'center' }
         );
 

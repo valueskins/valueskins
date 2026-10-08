@@ -46,8 +46,8 @@ const TEMPLATES: Record<EmailType, { subject: string; build: (data: any) => { ht
   payment_confirmed: {
     subject: (data: any) => `Payment confirmed, ₹${data.amount} for deal #${data.deal_id}`,
     build: (data: any) => ({
-      html: `<h2>Payment Confirmed</h2><p>₹${data.amount} has been deposited into escrow for deal #${data.deal_id}.</p><p><a href="${process.env.NEXT_PUBLIC_URL || ''}/deals/${data.deal_id}" style="background:#6366f1;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;">View Deal</a></p>`,
-      text: `Payment confirmed: ₹${data.amount} deposited into escrow for deal #${data.deal_id}.\n\nView: ${process.env.NEXT_PUBLIC_URL || ''}/deals/${data.deal_id}`,
+      html: `<h2>Payment Confirmed</h2><p>₹${data.amount} has been received for deal #${data.deal_id}.</p><p><a href="${process.env.NEXT_PUBLIC_URL || ''}/deals/${data.deal_id}" style="background:#6366f1;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;">View Deal</a></p>`,
+      text: `Payment confirmed: ₹${data.amount} received for deal #${data.deal_id}.\n\nView: ${process.env.NEXT_PUBLIC_URL || ''}/deals/${data.deal_id}`,
     }),
   },
   payout_processed: {

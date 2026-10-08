@@ -11,43 +11,35 @@ const C = {
 const FAQS = [
   {
     q: 'What is ValueSkins?',
-    a: 'ValueSkins is a marketplace connecting brands with creators. Brands post campaigns and deals; creators apply, deliver content, and get paid through our secure escrow system.',
+    a: 'A place where brands post paid deals and creators apply for them. Each deal has one brand, one creator and one fixed amount.',
   },
   {
     q: 'How does payment work?',
-    a: 'Brands fund escrow before work starts. Once deliverables are approved, payment is released to the creator. The platform deducts a small service fee from each transaction.',
+    a: 'The brand makes three payments. First a flat fee of ₹750 plus 18% GST (₹885) to ValueSkins through Razorpay. Then 30% of the remaining amount to the creator before work starts, and 70% after the brand approves the content. The two creator payments go directly to the creator by UPI.',
   },
   {
-    q: 'What is a ValueSkin?',
-    a: 'A ValueSkin is your professional identity on the platform, it represents your niche, style, and value tier. Creators choose a Skin during onboarding; brands use it to discover talent.',
+    q: 'Does ValueSkins hold the money?',
+    a: 'No. ValueSkins only receives its own fee. The creator is paid directly by the brand.',
   },
   {
-    q: 'How are creators matched to brands?',
-    a: 'Our algorithm considers your ValueSkin, niche, follower count, engagement rate, past deal performance, and platform presence. Brands can also search and invite creators directly.',
+    q: 'Can I negotiate the amount?',
+    a: 'No. The brand sets the amount when it posts the deal. If it does not work for you, do not apply.',
   },
   {
-    q: 'What fees does ValueSkins charge?',
-    a: 'Platform fees vary by deal size and creator tier. The exact percentage is displayed before you accept a deal. There are no fees to browse or apply.',
+    q: 'Is my UPI ID verified?',
+    a: 'No. We do not use any third-party UPI verification. Enter your UPI ID and the name on the account exactly. Brands should check the name their UPI app shows before paying.',
   },
   {
-    q: 'How do I get verified as a brand?',
-    a: 'Submit your business details and domain from the brand registration page. Our team reviews and verifies within 1-3 business days. Verified brands get a badge on their profile.',
+    q: 'Can I change my profile?',
+    a: 'Your profile is saved once. After that only your follower count can be changed.',
   },
   {
     q: 'Can I cancel a deal?',
-    a: 'Deals can be cancelled by mutual agreement before escrow is funded. After funding, the escrow terms apply. Contact support if you need assistance.',
-  },
-  {
-    q: 'Is my data secure?',
-    a: 'Yes. We encrypt data in transit and at rest. We never share your personal data with third parties. See our privacy policy for full details.',
-  },
-  {
-    q: 'How do I export my data?',
-    a: 'Go to Account > Data to request a full export of your data. We deliver a JSON file with all your information within 48 hours.',
+    a: 'A brand can cancel at no cost until it pays the ValueSkins fee. After that the deal cannot be cancelled in the app and the fee is not refunded. Creators cannot cancel a deal.',
   },
   {
     q: 'How do I delete my account?',
-    a: 'Go to Account > Data and click "Delete Account". Your data is permanently removed within 30 days per GDPR requirements.',
+    a: 'Go to Account, then Data, and choose Delete Account. Your data is removed within 30 days.',
   },
 ];
 
@@ -76,7 +68,7 @@ export default function HelpPage() {
         </div>
 
         <div style={{ textAlign: 'center', padding: '24px', color: C.textMuted, fontSize: '13px' }}>
-          Need more help? <a href="mailto:valueskinsfounder@gmail.com" style={{ color: C.primary }}>Contact us</a>
+          Need more help? <a href="mailto:founder@valueskins.com" style={{ color: C.primary }}>Contact us</a>
         </div>
       </div>
     </MarketplaceLayout>

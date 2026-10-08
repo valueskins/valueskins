@@ -16,7 +16,7 @@ const MAP_EMBED =
 // Opens the real Maps app on a phone, which the embed cannot do.
 const MAP_LINK = 'https://maps.google.com/?q=Ferguson+College+Main+Gate,+Pune';
 const CONTACT_PHONE = '8805695324';
-const CONTACT_EMAIL = 'valueskinsfounder@gmail.com';
+const CONTACT_EMAIL = 'founder@valueskins.com';
 
 const PRICE = 49;
 

@@ -158,12 +158,12 @@ export default function Footer() {
               }}>
                 Contact Us
               </Link>
-              <a href="mailto:valueskinsfounder@gmail.com" style={{
+              <a href="mailto:founder@valueskins.com" style={{
                 fontSize: '13px',
                 color: C.textSecondary,
                 textDecoration: 'none',
               }}>
-                valueskinsfounder@gmail.com
+                founder@valueskins.com
               </a>
             </div>
           </div>
@@ -186,12 +186,7 @@ export default function Footer() {
           }}>
             © {currentYear} Valueskins Pvt. Ltd. All rights reserved.
           </p>
-          <div style={{
-            fontSize: '12px',
-            color: C.textSecondary,
-          }}>
-            Made with care for creators & brands
-          </div>
+
         </div>
       </div>
     </footer>

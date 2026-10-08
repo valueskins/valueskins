@@ -6,7 +6,7 @@ import { query, queryOne } from '@/lib/db-pool';
 
 const FROM_NAME = 'ValueSkins';
 const FROM_EMAIL = process.env.SMTP_FROM || 'noreply@valueskins.com';
-const DISPUTE_EMAIL = 'valueskinsfounder@gmail.com';
+const DISPUTE_EMAIL = 'founder@valueskins.com';
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://www.valueskins.com';
 
 export type DealEmailType =
