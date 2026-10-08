@@ -99,7 +99,10 @@ async function setEmail(req: NextApiRequest, res: NextApiResponse, userId: strin
       to: email,
       userId: Number(userId),
       type: 'email_verification',
-      data: { link, verificationLink: link, url: link },
+      // The template reads `verify_url`. This passed `link`, `verificationLink`
+      // and `url` — none of which it reads — so the button's href was the
+      // literal string "undefined" and every confirmation link 404'd.
+      data: { verify_url: link },
     });
 
     return res.status(200).json({
