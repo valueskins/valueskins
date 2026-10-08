@@ -152,7 +152,7 @@ export default function Terms() {
           <p>We may amend these Legal Terms. When we do, we will update the date at the top of this page and tell you by email or by a notice on the Platform. We will also remind you of these Legal Terms at least once a year. Your continued use of the Services after a change takes effect means you accept it. The version that applies to a Deal is the one in force when that Deal was posted.</p>
 
           <H>22. Governing Law and Jurisdiction</H>
-          <p>These Legal Terms are governed by the laws of India. Subject to any right you have under the Consumer Protection Act, 2019 to approach a consumer forum, the courts at Delhi have exclusive jurisdiction over any dispute between you and us.</p>
+          <p>These Legal Terms are governed by the laws of India. Subject to any right you have under the Consumer Protection Act, 2019 to approach a consumer forum, the courts at Pune, Maharashtra have exclusive jurisdiction over any dispute between you and us.</p>
 
           <H>23. General</H>
           <p>If any part of these Legal Terms is found to be unenforceable, the rest remains in effect. Our failure to enforce a term is not a waiver of it. These Legal Terms, together with the Privacy Policy and the Refund and Cancellation Policy, are the entire agreement between you and us about the Services.</p>
