@@ -115,6 +115,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     results.push({ name: '009_email_queue.sql', success: false, error: err.message });
   }
 
+  // Name on the creator's UPI account (010).
+  try {
+    const pnPath = path.join(process.cwd(), 'src', 'lib', 'migrations', '010_payout_name.sql');
+    const ran = await runSqlStatements(fs.readFileSync(pnPath, 'utf-8'));
+    results.push({ name: `010_payout_name.sql (${ran} statements)`, success: true });
+  } catch (err: any) {
+    allPassed = false;
+    results.push({ name: '010_payout_name.sql', success: false, error: err.message });
+  }
+
   // Run escrow-v2 migration SQL
   try {
     const sqlPath = path.join(process.cwd(), 'src', 'lib', 'migrations-escrow-v2.sql');

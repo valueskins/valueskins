@@ -60,7 +60,7 @@ export function stageAmountFor(budget: number, stage: DirectStage): number {
 export type DestinationBlock =
   | 'not_brand' | 'no_creator' | 'creator_has_no_upi' | 'no_consent';
 export type Destination =
-  | { ok: true; vpa: string; creatorId: number }
+  | { ok: true; vpa: string; name: string; creatorId: number }
   | { ok: false; reason: DestinationBlock };
 
 // The project builds with `strict: false`, which disables the narrowing of a
@@ -82,14 +82,14 @@ export async function getPayoutDestination(
   if (!d.creator_id) return { ok: false, reason: 'no_creator' };
 
   const creator = await queryOne(
-    'SELECT id, payout_vpa, payout_vpa_share_consent_at FROM users WHERE id = $1',
+    'SELECT id, payout_vpa, payout_name, payout_vpa_share_consent_at FROM users WHERE id = $1',
     [d.creator_id]
   );
   const c = creator as any;
   if (!c?.payout_vpa) return { ok: false, reason: 'creator_has_no_upi' };
   if (!c.payout_vpa_share_consent_at) return { ok: false, reason: 'no_consent' };
 
-  return { ok: true, vpa: c.payout_vpa, creatorId: Number(c.id) };
+  return { ok: true, vpa: c.payout_vpa, name: c.payout_name || '', creatorId: Number(c.id) };
 }
 
 export interface RecordInput {

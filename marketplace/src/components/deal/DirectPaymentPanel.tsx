@@ -13,6 +13,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { C, withAlpha } from '@/theme/colors';
 import { useWebSocket } from '@/hooks/useWebSocket';
+import UpiPayButton from './UpiPayButton';
 
 interface DirectPayment {
   id: string;
@@ -29,7 +30,7 @@ interface DirectPayment {
 interface State {
   expected_stage: 'ADVANCE' | 'FINAL' | null;
   amount_due: number | null;
-  destination: { vpa?: string; blocked?: string };
+  destination: { vpa?: string; name?: string; blocked?: string };
   payments: DirectPayment[];
 }
 
@@ -198,7 +199,35 @@ export default function DirectPaymentPanel({
                 <div style={{ fontSize: 12, color: C.textMuted, marginTop: 6 }}>
                   Amount: <strong style={{ color: C.text }}>{money(due || 0)}</strong>
                 </div>
+                {destination.name && (
+                  <div style={{ fontSize: 12, color: C.textMuted, marginTop: 6 }}>
+                    Account name: <strong style={{ color: C.text }}>{destination.name}</strong>
+                  </div>
+                )}
               </div>
+
+              {/* The one check available before money moves. */}
+              <div
+                style={{
+                  fontSize: 12, color: C.text, lineHeight: 1.6,
+                  background: withAlpha(C.warning, 0x14),
+                  border: `1px solid ${C.warning}`, borderRadius: 8, padding: 10, marginBottom: 12,
+                }}
+              >
+                {destination.name
+                  ? <>Before you enter your PIN, check that your UPI app shows the name <strong>{destination.name}</strong>. If it shows a different name, do not pay.</>
+                  : <>The creator has not given the name on this account. Check the name your UPI app shows before you enter your PIN, and do not pay if it looks wrong.</>}
+                {' '}A UPI payment cannot be recalled.
+              </div>
+
+              {destination.vpa && (
+                <UpiPayButton
+                  vpa={destination.vpa}
+                  name={destination.name}
+                  amount={Number(due) || 0}
+                  note={stage === 'ADVANCE' ? 'ValueSkins advance' : 'ValueSkins final payment'}
+                />
+              )}
 
               <label htmlFor="ref" style={{ fontSize: 11, fontWeight: 600, color: C.outline, display: 'block', marginBottom: 4 }}>
                 UPI reference or UTR number
