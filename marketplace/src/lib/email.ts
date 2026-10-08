@@ -67,7 +67,7 @@ const TEMPLATES: Record<EmailType, { subject: string; build: (data: any) => { ht
   email_verification: {
     subject: 'Verify your email address',
     build: (data: any) => ({
-      html: `<h2>Verify Your Email</h2><p>Click the link below to verify your email address.</p><p><a href="${data.verify_url}" style="background:#6366f1;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;">Verify Email</a></p>`,
+      html: `<h2>Verify Your Email</h2><p>Click the link below to verify your email address.</p><p><a href="${data.verify_url}" style="background:#000;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;">Verify Email</a></p><p style="color:#666;font-size:12px">If the button does not work, copy this link into your browser:<br>${data.verify_url}</p>`,
       text: `Verify your email: ${data.verify_url}`,
     }),
   },
