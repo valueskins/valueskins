@@ -36,12 +36,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // The full UPI handle goes to the brand that has to pay it, and to nobody
     // else. The creator sees their own masked, which is enough to recognise.
-    let destination: { vpa?: string; masked?: string; blocked?: string } = {};
+    let destination: { vpa?: string; name?: string; masked?: string; blocked?: string } = {};
     if (isBrand) {
       const dest = await getPayoutDestination(deal.id, userId);
       destination = destinationBlocked(dest)
         ? { blocked: dest.reason }
-        : { vpa: dest.vpa };
+        : { vpa: dest.vpa, name: dest.name };
     }
 
     return res.status(200).json({

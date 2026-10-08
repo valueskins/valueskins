@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method === 'GET') {
     const row = await queryOne(
-      `SELECT payout_vpa, payout_vpa_share_consent_at, email_verified
+      `SELECT payout_vpa, payout_name, payout_vpa_share_consent_at, email_verified
          FROM users WHERE id = $1`,
       [userId]
     );
@@ -32,6 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // nobody else). It was masked here, which meant a creator could not check
       // what they had saved — and a typo in a UPI ID sends money to a stranger.
       upi_id: u.payout_vpa || null,
+      account_name: u.payout_name || '',
       masked: u.payout_vpa ? maskVpa(u.payout_vpa) : null,
       configured: !!u.payout_vpa,
       consented: !!u.payout_vpa_share_consent_at,
@@ -41,7 +42,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { upi_id, share_consent } = req.body || {};
+  const { upi_id, share_consent, account_name } = req.body || {};
+
+  // The name the bank has for this account. The brand compares it with what
+  // their UPI app shows before paying, so it is required, and limited to what a
+  // name can contain: it is rendered to another user and placed in a UPI link.
+  const name = typeof account_name === 'string' ? account_name.trim().replace(/\s+/g, ' ') : '';
+  if (!/^[A-Za-z][A-Za-z .'-]{1,79}$/.test(name)) {
+    return res.status(400).json({
+      error: 'Enter the name on your bank account, as your UPI app shows it.',
+      field: 'account_name',
+    });
+  }
 
   const vpa = typeof upi_id === 'string' ? upi_id.trim() : '';
   if (!isValidVpa(vpa)) {
@@ -68,10 +80,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await query(
       `UPDATE users
           SET payout_vpa = $2,
+              payout_name = $3,
               payout_vpa_share_consent_at = NOW(),
               bank_details_completed = TRUE
         WHERE id = $1`,
-      [userId, vpa]
+      [userId, vpa, name]
     );
 
     // Changing where money goes is the most valuable thing a stolen session can
@@ -112,6 +125,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({
       configured: true,
       upi_id: vpa,
+      account_name: name,
       masked: maskVpa(vpa),
       changed: !!previous && previous !== vpa,
     });

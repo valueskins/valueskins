@@ -14,6 +14,8 @@ import { getOnboardingStatus, isOk } from '@/lib/deal-api';
 export default function PayoutSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState<string | null>(null);
+  const [savedName, setSavedName] = useState('');
+  const [name, setName] = useState('');
   const [emailReady, setEmailReady] = useState<boolean | null>(null);
   const [editing, setEditing] = useState(false);
   const [upi, setUpi] = useState('');
@@ -29,7 +31,10 @@ export default function PayoutSettingsPage() {
       fetch('/api/profile/payout-upi', { credentials: 'include' }).then((r) => r.json()).catch(() => null),
       getOnboardingStatus(),
     ]);
-    if (payoutRes) setSaved(payoutRes.upi_id || null);
+    if (payoutRes) {
+      setSaved(payoutRes.upi_id || null);
+      setSavedName(payoutRes.account_name || '');
+    }
     if (isOk(onboarding)) {
       // Payouts require a verified email first: it is where confirmations go.
       setEmailReady(onboarding.data.email_verified);
@@ -40,7 +45,7 @@ export default function PayoutSettingsPage() {
   useEffect(() => { void load(); }, [load]);
 
   const mismatch = upiAgain.length > 0 && upi.trim() !== upiAgain.trim();
-  const canSubmit = !busy && !!upi.trim() && upi.trim() === upiAgain.trim() && consent;
+  const canSubmit = !busy && !!upi.trim() && upi.trim() === upiAgain.trim() && name.trim().length >= 2 && consent;
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -54,7 +59,7 @@ export default function PayoutSettingsPage() {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ upi_id: upi.trim(), share_consent: consent }),
+      body: JSON.stringify({ upi_id: upi.trim(), account_name: name.trim(), share_consent: consent }),
     });
     const data = await res.json().catch(() => ({}));
     setBusy(false);
@@ -65,6 +70,8 @@ export default function PayoutSettingsPage() {
       return;
     }
     setSaved(data.upi_id || upi.trim());
+    setSavedName(data.account_name || name.trim());
+    setName('');
     setNotice(data.changed ? 'UPI ID changed. We have emailed you a confirmation.' : 'UPI ID saved.');
     setUpi('');
     setUpiAgain('');
@@ -121,13 +128,21 @@ export default function PayoutSettingsPage() {
             <div style={card}>
               <div style={lbl}>Your UPI ID</div>
               <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 6, wordBreak: 'break-all' }}>{saved}</div>
+              <div style={lbl}>Name on the account</div>
+              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>
+                {savedName || (
+                  <span style={{ color: C.warning, fontWeight: 500 }}>
+                    Not added yet. Use Change UPI ID to add it, so brands can check it before paying.
+                  </span>
+                )}
+              </div>
               <div style={{ fontSize: 11, color: C.outline, lineHeight: 1.5, marginBottom: 12 }}>
                 Check this is exactly right. A UPI payment sent to the wrong ID cannot be recalled.
                 It is shown only to you and to brands you are confirmed on.
               </div>
               {emailReady !== false && (
                 <button
-                  onClick={() => { setEditing(true); setNotice(null); setError(null); }}
+                  onClick={() => { setEditing(true); setName(savedName); setNotice(null); setError(null); }}
                   style={{
                     background: 'none', border: `1px solid ${C.border}`, borderRadius: 8,
                     padding: '9px 14px', color: C.text, fontWeight: 600, fontSize: 13, cursor: 'pointer',
@@ -165,6 +180,18 @@ export default function PayoutSettingsPage() {
                 </div>
               )}
 
+              <label style={lbl} htmlFor="acct-name">Name on the bank account</label>
+              <input
+                id="acct-name" value={name} onChange={(e) => setName(e.target.value)}
+                placeholder="As your UPI app shows it"
+                autoComplete="name" maxLength={80}
+                style={input(errorField === 'account_name')}
+              />
+              <div style={{ fontSize: 11, color: C.outline, lineHeight: 1.5, margin: '-4px 0 10px' }}>
+                The brand sees this next to your UPI ID and checks it against the name their UPI
+                app shows before paying.
+              </div>
+
               {/* Said plainly rather than buried: we disclose this to one brand,
                   so the creator should know before, not discover it after. */}
               <label
@@ -181,7 +208,7 @@ export default function PayoutSettingsPage() {
                   style={{ marginTop: 2, flexShrink: 0 }}
                 />
                 <span>
-                  Share my UPI ID with brands I am confirmed on, so they can pay me directly.
+                  Share my UPI ID and this name with brands I am confirmed on, so they can pay me directly.
                   It is never shown to anyone else.
                 </span>
               </label>
