@@ -59,7 +59,7 @@ const RULES: Array<{ title: string; body: string }> = [
   },
   {
     title: 'UPI IDs are not verified',
-    body: 'We do not use any third-party UPI verification. Creators must enter their UPI ID correctly. Brands must check the name their UPI app shows before paying. A payment to a wrong UPI ID cannot be recalled.',
+    body: 'We do not use any third-party UPI verification. Please enter your UPI ID carefully, and check the name your UPI app shows before paying. A payment to a wrong UPI ID cannot be recalled.',
   },
   {
     title: 'Cancelling',
@@ -67,23 +67,112 @@ const RULES: Array<{ title: string; body: string }> = [
   },
   {
     title: 'Your profile is entered once',
-    body: 'Profile details are saved once and cannot be changed later, except your follower count.',
+    body: 'Profile details are saved once. After that only your follower count can be changed on the site. If you made a mistake, email us and we will correct it.',
   },
 ];
 
-// What the product does not do yet, said up front.
-const LIMITS: Array<{ title: string; body: string }> = [
+// What the product does not do yet, said up front and kindly. Each of these is
+// also reflected in the Terms (section 3) so the two never disagree.
+const LIMITS: Array<{ group: string; items: Array<{ title: string; body: string }> }> = [
   {
-    title: 'No GST on creator payments',
-    body: 'Payments to creators are plain UPI payments. We do not issue a GST invoice for them. A creator who is registered for GST has to raise their own invoice to the brand outside ValueSkins, and a brand cannot claim input tax credit on a creator payment through us.',
+    group: 'Scope',
+    items: [
+      {
+        title: 'Instagram only, for now',
+        body: 'Every social platform needs a different kind of content. We are focused on Instagram deals so that we can do one thing well before adding others.',
+      },
+      {
+        title: 'No niches yet',
+        body: 'In this first version we assume creators are open to all kinds of content work. Deals are not sorted by niche, so every creator sees every deal.',
+      },
+      {
+        title: 'India and rupees only',
+        body: 'At the moment the service is offered in India, and all amounts are in Indian rupees.',
+      },
+      {
+        title: 'One creator per deal',
+        body: 'A deal is between one brand and one creator. We do not yet support campaigns with several creators or creator teams.',
+      },
+      {
+        title: 'Website only',
+        body: 'ValueSkins works in your browser. We do not have a mobile app yet.',
+      },
+      {
+        title: 'One login per account',
+        body: 'The service is for adults aged 18 and over, and each account has a single login. We do not yet offer team or agency accounts.',
+      },
+    ],
   },
   {
-    title: 'No niches',
-    body: 'For this first version we assume every creator is open to every kind of content work. Deals are not sorted or filtered by niche, and every creator sees every deal.',
+    group: 'Money and tax',
+    items: [
+      {
+        title: 'We do not hold or protect payments',
+        body: 'Brands pay creators directly, and the money never passes through us. This keeps things simple, but it also means we are unable to guarantee or recover a payment for either side. We ask both sides to deal with each other in good faith.',
+      },
+      {
+        title: 'UPI IDs are not verified',
+        body: 'We do not currently use any third-party UPI verification. We kindly ask creators to enter their UPI ID carefully, and brands to check the name their UPI app shows before paying.',
+      },
+      {
+        title: 'No GST on creator payments',
+        body: 'Payments to creators are plain UPI payments, and we do not issue a GST invoice for them. A creator who is registered for GST would need to raise their own invoice to the brand outside ValueSkins, and a brand is not able to claim input tax credit on a creator payment through us.',
+      },
+      {
+        title: 'Tax deducted at source is not handled',
+        body: 'If a brand is required to deduct tax from a payment to a creator, it will need to do that itself. We are not able to do it on its behalf.',
+      },
+      {
+        title: 'One flat fee for every deal',
+        body: 'Our fee is the same whatever the size of the deal. We know this is a larger share of a small deal than of a big one.',
+      },
+    ],
   },
   {
-    title: 'Instagram only',
-    body: 'Every social platform needs a different kind of content. We are building for Instagram deals only, and we want to get that right before adding anything else.',
+    group: 'Deals',
+    items: [
+      {
+        title: 'Fixed price, no chat',
+        body: 'The amount is set by the brand and is not negotiated here. There is no chat on the site. The two sides are welcome to write to each other by email.',
+      },
+      {
+        title: 'Deadlines are a reminder, not a lock',
+        body: 'If content is late, we send a reminder. We do not cancel the deal or return money automatically. If a delay becomes a problem, please write to us and a person will look into it.',
+      },
+      {
+        title: 'Usage rights are up to each deal',
+        body: 'How a brand may use the content is whatever the deal says. We do not set a standard, so we suggest brands write it clearly and creators read it before applying.',
+      },
+      {
+        title: 'Disagreements are handled by a person',
+        body: 'There is no automatic dispute system. If something goes wrong, please email us. Someone will read it and reply to both sides. We will do our best, though we are not able to promise a particular outcome.',
+      },
+      {
+        title: 'We do not store the content',
+        body: 'Content is shared as a link that the creator hosts elsewhere. Please keep your own copy.',
+      },
+      {
+        title: 'No results tracking',
+        body: 'We do not measure how a post performs once it is live.',
+      },
+    ],
+  },
+  {
+    group: 'Profiles',
+    items: [
+      {
+        title: 'Follower counts are entered by the user',
+        body: 'We do not read follower numbers from Instagram, and we are not able to check them. We trust users to keep theirs honest and current.',
+      },
+      {
+        title: 'Profiles are not verified',
+        body: 'We confirm that a person controls the Instagram account they sign in with. We do not check anything else they tell us about themselves.',
+      },
+      {
+        title: 'Profiles are saved once',
+        body: 'After saving, only the follower count can be changed on the site. If something was entered by mistake, please email us and we will correct it.',
+      },
+    ],
   },
 ];
 
@@ -145,19 +234,22 @@ export default function HowItWorksPage() {
           ))}
 
           <h2 style={h2}>Our drawbacks and assumptions</h2>
-          <p style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6, margin: '0 0 14px' }}>
-            We try to do right by both brands and creators, but we are still new. These are things
-            we cannot do yet. We plan to fix them as we go.
+          <p style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6, margin: '0 0 6px' }}>
+            We try to do right by both brands and creators, but we are still new. Here is what we
+            are not able to offer yet. We would rather you hear it from us now, and we plan to
+            improve each of these as we grow. Thank you for your patience.
           </p>
-          {LIMITS.map((r, i) => (
-            <div key={r.title} style={{ ...card, display: 'flex', gap: 14 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: C.accent, minWidth: 22 }}>
-                {String(i + 1).padStart(2, '0')}
+          {LIMITS.map((g) => (
+            <div key={g.group}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.6px', margin: '20px 0 8px' }}>
+                {g.group}
               </div>
-              <div>
-                <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{r.title}</div>
-                <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6 }}>{r.body}</div>
-              </div>
+              {g.items.map((r) => (
+                <div key={r.title} style={card}>
+                  <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{r.title}</div>
+                  <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6 }}>{r.body}</div>
+                </div>
+              ))}
             </div>
           ))}
 
