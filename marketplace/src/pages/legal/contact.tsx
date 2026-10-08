@@ -23,13 +23,21 @@ export default function Contact() {
               <p style={{ margin: '0 0 4px 0' }}><strong style={{ color: C.text }}>Email:</strong></p>
               <a href="mailto:founder@valueskins.com" style={{ color: C.primary, fontSize: '15px' }}>founder@valueskins.com</a>
             </div>
+            <div style={{ marginBottom: '20px' }}>
+              <p style={{ margin: '0 0 4px 0' }}><strong style={{ color: C.text }}>Phone:</strong></p>
+              <a href="tel:+918805695324" style={{ color: C.primary, fontSize: '15px' }}>+91 88056 95324</a>
+            </div>
+            <div style={{ marginBottom: '20px' }}>
+              <p style={{ margin: '0 0 4px 0' }}><strong style={{ color: C.text }}>GSTIN:</strong></p>
+              <span style={{ color: C.primary, fontSize: '15px' }}>27AAMCV5525E1Z5</span>
+            </div>
           </div>
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '32px', marginBottom: '12px' }}>Response Time</h2>
           <p>We acknowledge all inquiries within 24 hours and aim to resolve most issues within 2-3 business days.</p>
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '32px', marginBottom: '12px' }}>Grievance Officer</h2>
-          <p>For complaints regarding data privacy or platform conduct, contact our Grievance Officer at <a href="mailto:founder@valueskins.com" style={{ color: C.primary }}>founder@valueskins.com</a>. We are required to acknowledge within 24 hours and resolve within 30 days under Indian law.</p>
+          <p>For complaints regarding data privacy or platform conduct, contact our Grievance Officer at <a href="mailto:founder@valueskins.com" style={{ color: C.primary }}>founder@valueskins.com</a>. We are required to acknowledge within 24 hours and resolve within 15 days under Indian law.</p>
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '32px', marginBottom: '12px' }}>Business Hours</h2>
           <p>Monday to Saturday, 10:00 AM to 7:00 PM IST. We respond to emails outside business hours as well.</p>
