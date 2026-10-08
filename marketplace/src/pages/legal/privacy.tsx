@@ -142,7 +142,7 @@ export default function Privacy() {
           <p><strong>Grievance Officer:</strong> Saketh Velamuri<br/>
           <strong>Company:</strong> Valueskins Pvt. Ltd.<br/>
           <strong>Email:</strong> <a href="mailto:founder@valueskins.com" style={{color: C.primary}}>founder@valueskins.com</a></p>
-          <p>We will acknowledge your complaint within 24 hours and resolve it within 30 days as required by law.</p>
+          <p>We will acknowledge your complaint within 24 hours and resolve it within 15 days of receiving it.</p>
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>17A. Payment Processing</h2>
           <p><strong>Payment Processor:</strong> All payments are processed through our payment processor (currently Razorpay). ValueSkins does not store, process, or have access to payment card details, bank account information, or UPI IDs. All payment security and storage is handled exclusively by our payment processor.</p>
