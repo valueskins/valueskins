@@ -32,7 +32,7 @@ export default function RefundPolicy() {
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>Contact</h2>
           <p>If you have questions about this policy:</p>
-          <p><strong>Email:</strong> <a href="mailto:valueskinsfounder@gmail.com" style={{color: C.primary}}>valueskinsfounder@gmail.com</a></p>
+          <p><strong>Email:</strong> <a href="mailto:founder@valueskins.com" style={{color: C.primary}}>founder@valueskins.com</a></p>
           
 
         </div>

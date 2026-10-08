@@ -31,7 +31,7 @@ export default function GrievanceOfficer() {
           <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: '12px', padding: '24px', marginTop: '16px' }}>
             <p><strong style={{ color: C.text }}>Company:</strong> Valueskins Pvt. Ltd.</p>
             <p><strong style={{ color: C.text }}>Grievance Officer:</strong> Saketh Velamuri</p>
-            <p><strong style={{ color: C.text }}>Email:</strong> <a href="mailto:valueskinsfounder@gmail.com" style={{ color: C.primary }}>valueskinsfounder@gmail.com</a></p>
+            <p><strong style={{ color: C.text }}>Email:</strong> <a href="mailto:founder@valueskins.com" style={{ color: C.primary }}>founder@valueskins.com</a></p>
             <p><strong style={{ color: C.text }}>Phone:</strong> </p>
             <p><strong style={{ color: C.text }}>Response Time:</strong> We acknowledge within 24 hours and resolve within 30 days.</p>
           </div>

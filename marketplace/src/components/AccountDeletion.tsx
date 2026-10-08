@@ -53,7 +53,7 @@ const sections = [
     title: 'Retained for 7 Years (tax law)',
     items: [
       'Payment transaction records (amounts, dates, IDs), required by IRS/UK HMRC/Indian tax law',
-      'Payout history and escrow release records',
+      'Records of payments made on your deals',
       'Invoice records for tax reporting purposes',
       'These records are anonymized, your name/email is removed but the financial data stays',
       'After 7 years, these records are permanently destroyed',
@@ -84,7 +84,6 @@ const sections = [
       'Your messages in deal rooms show as "[deleted]", content removed',
       'Reviews about you: reviews you wrote are deleted, reviews about you are anonymized',
       'Campaigns you created: frozen and removed from active rotation',
-      'Escrow amounts: any pending funds will be returned per our terms, contact support first',
     ],
   },
   {

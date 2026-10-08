@@ -197,8 +197,7 @@ export default function Login() {
                 ...enter(0.21),
               }}
             >
-              Where creators and brands close deals on{' '}
-              <span style={{ color: DEEP_SAND, fontWeight: 600 }}>earned trust</span>.
+              Brands post deals. Creators apply. Fixed price, paid directly.
             </p>
 
             {error && (
@@ -253,12 +252,6 @@ export default function Login() {
               </svg>
               Continue with Instagram
             </button>
-
-            {/* §0b.5 — trust whisper */}
-            <p style={{ margin: '18px 0 0', fontSize: '0.75rem', color: t.muted, letterSpacing: '0.01em', ...enter(0.45) }}>
-              Escrow-backed <span style={{ color: DEEP_SAND }}>·</span> Verified identities{' '}
-              <span style={{ color: DEEP_SAND }}>·</span> Earned reputation
-            </p>
 
             <p style={{ margin: '16px 0 0', fontSize: '0.6875rem', color: t.muted, lineHeight: 1.5, ...enter(0.5) }}>
               By continuing, you agree to our{' '}

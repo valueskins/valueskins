@@ -26,6 +26,16 @@ const nextConfig = {
     { source: '/valueskin/:path*', destination: '/deals/browse', permanent: false },
     { source: '/demo/profile', destination: '/profile/me', permanent: false },
     { source: '/preview', destination: '/deals/browse', permanent: false },
+    { source: '/competitors', destination: '/how-it-works', permanent: false },
+    // Pages from earlier versions of the product. They described escrow,
+    // negotiation, messaging and a skin store, none of which exist now.
+    ...[
+      '/feed', '/marketplace', '/explore', '/messages', '/promoter-earnings',
+      '/account/modules', '/account/valueskins', '/payments/history',
+      '/fake-bank', '/razorpay-test',
+      '/auth/onboarding', '/auth/onboarding-brand', '/auth/onboarding-creator', '/auth/onboarding-enhanced',
+      '/browse/:path*', '/briefs/:path*',
+    ].map((source) => ({ source, destination: '/deals/browse', permanent: false })),
   ],
   headers: async () => {
     return [

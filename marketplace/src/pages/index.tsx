@@ -217,24 +217,24 @@ export default function HomePage() {
       </div>
       </div>
 
-      {/* How It Works */}
-      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '60px 24px' }}>
+      {/* How it works, in four lines. The full version is /how-it-works. */}
+      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '60px 24px 20px' }}>
         <Reveal reduced={reduced}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: C.text, textAlign: 'center', marginBottom: '48px' }}>
-            How It Works
+            How it works
           </h2>
         </Reveal>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '32px' }}>
           {[
-            { step: '01', title: 'Create Your Profile', desc: 'Showcase your skills, portfolio, and rates. Brands find you, or you find them.' },
-            { step: '02', title: 'Make a Deal', desc: 'Brands post briefs, creators negotiate terms. Deliverables, deadlines, and payment are agreed upfront.' },
-            { step: '03', title: 'Paid In Stages', desc: 'The creator gets 30% to start and the rest once the brand approves the work. Payments run through Razorpay.' },
-            { step: '04', title: 'Deliver and Get Paid', desc: 'Creator submits work. Brand reviews and approves. Payment releases instantly. Reputation grows.' },
+            { step: '01', title: 'A brand posts a deal', desc: 'What it needs, the deadline and the amount. The amount is final.' },
+            { step: '02', title: 'Creators apply', desc: 'Every creator sees every open deal. The brand picks one.' },
+            { step: '03', title: 'The brand pays in three parts', desc: 'A flat fee to ValueSkins, then 30% to the creator before work starts and 70% after approval.' },
+            { step: '04', title: 'The creator delivers', desc: 'The creator shares the content. The brand approves it or asks for changes.' },
           ].map((item, i) => (
             <Reveal key={item.step} reduced={reduced} delay={i * 90}>
               <div style={{
                 background: C.surface, border: `1px solid ${C.border}`, borderRadius: '10px',
-                padding: '28px', transition: 'border-color 0.15s', height: '100%',
+                padding: '28px', height: '100%',
               }}>
                 <div style={{ fontSize: '0.75rem', fontWeight: 700, color: C.accent, marginBottom: '12px', letterSpacing: '0.1em' }}>
                   STEP {item.step}
@@ -245,92 +245,23 @@ export default function HomePage() {
             </Reveal>
           ))}
         </div>
-      </div>
-
-      {/* For Creators / For Brands — opposing reveal (spec §2) */}
-      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '40px 24px 60px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px' }}>
-          <Reveal reduced={reduced} from="left">
-            <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: '10px', padding: '32px', height: '100%' }}>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: C.text, margin: '0 0 16px' }}>For Creators</h3>
-              <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
-                {[
-                  'Build a public profile with your portfolio',
-                  'Get discovered by brands looking for creators',
-                  'Negotiate deal terms before committing',
-                  'Paid 30% up front, the rest on approval',
-                  'All communication documented and on-record',
-                  'Build reputation with completed deals',
-                ].map((item, i) => (
-                  <li key={i} style={{ fontSize: '0.9375rem', color: C.textSecondary, padding: '6px 0', lineHeight: 1.5 }}>
-                    <span style={{ color: C.accent, marginRight: '8px' }}>→</span>{item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-          <Reveal reduced={reduced} from="right">
-            <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: '10px', padding: '32px', height: '100%' }}>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: C.text, margin: '0 0 16px' }}>For Brands</h3>
-              <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
-                {[
-                  'Browse verified creator profiles and portfolios',
-                  'Post campaign briefs and receive pitches',
-                  'Set clear deliverables, deadlines, and budgets',
-                  'You only pay the rest once you approve the work',
-                  'Only pay for work you are satisfied with',
-                  'Track every deal from start to finish',
-                ].map((item, i) => (
-                  <li key={i} style={{ fontSize: '0.9375rem', color: C.textSecondary, padding: '6px 0', lineHeight: 1.5 }}>
-                    <span style={{ color: C.accent, marginRight: '8px' }}>→</span>{item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
+        <div style={{ textAlign: 'center', marginTop: '32px' }}>
+          <Link href="/how-it-works" style={{ fontSize: '0.9375rem', color: C.text, fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+            Read the full walkthrough
+          </Link>
         </div>
       </div>
 
-      {/* Pricing — reshaped, 12% vs agencies (spec §3a). Not led by a giant number. */}
+      {/* What it costs. One number, stated once. */}
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '40px 24px 60px', textAlign: 'center' }}>
         <Reveal reduced={reduced}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: C.text, margin: '0 0 12px' }}>
-            Pricing that only wins when you do
+            What it costs
           </h2>
-          <p style={{ fontSize: '1rem', color: C.textSecondary, margin: '0 auto 36px', maxWidth: '520px', lineHeight: 1.6 }}>
-            No subscription, no upfront fees. You only pay when a deal completes.
+          <p style={{ fontSize: '1rem', color: C.textSecondary, margin: '0 auto', maxWidth: '520px', lineHeight: 1.6 }}>
+            ₹750 plus 18% GST per deal, which is ₹885. The brand pays it, and it comes out of the
+            deal amount. Signing up, browsing and applying are free.
           </p>
-          <div
-            style={{
-              display: 'flex',
-              gap: '24px',
-              justifyContent: 'center',
-              alignItems: 'stretch',
-              flexWrap: 'wrap',
-            }}
-          >
-            <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: '10px', padding: '28px 36px', minWidth: '200px' }}>
-              <div style={{ fontSize: '0.75rem', letterSpacing: '0.1em', color: C.textSecondary, marginBottom: '10px' }}>VALUESKINS</div>
-              <div style={{ fontSize: '2.25rem', fontWeight: 800, color: C.accent, lineHeight: 1 }}>
-                <CountUp to={12} suffix="%" reduced={reduced} />
-              </div>
-            </div>
-            <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: '10px', padding: '28px 36px', minWidth: '200px' }}>
-              <div style={{ fontSize: '0.75rem', letterSpacing: '0.1em', color: C.textSecondary, marginBottom: '10px' }}>TYPICAL AGENCIES</div>
-              <div style={{ fontSize: '2.25rem', fontWeight: 800, color: C.textSecondary, lineHeight: 1 }}>15–25%</div>
-            </div>
-          </div>
-          <p style={{ fontSize: '0.9375rem', color: C.textSecondary, margin: '28px auto 0', maxWidth: '480px', lineHeight: 1.6 }}>
-            Less than half of what agencies charge, and only when the work is done.
-          </p>
-          <div style={{ marginTop: '32px' }}>
-            <Link href="/competitors" style={{
-              fontSize: '0.9375rem', color: C.accent, textDecoration: 'none', fontWeight: 600,
-              borderBottom: `1px solid ${C.accent}`, paddingBottom: '2px'
-            }}>
-              See how we compare to competitors →
-            </Link>
-          </div>
         </Reveal>
       </div>
 

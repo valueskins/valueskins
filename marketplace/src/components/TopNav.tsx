@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-// The whole app has two places: the marketplace and settings. The navigation is
-// the screen's width divided into those two halves, at the top.
+// The app has three places: the marketplace, settings, and a page explaining
+// how it all works. The navigation is the screen's width divided equally
+// between them, at the top.
 //
 // It replaces the four-tab bar at the bottom of the screen (Profile, Market,
 // Store, Settings). The store is gone, and the profile now lives in Settings.
@@ -19,6 +20,11 @@ const SECTIONS = [
     href: '/settings',
     label: 'Settings',
     match: (p: string) => p.startsWith('/settings') || p.startsWith('/account') || p.startsWith('/profile'),
+  },
+  {
+    href: '/how-it-works',
+    label: 'How it works',
+    match: (p: string) => p.startsWith('/how-it-works'),
   },
 ];
 
@@ -35,7 +41,7 @@ export default function TopNav() {
         aria-label="Primary"
         style={{
           position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9000,
-          height: TOP_NAV_HEIGHT, display: 'grid', gridTemplateColumns: '1fr 1fr',
+          height: TOP_NAV_HEIGHT, display: 'grid', gridTemplateColumns: `repeat(${SECTIONS.length}, 1fr)`,
           background: 'var(--c-bg)', borderBottom: '1px solid var(--c-border)',
           fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
         }}
