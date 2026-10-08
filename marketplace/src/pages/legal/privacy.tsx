@@ -7,24 +7,24 @@ export default function Privacy() {
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         <Link href="/" style={{ color: C.primary, textDecoration: 'none', fontSize: '14px', marginBottom: '32px', display: 'inline-block' }}>← Back</Link>
         <h1 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '12px' }}>Privacy Policy</h1>
-        <p style={{ color: C.textSecondary, marginBottom: '40px' }}>Last updated: September 18, 2026</p>
+        <p style={{ color: C.textSecondary, marginBottom: '40px' }}>Last updated: October 8, 2026</p>
         <div style={{ lineHeight: '1.8', color: C.textSecondary }}>
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>1. Introduction</h2>
           <p>Valueskins Pvt. Ltd. ("Company," "we," "us," or "our") respects your privacy and is committed to protecting your personal data. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform, website, and related services (collectively, the "Platform").</p>
-          <p>This Policy complies with the Information Technology Act, 2000; the Information Technology (Reasonable Security Practices and Procedures and Sensitive Personal Data or Information) Rules, 2011; the Digital Personal Data Protection Act, 2023 (DPDP Act) of India; the General Data Protection Regulation (GDPR) of the European Union; and the California Consumer Privacy Act (CCPA).</p>
+          <p>This Policy is written to meet the Information Technology Act, 2000; the Information Technology (Reasonable Security Practices and Procedures and Sensitive Personal Data or Information) Rules, 2011; and the Digital Personal Data Protection Act, 2023 (DPDP Act). The Platform is offered in India.</p>
           <p>Please read this Policy carefully. By using the Platform, you consent to the practices described in this Policy. If you do not agree with this Policy, please do not use the Platform.</p>
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>2. Information We Collect</h2>
-          <p><strong>Account Information:</strong> When you create an account, we collect your name, email address, phone number, password (stored as a bcrypt hash, never in plaintext), and profile information such as display name, avatar, and biography.</p>
-          <p><strong>Tax Compliance Information:</strong> For tax-compliant payouts and invoice generation, we collect Permanent Account Number (PAN) for Creators and Goods and Services Tax Identification Number (GSTIN) for Brands. This information is used solely for tax compliance, invoice generation, and TDS purposes.</p>
-          <p><strong>Profile & Listing Data:</strong> Creators may provide professional information including portfolio samples, pricing, profession categories, social media links, and credentials. Brands may provide company information, industry, and campaign preferences.</p>
-          <p><strong>Deal & Transaction Data:</strong> We collect information related to Deals you create or participate in, including deal terms, deliverables, messages, offers, counter-offers, reviews, ratings, and payment transaction records (note: full payment card details are handled by Razorpay and are not stored by us).</p>
-          <p><strong>Communication Data:</strong> Messages sent through the Platform, support inquiries, and communications with other Users are recorded and stored with tamper-evident protections.</p>
-          <p><strong>Instagram Account Data (Meta):</strong> You sign in to ValueSkins with an Instagram professional (Business or Creator) account. With your authorization through Meta's Instagram Login, we receive basic profile information only: your Instagram user ID, username, display name, account type, profile picture URL, follower count, media count, and biography. We use it to sign you in and to show your profile to other Users. We do not receive account insights or analytics, and we do not post, comment, message, or publish to Instagram on your behalf.</p>
-          <p><strong>Usage Data:</strong> We automatically collect information about how you interact with the Platform, including pages visited, features used, time spent, clickstream data, and referring URLs.</p>
+          <p><strong>Account and Profile Information:</strong> Your email address, and the profile details you enter in Settings. For a Creator these are full name, age, gender, city, and Instagram follower count. For a Brand these are brand name, website (optional), city, and Instagram follower count. You may also write a short description of yourself or your brand. We store your age as the age you gave and the date you gave it, so that it can advance each year; we do not ask for your date of birth. We do not collect a password or a phone number: you sign in with Instagram.</p>
+          <p><strong>Tax Information:</strong> We do not currently collect Permanent Account Numbers or GST numbers from users. If the law requires us to collect them in future, we will ask you for them and tell you why.</p>
+          <p><strong>Payout Details (Creators):</strong> The UPI ID you want to be paid on and the name on that account. We do not verify them. We do not accept or store bank account numbers.</p>
+          <p><strong>Deal Data:</strong> The Deals you post or apply to, including the description, amount, dates, applications, the links to content that a Creator shares, a Brand's written feedback, the dates of each step, the UPI payment references a Brand records, and a Creator's confirmations that a payment arrived. For our own fee we keep the payment record from our payment processor. Card and bank details used to pay our fee are handled by Razorpay and are not stored by us. We do not keep a copy of the content itself, and we do not measure how it performs.</p>
+          <p><strong>Communication Data:</strong> We keep a log of the emails the Platform sends you (recipient, subject, and time), and of any email you send us. There is no chat or messaging feature on the Platform.</p>
+          <p><strong>Instagram Account Data (Meta):</strong> You sign in to ValueSkins with an Instagram professional (Business or Creator) account. With your authorization through Meta's Instagram Login, we receive basic profile information only: your Instagram user ID, your username, and your account type. We use it to sign you in and to show your Instagram username to other Users. We do not read your follower count, media, messages, insights, or analytics from Instagram, and we do not post, comment, message, or act on your behalf. The follower count shown on your ValueSkins profile is the number you enter yourself.</p>
+          <p><strong>Usage Data:</strong> Our servers record the requests made to the Platform, such as the page or action requested and the time, for security and troubleshooting.</p>
           <p><strong>Device & Technical Data:</strong> IP address, browser type and version, operating system, device type, unique device identifiers, and other technical information.</p>
-          <p><strong>Cookies & Similar Technologies:</strong> We use cookies, web beacons, and similar tracking technologies to enhance your experience, analyze usage, and provide personalized content. See Section 10 (Cookie Policy) for details.</p>
+          <p><strong>Cookies:</strong> We use the cookies needed to keep you signed in and to remember your cookie choice. See Section 10 for details.</p>
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>3. How We Collect Your Information</h2>
           <p><strong>Direct Collection:</strong> You provide information directly when you create an account, complete your profile, create Deals, send messages, submit support requests, or otherwise use the Platform.</p>
@@ -34,9 +34,9 @@ export default function Privacy() {
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>4. How We Use Your Information</h2>
           <p>We use your information for the following purposes:</p>
-          <p><strong>To Provide Services:</strong> Operate, maintain, and provide the Platform's features, including account management, Deal creation and execution, messaging, payment processing, and dispute resolution.</p>
-          <p><strong>Sign-in and your profile:</strong> Your Instagram login identifies your account, and your Instagram profile information (username, profile picture, follower count) is shown on your ValueSkins profile so the other party in a deal can confirm who they are working with.</p>
-          <p><strong>To Improve the Platform:</strong> Analyze usage patterns, conduct research, perform analytics, and develop new features to enhance user experience.</p>
+          <p><strong>To Provide Services:</strong> Operate and maintain the Platform's features, including your account, posting and applying to Deals, showing a confirmed Brand where to pay a Creator, recording payments, sending notices by email, and reviewing disputes.</p>
+          <p><strong>Sign-in and your profile:</strong> Your Instagram login identifies your account, and your Instagram username is shown on your ValueSkins profile, together with the profile details you entered, so that the other party in a Deal can see who they are working with.</p>
+          <p><strong>To Improve the Platform:</strong> Understand how the Platform is used and fix problems. We do not use your personal data for advertising.</p>
           <p><strong>To Communicate with You:</strong> Send administrative messages (account verification, password resets, deal updates), service announcements, technical notices, and support responses.</p>
           <p><strong>To Ensure Safety & Security:</strong> Detect, prevent, and respond to fraud, abuse, security incidents, and violations of our Terms of Service.</p>
           <p><strong>To Comply with Legal Obligations:</strong> Fulfill legal requirements, respond to lawful requests from authorities, and enforce our rights.</p>
@@ -52,12 +52,12 @@ export default function Privacy() {
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>6. Data Sharing & Disclosure</h2>
           <p><strong>Service Providers:</strong> We share data with trusted third-party service providers who help us operate the Platform, subject to contractual obligations to protect your data:</p>
           <p>• <strong>Payment Processing:</strong> Razorpay (INR payments), transaction data necessary to process payments</p>
-          <p>• <strong>Hosting & Infrastructure:</strong> Vercel, Render, AWS, data hosting and storage</p>
+          <p>• <strong>Hosting & Infrastructure:</strong> Vercel and Render, which host the website and the database</p>
           <p>• <strong>Authentication:</strong> Meta (Instagram Login), to verify your identity when you sign in</p>
           <p>• <strong>Analytics:</strong> We do not use third-party behavioral advertising trackers. Where analytics are used, we process de-identified usage data ourselves or through a processor bound by this Policy, only with your consent where required by law.</p>
           <p>• <strong>Instagram / Meta:</strong> We interact with Meta Platforms solely to sign you in and retrieve the basic Instagram profile data described in Section 2, subject to Meta's Platform Terms. We do not otherwise share your Instagram data with any third party.</p>
-          <p>• <strong>Communications:</strong> Email service providers for transactional emails</p>
-          <p><strong>Other Users:</strong> Your profile information is visible to other Users as part of the Platform's marketplace functionality. Deal-related communications are visible to the participants of the Deal.</p>
+          <p>• <strong>Communications:</strong> Zoho Mail, which sends our transactional emails</p>
+          <p><strong>Other Users:</strong> Your Instagram username, your profile details, your description, and a summary of your completed Deals are visible to other signed-in Users. Your email address is shown only to Users with whom you share a Deal: the Brand that posted a Deal you applied to or were confirmed on, or a Creator who applied to or was confirmed on your Deal. If you are a Creator, your UPI ID and the name on that account are shown only to a Brand that has confirmed you on a Deal, so that it can pay you. A Brand's written feedback on content is visible to the Creator on that Deal.</p>
           <p><strong>Legal Requirements:</strong> We may disclose your information if required to do so by law, legal process, or governmental request, or if we believe disclosure is necessary to protect our rights, property, or safety, or the rights, property, or safety of others.</p>
           <p><strong>Business Transfers:</strong> In the event of a merger, acquisition, or sale of assets, your information may be transferred to the acquiring entity. You will be notified of any such change.</p>
           <p><strong>We do not sell your personal information</strong> to third parties for marketing or advertising purposes.</p>
@@ -73,7 +73,7 @@ export default function Privacy() {
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>8. Your Rights & Choices</h2>
           <p><strong>Under the DPDP Act (India):</strong></p>
           <p>• <strong>Right to Access:</strong> Request a summary of your personal data held by us</p>
-          <p>• <strong>Right to Correction:</strong> Request correction of inaccurate or incomplete data</p>
+          <p>• <strong>Right to Correction:</strong> Request correction of inaccurate or incomplete data. Profile details cannot be edited on the Platform after they are saved, apart from your follower count, so to correct a detail entered in error please email us and we will correct it after reasonable verification</p>
           <p>• <strong>Right to Erasure:</strong> Request deletion of your personal data (subject to legal exceptions)</p>
           <p>• <strong>Right to Grievance Redressal:</strong> Lodge complaints regarding data processing</p>
           <p>• <strong>Right to Nominate:</strong> Nominate a person to exercise your rights after your death</p>
@@ -93,22 +93,18 @@ export default function Privacy() {
           <p><strong>To Exercise Your Rights:</strong> Contact us at <a href="mailto:founder@valueskins.com" style={{color: C.primary}}>founder@valueskins.com</a>. We will respond to your request within the timeframes required by applicable law (generally 30 days). We may need to verify your identity before processing your request.</p>
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>9. Data Security</h2>
-          <p>We implement robust security measures to protect your data:</p>
-          <p>• <strong>Encryption in Transit:</strong> All data transmitted between your browser and our servers is encrypted using TLS 1.3+</p>
-          <p>• <strong>Encryption at Rest:</strong> Sensitive data (passwords, PII, payment tokens) is encrypted using AES-256-GCM</p>
-          <p>• <strong>Password Hashing:</strong> Passwords are hashed using bcrypt with a minimum of 12 salt rounds</p>
-          <p>• <strong>Access Controls:</strong> Strict role-based access controls (RBAC) and row-level security (RLS) on all databases</p>
-          <p>• <strong>Rate Limiting:</strong> Per-user and per-IP rate limiting to prevent abuse</p>
-          <p>• <strong>Audit Logging:</strong> All access to sensitive data is logged with immutable audit trails</p>
-          <p>• <strong>Regular Audits:</strong> Periodic security assessments, vulnerability scanning, and penetration testing</p>
-          <p>• <strong>Incident Response:</strong> Documented incident response plan with breach notification procedures</p>
+          <p>We take reasonable steps to protect your data:</p>
+          <p>• <strong>Encryption in Transit:</strong> Data sent between your browser and the Platform is encrypted using TLS</p>
+          <p>• <strong>No Passwords:</strong> We do not hold a password for your account. Sign-in is through Instagram, and your session is kept in a cookie that scripts on the page cannot read</p>
+          <p>• <strong>Payment Details:</strong> Card and bank details used to pay our fee are handled by Razorpay and never reach our servers</p>
+          <p>• <strong>Limited Access:</strong> Access to the database is restricted to the people who need it to run the Platform</p>
+          <p>• <strong>Records of Change:</strong> A change to a Creator's UPI ID is recorded and notified to the account's email address</p>
           <p>Despite these measures, no method of transmission or storage is 100% secure. We cannot guarantee absolute security.</p>
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>10. Cookie Policy and Analytics</h2>
           <p>We use cookies and similar technologies to enhance your experience. Here is what we use:</p>
           <p><strong>Essential Cookies:</strong> Required for the Platform to function (session management, CSRF protection, authentication). No consent required. These cannot be disabled.</p>
-          <p><strong>Analytics Cookies:</strong> Help us understand how you use the Platform (pages visited, features used). We use PostHog for product analytics and session replay. These are only set with your consent where required by law.</p>
-          <p><strong>Session Replay:</strong> With your consent, PostHog records session replays showing how pages were used, including clicks and navigation. Personal information is masked: passwords, one-time codes, email and phone fields are never captured, and screens containing personal details are hidden from recordings. Session replays are stored and used only to diagnose problems and improve the platform. You can withdraw analytics consent at any time.</p>
+          <p><strong>Analytics Cookies:</strong> We do not currently use analytics or advertising cookies. If we introduce analytics in future, they will be set only with your consent and this Policy will be updated first.</p>
           <p><strong>Preference Cookies:</strong> Remember your settings and preferences.</p>
           <p><strong>Managing Cookies:</strong> You can control cookies through your browser settings. Disabling essential cookies may affect Platform functionality. You can also use our cookie consent banner to manage your preferences.</p>
 
@@ -118,15 +114,11 @@ export default function Privacy() {
           <p><strong>DPDP Act:</strong> For Indian users, data is primarily stored within India. Where data is transferred outside India, we ensure equivalent levels of protection as required under the DPDP Act.</p>
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>12. Children's Privacy</h2>
-          <p>The Platform is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us immediately. If we become aware that we have collected personal information from a child under 13 without verification of parental consent, we will take steps to delete that information.</p>
+          <p>The Platform is for adults. You must be at least 18 years old to use it, and we do not knowingly collect personal data from anyone under 18. If you believe a person under 18 has given us personal data, please contact us and we will delete it.</p>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>13. Documented Communications</h2>
-          <p>All deal-related communications (including but not limited to messages, offers, counter-offers, contract terms, and file submissions sent through the ValueSkins deal room) are permanently recorded with the following properties:</p>
-          <p><strong>Tamper-evident storage:</strong> Each message is cryptographically hash-chained to the previous message. Any modification to a past message breaks the chain and is detectable.</p>
-          <p><strong>Server-authoritative timestamps:</strong> All timestamps are assigned by our servers at the moment of receipt. Client-side timestamps are not accepted.</p>
-          <p><strong>Signed proof export:</strong> You may export a verifiable proof of any deal, which includes an RSA signature over the hash chain. This signature can be independently verified without contacting ValueSkins.</p>
-          <p><strong>Recording consent:</strong> Before sending your first message in any deal room, you will be shown a notice explaining that the conversation is permanently recorded. Sending a message constitutes your consent to recording. Your consent choice is logged in our system.</p>
-          <p><strong>Retention:</strong> Deal messages are retained for the duration of your account plus 90 days after account deletion, or as required by applicable law (whichever is longer).</p>
+          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>13. Deal Records</h2>
+          <p>For each Deal we keep a record of its terms, the dates of each step, the content links shared, the feedback given, and the payments recorded and confirmed. Both parties to the Deal can see and download this record. It is kept so that either party can show what was agreed and what happened.</p>
+          <p><strong>Retention:</strong> Deal records are retained as described in Section 7.</p>
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>14. Data Deletion</h2>
           <p>To delete your account and data, sign in, open <Link href="/account/data" style={{color: C.primary}}>My Data</Link>, and choose <strong>Delete Account</strong>, or email <a href="mailto:founder@valueskins.com" style={{color: C.primary}}>founder@valueskins.com</a> from the address on your account. You can also remove ValueSkins from your Instagram account at any time under Instagram Settings → Website permissions → Apps and websites. When you request account deletion, the following happens:</p>
@@ -145,7 +137,7 @@ export default function Privacy() {
           <p>We will acknowledge your complaint within 24 hours and resolve it within 15 days of receiving it.</p>
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>17A. Payment Processing</h2>
-          <p><strong>Payment Processor:</strong> All payments are processed through our payment processor (currently Razorpay). ValueSkins does not store, process, or have access to payment card details, bank account information, or UPI IDs. All payment security and storage is handled exclusively by our payment processor.</p>
+          <p><strong>Our fee:</strong> Our fee is paid through our payment processor (currently Razorpay). We do not store, process, or have access to the card or bank details used. <strong>Payments to Creators:</strong> A Brand pays a Creator directly by UPI, outside the Platform. We do not process these payments. We store the Creator's UPI ID and the name on that account, show them to a Brand that has confirmed that Creator, and store the payment reference the Brand records. We do not verify UPI IDs.</p>
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>16. Accessibility and Data Processing for Persons with Disabilities</h2>
           <p>Valueskins is committed to ensuring that our Platform is accessible to all users, including persons with disabilities. We process personal data for persons with disabilities in accordance with applicable accessibility laws and standards:</p>
@@ -161,6 +153,14 @@ export default function Privacy() {
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>17. Data Protection Officer (GDPR)</h2>
           <p>          For users in the European Economic Area, you may contact our Data Protection Officer at <a href="mailto:founder@valueskins.com" style={{color: C.primary}}>founder@valueskins.com</a>. You also have the right to lodge a complaint with your local data protection supervisory authority.</p>
+
+          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>17B. What We Do Not Collect or Do</h2>
+          <p>So that you know the limits of what we hold and check:</p>
+          <p>• We do not read your follower count, posts, messages, or insights from Instagram. Follower counts are entered by Users and are not verified by us</p>
+          <p>• We do not verify identity, age, gender, city, or UPI IDs. We confirm only that a User controls the Instagram account they sign in with</p>
+          <p>• We do not store the content a Creator delivers, only the link to it, and we do not track how content performs</p>
+          <p>• We do not collect a phone number, a password, a date of birth, a precise location, or a bank account number</p>
+          <p>• We do not sell personal data, and we do not use it for advertising</p>
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>18. Changes to This Policy</h2>
           <p>We may update this Privacy Policy from time to time. We will notify you of material changes by email or through a prominent notice on the Platform. The "Last updated" date at the top of this Policy indicates when it was last revised. Your continued use of the Platform after the changes take effect constitutes your acceptance of the updated Policy.</p>
