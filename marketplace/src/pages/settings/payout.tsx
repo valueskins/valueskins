@@ -1,40 +1,35 @@
-// Payout details, entered once.
+// The creator's UPI ID: see what is saved, and change it.
 //
-// Replaces the deleted payout-onboarding page, which posted to an endpoint that
-// took `creator_id` from the request body with no authentication.
-//
-// What the form makes plain, because it is unusual and people should not have to
-// guess: ValueSkins never stores the account number. It goes straight to
-// Razorpay, which returns a token, and the token plus a masked tail is all that
-// is kept. That is also why there is no edit button — changing a payout
-// destination is the single most valuable thing a stolen session could do, so it
-// goes through support rather than a form.
+// Brands pay the creator directly on this ID, so two things matter here. The
+// creator has to be able to read back exactly what is saved, because a UPI
+// payment to a mistyped ID cannot be recalled. And they have to be able to
+// change it themselves. The ID is typed twice for the same reason a password
+// is: the app has no way to check it is the right one.
 import { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 import { C, withAlpha } from '@/theme/colors';
 import { getOnboardingStatus, isOk } from '@/lib/deal-api';
 
-
 export default function PayoutSettingsPage() {
   const [loading, setLoading] = useState(true);
-  const [configured, setConfigured] = useState(false);
-  const [hint, setHint] = useState<string | null>(null);
+  const [saved, setSaved] = useState<string | null>(null);
   const [emailReady, setEmailReady] = useState<boolean | null>(null);
+  const [editing, setEditing] = useState(false);
   const [upi, setUpi] = useState('');
+  const [upiAgain, setUpiAgain] = useState('');
   const [consent, setConsent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errorField, setErrorField] = useState<string | undefined>();
+  const [notice, setNotice] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     const [payoutRes, onboarding] = await Promise.all([
       fetch('/api/profile/payout-upi', { credentials: 'include' }).then((r) => r.json()).catch(() => null),
       getOnboardingStatus(),
     ]);
-    if (payoutRes) {
-      setConfigured(!!payoutRes.configured);
-      setHint(payoutRes.masked || null);
-    }
+    if (payoutRes) setSaved(payoutRes.upi_id || null);
     if (isOk(onboarding)) {
       // Payouts require a verified email first: it is where confirmations go.
       setEmailReady(onboarding.data.email_verified);
@@ -44,11 +39,16 @@ export default function PayoutSettingsPage() {
 
   useEffect(() => { void load(); }, [load]);
 
+  const mismatch = upiAgain.length > 0 && upi.trim() !== upiAgain.trim();
+  const canSubmit = !busy && !!upi.trim() && upi.trim() === upiAgain.trim() && consent;
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (!canSubmit) return;
     setBusy(true);
     setError(null);
     setErrorField(undefined);
+    setNotice(null);
 
     const res = await fetch('/api/profile/payout-upi', {
       method: 'POST',
@@ -64,9 +64,12 @@ export default function PayoutSettingsPage() {
       setErrorField(data.field);
       return;
     }
+    setSaved(data.upi_id || upi.trim());
+    setNotice(data.changed ? 'UPI ID changed. We have emailed you a confirmation.' : 'UPI ID saved.');
     setUpi('');
-    setConfigured(true);
-    setHint(data.masked || null);
+    setUpiAgain('');
+    setConsent(false);
+    setEditing(false);
   }
 
   const card: React.CSSProperties = {
@@ -81,6 +84,7 @@ export default function PayoutSettingsPage() {
     boxSizing: 'border-box', marginBottom: 10,
   });
   const lbl: React.CSSProperties = { fontSize: 11, fontWeight: 600, color: C.outline, display: 'block', marginBottom: 4 };
+  const showForm = !loading && emailReady !== false && (!saved || editing);
 
   return (
     <>
@@ -89,44 +93,77 @@ export default function PayoutSettingsPage() {
         <div style={{ maxWidth: 480, margin: '0 auto' }}>
           <h1 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 4px' }}>Payout details</h1>
           <p style={{ fontSize: 12, color: C.outline, margin: '0 0 16px' }}>
-            Where your earnings go. Entered once.
+            The UPI ID brands pay you on.
           </p>
 
           {loading && <div style={{ fontSize: 13, color: C.outline }}>Loading…</div>}
 
+          {notice && (
+            <div role="status" style={{ ...card, borderColor: C.accent, background: withAlpha(C.accent, 0x14), fontSize: 12 }}>
+              {notice}
+            </div>
+          )}
+
           {!loading && emailReady === false && (
             <div style={{ ...card, borderColor: C.warning, background: withAlpha(C.warning, 0x14) }}>
               <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>Confirm your email first</div>
-              <div style={{ fontSize: 12, color: C.textMuted }}>
-                Payout confirmations and your deal reports are sent there, so it has to be verified
-                before earnings can be routed anywhere.
-              </div>
-            </div>
-          )}
-
-          {!loading && configured && (
-            <div style={{ ...card, borderColor: C.accent, background: withAlpha(C.accent, 0x14) }}>
-              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>Payout details on file</div>
               <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 8 }}>
-                Paying out to <strong>{hint || 'your saved account'}</strong>.
+                Payment confirmations and your deal reports are sent there, so it has to be
+                confirmed before a UPI ID can be saved.
               </div>
-              <div style={{ fontSize: 11, color: C.outline, lineHeight: 1.5 }}>
-                We hold a token from Razorpay, not your account number — so there is nothing here to
-                show you in full. To change these details, contact support: changing a payout
-                destination is deliberately not something a signed-in session can do on its own.
-              </div>
+              <Link href="/settings/email" style={{ color: C.text, fontSize: 12, fontWeight: 700 }}>
+                Go to email settings
+              </Link>
             </div>
           )}
 
-          {!loading && !configured && emailReady !== false && (
+          {!loading && saved && !editing && (
+            <div style={card}>
+              <div style={lbl}>Your UPI ID</div>
+              <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 6, wordBreak: 'break-all' }}>{saved}</div>
+              <div style={{ fontSize: 11, color: C.outline, lineHeight: 1.5, marginBottom: 12 }}>
+                Check this is exactly right. A UPI payment sent to the wrong ID cannot be recalled.
+                It is shown only to you and to brands you are confirmed on.
+              </div>
+              {emailReady !== false && (
+                <button
+                  onClick={() => { setEditing(true); setNotice(null); setError(null); }}
+                  style={{
+                    background: 'none', border: `1px solid ${C.border}`, borderRadius: 8,
+                    padding: '9px 14px', color: C.text, fontWeight: 600, fontSize: 13, cursor: 'pointer',
+                  }}
+                >
+                  Change UPI ID
+                </button>
+              )}
+            </div>
+          )}
+
+          {showForm && (
             <form onSubmit={submit} style={card}>
-              <label style={lbl} htmlFor="upi">Your UPI ID</label>
+              <label style={lbl} htmlFor="upi">{saved ? 'New UPI ID' : 'Your UPI ID'}</label>
               <input
                 id="upi" value={upi} onChange={(e) => setUpi(e.target.value)}
                 placeholder="name@okhdfcbank"
-                inputMode="email" autoCapitalize="none" autoComplete="off"
+                inputMode="email" autoCapitalize="none" autoComplete="off" spellCheck={false}
                 style={input(errorField === 'upi_id')}
               />
+
+              <label style={lbl} htmlFor="upi-again">Type it again</label>
+              <input
+                id="upi-again" value={upiAgain} onChange={(e) => setUpiAgain(e.target.value)}
+                placeholder="name@okhdfcbank"
+                inputMode="email" autoCapitalize="none" autoComplete="off" spellCheck={false}
+                // Pasting the first field into the second would defeat the point.
+                onPaste={(e) => e.preventDefault()}
+                aria-invalid={mismatch}
+                style={input(mismatch)}
+              />
+              {mismatch && (
+                <div role="alert" style={{ fontSize: 12, color: C.error, margin: '-4px 0 10px' }}>
+                  The two UPI IDs do not match.
+                </div>
+              )}
 
               {/* Said plainly rather than buried: we disclose this to one brand,
                   so the creator should know before, not discover it after. */}
@@ -165,21 +202,36 @@ export default function PayoutSettingsPage() {
                 UPI only. We do not accept or store bank account numbers. Brands pay you
                 directly, so your money never passes through ValueSkins, and the deal only
                 moves forward once you confirm a payment arrived.
+                {saved ? ' A change applies to payments made after it; we email you when it happens.' : ''}
               </div>
 
-              <button
-                type="submit"
-                disabled={busy || !upi.trim() || !consent}
-                style={{
-                  width: '100%', padding: '12px',
-                  background: busy || !upi.trim() || !consent ? C.border : C.primary,
-                  border: 'none', borderRadius: 8, color: C.onPrimary,
-                  fontWeight: 700, fontSize: 13,
-                  cursor: busy || !upi.trim() || !consent ? 'not-allowed' : 'pointer',
-                }}
-              >
-                {busy ? 'Saving…' : 'Save UPI ID'}
-              </button>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button
+                  type="submit"
+                  disabled={!canSubmit}
+                  style={{
+                    flex: 1, padding: '12px',
+                    background: canSubmit ? C.primary : C.border,
+                    border: 'none', borderRadius: 8, color: C.onPrimary,
+                    fontWeight: 700, fontSize: 13,
+                    cursor: canSubmit ? 'pointer' : 'not-allowed',
+                  }}
+                >
+                  {busy ? 'Saving…' : saved ? 'Save new UPI ID' : 'Save UPI ID'}
+                </button>
+                {saved && (
+                  <button
+                    type="button"
+                    onClick={() => { setEditing(false); setUpi(''); setUpiAgain(''); setConsent(false); setError(null); }}
+                    style={{
+                      padding: '12px 16px', background: 'none', border: `1px solid ${C.border}`,
+                      borderRadius: 8, color: C.text, fontWeight: 600, fontSize: 13, cursor: 'pointer',
+                    }}
+                  >
+                    Cancel
+                  </button>
+                )}
+              </div>
             </form>
           )}
         </div>
