@@ -32,7 +32,7 @@ export default function GrievanceOfficer() {
             <p><strong style={{ color: C.text }}>Company:</strong> Valueskins Pvt. Ltd.</p>
             <p><strong style={{ color: C.text }}>Grievance Officer:</strong> Saketh Velamuri</p>
             <p><strong style={{ color: C.text }}>Email:</strong> <a href="mailto:founder@valueskins.com" style={{ color: C.primary }}>founder@valueskins.com</a></p>
-            <p><strong style={{ color: C.text }}>Phone:</strong> </p>
+            <p><strong style={{ color: C.text }}>Phone:</strong> <a href="tel:+918805695324" style={{ color: C.primary }}>+91 88056 95324</a></p>
             <p><strong style={{ color: C.text }}>Response Time:</strong> We acknowledge within 24 hours and resolve within 15 days.</p>
           </div>
         </div>

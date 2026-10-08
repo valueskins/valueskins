@@ -29,7 +29,7 @@ export default function Terms() {
           <H>1. Agreement to Our Legal Terms</H>
           <p>We are Valueskins Pvt. Ltd. (Company, we, us, our), a private limited company incorporated in India.</p>
           <p>We operate the website https://www.valueskins.com (the Site), as well as any other related products and services that refer or link to these legal terms (the Legal Terms) (collectively, the Services or the Platform).</p>
-          <p>You can contact us by email at <Mail />.</p>
+          <p>You can contact us by email at <Mail /> or by phone at <a href="tel:+918805695324" style={{ color: C.primary }}>+91 88056 95324</a>. Our GSTIN is 27AAMCV5525E1Z5.</p>
           <p>These Legal Terms constitute a legally binding agreement made between you, whether personally or on behalf of an entity (you), and Valueskins Pvt. Ltd., concerning your access to and use of the Services. By accessing the Services, you confirm that you have read, understood, and agreed to be bound by these Legal Terms. If you do not agree with these Legal Terms, you must not use the Services.</p>
           <p>This document is an electronic record under the Information Technology Act, 2000 and the rules made under it. It is published in accordance with Rule 3(1) of the Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021 and does not require a physical or digital signature.</p>
           <p>The Services are intended for users who are at least 18 years old. Persons under the age of 18 are not permitted to use or register for the Services.</p>
@@ -144,7 +144,8 @@ export default function Terms() {
           <p>In accordance with the Information Technology Act, 2000, the Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021, the Consumer Protection (E-Commerce) Rules, 2020, and the Digital Personal Data Protection Act, 2023, we have appointed a Grievance Officer:</p>
           <p><strong>Grievance Officer:</strong> Saketh Velamuri<br/>
           <strong>Company:</strong> Valueskins Pvt. Ltd.<br/>
-          <strong>Email:</strong> <Mail /></p>
+          <strong>Email:</strong> <Mail /><br/>
+          <strong>Phone:</strong> <a href="tel:+918805695324" style={{ color: C.primary }}>+91 88056 95324</a></p>
           <p>We will acknowledge your complaint within 24 hours and resolve it within 15 days of receiving it.</p>
 
           <H>21. Changes to These Terms</H>

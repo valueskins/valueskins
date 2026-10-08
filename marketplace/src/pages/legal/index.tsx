@@ -89,7 +89,7 @@ export default function LegalHub() {
             <strong style={{ color: C.text }}>Questions?</strong> Contact us at{' '}
             <a href="mailto:founder@valueskins.com" style={{ color: C.primary }}>founder@valueskins.com</a>
             {' '}or call{' '}
-            .
+            <a href="tel:+918805695324" style={{ color: C.primary }}>+91 88056 95324</a>.
             We respond within 24 hours.
           </p>
         </div>

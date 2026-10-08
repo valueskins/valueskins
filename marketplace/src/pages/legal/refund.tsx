@@ -57,7 +57,7 @@ export default function RefundPolicy() {
           <p>If you believe the fee was charged in error, please email us first so that we can put it right. If a chargeback is raised with a bank or card issuer for a fee that was correctly charged, we will provide the Deal record to our payment processor to contest it, and we may suspend the account while it is reviewed.</p>
 
           <H>6. Contact</H>
-          <p>Questions about this policy: <Mail /></p>
+          <p>Questions about this policy: <Mail /> or <a href="tel:+918805695324" style={{ color: C.primary }}>+91 88056 95324</a>.</p>
 
         </div>
       </div>
