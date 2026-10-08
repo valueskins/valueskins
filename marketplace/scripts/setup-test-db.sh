@@ -9,7 +9,7 @@ dropdb --if-exists "$DB"
 createdb "$DB"
 psql -q -d "$DB" -c 'CREATE EXTENSION IF NOT EXISTS pgcrypto'
 
-for f in 000_base_schema 006_build_spec_workflow 007_payout_processing 008_direct_payments 009_email_queue 010_payout_name; do
+for f in 000_base_schema 006_build_spec_workflow 007_payout_processing 008_direct_payments 009_email_queue 010_payout_name 011_profile_essentials; do
   psql -q -d "$DB" -v ON_ERROR_STOP=1 -f "src/lib/migrations/$f.sql" >/dev/null
   echo "applied $f"
 done

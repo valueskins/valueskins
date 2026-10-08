@@ -134,7 +134,7 @@ export default function CalendarPage({ userId, displayName, googleAccountId, dea
                 <li>Submission and approval deadlines</li>
               </ul>
               <p style={{ fontSize: '15px', color: C.text, margin: '0', lineHeight: 1.8 }}>
-                <strong>To use this feature, you must connect your Google Calendar account.</strong> We'll only access your calendar to add shoot dates — nothing else.
+                <strong>To use this feature, you must connect your Google Calendar account.</strong> We'll only access your calendar to add shoot dates, nothing else.
               </p>
             </div>
             <button

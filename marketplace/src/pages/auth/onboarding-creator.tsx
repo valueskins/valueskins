@@ -300,7 +300,7 @@ export default function OnboardingCreator() {
             {step === 'valueskin' && (
               <div>
                 <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '4px' }}>Choose your ValueSkin</h2>
-                <p style={{ fontSize: '0.875rem', color: C.textSecondary, marginBottom: '16px' }}>Your profession identity — brands match with you on this.</p>
+                <p style={{ fontSize: '0.875rem', color: C.textSecondary, marginBottom: '16px' }}>Your profession identity, brands match with you on this.</p>
                 <input type="text" placeholder="Search professions…" value={skinQuery} onChange={(e) => setSkinQuery(e.target.value)} style={inputStyle} />
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', maxHeight: '260px', overflowY: 'auto' }}>
                   {skinEntries.map(([name, badge]) => {
@@ -364,11 +364,11 @@ export default function OnboardingCreator() {
                 <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '4px' }}>You&apos;re set</h2>
                 <p style={{ fontSize: '0.875rem', color: C.textSecondary, marginBottom: '20px' }}>Review your identity, then launch your profile.</p>
                 <div style={{ fontSize: '0.9375rem', color: C.text, lineHeight: 1.9 }}>
-                  <div><span style={{ color: C.textSecondary }}>Name — </span>{data.displayName || '—'}</div>
-                  <div><span style={{ color: C.textSecondary }}>City — </span>{data.location.city || '—'}</div>
-                  <div><span style={{ color: C.textSecondary }}>ValueSkin — </span>{data.selectedValueSkin || '—'}</div>
-                  <div><span style={{ color: C.textSecondary }}>Languages — </span>{data.languages.join(', ') || '—'}</div>
-                  <div><span style={{ color: C.textSecondary }}>Rate from — </span>{data.minDealValue ? `₹${data.minDealValue.toLocaleString('en-IN')}` : '—'}</div>
+                  <div><span style={{ color: C.textSecondary }}>Name, </span>{data.displayName || '-'}</div>
+                  <div><span style={{ color: C.textSecondary }}>City, </span>{data.location.city || '-'}</div>
+                  <div><span style={{ color: C.textSecondary }}>ValueSkin, </span>{data.selectedValueSkin || '-'}</div>
+                  <div><span style={{ color: C.textSecondary }}>Languages, </span>{data.languages.join(', ') || '-'}</div>
+                  <div><span style={{ color: C.textSecondary }}>Rate from, </span>{data.minDealValue ? `₹${data.minDealValue.toLocaleString('en-IN')}` : '-'}</div>
                 </div>
               </div>
             )}
@@ -423,7 +423,7 @@ export default function OnboardingCreator() {
                 color: '#C8B89A',
               }}
             >
-              {selectedBadge ? selectedBadge.abbreviation : '—'}
+              {selectedBadge ? selectedBadge.abbreviation : '-'}
             </div>
             <div style={{ textAlign: 'center', fontSize: '1.125rem', fontWeight: 700 }}>{data.displayName || 'Your name'}</div>
             <div style={{ textAlign: 'center', fontSize: '0.8125rem', color: '#B8B4AC', marginBottom: '16px' }}>

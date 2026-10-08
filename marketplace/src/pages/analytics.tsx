@@ -434,7 +434,7 @@ function BrandDashboard({ data, tab }: { data: any; tab: Tab }) {
             {rl.mostHired.map((c: any, i: number) => (
               <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: i < rl.mostHired.length - 1 ? `1px solid ${C.cardBorder}` : 'none' }}>
                 <span style={{ fontSize: '13px', fontWeight: 600 }}>{c.creatorName}</span>
-                <span style={{ color: C.textMuted, fontSize: '13px' }}>{c.deals} deals — {formatCurrency(c.totalSpend)}</span>
+                <span style={{ color: C.textMuted, fontSize: '13px' }}>{c.deals} deals, {formatCurrency(c.totalSpend)}</span>
               </div>
             ))}
           </div>
@@ -445,7 +445,7 @@ function BrandDashboard({ data, tab }: { data: any; tab: Tab }) {
             {rl.longestRelationships.map((c: any, i: number) => (
               <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: i < rl.longestRelationships.length - 1 ? `1px solid ${C.cardBorder}` : 'none', fontSize: '13px' }}>
                 <span style={{ fontWeight: 600 }}>{c.creatorName}</span>
-                <span style={{ color: C.textMuted }}>{c.daysSinceFirst} days — {c.totalDeals} deals</span>
+                <span style={{ color: C.textMuted }}>{c.daysSinceFirst} days, {c.totalDeals} deals</span>
               </div>
             ))}
           </div>

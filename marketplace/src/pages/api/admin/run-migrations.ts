@@ -125,6 +125,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     results.push({ name: '010_payout_name.sql', success: false, error: err.message });
   }
 
+  // Profile essentials for the virtual resume (011).
+  try {
+    const pePath = path.join(process.cwd(), 'src', 'lib', 'migrations', '011_profile_essentials.sql');
+    const ran = await runSqlStatements(fs.readFileSync(pePath, 'utf-8'));
+    results.push({ name: `011_profile_essentials.sql (${ran} statements)`, success: true });
+  } catch (err: any) {
+    allPassed = false;
+    results.push({ name: '011_profile_essentials.sql', success: false, error: err.message });
+  }
+
   // Run escrow-v2 migration SQL
   try {
     const sqlPath = path.join(process.cwd(), 'src', 'lib', 'migrations-escrow-v2.sql');

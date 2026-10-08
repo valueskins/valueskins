@@ -85,7 +85,7 @@ export default async function handler(
   const startedAt = Date.now();
 
   if (!probeUrl) {
-    return res.status(400).json({ error: 'Invalid url — must be http(s) to a public host' });
+    return res.status(400).json({ error: 'Invalid url, must be http(s) to a public host' });
   }
 
   const controller = new AbortController();
@@ -116,7 +116,7 @@ export default async function handler(
     const note =
       response.ok
         ? 'Backend is reachable and healthy from the server (Vercel) network. ' +
-          'If it still fails in a visitor browser, the browser is calling a different URL — check NEXT_PUBLIC_BACKEND_URL.'
+          'If it still fails in a visitor browser, the browser is calling a different URL, check NEXT_PUBLIC_BACKEND_URL.'
         : `Backend responded but with HTTP ${response.status}.`;
 
     return res.status(200).json({

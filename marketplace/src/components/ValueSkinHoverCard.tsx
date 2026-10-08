@@ -194,7 +194,7 @@ export default function ValueSkinHoverCard({ data, style, onViewFullProfile }: P
               "{(data.topReview.text || '').replace(/<[^>]*>/g, '').replace(/[<>"'&]/g, '').substring(0, 120)}{(data.topReview.text || '').length > 120 ? '...' : ''}"
             </div>
             <div style={{ fontSize: '11px', color: C.primary, fontWeight: 600, marginTop: '4px' }}>
-              — {data.topReview.brandName}
+             , {data.topReview.brandName}
             </div>
           </div>
         )}

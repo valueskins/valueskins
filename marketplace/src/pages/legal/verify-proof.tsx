@@ -47,7 +47,7 @@ export default function VerifyProof() {
         <h1 style={{ fontSize: '28px', fontWeight: 800, marginBottom: '8px' }}>Verify Deal Proof</h1>
         <p style={{ color: C.textSecondary, marginBottom: '28px', fontSize: '14px' }}>
           Upload a proof file exported from a deal to verify its cryptographic integrity.
-          This tool works independently — you don&apos;t need a ValueSkins account to verify.
+          This tool works independently, you don&apos;t need a ValueSkins account to verify.
         </p>
 
         <div style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid rgba(255,255,255,0.08)`, borderRadius: '12px', padding: '24px', marginBottom: '20px' }}>
@@ -86,7 +86,7 @@ export default function VerifyProof() {
                 background: result.valid ? C.success : C.error,
               }} />
               <span style={{ fontSize: '18px', fontWeight: 700, color: result.valid ? C.success : C.error }}>
-                {result.valid ? 'PASSED — Proof is authentic' : 'FAILED — Proof may be tampered'}
+                {result.valid ? 'PASSED, Proof is authentic' : 'FAILED, Proof may be tampered'}
               </span>
             </div>
 

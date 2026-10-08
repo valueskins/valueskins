@@ -108,7 +108,7 @@ export default function MyDealsPage() {
 
   return (
     <>
-      <Head><title>Your deals — ValueSkins</title></Head>
+      <Head><title>Your deals · ValueSkins</title></Head>
       <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '24px 16px 48px' }}>
         <div style={{ maxWidth: 640, margin: '0 auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>

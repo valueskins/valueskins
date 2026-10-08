@@ -95,7 +95,7 @@ export default function EmailSettingsPage() {
 
   return (
     <>
-      <Head><title>Email — ValueSkins</title></Head>
+      <Head><title>Email · ValueSkins</title></Head>
       <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '24px 16px 48px' }}>
         <div style={{ maxWidth: 460, margin: '0 auto' }}>
           <h1 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 4px' }}>Your email</h1>

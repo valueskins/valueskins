@@ -369,7 +369,7 @@ export default function ProfileView({
               <span style={{ fontSize: '0.75rem', color: t.muted2 }}>
                 {progress && nextInfo
                   ? `${Math.max(0, progress.needed - progress.current)} more deals → ${nextInfo.label}`
-                  : `Top tier — ${LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length - 1].label}`}
+                  : `Top tier, ${LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length - 1].label}`}
               </span>
             </div>
 
@@ -382,7 +382,7 @@ export default function ProfileView({
             </div>
 
             <p style={{ marginTop: 10, marginBottom: 0, fontSize: '0.78125rem', color: t.muted2 }}>
-              Levels rise only on completed, paid deals — never bought, never gamed.
+              Levels rise only on completed, paid deals, never bought, never gamed.
             </p>
           </section>
 
@@ -406,7 +406,7 @@ export default function ProfileView({
           </div>
 
           <p style={{ marginTop: 12, marginBottom: 0, fontSize: '0.75rem', color: t.muted2 }}>
-            Stats are earned automatically from completed deals — they can&apos;t be edited or bought.
+            Stats are earned automatically from completed deals, they can&apos;t be edited or bought.
           </p>
         </div>
 

@@ -136,7 +136,7 @@ export default function BrowseDealsPage() {
 
   return (
     <>
-      <Head><title>Browse deals — ValueSkins</title></Head>
+      <Head><title>Browse deals · ValueSkins</title></Head>
       <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '20px 16px 48px' }}>
         <div style={{ maxWidth: 640, margin: '0 auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 4 }}>
@@ -153,7 +153,7 @@ export default function BrowseDealsPage() {
             </button>
           </div>
           <p style={{ fontSize: 12, color: C.outline, margin: '0 0 16px' }}>
-            Every open deal, no filtering. The amount is final — apply only if it works for you.
+            Every open deal, no filtering. The amount is final, apply only if it works for you.
           </p>
 
           <SetupBanner />
@@ -216,7 +216,7 @@ export default function BrowseDealsPage() {
                     <div key={String(k)}>
                       <div style={{ fontSize: 10, color: C.outline, textTransform: 'uppercase' }}>{k}</div>
                       <div style={{ fontSize: 12 }}>
-                        {v ? new Date(String(v)).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : '—'}
+                        {v ? new Date(String(v)).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : '-'}
                       </div>
                     </div>
                   ))}

@@ -288,7 +288,7 @@ export function startRealtime(): void {
   started = true;
 
   if (!WS_URL) {
-    logger.warn('[realtime] NEXT_PUBLIC_WS_URL not set — running offline');
+    logger.warn('[realtime] NEXT_PUBLIC_WS_URL not set, running offline');
     return;
   }
 

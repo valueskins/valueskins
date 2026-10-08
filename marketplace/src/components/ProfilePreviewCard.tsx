@@ -111,13 +111,13 @@ export default function ProfilePreviewCard({
               <div>
                 <div style={{ fontSize: '11px', color: C.textMuted, marginBottom: '4px' }}>Followers</div>
                 <div style={{ fontSize: '16px', fontWeight: 700, color: C.accent }}>
-                  {followerCount ? (followerCount > 1000000 ? `${(followerCount / 1000000).toFixed(1)}M` : followerCount > 1000 ? `${(followerCount / 1000).toFixed(1)}K` : followerCount) : '—'}
+                  {followerCount ? (followerCount > 1000000 ? `${(followerCount / 1000000).toFixed(1)}M` : followerCount > 1000 ? `${(followerCount / 1000).toFixed(1)}K` : followerCount) : '-'}
                 </div>
               </div>
               <div>
                 <div style={{ fontSize: '11px', color: C.textMuted, marginBottom: '4px' }}>Engagement</div>
                 <div style={{ fontSize: '16px', fontWeight: 700, color: C.accent }}>
-                  {engagementRate ? `${engagementRate.toFixed(1)}%` : '—'}
+                  {engagementRate ? `${engagementRate.toFixed(1)}%` : '-'}
                 </div>
               </div>
             </>
@@ -132,7 +132,7 @@ export default function ProfilePreviewCard({
               <div>
                 <div style={{ fontSize: '11px', color: C.textMuted, marginBottom: '4px' }}>Category</div>
                 <div style={{ fontSize: '13px', color: C.text, fontWeight: 500 }}>
-                  {category || '—'}
+                  {category || '-'}
                 </div>
               </div>
             </>

@@ -357,7 +357,7 @@ export default function MarketplaceDemoPage(initialDealData?: {
     ],
     4: [{ id: 1, sender: 'them', text: 'Can we sync on the dataset tomorrow?', time: '2:00 PM' }],
     5: [
-      { id: 1, sender: 'them', text: 'Found the issue — misconfigured env var in staging', time: '8:30 AM' },
+      { id: 1, sender: 'them', text: 'Found the issue, misconfigured env var in staging', time: '8:30 AM' },
       { id: 2, sender: 'me', text: 'Nice catch. Push when ready', time: '8:45 AM' },
       { id: 3, sender: 'them', text: 'Pipeline is green now. Pushed the fix.', time: '9:00 AM' },
     ],
@@ -372,11 +372,11 @@ export default function MarketplaceDemoPage(initialDealData?: {
   const [communityMessages, setCommunityMessages] = useState<Record<number, Array<{ id: number; author: string; handle: string; text: string; time: string }>>>({
     0: [
       { id: 0, author: 'Marcus T.', handle: '@ml_marcus', text: 'Just shipped a RAG pipeline that cut hallucination rate by 60%. Happy to share the architecture.', time: '4h ago' },
-      { id: 1, author: 'Priya S.', handle: '@priya_builds', text: 'Monthly hiring board is live — drop your referral links below.', time: '3h ago' },
+      { id: 1, author: 'Priya S.', handle: '@priya_builds', text: 'Monthly hiring board is live, drop your referral links below.', time: '3h ago' },
       { id: 2, author: 'Alex R.', handle: '@alex_codes', text: 'Rust > Go for anything that matters. Fight me.', time: '2h ago' },
     ],
     1: [
-      { id: 3, author: 'Dr. Chen', handle: '@drchen', text: 'Interesting presentation today — 34F with atypical chest pain. What would your differential be?', time: '3h ago' },
+      { id: 3, author: 'Dr. Chen', handle: '@drchen', text: 'Interesting presentation today, 34F with atypical chest pain. What would your differential be?', time: '3h ago' },
       { id: 4, author: 'Dr. Williams', handle: '@drwilliams', text: 'CME webinar this Friday at 6PM EST. See you there.', time: '2d ago' },
     ],
     2: [
@@ -1615,7 +1615,7 @@ export default function MarketplaceDemoPage(initialDealData?: {
     };
 
     drawLine('VALUESKINS', 22, m, { bold: true, color: accent });
-    drawLine('FINAL DEAL REPORT — SETTLEMENT DOCUMENT', 14, m, { bold: true, color: black });
+    drawLine('FINAL DEAL REPORT, SETTLEMENT DOCUMENT', 14, m, { bold: true, color: black });
     drawSep();
     drawLine(`Generated: ${new Date().toISOString().replace('T', ' ').slice(0, 19)} UTC`, 9, m, { color: gray });
     drawLine(`Deal ID: ${dealKey}`, 9, m, { color: gray });
@@ -1631,10 +1631,10 @@ export default function MarketplaceDemoPage(initialDealData?: {
     drawLine(`Performance Clause: ${deal.performanceClause ? 'Yes' : 'No'}`, 10, m);
     drawLine(`Payment Split: Advance ${deal.advancePercent}% / Approval ${deal.approvalPercent}%`, 9, m, { color: gray });
     if (deal.poc) {
-      drawLine(`Point of Contact: ${deal.poc.name} (${deal.poc.workEmail}) — ${deal.poc.role}`, 9, m, { color: gray });
+      drawLine(`Point of Contact: ${deal.poc.name} (${deal.poc.workEmail}), ${deal.poc.role}`, 9, m, { color: gray });
     }
     if (opp?.contentReview) {
-      drawLine(`Content Review Mode: ${opp.contentReview === 'review_required' ? 'Review required before publish' : 'Direct upload — no review'}`, 9, m, { color: gray });
+      drawLine(`Content Review Mode: ${opp.contentReview === 'review_required' ? 'Review required before publish' : 'Direct upload, no review'}`, 9, m, { color: gray });
     }
     drawSep();
 
@@ -1687,7 +1687,7 @@ export default function MarketplaceDemoPage(initialDealData?: {
     if (disputes.length > 0) {
       drawSectionTitle('DISPUTES');
       disputes.forEach(d => {
-        drawLine(`  [#${d.id}] ${d.type} — ${d.status} (filed by ${d.filledBy})`, 10, m);
+        drawLine(`  [#${d.id}] ${d.type}, ${d.status} (filed by ${d.filledBy})`, 10, m);
         drawWrapped(`    ${d.description}`, 9, m + 10, 490, { color: gray });
       });
       drawSep();
@@ -1756,7 +1756,7 @@ export default function MarketplaceDemoPage(initialDealData?: {
     // The composer owns the campaign draft now — clear it rather than five
     // individual form fields.
     if (typeof window !== 'undefined') localStorage.removeItem(CAMPAIGN_DRAFT_KEY);
-    setPurchaseToast('MVP reset complete — demo restarted from beginning');
+    setPurchaseToast('MVP reset complete, demo restarted from beginning');
     setTimeout(() => setPurchaseToast(null), 2500);
     if (typeof window !== 'undefined') {
       const keys = [
@@ -2257,7 +2257,7 @@ bio: profileBio
       line(`Amount Paid: ₹950.00`, 14, { bold: true, color: accent });
       line(`Status: Completed`, 10, { color: rgb(0.22, 0.74, 0.5) });
       sep();
-      line('No GST charged — seller is not GST-registered.', 8, { color: gray });
+      line('No GST charged, seller is not GST-registered.', 8, { color: gray });
       line('This is not a tax invoice.', 8, { color: gray });
 
       const pdfBytes = await doc.save();
@@ -2384,7 +2384,7 @@ bio: profileBio
       setLevelUpTo(newLevel);
       setShowLevelUpModal(true);
     } else {
-      setPurchaseToast('Deal complete — earnings added to your balance');
+      setPurchaseToast('Deal complete, earnings added to your balance');
       setTimeout(() => setPurchaseToast(null), 3000);
     }
   };
@@ -2817,7 +2817,7 @@ bio: profileBio
               </>
             )}
 
-            <button onClick={() => { setShowSkinShowcaseModal(null); setPurchaseToast(creatorSkinMode === 'showcase' ? 'Showcase saved — brands will see your pitch' : 'Skin set to static'); setTimeout(()=>setPurchaseToast(null),3000); }} style={{ width:'100%', background:creatorSkinMode==='showcase'?C.primary:C.primary, border:'none', borderRadius:8, padding:'12px', color:'var(--c-surface-lowest)', fontWeight:700, fontSize:14, cursor:'pointer', marginTop:8 }}>
+            <button onClick={() => { setShowSkinShowcaseModal(null); setPurchaseToast(creatorSkinMode === 'showcase' ? 'Showcase saved, brands will see your pitch' : 'Skin set to static'); setTimeout(()=>setPurchaseToast(null),3000); }} style={{ width:'100%', background:creatorSkinMode==='showcase'?C.primary:C.primary, border:'none', borderRadius:8, padding:'12px', color:'var(--c-surface-lowest)', fontWeight:700, fontSize:14, cursor:'pointer', marginTop:8 }}>
               {creatorSkinMode === 'showcase' ? 'Save Showcase' : 'Done'}
             </button>
           </div>
@@ -2885,10 +2885,10 @@ bio: profileBio
                 <div style={{ fontSize: '0.75rem', fontWeight: 700, color: C.textMuted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>Script</div>
                 <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: '10px', padding: '12px' }}>
                   {askModalOpp.scriptMode === 'non_negotiable' && (
-                    <div style={{ fontSize: '11px', fontWeight: 700, color: C.warning, marginBottom: '8px' }}>🔒 Non-negotiable — the brand provides the exact script that must be followed.</div>
+                    <div style={{ fontSize: '11px', fontWeight: 700, color: C.warning, marginBottom: '8px' }}>🔒 Non-negotiable, the brand provides the exact script that must be followed.</div>
                   )}
                   {askModalOpp.scriptMode === 'discussion' && (
-                    <div style={{ fontSize: '11px', fontWeight: 700, color: C.primary, marginBottom: '8px' }}>✏️ Collaborative — both parties edit the script together.</div>
+                    <div style={{ fontSize: '11px', fontWeight: 700, color: C.primary, marginBottom: '8px' }}>✏️ Collaborative, both parties edit the script together.</div>
                   )}
                   {askModalOpp.scriptFileName && (
                     <div style={{ fontSize: '12px', fontWeight: 600, color: C.text, marginBottom: askModalOpp.scriptText ? '6px' : 0 }}>📎 {askModalOpp.scriptFileName}</div>
@@ -3030,7 +3030,7 @@ bio: profileBio
                 <div style={{ fontSize:'0.75rem', color:C.primary, fontWeight:600, textTransform:'uppercase', letterSpacing:'0.5px', marginTop:'2px' }}>After</div>
               </div>
             </div>
-            <button onClick={() => { setShowLevelUpModal(false); setPurchaseToast('Deal complete — earnings added to your balance'); setTimeout(() => setPurchaseToast(null), 3000); }} style={{ width:'100%', background:C.primary, border:'none', borderRadius:'12px', padding:'14px', color:'var(--c-surface-lowest)', fontWeight:700, fontSize:'15px', cursor:'pointer' }}>
+            <button onClick={() => { setShowLevelUpModal(false); setPurchaseToast('Deal complete, earnings added to your balance'); setTimeout(() => setPurchaseToast(null), 3000); }} style={{ width:'100%', background:C.primary, border:'none', borderRadius:'12px', padding:'14px', color:'var(--c-surface-lowest)', fontWeight:700, fontSize:'15px', cursor:'pointer' }}>
               Continue
             </button>
           </div>
@@ -3237,7 +3237,7 @@ bio: profileBio
                           </button>
                         ))}
                         <button onClick={handleRefresh} title="Refresh campaigns and creator pool" style={{ background:'none', border:`1px solid ${C.border}`, borderRadius:'6px', cursor:'pointer', padding:'4px 10px', display:'flex', alignItems:'center', gap:'4px', color:C.textMuted, fontSize:'0.75rem', fontWeight:600, opacity: refreshing ? 0.5 : 1 }}>
-                          <span style={{ width:6, height:6, borderRadius:'50%', background: realtimeConnected ? 'var(--c-accent)' : 'var(--c-text-variant)', flexShrink:0 }} title={realtimeConnected ? 'Real-time connected' : 'Offline — data refreshes on reload'} />
+                          <span style={{ width:6, height:6, borderRadius:'50%', background: realtimeConnected ? 'var(--c-accent)' : 'var(--c-text-variant)', flexShrink:0 }} title={realtimeConnected ? 'Real-time connected' : 'Offline, data refreshes on reload'} />
                           {refreshing ? '↻' : '⟳'} Refresh
                         </button>
                       </div>
@@ -3441,7 +3441,7 @@ bio: profileBio
                                     <div>
                                       <span style={{ fontWeight: 700, color: C.textMuted }}>Script: </span>
                                       {opp.scriptFileName ? `📎 ${opp.scriptFileName}` : null}
-                                      {opp.scriptFileName && opp.scriptText ? ' — ' : null}
+                                      {opp.scriptFileName && opp.scriptText ? ', ' : null}
                                       {opp.scriptText && !opp.scriptFileName ? 'Brand script' : null}
                                       {opp.scriptMode === 'non_negotiable' ? ' (non-negotiable, locked)' : ''}
                                       {opp.scriptMode === 'discussion' ? ' (collaborative)' : ''}
@@ -3540,7 +3540,7 @@ bio: profileBio
                                           href={opp.brandWebsiteUrl || `https://portfolio.valueskins.com/${opp.brand.replace(/\s+/g, '')}`} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} style={{ color: C.primary, textDecoration: 'none', cursor:'pointer' }}>{opp.brand}</a>
                                       </div>
                                       <div style={{ fontSize: '12px', color: C.textMuted }}>
-                                        {dealRoomPhase === 'accepted' || dealRoomPhase === 'softhold' ? 'Deal accepted — terms locked' : dealRoomPhase === 'formal_offer' ? 'Review formal offer' : 'Fixed deal — final amount set by the brand'}
+                                        {dealRoomPhase === 'accepted' || dealRoomPhase === 'softhold' ? 'Deal accepted, terms locked' : dealRoomPhase === 'formal_offer' ? 'Review formal offer' : 'Fixed deal, final amount set by the brand'}
                                       </div>
                                     </div>
                                   </div>
@@ -3594,9 +3594,9 @@ bio: profileBio
                                         <div style={{ position: 'absolute', top: '100%', left: 0, marginTop: 4, background: C.card, border: `1px solid ${C.border}`, borderRadius: 8, padding: '8px 10px', width: 220, zIndex: 10, fontSize: 11, lineHeight: 1.5, color: C.text, boxShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>
                                           <strong>What is Intent?</strong><br/>
                                           How the brand wants to work with you:<br/>
-                                          <span style={{ color: C.textSecondary }}>Explore</span> — just browsing, no commitment<br/>
-                                          <span style={{ color: C.primary }}>Campaign</span> — specific paid project<br/>
-                                          <span style={{ color: 'var(--c-accent)' }}>Long-term</span> — ongoing partnership/retainer
+                                          <span style={{ color: C.textSecondary }}>Explore</span>, just browsing, no commitment<br/>
+                                          <span style={{ color: C.primary }}>Campaign</span>, specific paid project<br/>
+                                          <span style={{ color: 'var(--c-accent)' }}>Long-term</span>, ongoing partnership/retainer
                                         </div>
                                       )}
                                     </span>
@@ -3609,11 +3609,11 @@ bio: profileBio
                                       {hoveredTooltip === 'campaign_type' && (
                                         <div style={{ position: 'absolute', top: '100%', left: 0, marginTop: 4, background: C.card, border: `1px solid ${C.border}`, borderRadius: 8, padding: '8px 10px', width: 240, zIndex: 10, fontSize: 11, lineHeight: 1.5, color: C.text, boxShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>
                                           <strong>Campaign Types:</strong><br/>
-                                          <span style={{ color: C.textSecondary }}>Product Review</span> — showcase/review their product<br/>
-                                          <span style={{ color: C.primary }}>Sponsored Content</span> — branded post/reel<br/>
-                                          <span style={{ color: 'var(--c-accent)' }}>Brand Ambassador</span> — represent the brand over time<br/>
-                                          <span style={{ color: 'var(--c-warning)' }}>UGC</span> — user-generated content for their ads<br/>
-                                          <span style={{ color: C.textMuted }}>Affiliate</span> — earn per sale/click you drive
+                                          <span style={{ color: C.textSecondary }}>Product Review</span>, showcase/review their product<br/>
+                                          <span style={{ color: C.primary }}>Sponsored Content</span>, branded post/reel<br/>
+                                          <span style={{ color: 'var(--c-accent)' }}>Brand Ambassador</span>, represent the brand over time<br/>
+                                          <span style={{ color: 'var(--c-warning)' }}>UGC</span>, user-generated content for their ads<br/>
+                                          <span style={{ color: C.textMuted }}>Affiliate</span>, earn per sale/click you drive
                                         </div>
                                       )}
                                     </span>
@@ -3644,12 +3644,12 @@ bio: profileBio
                                               offerAmount: opp.budget?.replace(/[^0-9]/g, '') || '5000',
                                               chatMessages: [...(existingMsgs as any[]), acceptMsg],
                                             });
-                                            setPurchaseToast('Deal accepted — terms locked');
+                                            setPurchaseToast('Deal accepted, terms locked');
                                             setTimeout(() => setPurchaseToast(null), 2500);
                                           }}
                                           style={{ flex: 1, background: C.success, border: 'none', padding: '9px', borderRadius: '8px', color: 'var(--c-surface-lowest)', fontWeight: 600, cursor: 'pointer', fontSize: '12px' }}
                                         >
-                                          Accept Deal — ₹{parseInt(dealOfferAmount || opp.budget?.replace(/[^0-9]/g, '') || '5000').toLocaleString()} (fixed)
+                                          Accept Deal, ₹{parseInt(dealOfferAmount || opp.budget?.replace(/[^0-9]/g, '') || '5000').toLocaleString()} (fixed)
                                         </button>
                                         <button
                                           onClick={() => {
@@ -3679,7 +3679,7 @@ bio: profileBio
                                     <div style={{ background: 'rgba(255,193,7,0.06)', borderRadius: '8px', padding: '12px', border: `1px solid rgba(255,193,7,0.2)` }}>
                                       <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--c-warning)', marginBottom: '6px' }}>Counter Offer Sent</div>
                                       <div style={{ fontSize: '12px', color: C.text, marginBottom: '8px' }}>Your counter-offer of <strong>${parseInt(dealCounterAmount || '0').toLocaleString()}</strong> has been sent to the brand.</div>
-                                      <div style={{ fontSize: '0.75rem', color: C.textSecondary, lineHeight: 1.5 }}>Waiting for their response — they can accept, reject, or send a counter-offer back.</div>
+                                      <div style={{ fontSize: '0.75rem', color: C.textSecondary, lineHeight: 1.5 }}>Waiting for their response, they can accept, reject, or send a counter-offer back.</div>
                                     </div>
                                   )}
 
@@ -3752,7 +3752,7 @@ bio: profileBio
                                     const hasSensitiveContent = isSensitiveContent(briefText) || isSensitiveContent(opp.brand);
                                     return (
                                       <>
-                                        <div style={{ fontSize: '0.75rem', fontWeight: 700, color: C.textMuted, textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '12px' }}>Formal Offer — Review &amp; Accept</div>
+                                        <div style={{ fontSize: '0.75rem', fontWeight: 700, color: C.textMuted, textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '12px' }}>Formal Offer, Review &amp; Accept</div>
                                         <div style={{ fontSize: '0.75rem', color: C.textSecondary, marginBottom: '14px', lineHeight: 1.5 }}>
                                           The brand has submitted their final offer based on your chat negotiation. This document is the binding record of what was agreed.
                                         </div>
@@ -3763,7 +3763,7 @@ bio: profileBio
                                             <div style={{ fontSize: '0.75rem', color: C.textSecondary, lineHeight: 1.5 }}>
                                               This campaign involves regulated or sensitive topics (healthcare, skincare, legal, financial, etc.). <strong>You must include clear disclaimers</strong> in your content such as:
                                               <ul style={{ margin: '6px 0 0 16px', paddingLeft: 0 }}>
-                                                <li style={{ fontSize: '0.75rem', marginBottom: '3px' }}>"This is my personal opinion/experience—not professional advice"</li>
+                                                <li style={{ fontSize: '0.75rem', marginBottom: '3px' }}>"This is my personal opinion/experience, not professional advice"</li>
                                                 <li style={{ fontSize: '0.75rem', marginBottom: '3px' }}>"Based on advice from my [doctor/lawyer/specialist]"</li>
                                                 <li style={{ fontSize: '0.75rem' }}>"Consult a qualified professional before acting on this"</li>
                                               </ul>
@@ -3831,7 +3831,7 @@ bio: profileBio
                                             { key: 'deliverables', label: `I agree to deliver ${opp.deliverables.map(d => `${d.count}x ${d.format}`).join(', ')} by ${opp.deadline ? new Date(opp.deadline).toLocaleDateString('en-US', { month:'short', day:'numeric' }) : 'agreed date'}` },
                                             { key: 'payment', label: `Payment of ₹${totalPrice.toLocaleString()} split as: ${advPct}% advance, ${approvalPct}% on approval` },
                                             { key: 'usage', label: `Brand may use content for ${opp.usageRights || 'agreed period'} per usage rights terms` },
-                                            { key: 'exclusivity', label: `Exclusivity: ${opp.exclusivity || 'None'} — I will not promote competing brands during this period` },
+                                            { key: 'exclusivity', label: `Exclusivity: ${opp.exclusivity || 'None'}, I will not promote competing brands during this period` },
                                             { key: 'revisions', label: `Up to ${opp.revisionLimit} revision round${opp.revisionLimit !== 1 ? 's' : ''} included at no extra cost` },
                                           ].map(term => (
                                             <div key={term.key} onClick={() => setContractChecks(prev => ({ ...prev, [term.key]: !prev[term.key] }))} style={{ display:'flex', alignItems:'flex-start', gap:'10px', padding:'8px 0', borderBottom:`1px solid ${C.border}`, cursor:'pointer', fontSize:'0.75rem', color: contractChecks[term.key] ? C.text : C.textSecondary, lineHeight:1.4, transition:'color 0.15s' }}>
@@ -3878,7 +3878,7 @@ bio: profileBio
                                           </div>
                                         )}
                                         <div style={{ background: 'rgba(200, 184, 154,0.06)', border: '1px solid rgba(200, 184, 154,0.2)', borderRadius: '8px', padding: '10px', marginBottom: '10px', fontSize: '0.75rem', color: C.textSecondary, lineHeight: 1.5 }}>
-                                          ⚠️ Once you accept, terms are locked. Check all details carefully — no edits after signing.
+                                          ⚠️ Once you accept, terms are locked. Check all details carefully, no edits after signing.
                                         </div>
                                         <div style={{ display: 'flex', gap: '8px' }}>
                                           <button
@@ -3948,7 +3948,7 @@ bio: profileBio
                                             </div>
                                           )}
                                           <div style={{ padding: '12px', background: 'rgba(76,175,80,0.08)', borderRadius: '10px', marginBottom: '10px', border: '1px solid rgba(76,175,80,0.2)' }}>
-                                            <div style={{ fontSize: '13px', fontWeight: 700, color: C.success, marginBottom: '4px' }}>Deal confirmed — product incoming</div>
+                                            <div style={{ fontSize: '13px', fontWeight: 700, color: C.success, marginBottom: '4px' }}>Deal confirmed, product incoming</div>
                                             <div style={{ fontSize: '0.75rem', color: C.textSecondary, marginBottom: '8px' }}>Terms are locked and recorded. Chat remains open for coordination.</div>
                                             <div style={{ fontSize: '12px', fontWeight: 700, color: C.text, marginBottom: '6px' }}>{opp.brand} will send product</div>
                                             {opp.deadline && (
@@ -4186,7 +4186,7 @@ bio: profileBio
                                             <div style={{ fontSize: '0.75rem', color: C.text, marginBottom: '3px' }}>Exclusivity: <strong>{opp.exclusivity || 'None'}</strong></div>
                                             {opp.contentReview && (
                                               <div style={{ marginTop:'4px', fontSize:'0.75rem', padding:'4px 6px', borderRadius:'4px', background:opp.contentReview==='review_required'?`${withAlpha(C.warning, 0x15)}`:C.success+'20', color:opp.contentReview==='review_required'?C.warning:C.success, fontWeight:600 }}>
-                                                {opp.contentReview==='review_required' ? '📋 Content review required before publish' : '✅ Direct upload — no review needed'}
+                                                {opp.contentReview==='review_required' ? '📋 Content review required before publish' : '✅ Direct upload, no review needed'}
                                               </div>
                                             )}
                                           </div>
@@ -4267,7 +4267,7 @@ bio: profileBio
                                                     </div>
                                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '3px', marginTop: '1px', opacity: 0.7 }}>
                                                       <svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                                                      <span>Logged · {msg.isoTime ? new Date(msg.isoTime).toISOString().replace('T', ' ').slice(0, 19) + ' UTC' : '—'}</span>
+                                                      <span>Logged · {msg.isoTime ? new Date(msg.isoTime).toISOString().replace('T', ' ').slice(0, 19) + ' UTC' : '-'}</span>
                                                     </div>
                                                     {msg.seen && msg.seenAt && (
                                                       <div style={{ marginTop: '1px', opacity: 0.7 }}>
@@ -4324,7 +4324,7 @@ bio: profileBio
                                             </div>
                                             {opp.contentReview && (
                                               <div style={{ marginTop:'4px', fontSize:'9px', padding:'3px 5px', borderRadius:'4px', background:opp.contentReview==='review_required'?`${withAlpha(C.warning, 0x15)}`:C.success+'20', color:opp.contentReview==='review_required'?C.warning:C.success, fontWeight:600 }}>
-                                                {opp.contentReview==='review_required' ? '📋 Review required before publish' : '✅ Direct upload — no review'}
+                                                {opp.contentReview==='review_required' ? '📋 Review required before publish' : '✅ Direct upload, no review'}
                                               </div>
                                             )}
                                             {opp.shootLocation && (
@@ -4421,7 +4421,7 @@ bio: profileBio
                                                     });
                                                   }
                                                   if (marketplaceRole !== 'creator') {
-                                                    setPurchaseToast(`Deal completed — earnings released to ${brandName}`);
+                                                    setPurchaseToast(`Deal completed, earnings released to ${brandName}`);
                                                     setTimeout(() => setPurchaseToast(null), 3000);
                                                   }
                                                 }} style={{ flex: 1, background: C.success, border: 'none', padding: '10px', borderRadius: '8px', color: 'var(--c-surface-lowest)', fontWeight: 700, cursor: 'pointer', fontSize: '12px' }}>
@@ -4537,7 +4537,7 @@ bio: profileBio
                                                 setDealStates(prev => { const next = {...prev}; delete next[activeDealKey]; return next; });
                                               }
                                               setNegotiatingOpp(null);
-                                              setPurchaseToast('Deal declined — brand notified');
+                                              setPurchaseToast('Deal declined, brand notified');
                                               setTimeout(() => setPurchaseToast(null), 3000);
                                             }}
                                             style={{ width: '100%', background: 'none', border: `1px solid rgba(176, 65, 62,0.3)`, padding: '7px', borderRadius: '6px', color: 'rgba(176, 65, 62,0.85)', fontWeight: 600, fontSize: '0.75rem', cursor: 'pointer', marginTop: '4px' }}
@@ -4814,7 +4814,7 @@ bio: profileBio
                                                 ))}
                                               </div>
                                               <div style={{ background:'rgba(46,125,50,0.06)', border:'1px solid rgba(46,125,50,0.2)', borderRadius:'8px', padding:'10px', marginBottom:'12px', fontSize:'0.75rem', color:C.textSecondary }}>
-                                                Brand payment on-hold: ${agreedPrice.toLocaleString()} — released per milestones above
+                                                Brand payment on-hold: ${agreedPrice.toLocaleString()}, released per milestones above
                                               </div>
                                               {atLeastOneSubmitted && !submittedForReview && activeDeal?.creatorDealLifecycle !== 'submitted' && activeDeal?.creatorDealLifecycle !== 'approved' && (
                                                 <button onClick={() => {
@@ -4832,7 +4832,7 @@ bio: profileBio
                                                     });
                                                     sharedSendNotification(opp?.brand || 'Brand', 'application', `Deliverables submitted: ${agreedAmt.toLocaleString()} – Advance milestone released. Awaiting approval.`);
                                                   }
-                                                  setPurchaseToast(`Submitted for review — ₹${Math.round(agreedAmt * advancePercent / 100).toLocaleString()} released, ₹${Math.round(agreedAmt * approvalPercent / 100).toLocaleString()} pending approval`);
+                                                  setPurchaseToast(`Submitted for review, ₹${Math.round(agreedAmt * advancePercent / 100).toLocaleString()} released, ₹${Math.round(agreedAmt * approvalPercent / 100).toLocaleString()} pending approval`);
                                                   setTimeout(() => setPurchaseToast(null), 4000);
                                                 }} style={{ width:'100%', background:C.primary, border:'none', padding:'10px', borderRadius:'8px', color:'var(--c-surface-lowest)', fontWeight:600, cursor:'pointer', fontSize:'13px', marginBottom:'8px' }}>
                                                   Submit for Review
@@ -4856,7 +4856,7 @@ bio: profileBio
                                               <>
                                                 <div style={{ background:'rgba(0,102,204,0.06)', border:`1px solid rgba(0,102,204,0.2)`, borderRadius:'8px', padding:'12px', marginBottom:'12px' }}>
                                                   <div style={{ fontSize:'13px', fontWeight:700, color:C.text, marginBottom:'4px' }}>Deliverables Submitted</div>
-                                                  <div style={{ fontSize:'0.75rem', color:C.textSecondary, marginBottom:'8px' }}>Waiting for brand approval — typically within 48h.</div>
+                                                  <div style={{ fontSize:'0.75rem', color:C.textSecondary, marginBottom:'8px' }}>Waiting for brand approval, typically within 48h.</div>
                                                   <div style={{ fontSize:'0.75rem', color:C.textMuted, marginBottom:'2px' }}>Advance: <span style={{ color:C.success, fontWeight:600 }}>Paid</span></div>
                                                   <div style={{ fontSize:'0.75rem', color:C.textMuted }}>Approval milestone: <span style={{ color:'var(--c-warning)', fontWeight:600 }}>Pending brand approval</span></div>
                                                 </div>
@@ -4969,12 +4969,12 @@ bio: profileBio
                                                     <div style={{ fontSize:'0.75rem', fontWeight:700, color:C.textMuted, textTransform:'uppercase', letterSpacing:'0.4px', marginBottom:'6px' }}>Active Rights</div>
                                                     <div style={{ fontSize:'0.75rem', color:C.text, marginBottom:'3px' }}>
                                                       Content usage: <strong>{opp.usageRights || `${opp.revisionLimit * 30} days`}</strong>
-                                                      <span style={{ color:C.textMuted }}> — expires {new Date(Date.now() + (opp.revisionLimit || 3) * 30 * 86400000).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })}</span>
+                                                      <span style={{ color:C.textMuted }}>, expires {new Date(Date.now() + (opp.revisionLimit || 3) * 30 * 86400000).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })}</span>
                                                     </div>
                                                     {opp.exclusivity && opp.exclusivity !== 'None' && (
                                                       <div style={{ fontSize:'0.75rem', color:C.text }}>
                                                         Exclusivity: <strong>{opp.exclusivity}</strong>
-                                                        <span style={{ color:'var(--c-warning)' }}> — do not accept competing deals</span>
+                                                        <span style={{ color:'var(--c-warning)' }}>, do not accept competing deals</span>
                                                       </div>
                                                     )}
                                                   </div>
@@ -5243,7 +5243,7 @@ bio: profileBio
                             opacity: refreshing ? 0.5 : 1,
                           }}
                         >
-                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: realtimeConnected ? 'var(--c-accent)' : 'var(--c-text-variant)', flexShrink: 0 }} title={realtimeConnected ? 'Real-time connected' : 'Offline — data refreshes on reload'} />
+                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: realtimeConnected ? 'var(--c-accent)' : 'var(--c-text-variant)', flexShrink: 0 }} title={realtimeConnected ? 'Real-time connected' : 'Offline, data refreshes on reload'} />
                           {refreshing ? '↻' : '⟳'} Refresh
                         </button>
                         <button
@@ -5417,7 +5417,7 @@ bio: profileBio
 
                           {/* Deal Summary */}
                           <div style={{ background:C.bg, border:`1px solid ${C.border}`, borderRadius:'10px', padding:'14px', marginBottom:'14px' }}>
-                            <div style={{ fontSize:'12px', fontWeight:700, color:C.text, marginBottom:'8px' }}>{creatorName} — {deal.creatorSkin}</div>
+                            <div style={{ fontSize:'12px', fontWeight:700, color:C.text, marginBottom:'8px' }}>{creatorName}, {deal.creatorSkin}</div>
                             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'8px', marginBottom:'8px' }}>
                               <div>
                                 <div style={{ fontSize:'0.75rem', color:C.textMuted, fontWeight:600, marginBottom:'2px' }}>Deal Amount</div>
@@ -5568,7 +5568,7 @@ bio: profileBio
                             <button onClick={() => { setShowDisputeModal(null); setDisputeReason(''); setDisputeEvidence(''); }} style={{ flex:1, background:'none', border:`1px solid ${C.border}`, borderRadius:'8px', padding:'10px', color:C.text, fontWeight:600, fontSize:'13px', cursor:'pointer' }}>Cancel</button>
                             <button onClick={() => {
                               setCompletedDeals(prev => prev.map(d => d.id === showDisputeModal ? { ...d, disputed: true, disputeReason, disputeStatus: 'filed' as const } : d));
-                              setPurchaseToast('Dispute filed — under review');
+                              setPurchaseToast('Dispute filed, under review');
                               setTimeout(() => setPurchaseToast(null), 3000);
                               setShowDisputeModal(null); setDisputeReason(''); setDisputeEvidence('');
                             }} disabled={!disputeReason} style={{ flex:1, background: disputeReason ? 'var(--c-error)' : C.border, border:'none', borderRadius:'8px', padding:'10px', color:'var(--c-surface-lowest)', fontWeight:600, fontSize:'13px', cursor: disputeReason ? 'pointer' : 'not-allowed', opacity: disputeReason ? 1 : 0.5 }}>File Dispute</button>
@@ -5770,7 +5770,7 @@ bio: profileBio
                                 )}
                                 {!preferenceMatch.matches && preferenceMatch.reason && (
                                   <p style={{ fontSize:'13px', color:C.textMuted, margin:'12px 0 0', lineHeight:1.5 }}>
-                                    {preferenceMatch.reason} — you can still apply.
+                                    {preferenceMatch.reason}, you can still apply.
                                   </p>
                                 )}
                               </div>
@@ -5838,7 +5838,7 @@ bio: profileBio
                                 {/* ── [v1 COMMENTED OUT] "View Profile & Invite" opened the negotiation modal, which is disabled in v1. See Things-Commented-Out.md. */}
                                 <button
                                   onClick={() => {
-                                    setPurchaseToast('Creator invitations arrive in a later release — post your campaign and creators will apply.');
+                                    setPurchaseToast('Creator invitations arrive in a later release, post your campaign and creators will apply.');
                                     setTimeout(() => setPurchaseToast(null), 3200);
                                   }}
                                   style={{ width:'100%', background:C.primary, border:'none', borderRadius:'6px', padding:'8px', fontSize:'12px', fontWeight:700, color:'var(--c-surface-lowest)', cursor:'pointer' }}
@@ -5878,7 +5878,7 @@ bio: profileBio
                       const statusOf = (d: any) => {
                         if (d.phase === 'accepted') return { label: 'Accepted', color: C.success };
                         if (d.phase === 'rejected') return { label: 'Rejected', color: 'var(--c-error)' };
-                        if (d.phase === 'formal_offer') return { label: 'Final offer — awaiting your approval', color: C.primary };
+                        if (d.phase === 'formal_offer') return { label: 'Final offer, awaiting your approval', color: C.primary };
                         if (d.phase === 'pending') return { label: 'Awaiting your decision', color: 'var(--c-warning)' };
                         if (d.phase === 'checklist' || d.phase === 'softhold') return { label: 'In progress', color: C.success };
                         return { label: 'Applied', color: C.textSecondary };
@@ -5905,7 +5905,7 @@ bio: profileBio
                           {applicantDeals.map((d: any, i: number) => {
                             const creatorName = d.creatorName || d.key.split('|')[0];
                             const creatorSkin = d.creatorSkin || d.key.split('|')[1];
-                            const offer = d.counterAmount || d.offerAmount || '—';
+                            const offer = d.counterAmount || d.offerAmount || '-';
                             const st = statusOf(d);
                             const actionable = d.phase === 'formal_offer' || d.phase === 'pending';
                             const paymentPending = d.phase === 'formal_offer' && d.brandApprovalPhase !== 'accepted';
@@ -6224,7 +6224,7 @@ bio: profileBio
                           setEscrowFundingInProgress2(false);
                           setShowEscrowFundingModal(false);
                           setCampaignsSectionOpen(true);
-                          setPurchaseToast(`Payment secured — ₹${(pendingCampaignForEscrow.escrowPool||0).toLocaleString()} secured. Browse creators to invite.`);
+                          setPurchaseToast(`Payment secured, ₹${(pendingCampaignForEscrow.escrowPool||0).toLocaleString()} secured. Browse creators to invite.`);
                           setTimeout(() => setPurchaseToast(null), 4000);
                         }, 2000);
                       }}
@@ -6253,7 +6253,7 @@ bio: profileBio
               <div style={{ padding: '20px' }}>
                 <div style={{ marginBottom: '24px' }}>
                   <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '12px' }}>
-                    Insights Tab — Visible Metrics
+                    Insights Tab, Visible Metrics
                   </div>
                   <p style={{ fontSize: '13px', color: C.textSecondary, marginBottom: '16px', lineHeight: 1.5 }}>
                     Configure which metrics appear in the public Insights tab on creator profiles. Toggle metrics on or off to customize the experience.
@@ -6559,7 +6559,7 @@ bio: profileBio
                   ))}
 
                   <button
-                    onClick={() => alert('Scan queued — results in ~2 minutes')}
+                    onClick={() => alert('Scan queued, results in ~2 minutes')}
                     style={{
                       width: '100%',
                       marginTop: '12px',
@@ -6585,7 +6585,7 @@ bio: profileBio
                   <div style={{ fontSize: '13px', fontWeight: 700, color: C.text }}>Creator Safety Controls</div>
                 </div>
                 <div style={{ fontSize: '0.75rem', color: C.textSecondary, marginBottom: '18px', lineHeight: 1.5 }}>
-                  Platform-level rules enforced on all outreach. Creators cannot override these — they set the floor. Brands that violate are throttled or suspended.
+                  Platform-level rules enforced on all outreach. Creators cannot override these, they set the floor. Brands that violate are throttled or suspended.
                 </div>
 
                 {/* DM / Proposal Rate Limit */}
@@ -6662,7 +6662,7 @@ bio: profileBio
                     ))}
                   </div>
                   <div style={{ fontSize: '0.75rem', color: C.textMuted, marginTop: '6px', textAlign: 'center' }}>
-                    Current: min {safetyMinBrandTrust}★ — brands below are read-only
+                    Current: min {safetyMinBrandTrust}★, brands below are read-only
                   </div>
                 </div>
 
@@ -6701,7 +6701,7 @@ bio: profileBio
                   <div style={{ fontSize: '0.75rem', fontWeight: 700, color: C.textMuted, textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '12px' }}>Platform-Wide Enforcement</div>
                   {([
                     { label: 'Require verified Brand ValueSkin to contact', desc: 'Unverified brands cannot initiate any outreach', value: safetyRequireVerifiedBrand, set: setSafetyRequireVerifiedBrand },
-                    { label: 'Proposal form required (no free-text cold DMs)', desc: 'All contact must be a structured brief — not a message', value: safetyRequireBrief, set: setSafetyRequireBrief },
+                    { label: 'Proposal form required (no free-text cold DMs)', desc: 'All contact must be a structured brief, not a message', value: safetyRequireBrief, set: setSafetyRequireBrief },
                     { label: 'Block off-platform contact requests', desc: 'Auto-flag messages asking for phone/email/WhatsApp', value: safetyOffPlatformBlock, set: setSafetyOffPlatformBlock },
                   ] as const).map(({ label, desc, value, set }) => (
                     <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', padding: '8px 0', borderTop: `1px solid ${C.border}` }}>
@@ -6734,7 +6734,7 @@ bio: profileBio
                   • Minimum brand trust to contact: <strong style={{ color: C.text }}>{'★'.repeat(safetyMinBrandTrust)}</strong><br/>
                   {safetyNewBrandWarmIntro && <>• Brands with &lt;{safetyNewBrandDealCount} deals need warm intro<br/></>}
                   {safetyRequireVerifiedBrand && <>• Verified Brand ValueSkin required<br/></>}
-                  {safetyRequireBrief && <>• Proposal form mandatory — no cold DMs<br/></>}
+                  {safetyRequireBrief && <>• Proposal form mandatory, no cold DMs<br/></>}
                   {safetyOffPlatformBlock && <>• Off-platform contact requests auto-flagged<br/></>}
                 </div>
               </div>
@@ -6756,7 +6756,7 @@ bio: profileBio
                   { label: 'Rate Card', desc: 'Per-format pricing (Reel/Story/Post) visible on creator cards', value: adminShowRateCard, set: setAdminShowRateCard },
                   { label: 'Availability Calendar', desc: 'Creator "available from" date shown on cards and in search', value: adminShowAvailabilityCalendar, set: setAdminShowAvailabilityCalendar },
                   { label: 'Portfolio Samples', desc: 'Past brand work visible on creator cards', value: adminShowPortfolio, set: setAdminShowPortfolio },
-                  { label: 'Deal Completion Rate', desc: 'Creator % of started deals finished — penalises ghosting', value: adminShowDealCompletion, set: setAdminShowDealCompletion },
+                  { label: 'Deal Completion Rate', desc: 'Creator % of started deals finished, penalises ghosting', value: adminShowDealCompletion, set: setAdminShowDealCompletion },
                   { label: 'Verified Income Tier', desc: 'Trust badge showing lifetime earnings tier (₹10K+, ₹50K+, etc)', value: adminShowIncomeTier, set: setAdminShowIncomeTier },
                   { label: 'First-Deal Badge', desc: 'Badge shown on creators open to discounted first collaboration', value: adminShowFirstDealBadge, set: setAdminShowFirstDealBadge },
                   { label: 'Exclusivity Slot Signal', desc: 'Shows "Slot taken until [date]" when creator is exclusive with a brand', value: adminShowExclusivitySignal, set: setAdminShowExclusivitySignal },
@@ -6851,7 +6851,7 @@ bio: profileBio
                 <div style={{ background: 'rgba(211,47,47,0.06)', border: '1px solid rgba(211,47,47,0.2)', borderRadius: '10px', padding: '14px 16px', marginBottom: '10px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--c-error)" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--c-error)' }}>Non-negotiable — applies to both modes</span>
+                    <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--c-error)' }}>Non-negotiable, applies to both modes</span>
                   </div>
                   <div style={{ fontSize: '0.75rem', color: C.textSecondary, lineHeight: 1.6 }}>
                     Regardless of communication mode, the following security features are enforced on every deal message and cannot be disabled:
@@ -7232,7 +7232,7 @@ bio: profileBio
           <div style={{ background: C.primary, borderRadius: '12px', padding: '16px', marginTop: '20px', textAlign: 'center', color: C.onPrimary }}>
             <div style={{ fontSize: '14px', opacity: 0.9, marginBottom: '4px' }}>Highest Skin Level</div>
             <div style={{ fontSize: '32px', fontWeight: 'bold' }}>LEVEL {currentLevel}</div>
-            {ownedSkins.length === 0 && <div style={{ fontSize: '0.75rem', opacity: 0.7, marginTop: '4px' }}>No ValueSkin equipped — purchase one from the Closet</div>}
+            {ownedSkins.length === 0 && <div style={{ fontSize: '0.75rem', opacity: 0.7, marginTop: '4px' }}>No ValueSkin equipped, purchase one from the Closet</div>}
             {ownedSkins.length === 1 && <div style={{ fontSize: '0.75rem', opacity: 0.7, marginTop: '4px' }}>Followers contribute to XP with 1 skin</div>}
           </div>
         </Modal>

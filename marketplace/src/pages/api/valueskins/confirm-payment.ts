@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const valid = await verifySignature(razorpay_order_id, razorpay_payment_id, razorpay_signature);
     if (!valid) {
-      return res.status(400).json({ error: 'Payment verification failed — signature mismatch' });
+      return res.status(400).json({ error: 'Payment verification failed, signature mismatch' });
     }
 
     let valueskinCode: string;

@@ -18,6 +18,9 @@ interface Resume {
   pitch?: string;
   name?: string;
   city?: string;
+  age?: number | null;
+  gender?: string;
+  website?: string;
   display_name: string;
   role: string;
   instagram: {
@@ -94,9 +97,23 @@ export default function CreatorResume({ username }: { username: string }) {
         )}
       </div>
 
-      {(resume.name || resume.city) && (
-        <div style={{ fontSize: 11, color: C.textMuted, marginBottom: 8 }}>
-          {[resume.name, resume.city].filter(Boolean).join(' · ')}
+      {/* The essentials: name, age, gender, location. */}
+      {(resume.name || resume.age || resume.gender || resume.city) && (
+        <div style={{ fontSize: 11, color: C.textMuted, marginBottom: 8, lineHeight: 1.5 }}>
+          {[
+            resume.name,
+            resume.age ? `${resume.age} yrs` : '',
+            resume.gender && resume.gender !== 'Prefer not to say' ? resume.gender : '',
+            resume.city,
+          ].filter(Boolean).join(' · ')}
+        </div>
+      )}
+
+      {resume.website && /^https?:\/\//i.test(resume.website) && (
+        <div style={{ fontSize: 11, marginBottom: 8 }}>
+          <a href={resume.website} target="_blank" rel="noopener noreferrer nofollow" style={{ color: C.text }}>
+            {resume.website.replace(/^https?:\/\//i, '').replace(/\/$/, '')}
+          </a>
         </div>
       )}
 
@@ -125,9 +142,9 @@ export default function CreatorResume({ username }: { username: string }) {
           ['Followers', ig.followers.toLocaleString('en-IN')],
           // Zero here means Meta has not approved the analytics scope rather
           // than that the creator has no engagement, so it is not shown as 0%.
-          ['Engagement', ig.engagement_rate ? `${ig.engagement_rate}%` : '—'],
+          ['Engagement', ig.engagement_rate ? `${ig.engagement_rate}%` : '-'],
           ['Completed', String(stats.completed_deals)],
-          ['Earned', stats.total_value ? `₹${Math.round(stats.total_value).toLocaleString('en-IN')}` : '—'],
+          ['Earned', stats.total_value ? `₹${Math.round(stats.total_value).toLocaleString('en-IN')}` : '-'],
         ].map(([k, v]) => (
           <div key={k}>
             <div style={{ fontSize: 9, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.4px' }}>{k}</div>
@@ -141,7 +158,7 @@ export default function CreatorResume({ username }: { username: string }) {
       </div>
       {deals.length === 0 ? (
         <div style={{ fontSize: 11, color: C.outline }}>
-          No completed deals yet — this would be their first.
+          No completed deals yet, this would be their first.
         </div>
       ) : (
         deals.slice(0, 10).map((d) => (

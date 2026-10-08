@@ -214,7 +214,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (deals?.rows?.length > 0) {
       addLine(`Deals (${deals.rows.length})`, 12, true);
       for (const deal of deals.rows) {
-        addLine(`  #${deal.id} — ${deal.title || 'Untitled'} — ${deal.status || 'Unknown'} — ${formatCurrency(deal.offer_amount)}`);
+        addLine(`  #${deal.id}, ${deal.title || 'Untitled'}, ${deal.status || 'Unknown'}, ${formatCurrency(deal.offer_amount)}`);
         addLine(`    Value Skin: ${deal.value_skin || 'N/A'} | Type: ${deal.content_type || 'N/A'} | Delivery: ${deal.delivery_type || 'N/A'}`);
         addLine(`    Created: ${formatDate(deal.created_at)} | Completed: ${formatDate(deal.completed_at)}`);
         const delivs = deal.deliverables;
@@ -239,7 +239,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (payments?.rows?.length > 0) {
       addLine(`Payments (${payments.rows.length})`, 12, true);
       for (const pmt of payments.rows) {
-        addLine(`  #${pmt.id} — ${formatCurrency(pmt.amount)} — ${pmt.status || 'Unknown'} — ${formatDate(pmt.payment_date)}`);
+        addLine(`  #${pmt.id}, ${formatCurrency(pmt.amount)}, ${pmt.status || 'Unknown'}, ${formatDate(pmt.payment_date)}`);
       }
       addDivider();
     }
@@ -247,7 +247,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (escrow?.rows?.length > 0) {
       addLine(`Escrow Records (${escrow.rows.length})`, 12, true);
       for (const es of escrow.rows) {
-        addLine(`  Deal #${es.deal_id} — ${formatCurrency(es.amount)} — ${es.status} — Created: ${formatDate(es.created_at)}`);
+        addLine(`  Deal #${es.deal_id}, ${formatCurrency(es.amount)}, ${es.status}, Created: ${formatDate(es.created_at)}`);
       }
       addDivider();
     }
@@ -255,7 +255,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (reviews?.rows?.length > 0) {
       addLine(`Reviews & Ratings (${reviews.rows.length})`, 12, true);
       for (const rev of reviews.rows) {
-        addLine(`  Deal #${rev.deal_id} — Rating: ${rev.rating}/5 — ${formatDate(rev.created_at)}`);
+        addLine(`  Deal #${rev.deal_id}, Rating: ${rev.rating}/5-${formatDate(rev.created_at)}`);
         if (rev.comment) addLine(`    "${rev.comment.substring(0, 150)}"`);
       }
       addDivider();
@@ -264,7 +264,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (campaigns?.rows?.length > 0) {
       addLine(`Campaigns (${campaigns.rows.length})`, 12, true);
       for (const cmp of campaigns.rows) {
-        addLine(`  #${cmp.id} — ${cmp.title || 'Untitled'} — ${cmp.status || 'Unknown'} — ${formatCurrency(cmp.budget)}`);
+        addLine(`  #${cmp.id}, ${cmp.title || 'Untitled'}, ${cmp.status || 'Unknown'}, ${formatCurrency(cmp.budget)}`);
       }
       addDivider();
     }
@@ -283,7 +283,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     addLine('Consent Records', 12, true);
     if (consents?.rows?.length > 0) {
       for (const c of consents.rows) {
-        addLine(`  - ${c.consent_type}: ${c.granted ? 'Granted' : 'Denied'} (v${c.version || '1.0'}) — ${formatDate(c.created_at)}`);
+        addLine(`  - ${c.consent_type}: ${c.granted ? 'Granted' : 'Denied'} (v${c.version || '1.0'}), ${formatDate(c.created_at)}`);
       }
     } else {
       addLine('  (No consent records found)');
@@ -319,7 +319,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     addLine('Backup copies may persist up to 90 days after anonymization');
     addLine('');
     addLine('After account deletion, you can re-register with the same');
-    addLine('email address — it will be treated as a brand new account.');
+    addLine('email address, it will be treated as a brand new account.');
     addDivider();
 
     addLine('Thank you for being part of ValueSkins.', 12, true, rgb(0.3, 0.3, 0.3));

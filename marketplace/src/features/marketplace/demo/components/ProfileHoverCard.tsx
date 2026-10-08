@@ -156,7 +156,7 @@ export function InstagramResumeBlock({ ig }: { ig: HoverInstagram }) {
           fontSize: '10.5px', lineHeight: 1.45, color: '#334', marginBottom: '8px',
         }}>
           <span style={{ fontWeight: 800, color: '#0066CC', fontFamily: 'monospace' }}>instagram_business_basic</span>
-          <span style={{ color: '#667' }}> — {IG_BASIC_NOTE}</span>
+          <span style={{ color: '#667' }}>, {IG_BASIC_NOTE}</span>
         </div>
 
         {/* Basic profile row */}
@@ -226,7 +226,7 @@ export function InstagramResumeBlock({ ig }: { ig: HoverInstagram }) {
           fontSize: '10.5px', lineHeight: 1.45, color: '#334', marginBottom: '8px',
         }}>
           <span style={{ fontWeight: 800, color: '#DD2A7B', fontFamily: 'monospace' }}>instagram_business_manage_insights</span>
-          <span style={{ color: '#667' }}> — {IG_INSIGHTS_NOTE}</span>
+          <span style={{ color: '#667' }}>, {IG_INSIGHTS_NOTE}</span>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>

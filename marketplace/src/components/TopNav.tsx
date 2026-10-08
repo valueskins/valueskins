@@ -1,155 +1,69 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-interface TopNavProps {
-  userName?: string;
-  unreadMessages?: number;
-  unreadNotifications?: number;
-  onProfileClick?: () => void;
-  onMessagesClick?: () => void;
-  onNotificationsClick?: () => void;
-}
+// The whole app has two places: the marketplace and settings. The navigation is
+// the screen's width divided into those two halves, at the top.
+//
+// It replaces the four-tab bar at the bottom of the screen (Profile, Market,
+// Store, Settings). The store is gone, and the profile now lives in Settings.
+const SECTIONS = [
+  {
+    // /deals/browse sends a brand on to /campaigns, so one link serves both roles.
+    href: '/deals/browse',
+    label: 'Marketplace',
+    match: (p: string) => p.startsWith('/deals') || p.startsWith('/campaigns'),
+  },
+  {
+    href: '/settings',
+    label: 'Settings',
+    match: (p: string) => p.startsWith('/settings') || p.startsWith('/account') || p.startsWith('/profile'),
+  },
+];
 
-export default function TopNav({
-  userName = 'Creator',
-  unreadMessages = 0,
-  unreadNotifications = 0,
-  onProfileClick,
-  onMessagesClick,
-  onNotificationsClick,
-}: TopNavProps) {
+export const TOP_NAV_HEIGHT = 56;
+
+export default function TopNav() {
+  const { pathname } = useRouter();
+
   return (
-    <nav
-      style={{
-        background: '#ffffff',
-        border: '1px solid #e5e7eb',
-        padding: '16px 24px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '24px',
-        borderRadius: '8px',
-      }}
-    >
-      {/* Left - Home button and Logo */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <Link href="/" passHref>
-          <a style={{ color: '#0A0A0A', textDecoration: 'none', fontWeight: 600 }}>
-            Home
-          </a>
-        </Link>
-        <div style={{ fontSize: '20px', fontWeight: 700, color: '#0A0A0A' }}>
-          ValueSkins
-        </div>
-      </div>
-
-      {/* Center - Search */}
-      <input
-        type="text"
-        placeholder="Search deals, brands..."
+    <>
+      {/* Pages below start under the bar. */}
+      <style>{`body { padding-top: ${TOP_NAV_HEIGHT}px; }`}</style>
+      <nav
+        aria-label="Primary"
         style={{
-          maxWidth: '300px',
-          padding: '10px 16px',
-          border: '1px solid #d1d5db',
-          borderRadius: '6px',
-          fontSize: '14px',
-          fontFamily: 'inherit',
-          outline: 'none',
+          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9000,
+          height: TOP_NAV_HEIGHT, display: 'grid', gridTemplateColumns: '1fr 1fr',
+          background: 'var(--c-bg)', borderBottom: '1px solid var(--c-border)',
+          fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
         }}
-      />
-
-      {/* Right - Icons & Menu */}
-      <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-        {/* Notifications */}
-        <button
-          onClick={onNotificationsClick}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '20px',
-            cursor: 'pointer',
-            position: 'relative',
-          }}
-          title="Notifications"
-        >
-          🔔
-          {unreadNotifications > 0 && (
-            <span
+      >
+        {SECTIONS.map((s, i) => {
+          const active = s.match(pathname);
+          return (
+            <Link
+              key={s.href}
+              href={s.href}
+              aria-current={active ? 'page' : undefined}
               style={{
-                position: 'absolute',
-                top: '-6px',
-                right: '-6px',
-                background: 'var(--c-error)',
-                color: '#ffffff',
-                borderRadius: '50%',
-                width: '18px',
-                height: '18px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '10px',
-                fontWeight: 600,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                textDecoration: 'none',
+                fontSize: '0.875rem', letterSpacing: '0.04em',
+                fontWeight: active ? 700 : 500,
+                color: active ? 'var(--c-text)' : 'var(--c-text-muted)',
+                background: active ? 'var(--c-surface)' : 'transparent',
+                borderLeft: i === 0 ? 'none' : '1px solid var(--c-border)',
+                // The active half is marked along its whole bottom edge.
+                boxShadow: active ? 'inset 0 -2px 0 var(--c-accent)' : 'none',
               }}
             >
-              {unreadNotifications}
-            </span>
-          )}
-        </button>
-
-        {/* Messages */}
-        <button
-          onClick={onMessagesClick}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '20px',
-            cursor: 'pointer',
-            position: 'relative',
-          }}
-          title="Messages"
-        >
-          💬
-          {unreadMessages > 0 && (
-            <span
-              style={{
-                position: 'absolute',
-                top: '-6px',
-                right: '-6px',
-                background: 'var(--c-error)',
-                color: '#ffffff',
-                borderRadius: '50%',
-                width: '18px',
-                height: '18px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '10px',
-                fontWeight: 600,
-              }}
-            >
-              {unreadMessages}
-            </span>
-          )}
-        </button>
-
-        {/* Profile Menu */}
-        <button
-          onClick={onProfileClick}
-          style={{
-            background: '#f3f4f6',
-            border: '1px solid #d1d5db',
-            padding: '8px 16px',
-            borderRadius: '6px',
-            fontSize: '13px',
-            fontWeight: 600,
-            color: 'var(--c-text)',
-            cursor: 'pointer',
-          }}
-        >
-          👤 {userName}
-        </button>
-      </div>
-    </nav>
+              {s.label}
+            </Link>
+          );
+        })}
+      </nav>
+    </>
   );
 }

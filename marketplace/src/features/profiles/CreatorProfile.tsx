@@ -370,7 +370,7 @@ export default function CreatorProfile({
         {/* Reputation — read-only strip, earned not edited (spec §3).
             Trust score in deep sand, rest neutral — no green/orange. */}
         {showMarketplaceSettings && (
-          <ReadOnlyCard title="Reputation & Trust" note="Earned automatically from completed deals — not editable.">
+          <ReadOnlyCard title="Reputation & Trust" note="Earned automatically from completed deals, not editable.">
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px' }}>
               <StatBox label="Trust Score" value={`${profile.trust_score}%`} color={C.deepSand} />
               <StatBox label="Completion Rate" value={`${profile.completion_rate}%`} color={C.text} />

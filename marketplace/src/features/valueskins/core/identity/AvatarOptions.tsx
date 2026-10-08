@@ -86,7 +86,7 @@ export function defaultAboutMe(profession: string): string {
     'Cosmetics Brand': 'Clean beauty brand committed to ingredients you can trust. We believe in real beauty, real results, and real transparency.',
     'Lifestyle': 'Everyday life, shot beautifully. I create authentic lifestyle content that feels real and connects brands with real people.',
   };
-  return defaults[profession] ?? `${profession} — click Edit to write your brand story and explain what makes you unique.`;
+  return defaults[profession] ?? `${profession}, click Edit to write your brand story and explain what makes you unique.`;
 }
 
 //  Profession Sticker (clickable — opens About Me panel) 
@@ -140,7 +140,7 @@ export function ProfessionSticker({
   return (
     <>
       <div
-        title={clickable ? `${hideSlotLabel ? '' : SLOT_LABELS[slot] + ': '}${badge.label} — click to view` : badge.label}
+        title={clickable ? `${hideSlotLabel ? '' : SLOT_LABELS[slot] + ': '}${badge.label}, click to view` : badge.label}
         onClick={clickable ? () => setShowPanel(true) : undefined}
         style={{
           display: 'inline-flex',

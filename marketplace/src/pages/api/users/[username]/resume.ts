@@ -4,6 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { requireUser } from '@/lib/auth/require-user';
 import { query, queryOne } from '@/lib/db-pool';
 import { WORKFLOW } from '@/lib/deal-workflow';
+import { CURRENT_AGE_SQL, isPlaceholderName } from '@/lib/profile-essentials';
 
 const USERNAME_RE = /^[A-Za-z0-9._-]{1,64}$/;
 const RECENT_DEALS = 10;
@@ -23,7 +24,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const user = await queryOne(
-      `SELECT id, username, display_name, role, email, pitch_text, instagram_user_id,
+      `SELECT id, username, display_name, role, email, pitch_text, location, website, gender,
+              ${CURRENT_AGE_SQL} AS current_age, instagram_user_id,
               instagram_handle, instagram_bio, instagram_profile_pic_url,
               followers_count, engagement_rate, created_at
          FROM users
@@ -91,9 +93,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       username: u.username,
       email,
       pitch: u.pitch_text || '',
-      // Login writes a stand-in display name; only a name the user entered is shown.
-      name: /^(@|IG User |Instagram user$)/.test(u.display_name || '') ? '' : (u.display_name || ''),
+      // The essentials the account entered once in Settings.
+      name: isPlaceholderName(u.display_name) ? '' : u.display_name,
       city: u.location || '',
+      age: isCreator && u.current_age !== null && u.current_age !== undefined ? Number(u.current_age) : null,
+      gender: isCreator ? (u.gender || '') : '',
+      website: isCreator ? '' : (u.website || ''),
       display_name: u.display_name,
       role: u.role,
       instagram: {

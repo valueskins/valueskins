@@ -70,7 +70,7 @@ const FAKE_ACCOUNT = {
   bankName: 'ValueSkins Federal Credit',
   routing: '021000021',
   accountNumber: '40987234',
-  branch: 'Mumbai — Fort',
+  branch: 'Mumbai, Fort',
   swift: 'VSKNINBB',
 };
 
@@ -136,7 +136,7 @@ export default function FakeBankPage() {
               <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg, #C8B89A, var(--c-accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 800, color: '#0a0e1a' }}>V</div>
               <h1 style={{ fontSize: 22, fontWeight: 800, margin: 0 }}>Fake Bank</h1>
             </div>
-            <p style={{ fontSize: 12, color: C.muted, margin: '2px 0 0' }}>Payment Simulation Dashboard — all amounts are test/simulated</p>
+            <p style={{ fontSize: 12, color: C.muted, margin: '2px 0 0' }}>Payment Simulation Dashboard, all amounts are test/simulated</p>
           </div>
           <button onClick={clear} style={{
             padding: '8px 16px', background: 'rgba(248,113,113,0.1)', border: `1px solid ${withAlpha(C.error, 0x30)}`,

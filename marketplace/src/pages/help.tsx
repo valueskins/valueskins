@@ -19,7 +19,7 @@ const FAQS = [
   },
   {
     q: 'What is a ValueSkin?',
-    a: 'A ValueSkin is your professional identity on the platform — it represents your niche, style, and value tier. Creators choose a Skin during onboarding; brands use it to discover talent.',
+    a: 'A ValueSkin is your professional identity on the platform, it represents your niche, style, and value tier. Creators choose a Skin during onboarding; brands use it to discover talent.',
   },
   {
     q: 'How are creators matched to brands?',

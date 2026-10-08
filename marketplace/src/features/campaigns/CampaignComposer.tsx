@@ -507,7 +507,7 @@ export default function CampaignComposer({
           <Row span={2} two={formTwoCol}>{Text('title', 'Campaign title')}</Row>
           <Row span={2} two={formTwoCol}>
             {Area('description', 'About your product / campaign',
-              'Creators need to understand what they are promoting. Be specific — what is the product, who is it for, and what makes it worth their audience’s trust. Any exclusivity or non-compete clause must be stated here.')}
+              'Creators need to understand what they are promoting. Be specific, what is the product, who is it for, and what makes it worth their audience’s trust. Any exclusivity or non-compete clause must be stated here.')}
           </Row>
 
           {/* ── [v1 COMMENTED OUT] Profession / niche targeting — v1 is niche-agnostic (lifestyle & fashion). See Things-Commented-Out.md. */}
@@ -588,7 +588,7 @@ export default function CampaignComposer({
             <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: `1px solid ${SAND_HAIR}` }}>
               <label style={labelStyle}>Send a script draft</label>
               <div style={helpStyle}>
-                Attach a script draft (or paste it below) so creators know exactly what to produce. Optional — skip it and the creator writes the script.
+                Attach a script draft (or paste it below) so creators know exactly what to produce. Optional, skip it and the creator writes the script.
               </div>
 
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
@@ -645,8 +645,8 @@ export default function CampaignComposer({
                   {Area('scriptText',
                     draft.scriptMode === 'non_negotiable' ? 'Locked script (required)' : 'Paste your script draft',
                     draft.scriptMode === 'non_negotiable'
-                      ? 'Creators must follow this exact script — paste it in full.'
-                      : 'Paste the full script — every scene, line, and filming direction.',
+                      ? 'Creators must follow this exact script, paste it in full.'
+                      : 'Paste the full script, every scene, line, and filming direction.',
                     draft.scriptMode === 'non_negotiable'
                       ? 'Paste the exact script creators must follow…'
                       : 'Paste your script draft here…')}
@@ -713,7 +713,7 @@ export default function CampaignComposer({
 
               <div style={{ marginBottom: '14px' }}>
                 {Area('expectations', 'What you expect from the creator',
-                  'Be specific — e.g. a 60s talking-head reel, walk the product through the camera, show unboxing, tag the brand page, post within 7 days.',
+                  'Be specific, e.g. a 60s talking-head reel, walk the product through the camera, show unboxing, tag the brand page, post within 7 days.',
                   'Describe what a great result looks like for this campaign…')}
               </div>
 
@@ -808,16 +808,16 @@ export default function CampaignComposer({
             <div>
               <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#8A867E' }}>Budget</div>
               <div style={{ fontSize: '1.375rem', fontWeight: 700, color: '#F5F5F0', marginTop: '6px', letterSpacing: '-0.02em' }}>
-                {draft.budget ? `${currencySymbol}${parseInt(draft.budget, 10).toLocaleString()}` : '—'}
+                {draft.budget ? `${currencySymbol}${parseInt(draft.budget, 10).toLocaleString()}` : '-'}
               </div>
             </div>
             <div>
               <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#8A867E' }}>Deliverables</div>
-              <div style={{ fontSize: '0.875rem', color: '#C9C5BC', marginTop: '6px', lineHeight: 1.5 }}>{draft.deliverables || '—'}</div>
+              <div style={{ fontSize: '0.875rem', color: '#C9C5BC', marginTop: '6px', lineHeight: 1.5 }}>{draft.deliverables || '-'}</div>
             </div>
             <div>
               <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#8A867E' }}>Deliver by</div>
-              <div style={{ fontSize: '0.875rem', color: '#C9C5BC', marginTop: '6px' }}>{draft.deliveryDeadline || '—'}</div>
+              <div style={{ fontSize: '0.875rem', color: '#C9C5BC', marginTop: '6px' }}>{draft.deliveryDeadline || '-'}</div>
             </div>
           </div>
 
@@ -838,7 +838,7 @@ export default function CampaignComposer({
           ) : (
             <div style={{ marginTop: '20px' }}>
               <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#8A867E', marginBottom: '6px' }}>Script</div>
-              <div style={{ fontSize: '0.8125rem', color: '#8A867E' }}>No script — creator writes it</div>
+              <div style={{ fontSize: '0.8125rem', color: '#8A867E' }}>No script, creator writes it</div>
             </div>
           )}
 
