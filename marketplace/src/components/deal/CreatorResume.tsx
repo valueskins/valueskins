@@ -16,6 +16,8 @@ interface Resume {
   username: string;
   email: string | null;
   pitch?: string;
+  name?: string;
+  city?: string;
   display_name: string;
   role: string;
   instagram: {
@@ -91,6 +93,12 @@ export default function CreatorResume({ username }: { username: string }) {
           <span style={{ color: C.outline, fontWeight: 500 }}>{handleLabel(handle)}</span>
         )}
       </div>
+
+      {(resume.name || resume.city) && (
+        <div style={{ fontSize: 11, color: C.textMuted, marginBottom: 8 }}>
+          {[resume.name, resume.city].filter(Boolean).join(' · ')}
+        </div>
+      )}
 
       {/* Present only for someone who shares a deal with this user. */}
       {resume.email && (
