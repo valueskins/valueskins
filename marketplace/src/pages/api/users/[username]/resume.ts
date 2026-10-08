@@ -90,7 +90,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({
       username: u.username,
       email,
-      pitch: u.role === 'creator' ? (u.pitch_text || '') : '',
+      pitch: u.pitch_text || '',
+      // Login writes a stand-in display name; only a name the user entered is shown.
+      name: /^(@|IG User |Instagram user$)/.test(u.display_name || '') ? '' : (u.display_name || ''),
+      city: u.location || '',
       display_name: u.display_name,
       role: u.role,
       instagram: {

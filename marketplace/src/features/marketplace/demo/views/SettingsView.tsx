@@ -3,6 +3,7 @@ import { withAlpha } from '@/theme/colors';
 
 import React, { useState } from 'react';
 import PitchText from '@/components/PitchText';
+import ProfileDetails from '@/components/ProfileDetails';
 import { PROFESSION_BADGES, BRAND_CATEGORY_BADGES } from '@/features/valueskins/core/identity/AvatarOptions';
 import { STICKER_MANIFEST } from '@/features/valueskins/core/stickers/sticker-manifest';
 import { getLevel, getProgressToNext } from '@/lib/levels';
@@ -164,25 +165,7 @@ export default function SettingsView({
   const [creatorSettingsOpen, setCreatorSettingsOpen] = useState<string | null>(null);
   const [purchaseToast, setPurchaseToast] = useState<string | null>(null);
 
-  // ── My Profile (Demographics) ────────────────────────────────────
-  const [myProfileData, setMyProfileData] = useState(() => {
-    if (typeof window === 'undefined') return { fullName: '', ageRange: '', gender: '', country: '', city: '' };
-    const saved = localStorage.getItem('vs_demo_my_profile');
-    return saved ? JSON.parse(saved) : { fullName: '', ageRange: '', gender: '', country: '', city: '' };
-  });
-
-  const saveMyProfile = (updates: Partial<typeof myProfileData>) => {
-    const newData = { ...myProfileData, ...updates };
-    setMyProfileData(newData);
-    localStorage.setItem('vs_demo_my_profile', JSON.stringify(newData));
-    setPurchaseToast('Profile updated');
-    setTimeout(() => setPurchaseToast(null), 2000);
-  };
-
-  const isProfileComplete = myProfileData.fullName && myProfileData.ageRange && myProfileData.gender && myProfileData.country && myProfileData.city;
-
   // ── Brand-only state ─────────────────────────────────────────────
-  const brandValueSkins = propBrandValueSkins ?? JSON.parse(typeof window !== 'undefined' ? localStorage.getItem('vs_demo_brand_value_skins') || '[]' : '[]');
 
   // ── Creator-only state ───────────────────────────────────────────
   const [notAvailableFrom, setNotAvailableFrom] = useState('');
@@ -247,52 +230,13 @@ export default function SettingsView({
       </div>
       <div style={{ padding: '20px' }}>
 
-        {/* ── MY PROFILE (Demographics) ── */}
-        <div style={{ marginBottom: '24px' }}>
-          <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '12px' }}>My Profile</div>
-          <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: '12px', padding: '16px' }}>
-            {/* Full Name */}
-            <div style={{ marginBottom: '14px' }}>
-              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: C.textMuted, textTransform: 'uppercase', marginBottom: '6px' }}>Full Name *</label>
-              <input type="text" placeholder="Your full name" value={myProfileData.fullName} onChange={e => saveMyProfile({ fullName: e.target.value })}
-                style={{ width: '100%', background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px', color: C.text, padding: '10px 12px', fontSize: '13px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' as const }} />
-            </div>
+        {/* Details for this account's role, saved to the account. Replaced a
+            single "My Profile" form that asked a brand for a full name, an age
+            range and a gender, and kept the answers in localStorage. */}
+        <ProfileDetails role={role === 'brand' ? 'brand' : 'creator'} />
 
-            {/* Age Range */}
-            <div style={{ marginBottom: '14px' }}>
-              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: C.textMuted, textTransform: 'uppercase', marginBottom: '6px' }}>Age Range *</label>
-              <select value={myProfileData.ageRange} onChange={e => saveMyProfile({ ageRange: e.target.value })}
-                style={{ width: '100%', background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px', color: C.text, padding: '10px 12px', fontSize: '13px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' as const, cursor: 'pointer' }}>
-                <option value="">Select age range</option>
-                <option value="18-25">18-25</option>
-                <option value="25-34">25-34</option>
-                <option value="35-44">35-44</option>
-                <option value="45-54">45-54</option>
-                <option value="55+">55+</option>
-              </select>
-            </div>
-
-            {/* Gender */}
-            <div style={{ marginBottom: '14px' }}>
-              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: C.textMuted, textTransform: 'uppercase', marginBottom: '6px' }}>Gender *</label>
-              <select value={myProfileData.gender} onChange={e => saveMyProfile({ gender: e.target.value })}
-                style={{ width: '100%', background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px', color: C.text, padding: '10px 12px', fontSize: '13px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' as const, cursor: 'pointer' }}>
-                <option value="">Select gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Non-binary">Non-binary</option>
-                <option value="Prefer not to say">Prefer not to say</option>
-              </select>
-            </div>
-
-            {/* City */}
-            <div style={{ marginBottom: '0' }}>
-              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: C.textMuted, textTransform: 'uppercase', marginBottom: '6px' }}>City *</label>
-              <input type="text" placeholder="Your city" value={myProfileData.city} onChange={e => saveMyProfile({ city: e.target.value })}
-                style={{ width: '100%', background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px', color: C.text, padding: '10px 12px', fontSize: '13px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' as const }} />
-            </div>
-          </div>
-        </div>
+        {/* A brand's own words, shown to creators on its resume. */}
+        {role === 'brand' && <PitchText role="brand" />}
 
         {/* ── Brand Profile ── */}
         {role === 'brand' && (
@@ -448,7 +392,7 @@ export default function SettingsView({
           </div>
 
           {/* Text, saved to the account. Was a photo kept in the browser. */}
-          <PitchText />
+          <PitchText role="creator" />
 
         </>)}
         {/* ── END CREATOR-ONLY SETTINGS ── */}

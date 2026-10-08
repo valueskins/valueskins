@@ -8,7 +8,21 @@ import { C } from '@/theme/colors';
 
 const MAX = 600;
 
-export default function PitchText() {
+const COPY = {
+  creator: {
+    title: 'Why Brands Should Hire You',
+    help: 'A few sentences in your own words. Brands see this when they look at your resume.',
+    placeholder: 'What you make, who watches it, and what a brand gets from working with you.',
+  },
+  brand: {
+    title: 'About Your Brand',
+    help: 'A few sentences about the brand. Creators see this when they look at your resume.',
+    placeholder: 'What you sell, who it is for, and the kind of content you are looking for.',
+  },
+} as const;
+
+export default function PitchText({ role = 'creator' }: { role?: 'creator' | 'brand' }) {
+  const copy = COPY[role];
   const [saved, setSaved] = useState('');
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(true);
@@ -59,11 +73,11 @@ export default function PitchText() {
   return (
     <div style={{ marginBottom: '16px' }}>
       <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '12px' }}>
-        Why Brands Should Hire You
+        {copy.title}
       </div>
       <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: '12px', padding: '16px' }}>
         <label htmlFor="pitch-text" style={{ display: 'block', fontSize: '12px', color: C.textSecondary, marginBottom: '10px', lineHeight: 1.5 }}>
-          A few sentences in your own words. Brands see this when they look at your resume.
+          {copy.help}
         </label>
         <textarea
           id="pitch-text"
@@ -71,7 +85,7 @@ export default function PitchText() {
           onChange={(e) => { setText(e.target.value); setMessage(null); }}
           disabled={loading}
           rows={5}
-          placeholder={loading ? 'Loading…' : 'What you make, who watches it, and what a brand gets from working with you.'}
+          placeholder={loading ? 'Loading…' : copy.placeholder}
           style={{
             width: '100%', background: C.bg, border: `1px solid ${over ? C.danger : C.border}`,
             borderRadius: '8px', color: C.text, padding: '10px 12px', fontSize: '13px',

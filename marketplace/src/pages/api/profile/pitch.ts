@@ -1,4 +1,5 @@
-// GET  — the creator's "why brands should hire you" text.
+// GET  — the account's own description: a creator's "why brands should hire
+//        you", or a brand's "about your brand". One column, two labels.
 // POST — save it.
 //
 // Plain text only. It is shown to brands on the virtual resume, where React
