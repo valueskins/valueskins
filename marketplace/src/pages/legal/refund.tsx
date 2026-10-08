@@ -1,39 +1,63 @@
 'use client';
 import Link from 'next/link';
+
 const C = { bg: '#0A0A0A', text: '#F5F5F0', textSecondary: '#B8B4AC', primary: '#C8B89A' };
+
+const EMAIL = 'founder@valueskins.com';
+
+function H({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>
+      {children}
+    </h2>
+  );
+}
+
+function Mail() {
+  return <a href={`mailto:${EMAIL}`} style={{ color: C.primary }}>{EMAIL}</a>;
+}
+
 export default function RefundPolicy() {
   return (
     <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '60px 20px' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <Link href="/" style={{ color: C.primary, textDecoration: 'none', fontSize: '14px', marginBottom: '32px', display: 'inline-block' }}>← Back</Link>
-        <h1 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '12px' }}>Refund & Cancellation Policy</h1>
-        <p style={{ color: C.textSecondary, marginBottom: '40px' }}>Effective: July 11, 2026</p>
+        <Link href="/" style={{ color: C.primary, textDecoration: 'none', fontSize: '14px', marginBottom: '32px', display: 'inline-block' }}>Back</Link>
+        <h1 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '12px' }}>Refund and Cancellation Policy</h1>
+        <p style={{ color: C.textSecondary, marginBottom: '40px' }}>Effective: October 8, 2026</p>
         <div style={{ lineHeight: '1.8', color: C.textSecondary }}>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>No Refunds</h2>
-          <p>All purchases and payments on ValueSkins are final. <strong style={{ color: C.text }}>We do not offer refunds of any kind.</strong></p>
-          <p>This applies to:</p>
-          <p>• <strong style={{ color: C.text }}>ValueSkin purchases.</strong> All ValueSkin purchases are non-refundable. Once a ValueSkin is purchased, the transaction cannot be reversed.</p>
-          <p>• <strong style={{ color: C.text }}>Escrow payments.</strong> All funds deposited into escrow for a Deal are non-refundable once the Deal is funded. Escrow fund releases are governed solely by the Deal terms agreed between the Creator and Brand.</p>
-          <p>• <strong style={{ color: C.text }}>Platform fees.</strong> The 2% platform fee on completed transactions is non-refundable.</p>
+          <p>This policy forms part of our <Link href="/legal/terms" style={{ color: C.primary }}>Terms of Service</Link>. Words defined there have the same meaning here.</p>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>Deal Funded = No Refund</h2>
-          <p>When a Brand funds a Deal, the payment is processed immediately and held in escrow by Razorpay (INR). Once funded, the Brand waives the right to a refund. The funds will be released according to the Deal terms:</p>
-          <p>• If the Creator delivers and the Brand approves, funds release to the Creator.</p>
-          <p>• If the Deal is cancelled by mutual agreement, funds release per the cancellation terms agreed between the parties.</p>
-          <p>• If there is a dispute, funds remain frozen until resolution through the Platform's dispute process or arbitration.</p>
-          <p>Under no circumstances does ValueSkins independently issue refunds.</p>
+          <H>1. What You Pay ValueSkins</H>
+          <p>The only payment ValueSkins receives is its fee: 750 rupees plus Goods and Services Tax at the applicable rate (currently 18%, making 885 rupees) for each Deal. The Brand pays it through our payment processor after confirming a Creator.</p>
+          <p>Signing up, browsing, and applying are free. There is nothing else to refund.</p>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>Chargebacks</h2>
-          <p>If a Brand initiates a chargeback with their bank or card issuer instead of using the Platform's dispute resolution process:</p>
-          <p>• The relevant Creator account will be notified and may be suspended pending investigation.</p>
-          <p>• We will provide all Deal records, communications, and delivery evidence to the payment processor to contest the chargeback.</p>
-          <p>• Brands who abuse chargebacks may have their accounts permanently suspended.</p>
+          <H>2. Cancelling a Deal</H>
+          <p><strong>Before the fee is paid:</strong> A Brand may cancel a Deal at no cost.</p>
+          <p><strong>After the fee is paid:</strong> The Deal cannot be cancelled through the Platform.</p>
+          <p><strong>Creators:</strong> A Creator cannot cancel a Deal through the Platform after being confirmed. A Creator who cannot carry out a Deal must tell the Brand and us by email without delay.</p>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>Contact</h2>
-          <p>If you have questions about this policy:</p>
-          <p><strong>Email:</strong> <a href="mailto:founder@valueskins.com" style={{color: C.primary}}>founder@valueskins.com</a></p>
-          
+          <H>3. Refund of the Fee</H>
+          <p>The fee pays for the use of the Platform to post a Deal, receive applications, and confirm a Creator. That service has been provided by the time the fee is paid, so the fee is not refundable once paid, except in the cases below.</p>
+          <p>We will refund the fee in full where:</p>
+          <ul style={{ paddingLeft: '20px', marginBottom: '12px' }}>
+            <li>the fee was charged more than once for the same Deal;</li>
+            <li>the fee was charged because of a technical error on our side; or</li>
+            <li>a refund is required by applicable law.</li>
+          </ul>
+          <p><strong>How to ask:</strong> Email <Mail /> with the Deal and the payment reference. We will acknowledge your request within 24 hours and decide it within 15 days.</p>
+          <p><strong>How a refund is paid:</strong> An approved refund is sent to the original payment method through our payment processor. It usually reaches you within 5 to 7 working days, depending on your bank.</p>
+
+          <H>4. Payments Made to a Creator</H>
+          <p>A Brand pays the Creator directly by UPI. That money does not pass through ValueSkins. We do not hold it, and we cannot refund, reverse, or recover it.</p>
+          <p>If a Brand has paid a Creator and the Deal does not go ahead, or the Brand believes the content was not delivered as agreed, the return of that money is a matter between the Brand and the Creator. Either may email <Mail /> and we will review the Deal record as described in the Terms of Service, but we do not guarantee any outcome and we do not compensate either party.</p>
+          <p>A UPI payment sent to an incorrect UPI ID cannot be recalled by ValueSkins. The Brand should contact its own bank or UPI application without delay.</p>
+
+          <H>5. Chargebacks</H>
+          <p>If you believe the fee was charged in error, please email us first so that we can put it right. If a chargeback is raised with a bank or card issuer for a fee that was correctly charged, we will provide the Deal record to our payment processor to contest it, and we may suspend the account while it is reviewed.</p>
+
+          <H>6. Contact</H>
+          <p>Questions about this policy: <Mail /></p>
 
         </div>
       </div>

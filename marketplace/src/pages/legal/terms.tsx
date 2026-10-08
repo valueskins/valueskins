@@ -1,132 +1,160 @@
 'use client';
 import Link from 'next/link';
+
 const C = { bg: '#0A0A0A', text: '#F5F5F0', textSecondary: '#B8B4AC', primary: '#C8B89A' };
+
+const EMAIL = 'founder@valueskins.com';
+
+function H({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>
+      {children}
+    </h2>
+  );
+}
+
+function Mail() {
+  return <a href={`mailto:${EMAIL}`} style={{ color: C.primary }}>{EMAIL}</a>;
+}
+
 export default function Terms() {
   return (
     <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '60px 20px' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         <Link href="/" style={{ color: C.primary, textDecoration: 'none', fontSize: '14px', marginBottom: '32px', display: 'inline-block' }}>Back</Link>
         <h1 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '12px' }}>Terms of Service</h1>
-        <p style={{ color: C.textSecondary, marginBottom: '40px' }}>Last updated: August 29, 2026</p>
+        <p style={{ color: C.textSecondary, marginBottom: '40px' }}>Last updated: October 8, 2026</p>
         <div style={{ lineHeight: '1.8', color: C.textSecondary }}>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>1. Agreement to Our Legal Terms</h2>
+          <H>1. Agreement to Our Legal Terms</H>
           <p>We are Valueskins Pvt. Ltd. (Company, we, us, our), a private limited company incorporated in India.</p>
-          <p>We operate the website https://www.valueskins.com (the Site), as well as any other related products and services that refer or link to these legal terms (the Legal Terms) (collectively, the Services).</p>
-          <p>A marketplace for brands and creators to find and collaborate amongst each other. Everything both parties do on our app is documented (example: the chats) so that future disputes do not arise.</p>
-          <p>You can contact us by email at <a href="mailto:founder@valueskins.com" style={{color: C.primary}}>founder@valueskins.com</a>, or by mail to India.</p>
-          <p>These Legal Terms constitute a legally binding agreement made between you, whether personally or on behalf of an entity (you), and Valueskins Pvt. Ltd., concerning your access to and use of the Services. You agree that by accessing the Services, you have read, understood, and agreed to be bound by all of these Legal Terms. IF YOU DO NOT AGREE WITH ALL OF THESE LEGAL TERMS, THEN YOU ARE EXPRESSLY PROHIBITED FROM USING THE SERVICES AND YOU MUST DISCONTINUE USE IMMEDIATELY.</p>
-          <p>Supplemental terms and conditions or documents that may be posted on the Services from time to time are hereby expressly incorporated herein by reference. We reserve the right, in our sole discretion, to make changes or modifications to these Legal Terms from time to time. We will alert you about any changes by updating the Last updated date of these Legal Terms, and you waive any right to receive specific notice of each such change. It is your responsibility to periodically review these Legal Terms to stay informed of updates. You will be subject to, and will be deemed to have been made aware of and to have accepted, the changes in any revised Legal Terms by your continued use of the Services after the date such revised Legal Terms are posted.</p>
+          <p>We operate the website https://www.valueskins.com (the Site), as well as any other related products and services that refer or link to these legal terms (the Legal Terms) (collectively, the Services or the Platform).</p>
+          <p>You can contact us by email at <Mail />.</p>
+          <p>These Legal Terms constitute a legally binding agreement made between you, whether personally or on behalf of an entity (you), and Valueskins Pvt. Ltd., concerning your access to and use of the Services. By accessing the Services, you confirm that you have read, understood, and agreed to be bound by these Legal Terms. If you do not agree with these Legal Terms, you must not use the Services.</p>
+          <p>This document is an electronic record under the Information Technology Act, 2000 and the rules made under it. It is published in accordance with Rule 3(1) of the Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021 and does not require a physical or digital signature.</p>
           <p>The Services are intended for users who are at least 18 years old. Persons under the age of 18 are not permitted to use or register for the Services.</p>
+          <p>In these Legal Terms, a Brand is a user who posts a Deal, a Creator is a user who applies to a Deal, and a Deal is a piece of paid work posted by a Brand on the Platform.</p>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>2. Our Services</h2>
-          <p>The information provided when using the Services is not intended for distribution to or use by any person or entity in any jurisdiction or country where such distribution or use would be contrary to law or regulation or which would subject us to any registration requirement within such jurisdiction or country. Accordingly, those persons who choose to access the Services from other locations do so on their own initiative and are solely responsible for compliance with local laws, if and to the extent local laws are applicable.</p>
-          <p>ValueSkins is a marketplace platform that facilitates connections between Creators and Brands. Our services include profile creation and discovery tools, deal creation and management, escrow-based payment processing, messaging and collaboration tools, deliverable submission and review workflows, and dispute resolution mechanisms.</p>
-          <p><strong>Platform Role:</strong> ValueSkins is a platform facilitator and not a party to any agreement between Creators and Brands. We do not employ, endorse, or supervise Creators. We do not control the quality, safety, or legality of services offered. Each Deal created on ValueSkins constitutes a binding agreement between the Creator and Brand under the Indian Contract Act, 1872.</p>
+          <H>2. Our Services</H>
+          <p>ValueSkins is an online platform where Brands post Deals and Creators apply for them. A Brand posts a Deal with a fixed amount. Creators apply. The Brand confirms one Creator. The Creator delivers the content, and the Brand approves it or asks for changes.</p>
+          <p><strong>Platform Role:</strong> ValueSkins is an intermediary and a marketplace platform. We are not a party to any Deal. We are not an agent, employer, agency, or representative of any Brand or Creator. We do not employ, endorse, or supervise Creators, and we do not control the quality, safety, or legality of any content or service offered by a user.</p>
+          <p><strong>What the Platform does not offer:</strong> The Platform does not offer escrow, does not hold money on behalf of any user, does not offer negotiation of the Deal amount, and does not offer a chat between users. Users communicate by email.</p>
+          <p>The Services are offered to users in India. Those who access the Services from other locations do so on their own initiative and are responsible for compliance with local laws.</p>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>3. Intellectual Property Rights</h2>
-          <p><strong>Our intellectual property</strong></p>
-          <p>We are the owner or the licensee of all intellectual property rights in our Services, including all source code, databases, functionality, software, website designs, audio, video, text, photographs, and graphics in the Services (collectively, the Content), as well as the trademarks, service marks, and logos contained therein (the Marks).</p>
-          <p>Our Content and Marks are protected by copyright and trademark laws (and various other intellectual property rights and unfair competition laws) and treaties around the world.</p>
-          <p>The Content and Marks are provided in or through the Services AS IS for your personal, non-commercial use or internal business purpose only.</p>
-          <p><strong>Your use of our Services</strong></p>
-          <p>Subject to your compliance with these Legal Terms, including the PROHIBITED ACTIVITIES section below, we grant you a non-exclusive, non-transferable, revocable license to:</p>
-          <ul style={{ paddingLeft: '20px' }}>
-            <li>access the Services; and</li>
-            <li>download or print a copy of any portion of the Content to which you have properly gained access,</li>
+          <H>3. Your Account and Profile</H>
+          <p><strong>Sign in:</strong> You sign in to the Services using your Instagram account. You are responsible for all activity that takes place through your account and for keeping access to your Instagram account secure.</p>
+          <p><strong>Email address:</strong> You must provide a working email address before you can use the marketplace. We use it to send confirmations, notices about your Deals, and service messages.</p>
+          <p><strong>Profile details:</strong> You must enter true and accurate profile details. For a Creator these are full name, age, gender, city, and Instagram follower count. For a Brand these are brand name, website (optional), city, and Instagram follower count. Profile details are saved once and cannot be changed afterwards, except the follower count, which you must keep up to date.</p>
+          <p><strong>What other users see:</strong> Your Instagram username, your profile details, your description, and a summary of your completed Deals are shown to other signed-in users. Your email address is shown to users with whom you share a Deal, meaning the Brand that posted a Deal you applied to or were confirmed on, or a Creator who applied to or was confirmed on your Deal. If you are a Creator, your UPI ID and the name on that account are shown to a Brand that has confirmed you on a Deal, so that it can pay you. By using the Services you consent to this sharing.</p>
+          <p><strong>False information:</strong> If you provide information that is untrue, inaccurate, or misleading, we may suspend or terminate your account.</p>
+
+          <H>4. User Representations</H>
+          <p>By using the Services, you represent and warrant that: (1) all information you submit is true, accurate, current, and complete; (2) you are at least 18 years old and have the legal capacity to enter into a binding contract under the Indian Contract Act, 1872; (3) if you act on behalf of a business, you are authorised to bind that business; (4) you will not access the Services through automated or non-human means; (5) you will not use the Services for any illegal or unauthorised purpose; and (6) your use of the Services will not violate any applicable law or regulation.</p>
+
+          <H>5. How a Deal Works</H>
+          <p><strong>Posting:</strong> A Brand posts a Deal stating what it needs, the Deal amount, the last date to apply, and the date the content is due. The Deal amount is fixed by the Brand and is final. It cannot be negotiated on the Platform.</p>
+          <p><strong>Applying:</strong> Any Creator may apply to an open Deal. Applying is an offer to carry out the Deal for the amount and on the terms stated in it.</p>
+          <p><strong>Confirmation:</strong> The Brand confirms one Creator. On confirmation, a legally binding agreement is formed between that Brand and that Creator on the terms stated in the Deal, under the Indian Contract Act, 1872. ValueSkins is not a party to that agreement. Each Deal has exactly one Brand and one Creator.</p>
+          <p><strong>Delivery:</strong> The Creator must share a link to the content on the Deal page by the due date.</p>
+          <p><strong>Review:</strong> The Brand must review the content and either approve it or state in writing on the Deal page what should change. If changes are requested, the Creator shares a new link.</p>
+          <p><strong>Record:</strong> The Platform keeps a record of each Deal, including its terms, the dates of each step, and the payments recorded against it. Both parties can download this record.</p>
+
+          <H>6. Our Fee</H>
+          <p>ValueSkins charges a flat fee of 750 rupees plus Goods and Services Tax at the applicable rate (currently 18%, making 885 rupees) for each Deal. The Brand pays the fee after confirming a Creator. The fee is deducted from the Deal amount, so the amount payable to the Creator is the Deal amount less the fee.</p>
+          <p>There is no sign-up fee, no subscription, and no percentage commission. Browsing and applying are free.</p>
+          <p>The fee is paid through our payment processor, currently Razorpay. Card, bank, and wallet details used to pay the fee are handled by the payment processor and are not stored by us. By paying the fee you also agree to the payment processor's terms.</p>
+          <p>We may change the fee for future Deals. The fee that applies to a Deal is the fee in force when that Deal was posted.</p>
+
+          <H>7. Payments Between Brand and Creator</H>
+          <p><strong>Direct payment:</strong> The Brand pays the Creator directly by UPI, to the UPI ID the Creator has saved on the Platform. The Brand pays 30% of the amount payable to the Creator before work starts, and the remaining 70% after approving the content.</p>
+          <p><strong>We do not handle this money:</strong> ValueSkins does not receive, hold, transfer, or control any payment made by a Brand to a Creator. ValueSkins is not a bank, a payment aggregator, a payment system operator, or an escrow agent, and does not provide any of those services. The obligation to pay the Creator rests solely with the Brand.</p>
+          <p><strong>Recording a payment:</strong> After paying, the Brand records the UPI reference on the Deal page. The Creator confirms on the Deal page that the payment arrived. A Deal moves forward only when the Creator confirms. You must not record a payment that was not made, and you must not deny a payment that was received.</p>
+          <p><strong>UPI IDs Are Not Verified:</strong> ValueSkins does not currently use any third-party service to verify UPI IDs. We do not check that a UPI ID entered on the Platform exists, is active, or belongs to the person who entered it. Each Creator is solely responsible for entering their UPI ID and the name on the account correctly, and for keeping them up to date. Each Brand is solely responsible for checking the payee name shown by their own UPI application before authorising a payment. A payment sent to an incorrect UPI ID cannot be recalled by ValueSkins, and ValueSkins is not liable for any loss arising from an incorrect, mistyped, or out-of-date UPI ID.</p>
+          <p><strong>Storage:</strong> We store the Creator's UPI ID and the name on the account in order to show them to a Brand that has confirmed that Creator. We do not accept or store bank account numbers.</p>
+
+          <H>8. Cancellation and Refunds</H>
+          <p><strong>Before the fee is paid:</strong> A Brand may cancel a Deal at no cost at any time before it pays the fee.</p>
+          <p><strong>After the fee is paid:</strong> Once the fee is paid, the Deal cannot be cancelled through the Platform, and the fee is not refundable, except as stated below.</p>
+          <p><strong>Creators:</strong> A Creator cannot cancel a Deal through the Platform after being confirmed. A Creator who cannot carry out a Deal must tell the Brand and us by email without delay.</p>
+          <p><strong>When we refund the fee:</strong> We will refund the fee where it was charged more than once for the same Deal, where it was charged because of a technical error on our side, or where a refund is required by applicable law. To ask for a refund, email <Mail /> with the Deal and the payment reference.</p>
+          <p><strong>Money paid to a Creator:</strong> ValueSkins cannot refund, reverse, or recover any amount that a Brand has paid directly to a Creator, because that money never passes through us. Any return of such an amount is a matter between the Brand and the Creator.</p>
+          <p>More detail is in our <Link href="/legal/refund" style={{ color: C.primary }}>Refund and Cancellation Policy</Link>, which forms part of these Legal Terms.</p>
+
+          <H>9. Content and Usage Rights</H>
+          <p><strong>As stated in the Deal:</strong> The rights a Brand receives in the content, including how, where, and for how long it may use it, are whatever the Deal states. ValueSkins sets no default. Brands should state the usage rights they need in the Deal before posting it, and Creators should read them before applying.</p>
+          <p><strong>Ownership:</strong> Nothing in these Legal Terms transfers ownership of any content. Unless the Brand and the Creator agree otherwise in writing, the Creator remains the owner of the content they create. A Brand must not use content beyond what the Deal allows.</p>
+          <p><strong>Hosting:</strong> Content is shared by link and is hosted outside the Platform. ValueSkins does not host, review, or approve the content, and is not responsible for it.</p>
+          <p><strong>Creator warranties:</strong> A Creator warrants that the content they deliver is their own original work or that they hold all rights needed to deliver it, and that it does not infringe the rights of any other person.</p>
+
+          <H>10. Advertising Law and Disclosure</H>
+          <p>Creators are responsible for disclosing paid partnerships clearly, as required by the Consumer Protection Act, 2019, the Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022, the guidelines of the Advertising Standards Council of India, and the rules of the platform on which the content is published. Brands are responsible for the truth and accuracy of any claim they ask a Creator to make. ValueSkins does not review content for compliance.</p>
+
+          <H>11. Taxes</H>
+          <p>Each user is solely responsible for all taxes arising from their use of the Services and from their Deals, including Goods and Services Tax, income tax, and any tax required to be deducted at source. A Brand is responsible for deducting and depositing any tax it is required by law to deduct from a payment to a Creator.</p>
+          <p>We issue a tax invoice for our fee only. We do not issue invoices on behalf of Creators. Where the law requires us to collect tax details from you, or to deduct or collect tax in respect of a Deal, you agree to provide the details we ask for, such as your Permanent Account Number, and to our doing so.</p>
+          <p>ValueSkins does not provide tax advice.</p>
+
+          <H>12. Prohibited Activities</H>
+          <p>You must not use the Services except for the purpose for which we make them available. In particular, you must not host, display, upload, publish, transmit, or share any information that:</p>
+          <ul style={{ paddingLeft: '20px', marginBottom: '12px' }}>
+            <li>belongs to another person and to which you have no right;</li>
+            <li>is obscene, pornographic, paedophilic, invasive of another's privacy including bodily privacy, insulting or harassing on the basis of gender, racially or ethnically objectionable, or relating to or encouraging money laundering or gambling;</li>
+            <li>is harmful to a child;</li>
+            <li>infringes any patent, trademark, copyright, or other proprietary right;</li>
+            <li>deceives or misleads the recipient about the origin of the message, or knowingly communicates misinformation or information that is patently false;</li>
+            <li>impersonates another person;</li>
+            <li>threatens the unity, integrity, defence, security, or sovereignty of India, friendly relations with foreign States, or public order, or incites the commission of an offence;</li>
+            <li>contains a software virus or any other code designed to interrupt, destroy, or limit the functionality of any computer resource; or</li>
+            <li>violates any law for the time being in force.</li>
           </ul>
-          <p>solely for your personal, non-commercial use or internal business purpose.</p>
-          <p>Except as set out in this section or elsewhere in our Legal Terms, no part of the Services and no Content or Marks may be copied, reproduced, aggregated, republished, uploaded, posted, publicly displayed, encoded, translated, transmitted, distributed, sold, licensed, or otherwise exploited for any commercial purpose whatsoever, without our express prior written permission.</p>
-          <p>If you wish to make any use of the Services, Content, or Marks other than as set out in this section or elsewhere in our Legal Terms, please address your request to: <a href="mailto:founder@valueskins.com" style={{color: C.primary}}>founder@valueskins.com</a>. If we ever grant you the permission to post, reproduce, or publicly display any part of our Services or Content, you must identify us as the owners or licensors of the Services, Content, or Marks and ensure that any copyright or proprietary notice appears or is visible on posting, reproducing, or displaying our Content.</p>
-          <p>We reserve all rights not expressly granted to you in and to the Services, Content, and Marks.</p>
-          <p>Any breach of these Intellectual Property Rights will constitute a material breach of our Legal Terms and your right to use our Services will terminate immediately.</p>
-          <p><strong>Your submissions and contributions</strong></p>
-          <p>Please review this section and the PROHIBITED ACTIVITIES section carefully prior to using our Services to understand the (a) rights you give us and (b) obligations you have when you post or upload any content through the Services.</p>
-          <p><strong>Submissions:</strong> By directly sending us any question, comment, suggestion, idea, feedback, or other information about the Services (Submissions), you agree to assign to us all intellectual property rights in such Submission. You agree that we shall own this Submission and be entitled to its unrestricted use and dissemination for any lawful purpose, commercial or otherwise, without acknowledgment or compensation to you.</p>
-          <p><strong>Contributions:</strong> The Services may invite you to chat, contribute to, or participate in blogs, message boards, online forums, and other functionality during which you may create, submit, post, display, transmit, publish, distribute, or broadcast content and materials to us or through the Services, including but not limited to text, writings, video, audio, photographs, music, graphics, comments, reviews, rating suggestions, personal information, or other material (Contributions). Any Submission that is publicly posted shall also be treated as a Contribution.</p>
-          <p>You understand that Contributions may be viewable by other users of the Services.</p>
-          <p><strong>When you post Contributions, you grant us a license (including use of your name, trademarks, and logos):</strong> By posting any Contributions, you grant us an unrestricted, unlimited, irrevocable, perpetual, non-exclusive, transferable, royalty-free, fully-paid, worldwide right, and license to: use, copy, reproduce, distribute, sell, resell, publish, broadcast, retitle, store, publicly perform, publicly display, reformat, translate, excerpt (in whole or in part), and exploit your Contributions (including, without limitation, your image, name, and voice) for any purpose, commercial, advertising, or otherwise, to prepare derivative works of, or incorporate into other works, your Contributions, and to sublicense the licenses granted in this section. Our use and distribution may occur in any media formats and through any media channels.</p>
-          <p>This license includes our use of your name, company name, and franchise name, as applicable, and any of the trademarks, service marks, trade names, logos, and personal and commercial images you provide.</p>
-          <p><strong>You are responsible for what you post or upload:</strong> By sending us Submissions and/or posting Contributions through any part of the Services or making Contributions accessible through the Services by linking your account through the Services to any of your social networking accounts, you:</p>
-          <ul style={{ paddingLeft: '20px' }}>
-            <li>confirm that you have read and agree with our PROHIBITED ACTIVITIES and will not post, send, publish, upload, or transmit through the Services any Submission nor post any Contribution that is illegal, harassing, hateful, harmful, defamatory, obscene, bullying, abusive, discriminatory, threatening to any person or group, sexually explicit, false, inaccurate, deceitful, or misleading;</li>
-            <li>to the extent permissible by applicable law, waive any and all moral rights to any such Submission and/or Contribution;</li>
-            <li>warrant that any such Submission and/or Contributions are original to you or that you have the necessary rights and licenses to submit such Submissions and/or Contributions and that you have full authority to grant us the above-mentioned rights in relation to your Submissions and/or Contributions; and</li>
-            <li>warrant and represent that your Submissions and/or Contributions do not constitute confidential information.</li>
-          </ul>
-          <p>You are solely responsible for your Submissions and/or Contributions and you expressly agree to reimburse us for any and all losses that we may suffer because of your breach of (a) this section, (b) any third party's intellectual property rights, or (c) applicable law.</p>
-          <p><strong>We may remove or edit your Content:</strong> Although we have no obligation to monitor any Contributions, we shall have the right to remove or edit any Contributions at any time without notice if in our reasonable opinion we consider such Contributions harmful or in breach of these Legal Terms. If we remove or edit any such Contributions, we may also suspend or disable your account and report you to the authorities.</p>
-          <p><strong>Copyright infringement</strong></p>
-          <p>We respect the intellectual property rights of others. If you believe that any material available on or through the Services infringes upon any copyright you own or control, please immediately refer to the COPYRIGHT INFRINGEMENTS section below.</p>
+          <p>You must also not: create an account with false details or more than one account; post a Deal you do not intend to pay for; apply to a Deal you do not intend to carry out; record a payment that was not made or deny one that was received; inflate or misstate your follower count; use another user's email address or UPI ID for any purpose other than the Deal you share with them; attempt to gain unauthorised access to the Services; or scrape, copy, or collect data from the Services by automated means.</p>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>4. User Representations</h2>
-          <p>By using the Services, you represent and warrant that: (1) all registration information you submit will be true, accurate, current, and complete; (2) you will maintain the accuracy of such information and promptly update such registration information as necessary; (3) you have the legal capacity and you agree to comply with these Legal Terms; (4) you are not a minor in the jurisdiction in which you reside; (5) you will not access the Services through automated or non-human means, whether through a bot, script or otherwise; (6) you will not use the Services for any illegal or unauthorized purpose; and (7) your use of the Services will not violate any applicable law or regulation.</p>
-          <p>If you provide any information that is untrue, inaccurate, not current, or incomplete, we have the right to suspend or terminate your account and refuse any and all current or future use of the Services (or any portion thereof).</p>
+          <H>13. Intellectual Property Rights</H>
+          <p><strong>Our intellectual property:</strong> We are the owner or the licensee of all intellectual property rights in the Services, including the source code, databases, software, website designs, text, and graphics (the Content), and the trademarks, service marks, and logos contained in them (the Marks). The Content and Marks are protected by copyright and trademark laws.</p>
+          <p>Subject to your compliance with these Legal Terms, we grant you a non-exclusive, non-transferable, revocable licence to access and use the Services for the purpose of posting, applying to, and carrying out Deals. No part of the Services, Content, or Marks may be copied, reproduced, republished, sold, licensed, or otherwise exploited for any commercial purpose without our prior written permission.</p>
+          <p><strong>What you post:</strong> You keep ownership of what you post on the Platform, such as a Deal description or your profile text. You grant us a non-exclusive, royalty-free licence to store, display, and reproduce it for the purpose of operating the Services, for as long as we are required or permitted to keep it.</p>
+          <p><strong>Feedback:</strong> If you send us a suggestion about the Services, we may use it without restriction or payment.</p>
+          <p><strong>Copyright complaints:</strong> If you believe that anything on the Platform infringes a copyright you own or control, email <Mail /> with a description of the work, where it appears on the Platform, and your contact details. We will act on a valid complaint in accordance with the Copyright Act, 1957 and the rules made under it.</p>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>5. User Registration</h2>
-          <p>You may be required to register to use the Services. You agree to keep your password confidential and will be responsible for all use of your account and password. We reserve the right to remove, reclaim, or change a username you select if we determine, in our sole discretion, that such username is inappropriate, obscene, or otherwise objectionable.</p>
+          <H>14. Disputes Between Users</H>
+          <p>A dispute about a Deal, including late delivery, non-delivery, the quality of content, non-payment, or a payment sent to the wrong UPI ID, is a dispute between the Brand and the Creator. ValueSkins is not a party to it and is not an arbitrator.</p>
+          <p>Either party may email <Mail /> with the Deal and a description of the dispute. A person will review it and may share the Deal record with both parties and suggest a resolution. We do not guarantee any outcome, and we do not compensate either party. We may suspend an account while a dispute is reviewed, and we may mark a Deal as cancelled or completed where the record supports it.</p>
+          <p>Nothing in this section prevents either party from pursuing any remedy available to them in law against the other.</p>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>6. Purchases and Payment</h2>
-          <p>We accept the following forms of payment: through our payment processor (currently Razorpay for INR transactions). By using the Platform, you agree to be bound by our payment processor's terms of service and privacy policies.</p>
-          <p><strong>Data Security:</strong> ValueSkins does not store, process, or have access to your payment card details, bank account information, or UPI IDs. All payment processing, security, and storage is handled exclusively by our payment processor. You are responsible for maintaining the security of your payment information.</p>
-          <p>You agree to provide current, complete, and accurate purchase and account information for all purchases made via the Services. You further agree to promptly update account and payment information, including email address, payment method, and payment card expiration date, so that we can complete your transactions and contact you as needed. Sales tax will be added to the price of purchases as deemed required by us. We may change prices at any time. All payments shall be in Indian rupees.</p>
-          <p>You agree to pay all charges at the prices then in effect for your purchases and any applicable shipping fees, and you authorize us to charge your chosen payment provider for any such amounts upon placing your order. We reserve the right to correct any errors or mistakes in pricing, even if we have already requested or received payment.</p>
-          <p>We reserve the right to refuse any order placed through the Services. We may, in our sole discretion, limit or cancel quantities purchased per person, per household, or per order. These restrictions may include orders placed by or under the same customer account, the same payment method, and/or orders that use the same billing or shipping address. We reserve the right to limit or prohibit orders that, in our sole judgment, appear to be placed by dealers, resellers, or distributors.</p>
+          <H>15. Suspension and Termination</H>
+          <p>We may suspend or terminate your account, with or without notice, if you breach these Legal Terms, if we are required to do so by law, or if your use of the Services exposes us or other users to risk. Where it is reasonable to do so, we will tell you why.</p>
+          <p>You may delete your account at any time from your account settings. Deleting your account does not release you from any Deal you have been confirmed on, or from any amount you owe under it.</p>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>7. Payment Terms & Escrow</h2>
-          <p><strong>Escrow Arrangement:</strong> When a Brand funds a Deal, the payment is held in escrow by our payment processor. ValueSkins never holds, controls, or has access to the funds. Funds are released from escrow only upon fulfilment of the conditions agreed upon in the Deal.</p>
-          <p><strong>Platform Model:</strong> ValueSkins operates on a free entry plus commission model. There are no recurring subscription fees. Creators and Brands enjoy free access to the platform.</p>
-          <p><strong>Platform Commission:</strong> ValueSkins charges a platform commission of 12% (plus applicable GST) on every approved transaction. Approved means the Brand has reviewed and approved the Creator's deliverables and escrow has been released. The commission is deducted from the released amount before payment reaches the Creator. No commission is charged on deals that are cancelled or refunded before approval. This commission rate is shown to both parties before deal acceptance and is fixed at the time of deal creation. The rate does not change retroactively even if our rates change for future deals.</p>
-          <p><strong>Market Entry Fee:</strong> Access to the marketplace requires a one-time upfront payment of 950 rupees (plus applicable GST) for a ValueSkin, the profession identity required to browse, list, and transact. This is a one-time entry payment, not a recurring subscription. It is non-refundable once the ValueSkin has been issued to your account, except where required by applicable law.</p>
-          <p><strong>Taxes:</strong> Users are solely responsible for all taxes, including but not limited to GST, TDS, and income tax, arising from their use of the Platform and their transactions. ValueSkins does not provide tax advice. Creators earning above applicable thresholds must obtain GST registration and issue invoices to Brands as required by law.</p>
-          <p><strong>Tax Information Collection:</strong> To facilitate tax-compliant payouts and invoice generation, Creators may be asked to provide their Permanent Account Number (PAN) and Brands may be asked to provide their Goods and Services Tax Identification Number (GSTIN). This information is used solely for tax compliance and invoice generation purposes.</p>
-          <p><strong>Payouts:</strong> Upon successful completion of a Deal, funds are released to the Creator's registered payout account (bank account or UPI ID) by our payment processor. Payout timelines are subject to the payment processor's processing schedules and applicable banking regulations.</p>
+          <H>16. Disclaimer</H>
+          <p>The Services are provided on an as-is and as-available basis. To the fullest extent permitted by law, we make no warranty that the Services will be uninterrupted or error-free, that any user is who they say they are, that any information a user provides is accurate, that a Creator will deliver, or that a Brand will pay. You use the Services, and deal with other users, at your own risk.</p>
 
-          <p><strong>UPI IDs Are Not Verified:</strong> ValueSkins does not currently use any third-party service to verify UPI IDs. We do not check that a UPI ID entered on the Platform exists, is active, or belongs to the person who entered it. Each Creator is solely responsible for entering their UPI ID and the name on the account correctly, and for keeping them up to date. Each Brand is solely responsible for checking the payee name shown by their own UPI application before authorising a payment. A payment sent to an incorrect UPI ID cannot be recalled by ValueSkins, and ValueSkins is not liable for any loss arising from an incorrect, mistyped or out-of-date UPI ID.</p>
+          <H>17. Limitation of Liability</H>
+          <p>To the fullest extent permitted by law, ValueSkins is not liable for any indirect, incidental, or consequential loss, any loss of profit, revenue, or data, or any loss arising from the acts or omissions of another user, including non-delivery, non-payment, or a payment sent to an incorrect UPI ID.</p>
+          <p>To the fullest extent permitted by law, our total liability to you for any claim arising out of or relating to the Services is limited to the total fees you paid to us in the twelve months before the claim arose.</p>
+          <p>Nothing in these Legal Terms limits or excludes any liability that cannot be limited or excluded under applicable law, including liability for fraud.</p>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>8. No Refund Policy</h2>
-          <p>All payments made on the Platform, including ValueSkin purchases and escrow releases, are final and non-refundable. Once a ValueSkin is purchased or an escrow transaction is completed and funds are released, no refund, reversal, or chargeback will be processed under any circumstances. Users acknowledge that they have read, understood, and agreed to this no-refund policy before making any payment. ValueSkins shall not be held liable for any loss, dissatisfaction, or damage arising from a User's decision to make a payment on the Platform.</p>
+          <H>18. Indemnity</H>
+          <p>You agree to indemnify us against any claim, loss, or expense, including reasonable legal fees, arising out of your breach of these Legal Terms, your breach of any law, your Deals, or any content or information you provide.</p>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>9. Deals & Contracts</h2>
-          <p><strong>Deal Creation:</strong> A Deal is created when a Brand submits a brief and the Creator accepts it. The Deal terms include deliverables, timeline, payment amount, revision count, and other agreed conditions.</p>
-          <p><strong>Binding Agreement:</strong> Each accepted Deal constitutes a legally binding agreement between the Creator and Brand under the Indian Contract Act, 1872. ValueSkins is not a party to this agreement.</p>
-          <p><strong>Deal Terms Lock-In:</strong> Once both parties accept a Deal, the recorded terms are final and immutable. Neither party may unilaterally modify deal terms, deliverables, payment amounts, or any other agreed conditions. All changes to deal terms must be agreed to in writing by both parties through the platform.</p>
-          <p><strong>Deal Lifecycle:</strong> Deals progress through defined stages: Draft, Negotiation, Agreement, Funded, In Progress, Review, Completed/Cancelled/Disputed. Each stage has specific rules governing timelines, approvals, and actions.</p>
-          <p><strong>Auto-Resolution:</strong> If a Brand fails to review Deliverables within 7 days, the Deliverables are deemed approved and funds are released. If a Creator fails to submit Deliverables within the agreed timeline, the Brand may cancel the Deal and receive a full refund.</p>
-          <p><strong>Cancellation & Kill Fees:</strong> Deals may be cancelled by mutual agreement (full refund) or through the kill fee process (partial payment for partial delivery). If no resolution is reached within 14 days, the escrow is split on a predefined basis (70% to Brand, 30% to Creator) unless either party objects within 48 hours of notice.</p>
-          <p><strong>Intermediary Limitation of Liability:</strong> ValueSkins is not responsible for Creator non-performance, Brand non-payment, quality of deliverables, or any breach of deal terms by either party. Users assume all risk of counterparty breach. ValueSkins is not an arbitrator and provides the recorded deal history, messages, deliverables, approvals, and timestamps to both parties for dispute resolution. The parties are responsible for resolving disputes between themselves.</p>
+          <H>19. Data Protection and Retention</H>
+          <p>We process your personal data in accordance with our <Link href="/legal/privacy" style={{ color: C.primary }}>Privacy Policy</Link> and the Digital Personal Data Protection Act, 2023.</p>
+          <p>Deal records, including the terms, the dates of each step, the payments recorded, and our fee invoices, are retained for at least seven years, or longer where tax or company law requires. A Deal is an agreement between two parties, and one party cannot erase the shared record of it. Other personal data is retained only for as long as it is needed to provide the Services or as required by law.</p>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>10. Creator Due Diligence</h2>
-          <p>ValueSkins conducts due diligence on creator accounts to verify authenticity and compliance with platform standards. We may decline, suspend, or revoke creator status at our discretion based on evidence of engagement manipulation, policy violations, fraudulent activity, or other concerns. Creators subject to due diligence review will be notified of the outcome.</p>
-
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>11. Escrow Release</h2>
-          <p>Funds deposited into escrow are automatically released to the designated recipient once the deal deadline passes or the agreed-upon deliverables are marked as complete. ValueSkins does not manually intervene in, delay, reverse, or modify escrow releases under any circumstances. Users acknowledge that once funds are released from escrow, the transaction is final and irrevocable. ValueSkins shall not be held liable for any dispute, loss, or claim arising from the automatic release of escrow funds, including but not limited to disagreements between Users regarding deliverable quality, deadline compliance, or payment terms.</p>
-
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>12. Digital Rights & Content Usage</h2>
-          <p><strong>Digital Rights Definition:</strong> Digital rights refer to a Brand's permission to reuse, repurpose, repost, or commercially exploit a Creator's content beyond the original delivery. This includes but is not limited to: reposting on brand channels, use in advertisements, compilations, commercial purposes, and use across multiple platforms.</p>
-          <p><strong>Creator Ownership:</strong> Creators retain all intellectual property rights and ownership of content they produce unless explicitly agreed otherwise in the Deal. Usage rights, including any boosting, paid-media rights, and their duration, are exactly what the agreed deal terms specify. Brands must not use content beyond the agreed scope and duration.</p>
-          <p><strong>Digital Rights as Separate Offering:</strong> Digital rights are distinct from content creation fees. A Creator may offer digital rights to a Brand for an additional, separately negotiated fee. The scope and duration of digital rights are explicitly documented in the Deal agreement.</p>
-          <p><strong>Payment & Documentation:</strong> When a Brand opts to purchase digital rights, the payment is held in separate escrow and released upon agreement completion. All terms are documented in the signed Deal agreement with minute-by-minute timestamping and immutable records.</p>
-          <p><strong>Platform's Limited Role:</strong> ValueSkins provides a complete, uneditable audit trail of all digital rights agreements. ValueSkins does not monitor, enforce, or police how Brands use content after rights are granted. ValueSkins is not responsible for any breach of digital rights agreements.</p>
-
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>13. ASCI Compliance</h2>
-          <p>Creators are responsible for compliance with Indian advertising law, including the Advertising Standards Council of India (ASCI) disclosure requirements. ValueSkins automates disclosure requirements in the deal workflow, but Creators retain full responsibility for truthfulness of claims, compliance with advertising standards, and platform-specific rules (Instagram, YouTube, etc.). Brands are responsible for the accuracy of claims they ask a Creator to make. Failure to comply with ASCI requirements and advertising law may result in account suspension or termination.</p>
-
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>14. Data Retention</h2>
-          <p>Deal records, transaction history, invoices, payment status, and associated audit logs are retained for a minimum of seven years as required by Indian tax law, accounting standards, and legal obligations. This is because a deal is a binding agreement between two parties and one party cannot erase the shared record of it. Other personal data is retained only as long as necessary to provide Services or as required by law, except as noted in our Privacy Policy.</p>
-
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>15. Grievance Officer</h2>
-          <p>In compliance with the Information Technology Act, 2000 and the Digital Personal Data Protection Act, 2023, we have appointed a Grievance Officer to address your concerns regarding data processing, privacy, and platform conduct:</p>
+          <H>20. Grievance Officer</H>
+          <p>In accordance with the Information Technology Act, 2000, the Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021, the Consumer Protection (E-Commerce) Rules, 2020, and the Digital Personal Data Protection Act, 2023, we have appointed a Grievance Officer:</p>
           <p><strong>Grievance Officer:</strong> Saketh Velamuri<br/>
           <strong>Company:</strong> Valueskins Pvt. Ltd.<br/>
-          <strong>Email:</strong> <a href="mailto:founder@valueskins.com" style={{color: C.primary}}>founder@valueskins.com</a></p>
-          <p>We will acknowledge your complaint within 24 hours and resolve it within 30 days as required by law.</p>
+          <strong>Email:</strong> <Mail /></p>
+          <p>We will acknowledge your complaint within 24 hours and resolve it within 15 days of receiving it.</p>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>16. Changes to These Terms</h2>
-          <p>We may amend these terms and will notify you. Continued use after notice constitutes acceptance. The version applicable to a deal is the one in force when the deal was created.</p>
+          <H>21. Changes to These Terms</H>
+          <p>We may amend these Legal Terms. When we do, we will update the date at the top of this page and tell you by email or by a notice on the Platform. We will also remind you of these Legal Terms at least once a year. Your continued use of the Services after a change takes effect means you accept it. The version that applies to a Deal is the one in force when that Deal was posted.</p>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>17. Governing Law</h2>
-          <p>These terms are governed by the laws of India. The courts at Delhi have exclusive jurisdiction.</p>
+          <H>22. Governing Law and Jurisdiction</H>
+          <p>These Legal Terms are governed by the laws of India. Subject to any right you have under the Consumer Protection Act, 2019 to approach a consumer forum, the courts at Delhi have exclusive jurisdiction over any dispute between you and us.</p>
+
+          <H>23. General</H>
+          <p>If any part of these Legal Terms is found to be unenforceable, the rest remains in effect. Our failure to enforce a term is not a waiver of it. These Legal Terms, together with the Privacy Policy and the Refund and Cancellation Policy, are the entire agreement between you and us about the Services.</p>
 
         </div>
       </div>
