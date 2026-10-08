@@ -15,6 +15,7 @@ import { isInstagramHandle, handleLabel, instagramUrl } from '@/lib/handle';
 interface Resume {
   username: string;
   email: string | null;
+  pitch?: string;
   display_name: string;
   role: string;
   instagram: {
@@ -96,6 +97,12 @@ export default function CreatorResume({ username }: { username: string }) {
         <div style={{ fontSize: 11, marginBottom: 10 }}>
           <span style={{ color: C.outline }}>Contact: </span>
           <a href={`mailto:${resume.email}`} style={{ color: C.text }}>{resume.email}</a>
+        </div>
+      )}
+
+      {resume.pitch && (
+        <div style={{ fontSize: 11, color: C.text, lineHeight: 1.5, marginBottom: 10, whiteSpace: 'pre-wrap' }}>
+          {resume.pitch}
         </div>
       )}
 

@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const user = await queryOne(
-      `SELECT id, username, display_name, role, email, instagram_user_id,
+      `SELECT id, username, display_name, role, email, pitch_text, instagram_user_id,
               instagram_handle, instagram_bio, instagram_profile_pic_url,
               followers_count, engagement_rate, created_at
          FROM users
@@ -90,6 +90,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({
       username: u.username,
       email,
+      pitch: u.role === 'creator' ? (u.pitch_text || '') : '',
       display_name: u.display_name,
       role: u.role,
       instagram: {
