@@ -12,7 +12,8 @@ import Link from 'next/link';
 import { C, withAlpha } from '@/theme/colors';
 import { getOnboardingStatus, isOk } from '@/lib/deal-api';
 
-export default function PayoutUpi() {
+export default function PayoutUpi({ role = 'creator' }: { role?: 'creator' | 'brand' }) {
+  const isCreator = role !== 'brand';
   const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState<string | null>(null);
   const [savedName, setSavedName] = useState('');
@@ -46,7 +47,9 @@ export default function PayoutUpi() {
   useEffect(() => { void load(); }, [load]);
 
   const mismatch = upiAgain.length > 0 && upi.trim() !== upiAgain.trim();
-  const canSubmit = !busy && !!upi.trim() && upi.trim() === upiAgain.trim() && name.trim().length >= 2 && consent;
+  // Consent is to sharing the ID with a confirmed brand, which only applies to a
+  // creator. A brand's ID is shown to nobody, so there is nothing to agree to.
+  const canSubmit = !busy && !!upi.trim() && upi.trim() === upiAgain.trim() && name.trim().length >= 2 && (consent || !isCreator);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -60,7 +63,7 @@ export default function PayoutUpi() {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ upi_id: upi.trim(), account_name: name.trim(), share_consent: consent }),
+      body: JSON.stringify({ upi_id: upi.trim(), account_name: name.trim(), share_consent: isCreator ? consent : false }),
     });
     const data = await res.json().catch(() => ({}));
     setBusy(false);
@@ -138,13 +141,17 @@ export default function PayoutUpi() {
               <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>
                 {savedName || (
                   <span style={{ color: C.warning, fontWeight: 500 }}>
-                    Not added yet. Use Change UPI ID to add it, so brands can check it before paying.
+                    {isCreator
+                      ? 'Not added yet. Use Change UPI ID to add it, so brands can check it before paying.'
+                      : 'Not added yet. Use Change UPI ID to add it.'}
                   </span>
                 )}
               </div>
               <div style={{ fontSize: 11, color: C.outline, lineHeight: 1.5, marginBottom: 12 }}>
                 Check this is exactly right. A UPI payment sent to the wrong ID cannot be recalled.
-                It is shown only to you and to brands you are confirmed on.
+                {isCreator
+                  ? 'It is shown only to you and to brands you are confirmed on.'
+                  : 'It is shown only to you. It is not shown to creators.'}
               </div>
               {emailReady !== false && (
                 <button
@@ -200,24 +207,26 @@ export default function PayoutUpi() {
 
               {/* Said plainly rather than buried: we disclose this to one brand,
                   so the creator should know before, not discover it after. */}
-              <label
-                style={{
-                  display: 'flex', gap: 10, alignItems: 'flex-start',
-                  fontSize: 12, color: C.textMuted, lineHeight: 1.55,
-                  margin: '4px 0 12px', cursor: 'pointer',
-                }}
-              >
-                <input
-                  type="checkbox"
-                  checked={consent}
-                  onChange={(e) => setConsent(e.target.checked)}
-                  style={{ marginTop: 2, flexShrink: 0 }}
-                />
-                <span>
-                  Share my UPI ID and this name with brands I am confirmed on, so they can pay me directly.
-                  It is never shown to anyone else.
-                </span>
-              </label>
+              {isCreator && (
+                <label
+                  style={{
+                    display: 'flex', gap: 10, alignItems: 'flex-start',
+                    fontSize: 12, color: C.textMuted, lineHeight: 1.55,
+                    margin: '4px 0 12px', cursor: 'pointer',
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={(e) => setConsent(e.target.checked)}
+                    style={{ marginTop: 2, flexShrink: 0 }}
+                  />
+                  <span>
+                    Share my UPI ID and this name with brands I am confirmed on, so they can pay me directly.
+                    It is never shown to anyone else.
+                  </span>
+                </label>
+              )}
 
               {error && (
                 <div role="alert" style={{ fontSize: 12, color: C.error, marginBottom: 10 }}>
@@ -232,10 +241,11 @@ export default function PayoutUpi() {
                   borderRadius: 8, padding: 10, marginBottom: 12,
                 }}
               >
-                UPI only. We do not accept or store bank account numbers. Brands pay you
-                directly, so your money never passes through ValueSkins, and the deal only
-                moves forward once you confirm a payment arrived.
-                {saved ? ' A change applies to payments made after it; we email you when it happens.' : ''}
+                UPI only. We do not accept or store bank account numbers.{' '}
+                {isCreator
+                  ? 'Brands pay you directly, so your money never passes through ValueSkins, and the deal only moves forward once you confirm a payment arrived.'
+                  : 'This is kept on your account. ValueSkins does not send money to it or take money from it.'}
+                {saved ? ' We email you whenever it is changed.' : ''}
               </div>
 
               <div style={{ display: 'flex', gap: 8 }}>
