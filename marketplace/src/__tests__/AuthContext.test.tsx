@@ -75,7 +75,11 @@ describe('AuthContext', () => {
     expect(screen.getByTestId('loading').textContent).toBe('false');
     expect(screen.getByTestId('account-email').textContent).toBe('test@valueskins.local');
     expect(screen.getByTestId('account-verified').textContent).toBe('yes');
-    expect(fetch).toHaveBeenCalledWith('/api/auth/me', { credentials: 'include' });
+    // The request is time-boxed, so it also carries an abort signal.
+    expect(fetch).toHaveBeenCalledWith(
+      '/api/auth/me',
+      expect.objectContaining({ credentials: 'include' })
+    );
   });
 
   it('sets null account on 401', async () => {

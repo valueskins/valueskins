@@ -1,0 +1,24 @@
+name: Production smoke test
+
+# After every production deployment, checks that the live site still does the
+# things that must never break: pages load, signed-out visitors are sent to
+# login, and the endpoints that create things refuse anonymous callers. If any
+# check fails, this run fails and GitHub emails the repository owner.
+
+on:
+  deployment_status:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    name: Smoke test
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.deployment_status.state == 'success' &&
+       startsWith(github.event.deployment.environment, 'Production'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the live site
+        run: bash marketplace/scripts/smoke.sh https://www.valueskins.com

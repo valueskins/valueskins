@@ -11,6 +11,7 @@ import { sendEmail } from '@/lib/email';
 // for email validation backtrack catastrophically on hostile input.
 const EMAIL_RE = /^[^\s@]{1,64}@[^\s@.]{1,63}(\.[^\s@.]{1,63}){1,4}$/;
 const TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
+const MAX_LINKS_PER_HOUR = 5;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://www.valueskins.com';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -68,9 +69,27 @@ async function setEmail(req: NextApiRequest, res: NextApiResponse, userId: strin
       return res.status(200).json({ email, email_verified: true, next_step: 'bank_details' });
     }
 
+    // A cap on confirmation emails. Without one, "send the link again" and
+    // "change email" could be used to mail strangers from our address as fast
+    // as someone could click, and get the mailbox blocked for everyone.
+    const recent = await queryOne(
+      `SELECT COUNT(*)::int AS n FROM email_queue
+        WHERE user_id = $1 AND email_type = 'email_verification'
+          AND created_at > NOW() - INTERVAL '1 hour'`,
+      [userId]
+    );
+    if (((recent as any)?.n ?? 0) >= MAX_LINKS_PER_HOUR) {
+      res.setHeader('Retry-After', '3600');
+      return res.status(429).json({
+        error: 'Too many confirmation emails requested. Please try again in an hour.',
+      });
+    }
+
     // One account per email address: invoices and the ADP are delivered here.
     const taken = await queryOne(
-      'SELECT id FROM users WHERE LOWER(email) = $1 AND id <> $2 AND is_deleted = FALSE',
+      // Addresses are stored lower-cased (see above), so this compares the column
+      // directly and can use its index. LOWER(email) forced a scan of every user.
+      'SELECT id FROM users WHERE email = $1 AND id <> $2 AND is_deleted = FALSE',
       [email, userId]
     );
     if (taken) {
