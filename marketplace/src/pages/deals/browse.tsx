@@ -21,13 +21,12 @@ import SetupBanner from '@/components/deal/SetupBanner';
 import ResumeHover from '@/components/deal/ResumeHover';
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-  const { getSessionUserId } = await import('@/lib/session');
-  const { queryOne } = await import('@/lib/db');
-  const userId = await getSessionUserId(ctx.req.headers.cookie || '');
-  if (!userId) {
+  const { getSessionUser } = await import('@/lib/session');
+  // One query for the session, the role and the email together.
+  const row = await getSessionUser(ctx.req.headers.cookie || '');
+  if (!row) {
     return { redirect: { destination: '/auth/login', permanent: false } };
   }
-  const row = await queryOne('SELECT role, email FROM users WHERE id = $1', [userId]);
   // No email, no marketplace: it is the contact shown to the other party.
   if (!(row as any)?.email) {
     return { redirect: { destination: '/settings/email', permanent: false } };
