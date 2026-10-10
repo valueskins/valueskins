@@ -72,8 +72,11 @@ jobs:
       - name: Create the database schema
         run: bash scripts/ci-setup-db.sh
 
+      # razorpay-payouts.integration calls Razorpay's live test API and needs
+      # real keys, so it is not part of the gate. Run it by hand with
+      # `npm run test:integration` when the payout code changes.
       - name: Tests
-        run: npx jest --runInBand --ci
+        run: npx jest --runInBand --ci --testPathIgnorePatterns razorpay-payouts.integration
 
       - name: Payment invariants
         run: psql -h localhost -U postgres -d vs_ci -v ON_ERROR_STOP=1 -f scripts/verify-payment-invariants.sql
