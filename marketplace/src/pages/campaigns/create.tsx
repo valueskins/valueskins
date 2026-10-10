@@ -58,13 +58,34 @@ const todayPlus = (days: number) => {
   return d.toISOString().slice(0, 10);
 };
 
+const MIN_BUDGET = 885;
+const MAX_BUDGET = 100_000_000;
+
+/**
+ * What was typed or pasted, as whole rupees. Paise are dropped rather than
+ * read as extra digits: "25,000.50" is 25000, not 2500050.
+ */
+function toDigits(raw: string): string {
+  return raw.split('.')[0].replace(/[^0-9]/g, '').replace(/^0+/, '').slice(0, 9);
+}
+
+/** Indian digit grouping as you type: 1,00,000. */
+function groupIndian(digits: string): string {
+  return digits ? Number(digits).toLocaleString('en-IN') : '';
+}
+
 export default function CreateCampaign() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [title, setTitle] = useState('');
-  const [budget, setBudget] = useState(10000);
+  // The amount as typed, digits only. It starts empty: a pre-filled 10,000 made
+  // the breakdown below describe a deal nobody had entered.
+  const [budgetText, setBudgetText] = useState('');
+  const budget = budgetText ? Number(budgetText) : 0;
+  // The fee is a flat 885, so anything at or under it leaves the creator nothing.
+  const budgetValid = budget > MIN_BUDGET && budget <= MAX_BUDGET;
   const [requirements, setRequirements] = useState('');
   const [script, setScript] = useState('');
   const [counts, setCounts] = useState<Record<DeliverableKey, number>>({
@@ -89,6 +110,14 @@ export default function CreateCampaign() {
     e.preventDefault();
     setError(null);
 
+    if (!budgetValid) {
+      setError(
+        budget > MAX_BUDGET
+          ? 'That budget is too large.'
+          : 'Enter a budget above ₹885. The ValueSkins fee is ₹885, and the rest goes to the creator.'
+      );
+      return;
+    }
     if (totalItems === 0) {
       setError('Add at least one deliverable.');
       return;
@@ -126,7 +155,7 @@ export default function CreateCampaign() {
     const res = await createDeal({
       title: title.trim(),
       description,
-      budget: Number(budget),
+      budget,
       application_deadline: applicationClose.toISOString(),
       content_upload_deadline: iso(approvalDate),
       deal_deadline: iso(postingDate),
@@ -183,11 +212,82 @@ export default function CreateCampaign() {
 
             <div style={field}>
               <label style={lbl} htmlFor="budget">Budget (₹)</label>
+              {/* A text field, not type="number": a number field rejects commas,
+                  and people type and paste amounts with them. Whatever is typed
+                  is reduced to digits and shown back grouped the Indian way. */}
               <input
-                id="budget" type="number" value={budget}
-                onChange={(e) => setBudget(parseFloat(e.target.value) || 0)}
-                min={1000} max={1000000} required style={input}
+                id="budget" type="text" inputMode="numeric" autoComplete="off"
+                value={groupIndian(budgetText)}
+                onChange={(e) => setBudgetText(toDigits(e.target.value))}
+                placeholder="e.g. 25,000" required style={input}
+                aria-describedby="budget-help"
               />
+              {!budgetValid && (
+                <div id="budget-help" style={{ fontSize: 12, color: budgetText ? C.error : C.outline, marginTop: 6 }}>
+                  {!budgetText
+                    ? 'Enter the total you will spend. The breakdown appears as you type.'
+                    : budget > MAX_BUDGET
+                      ? 'That budget is too large.'
+                      : 'Enter more than ₹885. The ValueSkins fee is ₹885, and the rest goes to the creator.'}
+                </div>
+              )}
+
+              {/* Shown from the first valid amount and recalculated on every
+                  keystroke. It used to sit at the bottom of the form. */}
+              {budgetValid && (
+                <>
+              {/* Themed, with an accent border so it reads as a panel instead of
+                  dissolving into the page as the old #f5f5f5 block did. */}
+              <div
+                style={{
+                  background: withAlpha(C.primary, 0x12),
+                  border: `1px solid ${C.accent}`,
+                  borderRadius: 10, padding: 16, marginTop: 12,
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 11, fontWeight: 700, color: C.text,
+                    textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 12,
+                  }}
+                >
+                  Payment breakdown
+                </div>
+                {([
+                  ['Total budget', `₹${budget.toLocaleString('en-IN')}`, true],
+                  ['ValueSkins commission', `₹${F.commissionTotal.toLocaleString('en-IN')}`, false],
+                  ['Creator gets', `₹${F.creatorTotal.toLocaleString('en-IN')}`, true],
+                ] as [string, string, boolean][]).map(([k, v, strong]) => (
+                  <div
+                    key={k}
+                    style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6 }}
+                  >
+                    <span style={{ color: C.textMuted }}>{k}</span>
+                    <span style={{ color: C.text, fontWeight: strong ? 700 : 500 }}>{v}</span>
+                  </div>
+                ))}
+                <div style={{ borderTop: `1px solid ${C.border}`, marginTop: 10, paddingTop: 10 }}>
+                  <div style={{ fontSize: 11, color: C.outline, marginBottom: 6 }}>
+                    You pay the creator directly, in two parts
+                  </div>
+                  {([
+                    ['30% when they start', F.advance],
+                    ['70% on your approval', F.final],
+                  ] as [string, number][]).map(([k, v]) => (
+                    <div
+                      key={k}
+                      style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 3 }}
+                    >
+                      <span style={{ color: C.textMuted }}>{k}</span>
+                      <span style={{ color: C.text, fontWeight: 600 }}>
+                        ₹{v.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+                </>
+              )}
             </div>
 
             {/* Counts rather than a format dropdown: a collab is normally several items. */}
@@ -302,57 +402,6 @@ export default function CreateCampaign() {
               />
             </div>
 
-            {/* Themed, with an accent border so it reads as a panel instead of
-                dissolving into the page as the old #f5f5f5 block did. */}
-            <div
-              style={{
-                background: withAlpha(C.primary, 0x12),
-                border: `1px solid ${C.accent}`,
-                borderRadius: 10, padding: 16, marginBottom: 22,
-              }}
-            >
-              <div
-                style={{
-                  fontSize: 11, fontWeight: 700, color: C.text,
-                  textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 12,
-                }}
-              >
-                Payment breakdown
-              </div>
-              {([
-                ['Total budget', `₹${budget.toLocaleString('en-IN')}`, true],
-                ['ValueSkins commission', `₹${F.commissionTotal.toLocaleString('en-IN')}`, false],
-                ['Creator gets', `₹${F.creatorTotal.toLocaleString('en-IN')}`, true],
-              ] as [string, string, boolean][]).map(([k, v, strong]) => (
-                <div
-                  key={k}
-                  style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6 }}
-                >
-                  <span style={{ color: C.textMuted }}>{k}</span>
-                  <span style={{ color: C.text, fontWeight: strong ? 700 : 500 }}>{v}</span>
-                </div>
-              ))}
-              <div style={{ borderTop: `1px solid ${C.border}`, marginTop: 10, paddingTop: 10 }}>
-                <div style={{ fontSize: 11, color: C.outline, marginBottom: 6 }}>
-                  You pay the creator directly, in two parts
-                </div>
-                {([
-                  ['30% when they start', F.advance],
-                  ['70% on your approval', F.final],
-                ] as [string, number][]).map(([k, v]) => (
-                  <div
-                    key={k}
-                    style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 3 }}
-                  >
-                    <span style={{ color: C.textMuted }}>{k}</span>
-                    <span style={{ color: C.text, fontWeight: 600 }}>
-                      ₹{v.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {error && (
               <div role="alert" style={{ color: C.error, fontSize: 13, marginBottom: 12 }}>
                 {error}
@@ -361,13 +410,13 @@ export default function CreateCampaign() {
 
             <button
               type="submit"
-              disabled={loading || totalItems === 0}
+              disabled={loading || totalItems === 0 || !budgetValid}
               style={{
                 width: '100%', padding: '14px',
-                background: loading || totalItems === 0 ? C.border : C.primary,
+                background: loading || totalItems === 0 || !budgetValid ? C.border : C.primary,
                 color: C.onPrimary, border: 'none', borderRadius: 8,
                 fontSize: 15, fontWeight: 700,
-                cursor: loading || totalItems === 0 ? 'not-allowed' : 'pointer',
+                cursor: loading || totalItems === 0 || !budgetValid ? 'not-allowed' : 'pointer',
               }}
             >
               {loading ? 'Publishing…' : 'Publish deal'}
