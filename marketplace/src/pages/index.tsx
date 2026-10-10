@@ -197,14 +197,6 @@ export default function HomePage() {
           }}>
             Get Started
           </Link>
-          {/* The run club lives at its own URL so it needs no space here beyond
-              a quiet line. The product is not blacked out for it. */}
-          <Link href="/run-club" style={{
-            fontSize: '0.8125rem', color: C.textSecondary, textDecoration: 'underline',
-            textUnderlineOffset: '3px',
-          }}>
-            Or join our Pune run club
-          </Link>
         </div>
 
         {/* Scroll hint — bobbing chevron (spec §2) */}
