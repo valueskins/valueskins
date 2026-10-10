@@ -37,6 +37,10 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   if ((row as any)?.role === 'brand') {
     return { redirect: { destination: '/campaigns', permanent: false } };
   }
+  // Creators only. An account with no confirmed role gets neither side's pages.
+  if ((row as any)?.role !== 'creator') {
+    return { redirect: { destination: '/settings', permanent: false } };
+  }
   return { props: {} };
 }
 

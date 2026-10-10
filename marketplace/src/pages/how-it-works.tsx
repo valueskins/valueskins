@@ -8,7 +8,7 @@ import { C } from '@/theme/colors';
 const STEPS: Array<{ title: string; body: string }> = [
   {
     title: 'Sign in and set up',
-    body: 'Sign in with Instagram. Add your email address, which is how the other side of a deal reaches you. Fill in your profile once in Settings. Creators also add the UPI ID they want to be paid on.',
+    body: 'Sign in with Instagram. The account needs to be public and either a Business account or a Creator account. A Business account is a brand here and posts deals. A Creator account is a creator here and applies to them. This is read from Instagram and is not something you pick. Add your email address, which is how the other side of a deal reaches you. Fill in your profile once in Settings. Creators also add the UPI ID they want to be paid on.',
   },
   {
     title: 'A brand posts a deal',

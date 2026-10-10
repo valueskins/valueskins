@@ -2,7 +2,7 @@
 // Account type auto-detected from Instagram token response
 import type { NextApiRequest, NextApiResponse } from 'next';
 import crypto from 'crypto';
-import { exchangeInstagramCode, getInstagramUsername } from '@/lib/oauth';
+import { exchangeInstagramCode, getInstagramIdentity, roleFromInstagramAccountType } from '@/lib/oauth';
 import { placeholderUsername } from '@/lib/handle';
 import { query } from '@/lib/db';
 import { SESSION_IDLE_TIMEOUT_MS, SESSION_ABSOLUTE_TIMEOUT_MS } from '@/config/constants';
@@ -49,42 +49,71 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const instagramUserId = String(short.user_id);
 
-    // Auto-detect role from Instagram account_type (in token response, no API call)
-    const accountType = (short.account_type || '').toUpperCase().trim();
-    let detectedRole: 'brand' | 'creator' = 'creator'; // Default
-    if (accountType === 'BUSINESS') {
-      detectedRole = 'brand';
-    } else if (accountType.includes('CREATOR')) {
-      detectedRole = 'creator';
-    }
+    // Who this is, read from Instagram: username and account type. Never
+    // throws and is time-boxed, so login cannot stall on it.
+    const identity = await getInstagramIdentity(short.access_token);
+    const igUsername = identity.username;
+    const accountType = identity.accountType;
+    const verifiedRole = roleFromInstagramAccountType(accountType);
 
-    console.log('[oauth] Instagram login verified', {
-      instagramUserId,
-      accountType,
-      detectedRole,
-    });
-
-    // The profile and the virtual resume show the Instagram username, and the
-    // token response carries only a numeric id. Never throws and is bounded, so
-    // login cannot fail or stall on it; '' means Instagram would not say.
-    const igUsername = await getInstagramUsername(short.access_token);
-    if (!igUsername) console.warn('[oauth] instagram username unavailable at login');
-
-    // 2. Check if user exists
     const existing = await query(
-      'SELECT id FROM users WHERE instagram_user_id = $1',
+      'SELECT id, role, instagram_account_type FROM users WHERE instagram_user_id = $1',
       [instagramUserId]
     );
+    const known = existing.rows[0] as
+      | { id: number; role: string; instagram_account_type: string }
+      | undefined;
+
+    // The role is never guessed. If Instagram reports a type we do not serve,
+    // or will not report one at all for an account whose role it has never
+    // confirmed, the sign-in stops here with an explanation. Defaulting to
+    // "creator" is what let brands browse and apply to deals.
+    if (!verifiedRole) {
+      if (accountType) {
+        console.warn('[oauth] unsupported instagram account type', { accountType });
+        return res.redirect('/auth/login?error=account_type_unsupported');
+      }
+      if (!known || !roleFromInstagramAccountType(known.instagram_account_type)) {
+        console.warn('[oauth] instagram account type unavailable at login');
+        return res.redirect('/auth/login?error=account_type_unreadable');
+      }
+    }
+
+    // A returning account whose type Instagram confirmed before keeps that role
+    // when today's read failed.
+    let role: 'brand' | 'creator' =
+      verifiedRole || (known!.role === 'brand' ? 'brand' : 'creator');
+
+    console.log('[oauth] Instagram login verified', { accountType, role });
 
     let userId: number;
 
-    if (existing.rows.length > 0) {
-      // Returning user - update last login
-      userId = existing.rows[0].id;
-      // COALESCE keeps the stored handle when the lookup above came back empty.
+    if (known) {
+      userId = known.id;
+
+      // The account type changed on Instagram since the role was set. Follow
+      // it only if this account has done nothing in its current role: a brand
+      // with posted deals cannot become a creator and leave them ownerless.
+      let roleChanged = false;
+      if (verifiedRole && verifiedRole !== known.role) {
+        const activity = await query(
+          `SELECT (SELECT COUNT(*) FROM deals WHERE brand_id = $1 OR creator_id = $1)
+                + (SELECT COUNT(*) FROM applications WHERE creator_id = $1) AS n`,
+          [userId]
+        );
+        if (Number(activity.rows[0]?.n) > 0) {
+          console.warn('[oauth] account type changed but the account has deals; role kept', { userId });
+          role = known.role === 'brand' ? 'brand' : 'creator';
+        } else {
+          roleChanged = true;
+        }
+      }
+
       await query(
         `UPDATE users
             SET last_login_at = NOW(),
+                role = $4,
+                instagram_account_type = COALESCE(NULLIF($5, ''), instagram_account_type),
                 instagram_handle = COALESCE(NULLIF($2, ''), instagram_handle),
                 username = CASE
                   WHEN $2 <> '' THEN $2
@@ -92,14 +121,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                   ELSE username
                 END
           WHERE id = $1`,
-        [userId, igUsername, placeholderUsername(instagramUserId)]
+        [userId, igUsername, placeholderUsername(instagramUserId), role, verifiedRole ? accountType : '']
       );
+
+      // A creator's profile and a brand's are different forms. If the role
+      // moved, the one-time profile is released so the right form can be filled.
+      if (roleChanged) {
+        await query(
+          `UPDATE users
+              SET profile_locked_at = NULL, age = NULL, age_recorded_at = NULL,
+                  gender = '', website = '', payout_vpa = '', payout_name = '',
+                  payout_vpa_share_consent_at = NULL, bank_details_completed = FALSE
+            WHERE id = $1`,
+          [userId]
+        );
+      }
     } else {
       // New user - create account
       // Profile: only Instagram ID + email + auto-detected role
       const created = await query(
-        `INSERT INTO users (instagram_user_id, email, username, display_name, is_active, role, onboarding_stage, instagram_handle)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, NULLIF($8, '')) RETURNING id`,
+        `INSERT INTO users (instagram_user_id, email, username, display_name, is_active, role, onboarding_stage, instagram_handle, instagram_account_type)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, NULLIF($8, ''), $9) RETURNING id`,
         [
           instagramUserId,
           '', // Email is empty; user provides it on first access
@@ -108,9 +150,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           igUsername || placeholderUsername(instagramUserId),
           igUsername ? `@${igUsername}` : 'Instagram user',
           true,
-          detectedRole, // Auto-set from account_type
+          role, // from the Instagram account type, never chosen
           'complete', // No onboarding needed; just go to app
           igUsername,
+          accountType,
         ]
       );
       if (!created.rows[0]) throw new Error('Failed to create user');

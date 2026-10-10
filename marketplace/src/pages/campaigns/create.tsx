@@ -32,8 +32,11 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   }
   // Brand surface. A creator could otherwise fill in this whole form and only
   // discover at submit that they cannot post deals.
-  if ((row as any)?.role !== 'brand') {
+  if ((row as any)?.role === 'creator') {
     return { redirect: { destination: '/deals/browse', permanent: false } };
+  }
+  if ((row as any)?.role !== 'brand') {
+    return { redirect: { destination: '/settings', permanent: false } };
   }
   return { props: {} };
 }

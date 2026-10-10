@@ -95,6 +95,9 @@ export default function CreatorResume({ username }: { username: string }) {
         ) : (
           <span style={{ color: C.outline, fontWeight: 500 }}>{handleLabel(handle)}</span>
         )}
+        <span style={{ marginLeft: 8, fontSize: 10, fontWeight: 600, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+          {resume.role === 'brand' ? 'Brand' : 'Creator'}
+        </span>
       </div>
 
       {/* The essentials: name, age, gender, location. */}

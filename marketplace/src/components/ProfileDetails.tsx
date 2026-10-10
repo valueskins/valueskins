@@ -141,6 +141,22 @@ export default function ProfileDetails({ role }: { role: Role }) {
       <form onSubmit={save} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: '12px', padding: '16px' }}>
         {loading && <div style={{ fontSize: '13px', color: C.textMuted, marginBottom: '14px' }}>Loading…</div>}
 
+        {/* Taken from Instagram at sign-in, never chosen here. */}
+        {!loading && (
+          <div style={{ marginBottom: '14px', paddingBottom: '14px', borderBottom: `1px solid ${C.border}` }}>
+            <div style={label}>Account type</div>
+            <div style={{ fontSize: '14px', color: C.text, fontWeight: 700 }}>
+              {role === 'brand' ? 'Brand' : 'Creator'}
+            </div>
+            <div style={{ fontSize: '11px', color: C.textMuted, lineHeight: 1.5, marginTop: 4 }}>
+              {role === 'brand'
+                ? 'Your Instagram account is a Business account, so you post deals.'
+                : 'Your Instagram account is a Creator account, so you apply to deals.'}
+              {' '}This comes from Instagram and cannot be changed here.
+            </div>
+          </div>
+        )}
+
         {!loading && locked && (
           <>
             {fixed(copy.name, name)}

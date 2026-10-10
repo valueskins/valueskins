@@ -27,6 +27,8 @@ const nextConfig = {
     { source: '/demo/profile', destination: '/profile/me', permanent: false },
     { source: '/preview', destination: '/deals/browse', permanent: false },
     { source: '/competitors', destination: '/how-it-works', permanent: false },
+    // The old create page had no role check. The real one is brands-only.
+    { source: '/deals/create', destination: '/campaigns/create', permanent: false },
     // Pages from earlier versions of the product. They described escrow,
     // negotiation, messaging and a skin store, none of which exist now.
     ...[

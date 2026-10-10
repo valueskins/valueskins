@@ -46,8 +46,12 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   if (!(role as any)?.email) {
     return { redirect: { destination: '/settings/email', permanent: false } };
   }
-  if ((role as any)?.role !== 'brand') {
+  if ((role as any)?.role === 'creator') {
     return { redirect: { destination: '/deals/browse', permanent: false } };
+  }
+  // Brands only. An account with no confirmed role gets neither side's pages.
+  if ((role as any)?.role !== 'brand') {
+    return { redirect: { destination: '/settings', permanent: false } };
   }
 
   try {
