@@ -37,6 +37,15 @@ export function middleware(request: NextRequest) {
     })
     .filter(Boolean);
 
+  // Error reports go to the host named in the Sentry DSN. Derived from the DSN
+  // so that it is allowed exactly when reporting is switched on.
+  let sentryOrigin = '';
+  try {
+    if (process.env.NEXT_PUBLIC_SENTRY_DSN) sentryOrigin = new URL(process.env.NEXT_PUBLIC_SENTRY_DSN).origin;
+  } catch {
+    sentryOrigin = '';
+  }
+
   // The app talks to the same host over both https (REST) and wss (realtime),
   // so allow both schemes for every backend host.
   const connectSrc = Array.from(
@@ -63,7 +72,7 @@ export function middleware(request: NextRequest) {
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
       "img-src 'self' data: https:; " +
       "font-src 'self' data: https://fonts.gstatic.com; " +
-      `connect-src 'self' https://accounts.google.com https://api.razorpay.com https://api.instagram.com https://graph.instagram.com https://www.instagram.com${connectSrc ? ` ${connectSrc}` : ''}; ` +
+      `connect-src 'self' https://accounts.google.com https://api.razorpay.com https://api.instagram.com https://graph.instagram.com https://www.instagram.com${connectSrc ? ` ${connectSrc}` : ''}${sentryOrigin ? ` ${sentryOrigin}` : ''}; ` +
       // www.google.com is needed for the Maps embed on /run-club: without it the
       // CSP blocks the iframe and the map renders as an empty box.
       'frame-src https://accounts.google.com https://api.razorpay.com https://www.instagram.com https://www.google.com'

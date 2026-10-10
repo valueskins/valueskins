@@ -1,5 +1,6 @@
 'use client';
 
+import * as Sentry from '@sentry/nextjs';
 import React, { ReactNode } from 'react';
 import { logger } from '@/lib/logger';
 
@@ -30,6 +31,9 @@ export class ErrorBoundary extends React.Component<
     logger.error('React Error Boundary caught error', error, {
       componentStack: errorInfo.componentStack,
     });
+    // A render crash is caught here and never reaches window.onerror, so it
+    // has to be reported by hand or it would be invisible.
+    Sentry.captureException(error, { extra: { componentStack: errorInfo.componentStack } });
   }
 
   render() {
