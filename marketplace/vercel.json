@@ -11,5 +11,8 @@
       "path": "/api/cron/deal-maintenance",
       "schedule": "29 18 * * *"
     }
+  ],
+  "regions": [
+    "sin1"
   ]
 }

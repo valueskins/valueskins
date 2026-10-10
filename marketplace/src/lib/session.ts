@@ -38,6 +38,35 @@ export async function getSessionUserId(cookie: string): Promise<string | null> {
   return result.rows[0].user_id;
 }
 
+/**
+ * The signed-in user with the two fields every page gate needs, in one query.
+ *
+ * Pages used to call getSessionUserId and then run a second query for the role
+ * and email. That is two round trips to the database before the page has done
+ * anything, on every navigation.
+ */
+export async function getSessionUser(
+  cookie: string
+): Promise<{ id: string; role: string | null; email: string } | null> {
+  const match = cookie.match(/(?:^|;\s*)valueskins_session=([^;]+)/);
+  if (!match) return null;
+  const sessionToken = match[1];
+
+  const result = await query(
+    `SELECT u.id, u.role, u.email
+       FROM auth_sessions s
+       JOIN users u ON u.id = s.user_id
+      WHERE s.id = $1 AND s.is_active = true AND s.expires_at > NOW()`,
+    [sessionToken]
+  );
+  if (result.rows.length === 0) return null;
+
+  // Sliding expiry, off the critical path, exactly as in getSessionUserId.
+  void touchSession(sessionToken);
+  const u = result.rows[0];
+  return { id: String(u.id), role: u.role ?? null, email: u.email || '' };
+}
+
 export async function getAccountId(cookie: string): Promise<string | null> {
   const userId = await getSessionUserId(cookie);
   if (!userId) return null;
