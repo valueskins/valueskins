@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 import { query, queryOne } from '@/lib/db-pool';
 
-export type EmailType = 'deal_update' | 'new_message' | 'payment_confirmed' | 'payout_processed' | 'password_reset' | 'email_verification' | 'campaign_invite' | 'welcome' | 'deal_completed' | 'usage_rights_expiring' | 'payout_changed';
+export type EmailType = 'deal_update' | 'new_message' | 'payment_confirmed' | 'payout_processed' | 'password_reset' | 'email_verification' | 'campaign_invite' | 'welcome' | 'deal_completed' | 'usage_rights_expiring' | 'payout_changed' | 'email_changed';
 
 const FROM_NAME = 'ValueSkins';
 const FROM_EMAIL = process.env.SMTP_FROM || 'noreply@valueskins.com';
@@ -69,6 +69,13 @@ const TEMPLATES: Record<EmailType, { subject: string; build: (data: any) => { ht
     build: (data: any) => ({
       html: `<h2>Verify Your Email</h2><p>Click the link below to verify your email address.</p><p><a href="${data.verify_url}" style="background:#000;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;">Verify Email</a></p><p style="color:#666;font-size:12px">If the button does not work, copy this link into your browser:<br>${data.verify_url}</p>`,
       text: `Verify your email: ${data.verify_url}`,
+    }),
+  },
+  email_changed: {
+    subject: 'Your ValueSkins email address was changed',
+    build: (data: any) => ({
+      html: `<h2>Your email address was changed</h2><p>The email address on your ValueSkins account was changed to <strong>${data.masked}</strong>. Notices about your deals will go there once it is confirmed.</p><p>If you did not make this change, reply to this email straight away.</p>`,
+      text: `The email address on your ValueSkins account was changed to ${data.masked}. Notices about your deals will go there once it is confirmed.\n\nIf you did not make this change, reply to this email straight away.`,
     }),
   },
   payout_changed: {

@@ -138,11 +138,15 @@ export default function ProfileDetails({ role }: { role: Role }) {
         your profile.
       </div>
 
-      <form onSubmit={save} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: '12px', padding: '16px' }}>
-        {loading && <div style={{ fontSize: '13px', color: C.textMuted, marginBottom: '14px' }}>Loading…</div>}
+      <form onSubmit={save} style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: '12px', padding: '16px' }}>
+        {/* The form is on screen from the first paint. It used to wait for the
+            saved details to arrive, and until they did the card was an empty
+            box the same colour as the page, which read as "nothing here". The
+            fields are disabled, not hidden, for that moment. */}
+        <fieldset disabled={loading} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
 
         {/* Taken from Instagram at sign-in, never chosen here. */}
-        {!loading && (
+        {(
           <div style={{ marginBottom: '14px', paddingBottom: '14px', borderBottom: `1px solid ${C.border}` }}>
             <div style={label}>Account type</div>
             <div style={{ fontSize: '14px', color: C.text, fontWeight: 700 }}>
@@ -171,7 +175,7 @@ export default function ProfileDetails({ role }: { role: Role }) {
           </>
         )}
 
-        {!loading && !locked && (
+        {!locked && (
           <>
             <label htmlFor="pd-name" style={label}>{copy.name}</label>
             <input
@@ -229,7 +233,7 @@ export default function ProfileDetails({ role }: { role: Role }) {
           </>
         )}
 
-        {!loading && (
+        {(
           <>
             <label htmlFor="pd-followers" style={label}>Instagram followers</label>
             <input
@@ -243,7 +247,7 @@ export default function ProfileDetails({ role }: { role: Role }) {
           </>
         )}
 
-        {!loading && !locked && (
+        {!locked && (
           <label
             style={{
               display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: '12px',
@@ -262,9 +266,11 @@ export default function ProfileDetails({ role }: { role: Role }) {
           </label>
         )}
 
+        </fieldset>
+
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
           <span role="status" style={{ fontSize: '11px', color: message?.ok === false ? C.danger : C.textSecondary }}>
-            {message?.text || ''}
+            {message?.text || (loading ? 'Loading your saved details…' : '')}
           </span>
           <button
             type="submit" disabled={off}

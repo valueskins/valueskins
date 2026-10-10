@@ -84,6 +84,20 @@ async function setEmail(req: NextApiRequest, res: NextApiResponse, userId: strin
       [userId, email]
     );
 
+    // The address being replaced was confirmed, so its owner is told. A stolen
+    // session that redirects an account's mail should not be able to do it
+    // silently. The new address is masked: the old inbox may not be the user's
+    // any more either. Best-effort, and never blocks the change.
+    if (cur?.email && cur.email_verified && cur.email !== email) {
+      const [local, domain] = email.split('@');
+      const masked = `${local.slice(0, 2)}${'*'.repeat(Math.max(2, Math.min(6, local.length - 2)))}@${domain}`;
+      try {
+        await sendEmail({ to: cur.email, userId: Number(userId), type: 'email_changed', data: { masked } });
+      } catch {
+        console.error('[set-email] change notice failed', { userId });
+      }
+    }
+
     const token = crypto.randomBytes(32).toString('hex');
     await query(
       `INSERT INTO email_verifications (user_id, token, expires_at)

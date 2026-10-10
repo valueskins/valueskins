@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import PitchText from '@/components/PitchText';
 import ProfileDetails from '@/components/ProfileDetails';
 import PayoutUpi from '@/components/PayoutUpi';
+import EmailSettings from '@/components/EmailSettings';
 import Link from 'next/link';
 import { PROFESSION_BADGES, BRAND_CATEGORY_BADGES } from '@/features/valueskins/core/identity/AvatarOptions';
 import { STICKER_MANIFEST } from '@/features/valueskins/core/stickers/sticker-manifest';
@@ -237,13 +238,8 @@ export default function SettingsView({
             range and a gender, and kept the answers in localStorage. */}
         <ProfileDetails role={role === 'brand' ? 'brand' : 'creator'} />
 
-        {/* Email: the contact shown to the other side of a deal. */}
-        <div style={{ marginBottom: '24px' }}>
-          <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '12px' }}>Email Address</div>
-          <Link href="/settings/email" style={{ display: 'block', background: C.card, border: `1px solid ${C.border}`, borderRadius: '12px', padding: '14px 16px', color: C.text, textDecoration: 'none', fontSize: '13px', fontWeight: 600 }}>
-            View or change your email address
-          </Link>
-        </div>
+        {/* Email: seen and changed here, not on another page. */}
+        <EmailSettings />
 
         {/* Both roles can see and change their UPI ID here. A creator's is shown
             to the brand that confirms them; a brand's is shown to nobody. */}
