@@ -52,6 +52,11 @@ const validateBulkCreate = (data: any, config: any): { valid: boolean; errors: s
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Retired. This endpoint created deals or campaigns for any signed-in account
+  // without checking its role, so a creator could post one. Deals are created
+  // only through /api/deals/create-workflow-deal, which is brands-only.
+  return res.status(410).json({ error: 'This endpoint has been retired' });
+  // eslint-disable-next-line no-unreachable
   try {
     if (req.method !== 'POST') {
       return res.status(405).json({ error: 'Method not allowed' });

@@ -77,6 +77,18 @@ export default function Login() {
     const on = () => setReduced(mq.matches);
     mq.addEventListener('change', on);
     setMounted(true);
+
+    // The sign-in callback sends people back here with a reason when it has to
+    // stop. Only known codes are shown, never text taken from the URL.
+    const code = new URLSearchParams(window.location.search).get('error');
+    const REASONS: Record<string, string> = {
+      account_type_unsupported:
+        'This Instagram account is not a Business or Creator account. Switch it to a professional account in Instagram settings, then sign in again.',
+      account_type_unreadable:
+        'We could not read your Instagram account type. Please make sure the account is public and is a Business or Creator account, then try again.',
+    };
+    if (code && REASONS[code]) setError(REASONS[code]);
+
     return () => mq.removeEventListener('change', on);
   }, []);
 

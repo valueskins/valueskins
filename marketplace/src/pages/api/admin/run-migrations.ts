@@ -135,6 +135,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     results.push({ name: '011_profile_essentials.sql', success: false, error: err.message });
   }
 
+  // Instagram account type behind each role (012).
+  try {
+    const atPath = path.join(process.cwd(), 'src', 'lib', 'migrations', '012_instagram_account_type.sql');
+    const ran = await runSqlStatements(fs.readFileSync(atPath, 'utf-8'));
+    results.push({ name: `012_instagram_account_type.sql (${ran} statements)`, success: true });
+  } catch (err: any) {
+    allPassed = false;
+    results.push({ name: '012_instagram_account_type.sql', success: false, error: err.message });
+  }
+
   // Run escrow-v2 migration SQL
   try {
     const sqlPath = path.join(process.cwd(), 'src', 'lib', 'migrations-escrow-v2.sql');

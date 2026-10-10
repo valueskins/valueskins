@@ -14,6 +14,10 @@ const FAQS = [
     a: 'A place where brands post paid deals and creators apply for them. Each deal has one brand, one creator and one fixed amount.',
   },
   {
+    q: 'Am I a brand or a creator?',
+    a: 'That comes from your Instagram account. A Business account is a brand and posts deals. A Creator account is a creator and applies to deals. The account needs to be public, and personal accounts cannot sign in.',
+  },
+  {
     q: 'How does payment work?',
     a: 'The brand makes three payments. First a flat fee of ₹750 plus 18% GST (₹885) to ValueSkins through Razorpay. Then 30% of the remaining amount to the creator before work starts, and 70% after the brand approves the content. The two creator payments go directly to the creator by UPI.',
   },

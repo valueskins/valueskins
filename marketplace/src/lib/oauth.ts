@@ -313,16 +313,27 @@ export async function getInstagramUserInfo(accessToken: string): Promise<any> {
   throw new Error(`Failed to fetch Instagram user info (${lastError.slice(0, 300)})`);
 }
 
-// The Instagram username, or '' when Instagram will not say.
+// Who signed in, as Instagram describes them: the username and the account
+// type. '' for either means Instagram would not say.
 //
-// getInstagramUserInfo starts with the richest field set and walks down, so a
-// token without the analytics scope spends several failed round trips before it
-// reaches the fields it is allowed to read. Login only needs the username, so
-// this asks for exactly that, bounds each attempt, and tries twice: a single
-// slow response from Instagram was enough to leave an account without one.
-export async function getInstagramUsername(accessToken: string): Promise<string> {
+// The account type decides the user's role, and it is NOT in the token
+// response. Login used to read `account_type` from there, always found nothing,
+// and fell back to "creator" for everyone, so a brand that signed in was given
+// the creator's pages. It has to be read from /me.
+//
+// Asks only for what login needs, bounds each attempt, and retries once on a
+// timeout or a 5xx. A 4xx is Meta refusing the token, and asking again will not
+// change its mind.
+export async function getInstagramIdentity(
+  accessToken: string
+): Promise<{ username: string; accountType: string }> {
   const ATTEMPT_MS = 3500;
-  for (const fields of ['user_id,username', 'username']) {
+  const HANDLE_RE = /^[A-Za-z0-9._]{1,30}$/;
+  let username = '';
+
+  // The first set is the one we want. The second still recovers the username
+  // if Instagram refuses the account type for this token.
+  for (const fields of ['user_id,username,account_type', 'user_id,username']) {
     for (let attempt = 0; attempt < 2; attempt++) {
       try {
         const params = new URLSearchParams({ fields, access_token: accessToken });
@@ -331,20 +342,35 @@ export async function getInstagramUsername(accessToken: string): Promise<string>
         });
         if (response.ok) {
           const body: any = await response.json();
-          if (typeof body?.username === 'string' && /^[A-Za-z0-9._]{1,30}$/.test(body.username)) {
-            return body.username;
+          if (typeof body?.username === 'string' && HANDLE_RE.test(body.username)) {
+            username = body.username;
           }
-          return '';
+          const accountType =
+            typeof body?.account_type === 'string' ? body.account_type.toUpperCase().trim() : '';
+          if (accountType || fields.indexOf('account_type') === -1) {
+            return { username, accountType: /^[A-Z_]{1,40}$/.test(accountType) ? accountType : '' };
+          }
+          break; // answered, but without a type: try the next field set
         }
-        // A 4xx is Meta refusing this token, and asking again will not change
-        // its mind. Only a 5xx or a timeout is worth the second attempt.
         if (response.status < 500) break;
       } catch {
         // timed out or network error: retry
       }
     }
   }
-  return '';
+  return { username, accountType: '' };
+}
+
+/**
+ * Instagram account type -> ValueSkins role. Instagram reports "BUSINESS" for a
+ * Business account and "MEDIA_CREATOR" for a Creator account. Anything else is
+ * not an account that can use the marketplace, so there is no default.
+ */
+export function roleFromInstagramAccountType(accountType: string): 'brand' | 'creator' | null {
+  const t = (accountType || '').toUpperCase().trim();
+  if (t === 'BUSINESS') return 'brand';
+  if (t === 'MEDIA_CREATOR' || t === 'CREATOR') return 'creator';
+  return null;
 }
 
 export function parseOAuthState(state: string): { role: string; csrf: string } {
