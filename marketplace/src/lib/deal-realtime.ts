@@ -23,7 +23,6 @@ export interface NewDealEvent {
 
 // Creators are notified in batches: loading every id into one array does not
 // scale, and the bus only needs the ids it actually holds connections for.
-const BATCH = 1000;
 
 export async function broadcastNewDeal(deal: NewDealEvent): Promise<void> {
   // The real path: Redis -> the WebSocket server on Render -> every connected
@@ -40,36 +39,13 @@ export async function broadcastNewDeal(deal: NewDealEvent): Promise<void> {
     applicationDeadline: deal.application_deadline,
   });
 
-  try {
-    let offset = 0;
-    for (;;) {
-      const res = await query(
-        `SELECT id FROM users
-          WHERE role = 'creator' AND is_active = TRUE AND is_deleted = FALSE
-          ORDER BY id
-          LIMIT $1 OFFSET $2`,
-        [BATCH, offset]
-      );
-      const ids = (res.rows || []).map((r: any) => Number(r.id));
-      if (ids.length === 0) break;
-
-      broadcast('new-deal', ids, {
-        id: deal.id,
-        title: deal.title,
-        description: deal.description,
-        budget: deal.budget,
-        brand_id: deal.brand_id,
-        application_deadline: deal.application_deadline,
-      });
-
-      if (ids.length < BATCH) break;
-      offset += BATCH;
-    }
-  } catch (err) {
-    // A failed broadcast must never fail deal creation; the deal is already
-    // committed and the feed's `since` cursor will surface it.
-    console.error('[deal-realtime] broadcast failed', (err as Error).message);
-  }
+  // This used to go on to page through EVERY creator in the database, a
+  // thousand at a time, to hand their ids to an in-process event bus. On
+  // serverless that bus reaches nobody (each request is its own process), so
+  // the loop delivered nothing and cost one query per thousand creators on
+  // every deal posted: 100 queries at 100,000 creators, inside the request.
+  // Creators see new deals through the feed's `since` cursor, which costs the
+  // same however many of them there are.
 }
 
 // Notifies the two parties of a deal that its state changed.

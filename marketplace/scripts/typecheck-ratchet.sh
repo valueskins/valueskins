@@ -35,7 +35,9 @@ if [ "$COUNT" -lt "$BASELINE" ]; then
   echo ""
   echo "$((BASELINE - COUNT)) error(s) fixed. Lower the baseline to lock it in:"
   echo "    echo $COUNT > marketplace/$BASELINE_FILE"
-  exit 1
+  # Not a failure. Fixing type errors must never be what blocks a merge; this
+  # exited 1, which punished exactly the change it should reward.
+  exit 0
 fi
 
 echo "OK: no new type errors."

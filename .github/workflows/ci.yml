@@ -1,65 +1,85 @@
 name: CI
 
+# Runs on every pull request to main. The main branch requires the "Checks"
+# job to pass before a pull request can be merged, so anything that fails here
+# cannot reach production.
+#
+# This file used to be decoration: the type check and lint could not fail
+# (`continue-on-error` plus `|| true`), and the test job was a single `echo`.
+# Changes shipped untested, which is how the same things kept breaking.
+
 on:
   pull_request:
-    branches: [main, develop]
-  workflow_call:
+    branches: [main]
   workflow_dispatch:
-    inputs:
-      run_load_tests:
-        description: 'Run k6 load/abuse tests'
-        required: false
-        type: boolean
-        default: false
 
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  lint:
-    name: Lint & Format
+  checks:
+    name: Checks
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    # A real Postgres, because the tests that matter drive the real handlers
+    # against a real database: who may post, who may apply, who sees what.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: vs_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    defaults:
+      run:
+        working-directory: marketplace
+
+    env:
+      TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/vs_ci
+      PGPASSWORD: postgres
+      # Placeholders so the build and the tests never reach a real service.
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/vs_ci
+      RAZORPAY_KEY_ID: rzp_test_ci
+      RAZORPAY_KEY_SECRET: ci
+      NEXT_PUBLIC_APP_URL: https://www.valueskins.com
+      NEXT_TELEMETRY_DISABLED: '1'
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Marketplace lint
-        working-directory: marketplace
-        continue-on-error: true
-        run: |
-          npm ci
-          npx next lint --no-cache 2>&1 || true
-      # Ratchet, not a gate: fails only when the type-error count rises above
-      # the checked-in baseline. This used to be `continue-on-error` + `|| true`,
-      # which meant it could never fail — see P2-F4.
-      - name: Marketplace typecheck (ratchet)
-        working-directory: marketplace
-        continue-on-error: true
-        run: ./scripts/typecheck-ratchet.sh 2>&1 || true
+          cache: npm
+          cache-dependency-path: marketplace/package-lock.json
 
-  test-marketplace:
-    name: Marketplace Tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Skip tests (unblocking backend deployment)
-        run: echo "Tests skipped for backend deployment"
+      - name: Install
+        run: npm ci
 
-  environment-summary:
-    name: Environment Summary
-    needs: [lint, test-marketplace]
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Display CI Results
-        run: |
-          echo "# CI Pipeline Results" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Branch: \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "Commit: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
-          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Lint & Format | ${{ needs.lint.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Marketplace Tests | ${{ needs.test-marketplace.result }} |" >> $GITHUB_STEP_SUMMARY
+      - name: Type check (may not get worse)
+        run: ./scripts/typecheck-ratchet.sh
+
+      - name: Create the database schema
+        run: bash scripts/ci-setup-db.sh
+
+      # razorpay-payouts.integration calls Razorpay's live test API and needs
+      # real keys, so it is not part of the gate. Run it by hand with
+      # `npm run test:integration` when the payout code changes.
+      - name: Tests
+        run: npx jest --runInBand --ci --testPathIgnorePatterns razorpay-payouts.integration
+
+      - name: Payment invariants
+        run: psql -h localhost -U postgres -d vs_ci -v ON_ERROR_STOP=1 -f scripts/verify-payment-invariants.sql
+
+      - name: Build
+        run: npx next build

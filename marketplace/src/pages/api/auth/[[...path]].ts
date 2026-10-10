@@ -1,5 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { query } from '@/lib/db';
+// Used when a session close to expiry is renewed. It was referenced without
+// being imported, so that renewal threw and /api/auth/me failed for anyone in
+// the last five minutes of a session.
+import { SESSION_IDLE_TIMEOUT_MS } from '@/config/constants';
 
 // ── GOOGLE OAUTH — COMMENTED OUT (kept for reference, do not delete) ──
 // const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
