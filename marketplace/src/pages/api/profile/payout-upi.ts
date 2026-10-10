@@ -64,15 +64,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       field: 'upi_id',
     });
   }
-  if (share_consent !== true) {
+  const user = await queryOne('SELECT email, email_verified, payout_vpa, role FROM users WHERE id = $1', [userId]);
+  const u = user as any;
+
+  // A creator's UPI ID is shown to the brand that confirms them, so a creator
+  // has to agree to that. A brand's is shown to nobody: there is nothing to
+  // consent to, and no consent is recorded for it. The role is read from the
+  // account, so a creator cannot skip the question by claiming to be a brand.
+  const isCreator = u?.role !== 'brand';
+  if (isCreator && share_consent !== true) {
     return res.status(400).json({
       error: 'Brands you are confirmed on need your UPI ID to pay you, so this has to be agreed.',
       field: 'share_consent',
     });
   }
-
-  const user = await queryOne('SELECT email, email_verified, payout_vpa FROM users WHERE id = $1', [userId]);
-  const u = user as any;
   if (!u?.email) return res.status(400).json({ error: 'Add your email address first' });
   if (!u.email_verified) return res.status(400).json({ error: 'Confirm your email address first' });
 
@@ -81,10 +86,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       `UPDATE users
           SET payout_vpa = $2,
               payout_name = $3,
-              payout_vpa_share_consent_at = NOW(),
+              payout_vpa_share_consent_at = CASE WHEN $4 THEN NOW() ELSE NULL END,
               bank_details_completed = TRUE
         WHERE id = $1`,
-      [userId, vpa, name]
+      [userId, vpa, name, isCreator]
     );
 
     // Changing where money goes is the most valuable thing a stolen session can

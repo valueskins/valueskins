@@ -2,8 +2,11 @@
 import Head from 'next/head';
 import { C } from '@/theme/colors';
 import PayoutUpi from '@/components/PayoutUpi';
+import { useAuth } from '@/context/AuthContext';
 
 export default function PayoutSettingsPage() {
+  const { account } = useAuth();
+  const role = account?.role === 'brand' ? 'brand' : 'creator';
   return (
     <>
       <Head><title>Payout details · ValueSkins</title></Head>
@@ -11,9 +14,9 @@ export default function PayoutSettingsPage() {
         <div style={{ maxWidth: 480, margin: '0 auto' }}>
           <h1 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 4px' }}>Payout details</h1>
           <p style={{ fontSize: 12, color: C.outline, margin: '0 0 16px' }}>
-            The UPI ID brands pay you on.
+            {role === 'brand' ? 'The UPI ID saved on your account.' : 'The UPI ID brands pay you on.'}
           </p>
-          <PayoutUpi />
+          <PayoutUpi role={role} />
         </div>
       </div>
     </>

@@ -245,13 +245,12 @@ export default function SettingsView({
           </Link>
         </div>
 
-        {/* A creator is paid on this; a brand pays and has no payout ID. */}
-        {role !== 'brand' && (
-          <div style={{ marginBottom: '24px' }}>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '12px' }}>UPI ID</div>
-            <PayoutUpi />
-          </div>
-        )}
+        {/* Both roles can see and change their UPI ID here. A creator's is shown
+            to the brand that confirms them; a brand's is shown to nobody. */}
+        <div style={{ marginBottom: '24px' }}>
+          <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '12px' }}>UPI ID</div>
+          <PayoutUpi role={role === 'brand' ? 'brand' : 'creator'} />
+        </div>
 
         {/* A brand's own words, shown to creators on its resume. */}
         {role === 'brand' && <PitchText role="brand" />}
