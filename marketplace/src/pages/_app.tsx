@@ -7,6 +7,8 @@ import CookieConsent from '@/components/CookieConsent';
 import TopNav from '@/components/TopNav';
 import { ThemeProvider } from '@/theme/ThemeContext';
 import '@/styles/globals.css';
+// Starts browser error reporting. Does nothing unless a Sentry DSN is set.
+import '../../sentry.client.config';
 
 // The login page ships its own slim footer (login page.md §0b.6) and has to fit
 // in a single viewport with no scroll (§3) — the tall global footer breaks that.

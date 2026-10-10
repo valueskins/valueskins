@@ -8,6 +8,9 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
   swcMinify: true,
+  // Loads src/instrumentation.ts when the server starts, which is where
+  // server-side error reporting is initialised.
+  experimental: { instrumentationHook: true },
   // Next inlines the whole Google Fonts stylesheet, which includes the legacy
   // .woff faces alongside the .woff2 ones. On production that had the browser
   // pulling both formats — traced at 3.1s, 8.2s and 8.6s for individual font
