@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 const C = {
   bg: '#0A0A0A',
   surface: '#1A1A1A',
-  border: '#2D2D2D',
+  border: 'var(--c-border)',
   text: '#F5F5F0',
   textSecondary: '#D6D2C8',
   primary: '#0066CC',
@@ -101,7 +101,7 @@ export default function CreatorEventHistory({ creatorId }: Props) {
                   display: 'inline-block',
                   padding: '4px 8px',
                   background: C.primary,
-                  color: '#fff',
+                  color: 'var(--c-on-primary)',
                   borderRadius: '4px',
                   fontSize: '10px',
                   fontWeight: 600,

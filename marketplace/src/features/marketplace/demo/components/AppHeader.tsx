@@ -132,7 +132,7 @@ export default function AppHeader({
                 key={view}
                 onClick={() => onSelect(view)}
                 aria-current={active ? 'page' : undefined}
-                onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = 'rgba(200,184,154,0.07)'; }}
+                onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = 'var(--c-surface-container)'; }}
                 onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = 'transparent'; }}
                 style={{
                   display: 'inline-flex',
@@ -142,7 +142,7 @@ export default function AppHeader({
                   padding: '0 14px',
                   borderRadius: '8px',
                   border: 'none',
-                  background: active ? 'rgba(200,184,154,0.12)' : 'transparent',
+                  background: active ? 'var(--c-surface-container)' : 'transparent',
                   color: active ? C.text : C.textMuted,
                   // Was 10px on the bottom bar. This is the readable size.
                   fontSize: '0.9375rem',

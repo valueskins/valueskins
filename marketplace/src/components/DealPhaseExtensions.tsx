@@ -7,7 +7,7 @@ const C = {
   surface: '#f9fafb',
   text: 'var(--c-text)',
   textMuted: 'var(--c-text-variant)',
-  border: '#e5e7eb',
+  border: 'var(--c-border)',
   primary: '#0A0A0A',
   success: 'var(--c-accent)',
   warning: 'var(--c-warning)',
@@ -210,7 +210,7 @@ export function DeliverablesView({ dealId, deliverables }: { dealId: string; del
                   style={{
                     padding: '8px 16px',
                     background: C.primary,
-                    color: '#fff',
+                    color: 'var(--c-on-primary)',
                     border: 'none',
                     borderRadius: '4px',
                     fontSize: '12px',
@@ -312,7 +312,7 @@ export function InvoiceView({ dealId, invoice }: { dealId: string; invoice: Invo
             width: '100%',
             padding: '10px',
             background: C.primary,
-            color: '#fff',
+            color: 'var(--c-on-primary)',
             border: 'none',
             borderRadius: '6px',
             fontSize: '13px',
@@ -363,7 +363,7 @@ export function ContractView({ dealId }: { dealId: string }) {
           borderRadius: '8px',
           padding: '24px',
           textAlign: 'center',
-          background: '#fafafa',
+          background: 'var(--c-surface)',
         }}
       >
         <div style={{ fontSize: '32px', marginBottom: '8px' }}>📄</div>

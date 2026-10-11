@@ -12,9 +12,9 @@ export default function TabNav({ tabs, activeTab, onTabChange }: TabNavProps) {
       style={{
         display: 'flex',
         gap: '0',
-        borderBottom: '1px solid #e5e7eb',
+        borderBottom: '1px solid var(--c-border)',
         marginBottom: '24px',
-        background: '#ffffff',
+        background: 'var(--c-surface)',
         borderRadius: '8px 8px 0 0',
       }}
     >
@@ -28,7 +28,7 @@ export default function TabNav({ tabs, activeTab, onTabChange }: TabNavProps) {
             background: activeTab === tab.id ? '#0A0A0A' : '#ffffff',
             color: activeTab === tab.id ? '#ffffff' : 'var(--c-text-variant)',
             border: 'none',
-            borderBottom: activeTab === tab.id ? '3px solid #0A0A0A' : 'none',
+            borderBottom: activeTab === tab.id ? '3px solid var(--c-border)' : 'none',
             fontWeight: activeTab === tab.id ? 600 : 500,
             fontSize: '14px',
             cursor: 'pointer',

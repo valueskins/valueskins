@@ -10,7 +10,7 @@ export default function NotFound() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '20px',
+      padding: '28px',
       fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
     }}>
       <div style={{ textAlign: 'center' }}>
@@ -31,7 +31,7 @@ export default function NotFound() {
           Page Not Found
         </h1>
         <p style={{
-          fontSize: '16px',
+          fontSize: '18px',
           color: C.textSecondary,
           marginBottom: '32px',
           maxWidth: '400px',

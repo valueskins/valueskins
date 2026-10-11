@@ -104,11 +104,11 @@ export default function AdminBrands() {
         {error && (
           <div style={{
             padding: '16px',
-            background: '#fee2e2',
+            background: 'var(--c-error-container)',
             color: 'var(--c-error)',
             borderRadius: '8px',
             marginBottom: '20px',
-            border: `1px solid #fecaca`
+            border: `1px solid var(--c-error)`
           }}>
             {error}
           </div>
@@ -161,7 +161,7 @@ export default function AdminBrands() {
                     <span style={{
                       padding: '4px 8px',
                       borderRadius: '4px',
-                      background: brand.verification_status === 'verified' ? 'rgba(200, 184, 154, 0.2)' : 'rgba(200, 184, 154, 0.2)',
+                      background: brand.verification_status === 'verified' ? 'var(--c-border)' : 'var(--c-border)',
                       color: brand.verification_status === 'verified' ? 'var(--c-accent)' : 'var(--c-warning)',
                       fontSize: '12px',
                       fontWeight: 600
@@ -173,7 +173,7 @@ export default function AdminBrands() {
                     <span style={{
                       padding: '4px 8px',
                       borderRadius: '4px',
-                      background: brand.status === 'active' ? 'rgba(200, 184, 154, 0.2)' : 'rgba(176, 65, 62, 0.2)',
+                      background: brand.status === 'active' ? 'var(--c-border)' : 'rgba(176, 65, 62, 0.2)',
                       color: brand.status === 'active' ? 'var(--c-accent)' : 'var(--c-error)',
                       fontSize: '12px',
                       fontWeight: 600

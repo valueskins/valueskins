@@ -56,7 +56,7 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
               top: '0',
               right: '0',
               background: 'var(--c-error)',
-              color: '#ffffff',
+              color: 'var(--c-on-primary)',
               borderRadius: '999px',
               width: '20px',
               height: '20px',
@@ -78,8 +78,8 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
             position: 'absolute',
             top: '100%',
             right: '0',
-            background: '#ffffff',
-            border: '1px solid #e5e7eb',
+            background: 'var(--c-surface)',
+            border: '1px solid var(--c-border)',
             borderRadius: '8px',
             boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
             minWidth: '350px',
@@ -89,7 +89,7 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
             marginTop: '8px',
           }}
         >
-          <div style={{ padding: '12px 16px', borderBottom: '1px solid #e5e7eb', fontWeight: 600 }}>
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--c-border)', fontWeight: 600 }}>
             Notifications
           </div>
 
@@ -105,7 +105,7 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
                   onClick={() => handleMarkRead(n.id)}
                   style={{
                     padding: '12px 16px',
-                    borderBottom: '1px solid #f3f4f6',
+                    borderBottom: '1px solid var(--c-border)',
                     cursor: 'pointer',
                     background: n.read_at ? '#ffffff' : 'rgba(10, 10, 10, 0.05)',
                     fontSize: '14px',

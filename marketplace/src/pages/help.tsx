@@ -52,26 +52,26 @@ export default function HelpPage() {
 
   return (
     <MarketplaceLayout title="Help Center" hideBottomNav>
-      <div style={{ padding: '16px', color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
+      <div style={{ padding: '28px', color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
         <h1 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '4px' }}>Help Center</h1>
-        <p style={{ fontSize: '13px', color: C.textMuted, marginBottom: '20px' }}>Frequently asked questions about using ValueSkins.</p>
+        <p style={{ fontSize: '15px', color: C.textMuted, marginBottom: '48px' }}>Frequently asked questions about using ValueSkins.</p>
 
         <div style={{ display: 'grid', gap: '4px' }}>
           {FAQS.map((faq, i) => (
             <div key={i} style={{ background: C.surface, borderRadius: '8px', border: `1px solid ${C.border}`, overflow: 'hidden' }}>
               <button onClick={() => setOpenIdx(openIdx === i ? null : i)}
-                style={{ width: '100%', padding: '14px 16px', background: 'none', border: 'none', color: C.text, cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '14px', fontWeight: 600, textAlign: 'left' }}>
+                style={{ width: '100%', padding: '14px 16px', background: 'none', border: 'none', color: C.text, cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '16px', fontWeight: 600, textAlign: 'left' }}>
                 {faq.q}
-                <span style={{ color: C.primary, transform: openIdx === i ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', fontSize: '12px' }}>-</span>
+                <span style={{ color: C.primary, transform: openIdx === i ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', fontSize: '14px' }}>-</span>
               </button>
               {openIdx === i && (
-                <div style={{ padding: '0 16px 14px', fontSize: '13px', color: C.textMuted, lineHeight: 1.6 }}>{faq.a}</div>
+                <div style={{ padding: '0 16px 14px', fontSize: '15px', color: C.textMuted, lineHeight: 1.6 }}>{faq.a}</div>
               )}
             </div>
           ))}
         </div>
 
-        <div style={{ textAlign: 'center', padding: '24px', color: C.textMuted, fontSize: '13px' }}>
+        <div style={{ textAlign: 'center', padding: '24px', color: C.textMuted, fontSize: '15px' }}>
           Need more help? <a href="mailto:founder@valueskins.com" style={{ color: C.primary }}>Contact us</a>
         </div>
       </div>

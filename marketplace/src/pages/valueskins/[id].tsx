@@ -88,7 +88,7 @@ export default function SkinDetail() {
             </div>
 
             <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
-              <span style={{ padding: '4px 12px', background: C.primaryContainer, color: '#736670', borderRadius: 999, fontSize: 12, fontWeight: 600 }}>{skin.rarity}</span>
+              <span style={{ padding: '4px 12px', background: C.primaryContainer, color: 'var(--c-text-muted)', borderRadius: 999, fontSize: 12, fontWeight: 600 }}>{skin.rarity}</span>
               <span style={{ padding: '4px 12px', background: C.surface, color: C.outline, border: `1px solid ${C.outlineVariant}`, borderRadius: 999, fontSize: 12, fontWeight: 600 }}>{skin.category}</span>
             </div>
           </div>

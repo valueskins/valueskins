@@ -25,8 +25,8 @@ export default function DealCard({
     <div
       onClick={onClick}
       style={{
-        background: '#ffffff',
-        border: '1px solid #e5e7eb',
+        background: 'var(--c-surface)',
+        border: '1px solid var(--c-border)',
         borderRadius: '8px',
         padding: '16px',
         cursor: 'pointer',
@@ -86,7 +86,7 @@ export default function DealCard({
 
       {/* Match Score */}
       <div style={{
-        background: '#dbeafe',
+        background: 'var(--c-surface-container)',
         border: '1px solid #93c5fd',
         borderRadius: '4px',
         padding: '8px 12px',
@@ -94,8 +94,8 @@ export default function DealCard({
         justifyContent: 'space-between',
         alignItems: 'center',
       }}>
-        <span style={{ fontSize: '12px', color: '#2D2D2D', fontWeight: 600 }}>Match Score</span>
-        <span style={{ fontSize: '14px', fontWeight: 700, color: '#0A0A0A' }}>{matchScore}</span>
+        <span style={{ fontSize: '12px', color: 'var(--c-text)', fontWeight: 600 }}>Match Score</span>
+        <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--c-text)' }}>{matchScore}</span>
       </div>
     </div>
   );

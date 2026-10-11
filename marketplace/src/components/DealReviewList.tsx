@@ -7,7 +7,7 @@ const C = {
   surface: '#f9fafb',
   text: 'var(--c-text)',
   textSecondary: 'var(--c-text-variant)',
-  border: '#e5e7eb',
+  border: 'var(--c-border)',
   error: 'var(--c-error)',
   success: 'var(--c-accent)',
 };
@@ -85,10 +85,10 @@ export default function DealReviewList({ dealId }: DealReviewListProps) {
     return (
       <div style={{
         padding: '12px 16px',
-        background: '#fee2e2',
+        background: 'var(--c-error-container)',
         color: C.error,
         borderRadius: '8px',
-        border: `1px solid #fecaca`,
+        border: `1px solid var(--c-error)`,
       }}>
         {error}
       </div>
@@ -133,7 +133,7 @@ export default function DealReviewList({ dealId }: DealReviewListProps) {
     height: '40px',
     borderRadius: '50%',
     background: C.primary,
-    color: '#fff',
+    color: 'var(--c-on-primary)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

@@ -31,8 +31,8 @@ export default function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
 
   return (
     <div style={{
-      background: '#f9fafb',
-      border: '1px solid #e5e7eb',
+      background: 'var(--c-surface)',
+      border: '1px solid var(--c-border)',
       borderRadius: '8px',
       padding: '20px',
       height: 'fit-content',
@@ -54,7 +54,7 @@ export default function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
             style={{
               width: '50%',
               padding: '8px',
-              border: '1px solid #d1d5db',
+              border: '1px solid var(--c-border)',
               borderRadius: '4px',
               fontSize: '12px',
             }}
@@ -67,7 +67,7 @@ export default function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
             style={{
               width: '50%',
               padding: '8px',
-              border: '1px solid #d1d5db',
+              border: '1px solid var(--c-border)',
               borderRadius: '4px',
               fontSize: '12px',
             }}

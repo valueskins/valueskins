@@ -25,7 +25,7 @@ export default function EmptyState({ title, message, action, icon }: Props) {
             display: 'inline-block',
             padding: '10px 24px',
             background: C.primary,
-            color: '#000',
+            color: 'var(--c-on-primary)',
             borderRadius: '8px',
             textDecoration: 'none',
             fontSize: '14px',

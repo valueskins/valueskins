@@ -48,8 +48,8 @@ export default function DataRequestPage() {
           Exercise your rights under GDPR (Europe), CCPA (California), and DPDP Act (India). We will process your request within 30 days.
         </p>
 
-        {error && <div style={{ padding: '10px 14px', background: '#fef2f2', color: 'var(--c-error)', borderRadius: '8px', fontSize: '13px', marginBottom: '16px', border: '1px solid #fecaca' }}>{error}</div>}
-        {message && <div style={{ padding: '10px 14px', background: '#f0fdf4', color: 'var(--c-accent)', borderRadius: '8px', fontSize: '13px', marginBottom: '16px', border: '1px solid #bbf7d0' }}>{message}</div>}
+        {error && <div style={{ padding: '10px 14px', background: 'var(--c-error-container)', color: 'var(--c-error)', borderRadius: '8px', fontSize: '13px', marginBottom: '16px', border: '1px solid var(--c-error)' }}>{error}</div>}
+        {message && <div style={{ padding: '10px 14px', background: 'var(--c-surface-container)', color: 'var(--c-accent)', borderRadius: '8px', fontSize: '13px', marginBottom: '16px', border: '1px solid #bbf7d0' }}>{message}</div>}
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
@@ -76,7 +76,7 @@ export default function DataRequestPage() {
             </div>
           </div>
 
-          <button type="submit" disabled={loading} style={{ width: '100%', padding: '12px', background: C.primary, color: '#000', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1 }}>
+          <button type="submit" disabled={loading} style={{ width: '100%', padding: '12px', background: C.primary, color: 'var(--c-on-primary)', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1 }}>
             {loading ? 'Submitting...' : 'Submit request'}
           </button>
         </form>

@@ -88,7 +88,7 @@ export default function ValueSkinsCustomizer() {
               <h1 style={{ fontSize: 32, fontWeight: 400, marginBottom: 8, lineHeight: '40px' }}>Etheric Bloom v.2</h1>
               <p style={{ fontSize: 16, color: C.textMuted }}>Premium skin collection • Designer Series</p>
             </div>
-            <span style={{ background: C.primaryContainer, color: '#736670', padding: '8px 16px', borderRadius: 12, fontSize: 12, fontWeight: 500 }}>Level 42</span>
+            <span style={{ background: C.primaryContainer, color: 'var(--c-text-muted)', padding: '8px 16px', borderRadius: 12, fontSize: 12, fontWeight: 500 }}>Level 42</span>
           </div>
         </section>
 

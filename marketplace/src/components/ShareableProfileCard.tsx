@@ -104,7 +104,7 @@ export default function ShareableProfileCard({
                     <div className="flex items-center gap-4 mb-4">
                         <div
                             className="w-16 h-16 rounded-full border-3 border-white/30 flex items-center justify-center text-2xl"
-                            style={{ background: 'rgba(255,255,255,0.2)' }}
+                            style={{ background: 'var(--c-border)' }}
                         >
                             {avatarUri ? (
                                 <img

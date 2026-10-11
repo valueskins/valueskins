@@ -34,13 +34,13 @@ const TOKENS = {
     bgA: '#0A0A0A', bgB: '#141310', bgC: '#1C1B17',
     head: '#F5F5F0', text: '#B8B4AC', muted2: '#8A867E',
     card: '#141310', hair: 'rgba(245,245,240,0.08)', divider: 'rgba(245,245,240,0.10)',
-    cardbrd: 'rgba(200,184,154,0.16)', headerBg: 'rgba(10,10,10,0.7)',
+    cardbrd: 'var(--c-surface-container)', headerBg: 'rgba(10,10,10,0.7)',
   },
   light: {
     bgA: '#F5F5F0', bgB: '#F2EEE4', bgC: '#EAE2D0',
     head: '#0A0A0A', text: '#2D2D2D', muted2: '#6E6A60',
-    card: '#F5F5F0', hair: 'rgba(160,138,94,0.18)', divider: 'rgba(160,138,94,0.20)',
-    cardbrd: 'rgba(160,138,94,0.34)', headerBg: 'rgba(245,245,240,0.85)',
+    card: '#F5F5F0', hair: 'var(--c-surface-container)', divider: 'var(--c-border)',
+    cardbrd: 'var(--c-border)', headerBg: 'rgba(245,245,240,0.85)',
   },
 } as const;
 
@@ -280,7 +280,7 @@ export default function ProfileView({
             alignItems: 'center', gap: 34,
             textAlign: isNarrow ? 'center' : 'left',
             background: 'linear-gradient(155deg,#0A0A0A 0%,#17150F 55%,#22201A 100%)',
-            border: '1px solid rgba(200,184,154,0.22)',
+            border: '1px solid var(--c-border)',
             boxShadow: '0 40px 80px -42px rgba(10,10,10,0.6)',
             overflow: 'hidden',
             ...enter(0.05, 16),
@@ -291,16 +291,16 @@ export default function ProfileView({
             }} />
 
             <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
-              <h1 style={{ fontSize: 'clamp(1.875rem,4.5vw,2.5rem)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: '#F5F5F0', margin: 0 }}>
+              <h1 style={{ fontSize: 'clamp(1.875rem,4.5vw,2.5rem)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: 'var(--c-text)', margin: 0 }}>
                 {displayName}
               </h1>
 
-              <p style={{ marginTop: 8, marginBottom: 0, fontSize: '0.875rem', color: '#B8B4AC' }}>
-                @{handle} · <b style={{ color: '#C9C5BC', fontWeight: 500 }}>{profession}</b>{place && ` · ${place}`}
+              <p style={{ marginTop: 8, marginBottom: 0, fontSize: '0.875rem', color: 'var(--c-text-muted)' }}>
+                @{handle} · <b style={{ color: 'var(--c-text-muted)', fontWeight: 500 }}>{profession}</b>{place && ` · ${place}`}
               </p>
 
-              <p style={{ marginTop: 14, marginBottom: 0, fontSize: '0.875rem', color: '#C9C5BC' }}>
-                Speaks <b style={{ color: '#F5F5F0', fontWeight: 600 }}>{languages.join(', ')}</b>
+              <p style={{ marginTop: 14, marginBottom: 0, fontSize: '0.875rem', color: 'var(--c-text-muted)' }}>
+                Speaks <b style={{ color: 'var(--c-text)', fontWeight: 600 }}>{languages.join(', ')}</b>
                 {profile?.open_for_work !== false && ' · Open for work'}
               </p>
 
@@ -308,11 +308,11 @@ export default function ProfileView({
                   Project.md §28) is DROPPED, so no Type pill here — only the
                   earned Tier and verification. */}
               <div style={{ marginTop: 16, display: 'flex', gap: 9, flexWrap: 'wrap', justifyContent: isNarrow ? 'center' : 'flex-start' }}>
-                <span style={{ ...pill, background: WARM_SAND, color: '#0A0A0A' }}>
+                <span style={{ ...pill, background: WARM_SAND, color: 'var(--c-text)' }}>
                   {levelInfo.label} · Level {level}
                 </span>
                 {profile?.is_verified && (
-                  <span style={{ ...pill, border: '1px solid rgba(200,184,154,0.35)', color: WARM_SAND }}>Verified</span>
+                  <span style={{ ...pill, border: '1px solid var(--c-border)', color: WARM_SAND }}>Verified</span>
                 )}
               </div>
 
@@ -322,7 +322,7 @@ export default function ProfileView({
                 </button>
                 <button
                   onClick={onEditProfile}
-                  style={{ ...action, background: 'transparent', border: '1px solid rgba(245,245,240,0.28)', color: '#F5F5F0' }}
+                  style={{ ...action, background: 'transparent', border: '1px solid rgba(245,245,240,0.28)', color: 'var(--c-text)' }}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(245,245,240,0.6)'; }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(245,245,240,0.28)'; }}
                 >
@@ -338,7 +338,7 @@ export default function ProfileView({
               style={{
                 position: 'relative', flex: 'none', width: 160, height: 160, borderRadius: 18,
                 background: 'rgba(245,245,240,0.04)',
-                border: '1px solid rgba(200,184,154,0.30)',
+                border: '1px solid var(--c-border)',
                 boxShadow: 'inset 0 1px 0 rgba(245,245,240,0.08)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 animation: reduced

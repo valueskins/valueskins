@@ -182,11 +182,11 @@ export default function CreatorProfile({
     <div style={{
       minHeight: embedded ? undefined : '100vh',
       background: embedded ? undefined : C.bg,
-      color: C.text, fontFamily: FONT, padding: '20px',
+      color: C.text, fontFamily: FONT, padding: '28px',
     }}>
       <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
         {/* Sticky header + completion bar (spec §2) */}
-        <div style={{ marginBottom: '24px' }}>
+        <div style={{ marginBottom: '48px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
             <div>
               <h1 style={{ fontSize: '2rem', fontWeight: 700, margin: 0 }}>Profile</h1>
@@ -194,7 +194,7 @@ export default function CreatorProfile({
             </div>
             <button
               onClick={() => (onBack ? onBack() : router.push('/profile/me'))}
-              style={{ padding: '10px 20px', background: 'transparent', color: C.text, border: `1px solid rgba(160,138,94,0.35)`, borderRadius: '6px', fontWeight: 600, cursor: 'pointer', fontFamily: FONT }}
+              style={{ padding: '10px 20px', background: 'transparent', color: C.text, border: `1px solid var(--c-border)`, borderRadius: '6px', fontWeight: 600, cursor: 'pointer', fontFamily: FONT }}
             >
               Back to profile
             </button>
@@ -205,27 +205,27 @@ export default function CreatorProfile({
             <span>Profile completion</span>
             <span>{completion}%</span>
           </div>
-          <div style={{ height: '6px', background: 'rgba(160,138,94,0.18)', borderRadius: '3px', overflow: 'hidden' }}>
+          <div style={{ height: '6px', background: 'var(--c-surface-container)', borderRadius: '3px', overflow: 'hidden' }}>
             <div style={{ width: `${completion}%`, height: '100%', background: C.sand, transition: 'width 0.4s cubic-bezier(0.16,1,0.3,1)' }} />
           </div>
         </div>
 
         {/* Segmented tabs with sliding sand indicator (spec §2) */}
-        <div style={{ display: 'flex', gap: '4px', background: C.surface, border: `1px solid ${C.border}`, borderRadius: '8px', padding: '4px', marginBottom: '24px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '4px', background: C.surface, border: `1px solid ${C.border}`, borderRadius: '8px', padding: '4px', marginBottom: '48px', flexWrap: 'wrap' }}>
           {tabs.map((t) => (
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
               style={{
                 flex: '1 1 auto',
-                padding: '10px 16px',
+                padding: '13px 26px',
                 borderRadius: '6px',
                 border: 'none',
                 cursor: 'pointer',
                 fontFamily: FONT,
                 fontSize: '0.875rem',
                 fontWeight: tab === t.id ? 600 : 400,
-                background: tab === t.id ? 'rgba(200,184,154,0.14)' : 'transparent',
+                background: tab === t.id ? 'var(--c-surface-container)' : 'transparent',
                 color: tab === t.id ? C.text : C.textMuted,
                 transition: 'background 0.2s, color 0.2s',
               }}
@@ -236,7 +236,7 @@ export default function CreatorProfile({
         </div>
 
         {/* Tab content */}
-        <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: '10px', padding: '28px', marginBottom: '24px' }}>
+        <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: '10px', padding: '28px', marginBottom: '48px' }}>
           {tab === 'identity' && (
             <form style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
               <InputField label="Display Name" value={profile.display_name} onChange={(v) => setProfile({ ...profile, display_name: v })} />
@@ -317,7 +317,7 @@ export default function CreatorProfile({
                           setProfile({ ...profile, preferred_deal_types: updated });
                         }}
                         style={{
-                          padding: '8px 16px',
+                          padding: '13px 26px',
                           borderRadius: '6px',
                           border: sel ? `1px solid ${C.sand}` : `1px solid ${C.border}`,
                           background: sel ? C.sand : 'transparent',
@@ -345,14 +345,14 @@ export default function CreatorProfile({
             {profile.completed_deals.length > 0 ? (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
                 {profile.completed_deals.map((deal) => (
-                  <div key={deal.id} style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px', padding: '16px' }}>
+                  <div key={deal.id} style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px', padding: '28px' }}>
                     <div style={{ fontSize: '0.875rem', fontWeight: 600, color: C.text }}>{deal.deal_title}</div>
                     <div style={{ fontSize: '0.75rem', color: C.textMuted, marginBottom: '8px' }}>with {deal.brand_name}</div>
-                    <div style={{ fontSize: '0.75rem', color: C.textMuted, marginBottom: '12px' }}>
+                    <div style={{ fontSize: '0.75rem', color: C.textMuted, marginBottom: '16px' }}>
                       Completed: {new Date(deal.completion_date).toLocaleDateString()}
                     </div>
                     {deal.pdf_url && (
-                      <a href={deal.pdf_url} download style={{ display: 'inline-block', padding: '8px 12px', background: C.sand, color: '#0A0A0A', borderRadius: '6px', textDecoration: 'none', fontSize: '0.75rem', fontWeight: 600 }}>
+                      <a href={deal.pdf_url} download style={{ display: 'inline-block', padding: '13px 26px', background: C.sand, color: 'var(--c-text)', borderRadius: '6px', textDecoration: 'none', fontSize: '0.75rem', fontWeight: 600 }}>
                         Download PDF
                       </a>
                     )}
@@ -386,7 +386,7 @@ export default function CreatorProfile({
 
 const fieldStyle: React.CSSProperties = {
   width: '100%',
-  padding: '10px 12px',
+  padding: '13px 26px',
   background: TH.surface,
   border: `1px solid ${C.border}`,
   borderRadius: '6px',
@@ -407,7 +407,7 @@ const labelCap: React.CSSProperties = {
 
 function ReadOnlyCard({ title, note, children }: { title: string; note?: string; children: React.ReactNode }) {
   return (
-    <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: '10px', padding: '24px', marginBottom: '20px' }}>
+    <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: '10px', padding: '24px', marginBottom: '48px' }}>
       <h2 style={{ fontSize: '1.125rem', fontWeight: 700, margin: '0 0 4px', color: C.text }}>{title}</h2>
       {note && <div style={{ fontSize: '0.75rem', color: C.textMuted, marginBottom: '16px' }}>{note}</div>}
       {!note && <div style={{ marginBottom: '16px' }} />}
@@ -427,7 +427,7 @@ function InputField({ label, value, onChange, placeholder = '', type = 'text' }:
 
 function StatBox({ label, value, color = C.sand }: { label: string; value: string; color?: string }) {
   return (
-    <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
+    <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px', padding: '28px', textAlign: 'center' }}>
       <div style={{ fontSize: '0.75rem', color: C.textMuted, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</div>
       <div style={{ fontSize: '1.5rem', fontWeight: 700, color }}>{value}</div>
     </div>

@@ -46,7 +46,7 @@ export default function DemoProfilePage() {
         style={{
           position: 'fixed', right: 20, bottom: 20, zIndex: 50,
           minHeight: 44, padding: '0 20px', borderRadius: 10,
-          background: '#C8B89A', color: '#0A0A0A', border: 'none',
+          background: 'var(--c-primary)', color: 'var(--c-on-primary)', border: 'none',
           fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
           fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer',
         }}

@@ -22,8 +22,8 @@ export default function SettingsRedirect() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: '#0A0A0A',
-        color: '#8A867E',
+        background: 'var(--c-surface)',
+        color: 'var(--c-text-muted)',
         fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
       }}
     >

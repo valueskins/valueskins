@@ -10,7 +10,7 @@ const C = {
   surface: '#1A1A1A',
   text: '#F5F5F0',
   textSecondary: '#D6D2C8',
-  border: '#2D2D2D',
+  border: 'var(--c-border)',
 };
 
 interface DealAgencyExtensionsProps {
@@ -163,7 +163,7 @@ export default function DealAgencyExtensions({
             <div
               style={{
                 padding: '12px 16px',
-                background: 'rgba(200, 184, 154, 0.1)',
+                background: 'var(--c-border)',
                 border: `1px solid ${C.success}`,
                 borderRadius: '8px',
                 marginBottom: '16px',
@@ -249,7 +249,7 @@ export default function DealAgencyExtensions({
                 <div
                   style={{
                     padding: '12px 16px',
-                    background: 'rgba(200, 184, 154, 0.1)',
+                    background: 'var(--c-border)',
                     border: `1px solid ${C.success}`,
                     borderRadius: '8px',
                     fontSize: '13px',
@@ -265,7 +265,7 @@ export default function DealAgencyExtensions({
                     width: '100%',
                     padding: '10px',
                     background: C.primary,
-                    color: '#fff',
+                    color: 'var(--c-on-primary)',
                     border: 'none',
                     borderRadius: '8px',
                     cursor: loading ? 'not-allowed' : 'pointer',
@@ -294,7 +294,7 @@ export default function DealAgencyExtensions({
                     flex: 1,
                     padding: '10px',
                     background: C.success,
-                    color: '#fff',
+                    color: 'var(--c-on-primary)',
                     border: 'none',
                     borderRadius: '8px',
                     cursor: loading ? 'not-allowed' : 'pointer',
@@ -311,7 +311,7 @@ export default function DealAgencyExtensions({
                     flex: 1,
                     padding: '10px',
                     background: C.warning,
-                    color: '#000',
+                    color: 'var(--c-on-primary)',
                     border: 'none',
                     borderRadius: '8px',
                     cursor: loading ? 'not-allowed' : 'pointer',

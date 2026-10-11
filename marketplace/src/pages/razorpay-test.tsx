@@ -206,7 +206,7 @@ const inputStyle: CSSProperties = {
   width: '100%',
   borderRadius: 12,
   border: `1px solid ${C.border}`,
-  background: '#0A0A0A',
+  background: 'var(--c-surface)',
   color: C.text,
   padding: '12px 14px',
   boxSizing: 'border-box',

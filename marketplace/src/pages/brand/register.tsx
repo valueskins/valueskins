@@ -85,8 +85,8 @@ const benefitDescStyle: CSSProperties = {
 };
 
 const pricingInfoStyle: CSSProperties = {
-  background: 'rgba(200, 184, 154, 0.05)',
-  border: `1px solid rgba(200, 184, 154, 0.2)`,
+  background: 'var(--c-surface-container)',
+  border: `1px solid var(--c-border)`,
   borderRadius: 16,
   padding: 16,
   display: 'grid',
@@ -236,7 +236,7 @@ export default function BrandRegisterPage({ registrationFeeCents = 99900 }: Bran
           {process.env.NODE_ENV === 'development' && (
             <div
               style={{
-                background: 'rgba(200, 184, 154, 0.05)',
+                background: 'var(--c-surface-container)',
                 border: `1px dashed ${C.border}`,
                 borderRadius: 12,
                 padding: 12,

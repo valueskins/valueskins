@@ -10,7 +10,7 @@ import EmptyState from '@/components/EmptyState';
 const C = {
   bg: '#0A0A0A', surface: '#1A1A1A', surfaceAlt: '#2D2D2D',
   text: '#F5F5F0', textMuted: '#B8B4AC', primary: '#C8B89A',
-  success: 'var(--c-accent)', warning: 'var(--c-warning)', border: '#2D2D2D',
+  success: 'var(--c-accent)', warning: 'var(--c-warning)', border: 'var(--c-border)',
 };
 
 export default function BriefsPage() {
@@ -44,7 +44,7 @@ export default function BriefsPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <h1 style={{ fontSize: '22px', fontWeight: 700, margin: 0 }}>Briefs</h1>
           <button onClick={() => setShowForm(!showForm)}
-            style={{ padding: '8px 16px', background: C.primary, color: '#000', border: 'none', borderRadius: '6px', fontWeight: 600, cursor: 'pointer', fontSize: '13px' }}>
+            style={{ padding: '8px 16px', background: C.primary, color: 'var(--c-on-primary)', border: 'none', borderRadius: '6px', fontWeight: 600, cursor: 'pointer', fontSize: '13px' }}>
             {showForm ? 'Cancel' : '+ New Brief'}
           </button>
         </div>

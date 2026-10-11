@@ -50,14 +50,14 @@ export default function VerifyProof() {
           This tool works independently, you don&apos;t need a ValueSkins account to verify.
         </p>
 
-        <div style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid rgba(255,255,255,0.08)`, borderRadius: '12px', padding: '24px', marginBottom: '20px' }}>
+        <div style={{ background: 'var(--c-surface-container)', border: `1px solid var(--c-surface-container)`, borderRadius: '12px', padding: '24px', marginBottom: '20px' }}>
           <div style={{ marginBottom: '16px' }}>
             <label style={{ fontSize: '12px', fontWeight: 600, color: C.textSecondary, textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: '8px' }}>Proof File (.json)</label>
             <input
               ref={fileInputRef}
               type="file"
               accept=".json"
-              style={{ width: '100%', padding: '10px', background: C.bg, border: `1px solid rgba(255,255,255,0.12)`, borderRadius: '8px', color: C.text, fontSize: '14px' }}
+              style={{ width: '100%', padding: '10px', background: C.bg, border: `1px solid var(--c-border)`, borderRadius: '8px', color: C.text, fontSize: '14px' }}
             />
           </div>
           <button
@@ -65,7 +65,7 @@ export default function VerifyProof() {
             disabled={loading}
             style={{
               width: '100%', padding: '12px', background: C.primary, border: 'none', borderRadius: '8px',
-              color: '#fff', fontWeight: 700, cursor: loading ? 'wait' : 'pointer', fontSize: '14px', opacity: loading ? 0.6 : 1,
+              color: 'var(--c-on-primary)', fontWeight: 700, cursor: loading ? 'wait' : 'pointer', fontSize: '14px', opacity: loading ? 0.6 : 1,
             }}
           >
             {loading ? 'Verifying...' : 'Verify Proof'}
@@ -79,7 +79,7 @@ export default function VerifyProof() {
         )}
 
         {result && (
-          <div style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid rgba(255,255,255,0.08)`, borderRadius: '12px', padding: '24px' }}>
+          <div style={{ background: 'var(--c-surface-container)', border: `1px solid var(--c-surface-container)`, borderRadius: '12px', padding: '24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
               <div style={{
                 width: '12px', height: '12px', borderRadius: '50%',
@@ -96,7 +96,7 @@ export default function VerifyProof() {
               <CheckRow label="Individual message hashes" passed={!result.checks.individualHashIssues} />
             </div>
 
-            <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: `1px solid rgba(255,255,255,0.08)`, fontSize: '12px', color: C.textSecondary }}>
+            <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: `1px solid var(--c-surface-container)`, fontSize: '12px', color: C.textSecondary }}>
               <p>Messages in proof: {result.details.messageCount}</p>
               <p>Algorithm: {result.details.algorithm}</p>
               <p>Signing key: {result.details.keyId}</p>

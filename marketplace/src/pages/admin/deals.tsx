@@ -125,11 +125,11 @@ export default function AdminDeals() {
         {error && (
           <div style={{
             padding: '16px',
-            background: '#fee2e2',
+            background: 'var(--c-error-container)',
             color: 'var(--c-error)',
             borderRadius: '8px',
             marginBottom: '20px',
-            border: `1px solid #fecaca`
+            border: `1px solid var(--c-error)`
           }}>
             {error}
           </div>

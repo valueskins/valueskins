@@ -32,7 +32,7 @@ const COLORS = {
   surface: '#141414',
   text: '#E0E0E0',
   textSecondary: '#888',
-  border: '#262626',
+  border: 'var(--c-border)',
 };
 
 export function InstagramProfilePreview({
@@ -157,7 +157,7 @@ export function InstagramProfilePreview({
               style={{
                 background: isFollowing ? '#262626' : COLORS.primary,
                 border: `1px solid ${isFollowing ? '#333' : COLORS.primary}`,
-                borderRadius: '8px', color: '#fff', padding: '8px 24px',
+                borderRadius: '8px', color: 'var(--c-text)', padding: '8px 24px',
                 fontWeight: '600', fontSize: '14px', cursor: 'pointer',
               }}
             >

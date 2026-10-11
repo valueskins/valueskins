@@ -37,7 +37,7 @@ const C = {
   success: 'var(--c-accent)',
   warning: 'var(--c-warning)',
   danger: 'var(--c-error)',
-  border: '#2D2D2D',
+  border: 'var(--c-border)',
 };
 
 export default function ValueSkinHoverCard({ data, style, onViewFullProfile }: Props) {

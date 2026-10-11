@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 const C = {
   bg: 'var(--c-bg)', surface: '#111827', surfaceAlt: '#1A1A1A',
   text: '#E0E0DA', textMuted: 'var(--c-text-variant)', primary: 'var(--c-accent)',
-  success: 'var(--c-accent)', warning: 'var(--c-warning)', danger: 'var(--c-error)', border: '#1A1A1A',
+  success: 'var(--c-accent)', warning: 'var(--c-warning)', danger: 'var(--c-error)', border: 'var(--c-border)',
 };
 
 export default function AdminDashboard() {

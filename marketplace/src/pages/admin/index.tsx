@@ -11,7 +11,7 @@ const C = {
   text: '#0A0A0A',
   textSecondary: 'var(--c-text-muted)',
   textMuted: '#B8B4AC',
-  border: '#E0E0DA',
+  border: 'var(--c-border)',
   success: 'var(--c-accent)',
   danger: 'var(--c-error)',
 };
@@ -80,7 +80,7 @@ export default function AdminPanel() {
           <h1 style={{ fontSize: '20px', fontWeight: 700, color: C.text }}>Admin Panel</h1>
           <p style={{ fontSize: '12px', color: C.textSecondary, marginTop: '4px' }}>Logged in as: {adminEmail}</p>
         </div>
-        <button onClick={handleLogout} style={{ background: C.danger, color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>
+        <button onClick={handleLogout} style={{ background: C.danger, color: 'var(--c-on-primary)', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>
           Logout
         </button>
       </div>
@@ -207,7 +207,7 @@ function LoginPage({ onSuccess }: { onSuccess: (email: string) => void }) {
             disabled={loading}
             style={{
               background: loading ? C.textMuted : C.primary,
-              color: '#fff',
+              color: 'var(--c-text)',
               border: 'none',
               padding: '12px',
               borderRadius: '8px',

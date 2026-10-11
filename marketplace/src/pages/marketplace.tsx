@@ -107,7 +107,7 @@ export default function MarketplacePage() {
   const buttonStyle: CSSProperties = {
     padding: '12px 24px',
     background: C.primary,
-    color: '#fff',
+    color: 'var(--c-on-primary)',
     border: 'none',
     borderRadius: '8px',
     fontSize: '14px',
@@ -119,7 +119,7 @@ export default function MarketplacePage() {
   const badgeStyle: CSSProperties = {
     display: 'inline-block',
     padding: '4px 12px',
-    background: 'rgba(200, 184, 154, 0.1)',
+    background: 'var(--c-border)',
     color: C.accent,
     borderRadius: '999px',
     fontSize: '12px',

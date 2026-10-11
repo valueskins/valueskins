@@ -136,11 +136,11 @@ export default function AdminDisputes() {
         {error && (
           <div style={{
             padding: '16px',
-            background: '#fee2e2',
+            background: 'var(--c-error-container)',
             color: 'var(--c-error)',
             borderRadius: '8px',
             marginBottom: '20px',
-            border: `1px solid #fecaca`
+            border: `1px solid var(--c-error)`
           }}>
             {error}
           </div>
@@ -207,7 +207,7 @@ export default function AdminDisputes() {
                             download
                             style={{
                               padding: '8px',
-                              background: 'rgba(200, 184, 154, 0.2)',
+                              background: 'var(--c-border)',
                               color: C.primary,
                               textDecoration: 'none',
                               borderRadius: '4px',
@@ -281,7 +281,7 @@ export default function AdminDisputes() {
                       width: '100%',
                       padding: '10px',
                       background: C.primary,
-                      color: '#000',
+                      color: 'var(--c-on-primary)',
                       border: 'none',
                       borderRadius: '6px',
                       fontSize: '14px',

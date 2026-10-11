@@ -53,7 +53,7 @@ export default function FeedPage() {
   const buttonStyle = {
     padding: '12px 24px',
     background: C.primary,
-    color: '#fff',
+    color: 'var(--c-on-primary)',
     border: 'none',
     borderRadius: '8px',
     fontSize: '14px',

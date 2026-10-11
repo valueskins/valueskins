@@ -34,13 +34,13 @@ export default function AccountLocked() {
         {!sent ? (
           <form onSubmit={handleUnlockRequest}>
             <input type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} required style={{ width: '100%', padding: '12px', border: `1px solid ${C.border}`, borderRadius: '8px', fontSize: '14px', marginBottom: '12px', boxSizing: 'border-box' }} />
-            <button type="submit" disabled={loading || !email} style={{ width: '100%', padding: '12px', background: loading || !email ? C.border : C.primary, color: '#fff', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: loading || !email ? 'not-allowed' : 'pointer', marginBottom: '12px' }}>
+            <button type="submit" disabled={loading || !email} style={{ width: '100%', padding: '12px', background: loading || !email ? C.border : C.primary, color: 'var(--c-text)', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: loading || !email ? 'not-allowed' : 'pointer', marginBottom: '12px' }}>
               {loading ? 'Sending...' : 'Send unlock email'}
             </button>
           </form>
         ) : (
-          <div style={{ padding: '20px', background: '#f0fdf4', borderRadius: '12px', border: '1px solid #bbf7d0' }}>
-            <p style={{ fontSize: '14px', color: '#166534' }}>If an account exists with that email, we've sent unlock instructions.</p>
+          <div style={{ padding: '20px', background: 'var(--c-surface-container)', borderRadius: '12px', border: '1px solid #bbf7d0' }}>
+            <p style={{ fontSize: '14px', color: 'var(--c-text)' }}>If an account exists with that email, we've sent unlock instructions.</p>
           </div>
         )}
 

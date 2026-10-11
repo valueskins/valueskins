@@ -92,7 +92,7 @@ export default function Modules() {
           Enable or disable platform capabilities. Your account stays the same, no separate signups needed.
         </p>
 
-        {error && <div style={{ padding: '10px 14px', background: '#fef2f2', color: C.error, borderRadius: '8px', fontSize: '13px', marginBottom: '16px', border: '1px solid #fecaca' }}>{error}</div>}
+        {error && <div style={{ padding: '10px 14px', background: 'var(--c-error-container)', color: C.error, borderRadius: '8px', fontSize: '13px', marginBottom: '16px', border: '1px solid var(--c-error)' }}>{error}</div>}
 
         {Object.entries(MODULE_DETAILS).map(([code, details]) => {
           const active = modules.find(m => m.code === code)?.is_active ?? false;

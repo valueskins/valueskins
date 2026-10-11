@@ -38,7 +38,7 @@ export default function VerificationsPage() {
             <div
               key={v.brand_id}
               style={{
-                border: '1px solid #e5e7eb',
+                border: '1px solid var(--c-border)',
                 borderRadius: '8px',
                 padding: '16px',
                 display: 'flex',
@@ -57,7 +57,7 @@ export default function VerificationsPage() {
                   style={{
                     padding: '8px 16px',
                     background: 'var(--c-accent)',
-                    color: '#ffffff',
+                    color: 'var(--c-on-primary)',
                     border: 'none',
                     borderRadius: '6px',
                     fontWeight: 600,
@@ -72,7 +72,7 @@ export default function VerificationsPage() {
                   style={{
                     padding: '8px 16px',
                     background: 'var(--c-error)',
-                    color: '#ffffff',
+                    color: 'var(--c-on-primary)',
                     border: 'none',
                     borderRadius: '6px',
                     fontWeight: 600,

@@ -35,7 +35,7 @@ export default function ForgotPassword() {
           <p style={{ fontSize: '15px', color: C.textSecondary }}>Reset your password</p>
         </div>
 
-        {error && <div style={{ padding: '10px 14px', background: '#fef2f2', color: C.error, borderRadius: '8px', fontSize: '13px', marginBottom: '16px', border: '1px solid #fecaca' }}>{error}</div>}
+        {error && <div style={{ padding: '10px 14px', background: 'var(--c-error-container)', color: C.error, borderRadius: '8px', fontSize: '13px', marginBottom: '16px', border: '1px solid var(--c-error)' }}>{error}</div>}
 
         {sent ? (
           <div style={{ padding: '20px', textAlign: 'center' }}>

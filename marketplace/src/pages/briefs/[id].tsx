@@ -7,7 +7,7 @@ import MarketplaceLayout from '@/components/MarketplaceLayout';
 const C = {
   bg: '#0A0A0A', surface: '#1A1A1A', surfaceAlt: '#2D2D2D',
   text: '#F5F5F0', textMuted: '#B8B4AC', primary: '#C8B89A',
-  success: 'var(--c-accent)', warning: 'var(--c-warning)', danger: 'var(--c-error)', border: '#2D2D2D',
+  success: 'var(--c-accent)', warning: 'var(--c-warning)', danger: 'var(--c-error)', border: 'var(--c-border)',
 };
 
 export default function BriefDetailPage() {
@@ -63,7 +63,7 @@ export default function BriefDetailPage() {
         </div>
 
         <button onClick={findMatches} disabled={matching}
-          style={{ width: '100%', padding: '10px', background: C.primary, color: '#000', border: 'none', borderRadius: '6px', fontWeight: 600, cursor: 'pointer', opacity: matching ? 0.6 : 1, marginBottom: '16px' }}>
+          style={{ width: '100%', padding: '10px', background: C.primary, color: 'var(--c-on-primary)', border: 'none', borderRadius: '6px', fontWeight: 600, cursor: 'pointer', opacity: matching ? 0.6 : 1, marginBottom: '16px' }}>
           {matching ? 'Finding matches...' : 'Find Matching Creators'}
         </button>
 

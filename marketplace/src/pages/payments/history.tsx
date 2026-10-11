@@ -8,7 +8,7 @@ import EmptyState from '@/components/EmptyState';
 
 const C = {
   bg: 'var(--c-bg)', surface: '#111827', text: '#E0E0DA', textMuted: 'var(--c-text-variant)',
-  primary: 'var(--c-accent)', success: 'var(--c-accent)', danger: 'var(--c-error)', warning: 'var(--c-warning)', border: '#1A1A1A',
+  primary: 'var(--c-accent)', success: 'var(--c-accent)', danger: 'var(--c-error)', warning: 'var(--c-warning)', border: 'var(--c-border)',
 };
 
 export default function PaymentHistoryPage() {

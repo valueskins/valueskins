@@ -53,7 +53,7 @@ const C = {
   success: 'var(--c-accent)',
   warning: 'var(--c-warning)',
   accent: 'var(--c-accent)',
-  border: '#2D2D2D',
+  border: 'var(--c-border)',
 };
 
 function SocialIcon({ platform, handle }: { platform: string; handle?: string }) {
@@ -320,7 +320,7 @@ export default function ValueSkinCard({ data, variant = 'full', onViewProfile, o
               flex: 1,
               padding: '10px',
               background: C.primary,
-              color: '#000',
+              color: 'var(--c-on-primary)',
               border: 'none',
               borderRadius: '8px',
               fontWeight: 700,

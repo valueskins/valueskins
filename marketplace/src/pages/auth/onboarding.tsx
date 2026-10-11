@@ -166,7 +166,7 @@ export default function Onboarding() {
         justifyContent: 'center',
         padding: '48px 20px',
         fontFamily: FONT,
-        color: '#F5F5F0',
+        color: 'var(--c-text)',
       }}
     >
       <div style={{ width: '100%', maxWidth: '860px' }}>
@@ -175,9 +175,9 @@ export default function Onboarding() {
           <ValueSkinsLogo theme="dark" size={34} />
           <h1 style={{ fontSize: 'clamp(1.6rem, 4vw, 2rem)', fontWeight: 700, margin: '28px 0 10px', lineHeight: 1.15 }}>
             Where creators and brands close deals on{' '}
-            <span style={{ color: '#C8B89A' }}>earned trust</span>.
+            <span style={{ color: 'var(--c-text)' }}>earned trust</span>.
           </h1>
-          <p style={{ fontSize: '1rem', color: '#B8B4AC', margin: 0 }}>
+          <p style={{ fontSize: '1rem', color: 'var(--c-text-muted)', margin: 0 }}>
             Verified identities. Real reputation. Money that actually moves.
           </p>
         </div>
@@ -190,8 +190,8 @@ export default function Onboarding() {
             { label: 'Paid to creators', node: <Counter to={stats.paidOut || 0} prefix="₹" reduced={reduced} /> },
           ].map((s) => (
             <div key={s.label} style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#F5F5F0' }}>{s.node}</div>
-              <div style={{ fontSize: '0.75rem', letterSpacing: '0.08em', color: '#B8B4AC', marginTop: '4px' }}>{s.label}</div>
+              <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--c-text)' }}>{s.node}</div>
+              <div style={{ fontSize: '0.75rem', letterSpacing: '0.08em', color: 'var(--c-text-muted)', marginTop: '4px' }}>{s.label}</div>
             </div>
           ))}
         </div>
@@ -218,12 +218,12 @@ export default function Onboarding() {
                 onBlur={() => setHovered(null)}
                 style={{
                   padding: '36px 28px',
-                  border: `1px solid ${isHovered ? 'rgba(200,184,154,0.55)' : 'rgba(200,184,154,0.2)'}`,
+                  border: `1px solid ${isHovered ? 'var(--c-border)' : 'var(--c-border)'}`,
                   borderRadius: '10px',
-                  background: isHovered ? 'rgba(200,184,154,0.06)' : 'rgba(255,255,255,0.02)',
+                  background: isHovered ? 'var(--c-surface-container)' : 'var(--c-surface-container)',
                   cursor: loading ? 'not-allowed' : 'pointer',
                   textAlign: 'left',
-                  color: '#F5F5F0',
+                  color: 'var(--c-text)',
                   fontFamily: FONT,
                   transition: reduced ? 'none' : 'transform 0.25s cubic-bezier(0.16,1,0.3,1), border-color 0.2s, background 0.2s, opacity 0.2s',
                   transform: !reduced && isHovered ? 'translateY(-4px)' : 'none',
@@ -231,7 +231,7 @@ export default function Onboarding() {
                 }}
               >
                 <div style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '10px' }}>{card.title}</div>
-                <div style={{ fontSize: '0.9375rem', color: '#B8B4AC', lineHeight: 1.5, marginBottom: '16px' }}>{card.desc}</div>
+                <div style={{ fontSize: '0.9375rem', color: 'var(--c-text-muted)', lineHeight: 1.5, marginBottom: '16px' }}>{card.desc}</div>
                 {/* Hidden feature lines reveal on hover (spec §1) */}
                 <div
                   style={{
@@ -242,12 +242,12 @@ export default function Onboarding() {
                   }}
                 >
                   {card.reveal.map((line) => (
-                    <div key={line} style={{ fontSize: '0.8125rem', color: '#C8B89A', padding: '3px 0' }}>
+                    <div key={line} style={{ fontSize: '0.8125rem', color: 'var(--c-text)', padding: '3px 0' }}>
                       <span style={{ marginRight: '8px' }}>→</span>
                       {line}
                     </div>
                   ))}
-                  <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#F5F5F0', marginTop: '10px' }}>
+                  <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--c-text)', marginTop: '10px' }}>
                     Continue as {card.role === 'creator' ? 'Creator' : 'Brand'} →
                   </div>
                 </div>
@@ -258,7 +258,7 @@ export default function Onboarding() {
 
         {/* Current-flow copy kept verbatim. NOTE: contradicts Role Selection.md §1
             ("You can change your role anytime in settings.") — flagged, not changed. */}
-        <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '0.75rem', color: '#B8B4AC' }}>
+        <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '0.75rem', color: 'var(--c-text-muted)' }}>
           {loading ? 'Setting up your account…' : 'This selection is permanent and cannot be changed later.'}
         </div>
       </div>

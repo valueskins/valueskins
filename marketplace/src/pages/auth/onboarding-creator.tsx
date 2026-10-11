@@ -184,7 +184,7 @@ export default function OnboardingCreator() {
   const inputStyle: React.CSSProperties = {
     width: '100%',
     padding: '12px 14px',
-    border: '1px solid rgba(160,138,94,0.28)',
+    border: '1px solid var(--c-border)',
     borderRadius: '6px',
     background: C.bg,
     color: C.text,
@@ -208,7 +208,7 @@ export default function OnboardingCreator() {
   const pill = (selected: boolean): React.CSSProperties => ({
     padding: '8px 14px',
     borderRadius: '6px',
-    border: selected ? '1px solid #C8B89A' : '1px solid rgba(160,138,94,0.28)',
+    border: selected ? '1px solid var(--c-border)' : '1px solid var(--c-border)',
     background: selected ? '#C8B89A' : C.bg,
     color: selected ? '#0A0A0A' : C.textSecondary,
     fontSize: '0.8125rem',
@@ -233,9 +233,9 @@ export default function OnboardingCreator() {
               <button
                 key={r.role}
                 onClick={() => handleRoleSelect(r.role)}
-                style={{ padding: '32px 24px', background: C.surface, border: '1px solid rgba(160,138,94,0.28)', borderRadius: '10px', cursor: 'pointer', textAlign: 'center', fontFamily: FONT }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#C8B89A'; e.currentTarget.style.background = 'rgba(200,184,154,0.05)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(160,138,94,0.28)'; e.currentTarget.style.background = C.surface; }}
+                style={{ padding: '32px 24px', background: C.surface, border: '1px solid var(--c-border)', borderRadius: '10px', cursor: 'pointer', textAlign: 'center', fontFamily: FONT }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#C8B89A'; e.currentTarget.style.background = 'var(--c-surface-container)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--c-border)'; e.currentTarget.style.background = C.surface; }}
               >
                 <div style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '8px', color: C.text }}>{r.title}</div>
                 <p style={{ fontSize: '0.8125rem', color: C.textSecondary, margin: 0 }}>{r.desc}</p>
@@ -264,7 +264,7 @@ export default function OnboardingCreator() {
                 <button
                   key={idx}
                   onClick={() => idx < currentStepIndex && setStep(steps[idx])}
-                  style={{ flex: 1, height: '4px', background: idx <= currentStepIndex ? '#C8B89A' : 'rgba(160,138,94,0.22)', border: 'none', borderRadius: '2px', cursor: idx < currentStepIndex ? 'pointer' : 'default', transition: 'background 0.3s' }}
+                  style={{ flex: 1, height: '4px', background: idx <= currentStepIndex ? '#C8B89A' : 'var(--c-border)', border: 'none', borderRadius: '2px', cursor: idx < currentStepIndex ? 'pointer' : 'default', transition: 'background 0.3s' }}
                   aria-label={`Step ${idx + 1}`}
                 />
               ))}
@@ -275,7 +275,7 @@ export default function OnboardingCreator() {
             </div>
           </div>
 
-          <div style={{ background: C.surface, border: '1px solid rgba(160,138,94,0.22)', borderRadius: '10px', padding: '32px', marginBottom: '24px' }}>
+          <div style={{ background: C.surface, border: '1px solid var(--c-border)', borderRadius: '10px', padding: '32px', marginBottom: '24px' }}>
             {/* Step 1 — Identity */}
             {step === 'identity' && (
               <div>
@@ -377,7 +377,7 @@ export default function OnboardingCreator() {
           {/* Nav — near-black primary (no gold fill, spec §3) */}
           <div style={{ display: 'flex', gap: '12px' }}>
             {currentStepIndex > 0 && (
-              <button onClick={() => setStep(steps[currentStepIndex - 1])} style={{ flex: 1, padding: '12px', border: '1px solid rgba(160,138,94,0.28)', background: 'transparent', color: C.text, borderRadius: '6px', cursor: 'pointer', fontFamily: FONT, fontWeight: 500 }}>
+              <button onClick={() => setStep(steps[currentStepIndex - 1])} style={{ flex: 1, padding: '12px', border: '1px solid var(--c-border)', background: 'transparent', color: C.text, borderRadius: '6px', cursor: 'pointer', fontFamily: FONT, fontWeight: 500 }}>
                 Back
               </button>
             )}
@@ -399,13 +399,13 @@ export default function OnboardingCreator() {
           <div
             style={{
               background: 'linear-gradient(160deg,#0A0A0A,#161512 60%,#20201B)',
-              border: '1px solid rgba(200,184,154,0.28)',
+              border: '1px solid var(--c-border)',
               borderRadius: '12px',
               padding: '24px',
-              color: '#F5F5F0',
+              color: 'var(--c-text)',
             }}
           >
-            <div style={{ fontSize: '0.7rem', letterSpacing: '0.14em', color: '#B8B4AC', marginBottom: '16px' }}>LIVE PREVIEW</div>
+            <div style={{ fontSize: '0.7rem', letterSpacing: '0.14em', color: 'var(--c-text-muted)', marginBottom: '16px' }}>LIVE PREVIEW</div>
             {/* ValueSkin slot */}
             <div
               style={{
@@ -413,37 +413,37 @@ export default function OnboardingCreator() {
                 height: '96px',
                 margin: '0 auto 16px',
                 borderRadius: '10px',
-                border: '1px solid rgba(200,184,154,0.3)',
+                border: '1px solid var(--c-border)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'rgba(255,255,255,0.02)',
+                background: 'var(--c-surface-container)',
                 fontSize: '1.5rem',
                 fontWeight: 700,
-                color: '#C8B89A',
+                color: 'var(--c-text)',
               }}
             >
               {selectedBadge ? selectedBadge.abbreviation : '-'}
             </div>
             <div style={{ textAlign: 'center', fontSize: '1.125rem', fontWeight: 700 }}>{data.displayName || 'Your name'}</div>
-            <div style={{ textAlign: 'center', fontSize: '0.8125rem', color: '#B8B4AC', marginBottom: '16px' }}>
+            <div style={{ textAlign: 'center', fontSize: '0.8125rem', color: 'var(--c-text-muted)', marginBottom: '16px' }}>
               {data.socialAccounts[0]?.username ? `@${data.socialAccounts[0].username.replace(/^@/, '')}` : '@handle'}
               {data.location.city ? ` · ${data.location.city}` : ''}
             </div>
             {data.selectedValueSkin && (
-              <div style={{ textAlign: 'center', fontSize: '0.8125rem', color: '#C8B89A', marginBottom: '12px' }}>{data.selectedValueSkin}</div>
+              <div style={{ textAlign: 'center', fontSize: '0.8125rem', color: 'var(--c-text)', marginBottom: '12px' }}>{data.selectedValueSkin}</div>
             )}
             {data.languages.length > 0 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', justifyContent: 'center', marginBottom: '12px' }}>
                 {data.languages.map((l) => (
-                  <span key={l} style={{ fontSize: '0.7rem', color: '#B8B4AC', border: '1px solid rgba(200,184,154,0.25)', borderRadius: '4px', padding: '2px 8px' }}>{l}</span>
+                  <span key={l} style={{ fontSize: '0.7rem', color: 'var(--c-text-muted)', border: '1px solid var(--c-border)', borderRadius: '4px', padding: '2px 8px' }}>{l}</span>
                 ))}
               </div>
             )}
             {data.minDealValue > 0 && (
-              <div style={{ textAlign: 'center', fontSize: '0.8125rem', color: '#F5F5F0' }}>From ₹{data.minDealValue.toLocaleString('en-IN')}</div>
+              <div style={{ textAlign: 'center', fontSize: '0.8125rem', color: 'var(--c-text)' }}>From ₹{data.minDealValue.toLocaleString('en-IN')}</div>
             )}
-            <div style={{ marginTop: '18px', borderTop: '1px solid rgba(200,184,154,0.18)', paddingTop: '12px', fontSize: '0.7rem', color: '#B8B4AC', textAlign: 'center' }}>
+            <div style={{ marginTop: '18px', borderTop: '1px solid var(--c-surface-container)', paddingTop: '12px', fontSize: '0.7rem', color: 'var(--c-text-muted)', textAlign: 'center' }}>
               {completion}% complete
             </div>
           </div>

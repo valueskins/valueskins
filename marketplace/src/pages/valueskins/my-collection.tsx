@@ -123,7 +123,7 @@ export default function MyCollection() {
                     flex: 1,
                     padding: '8px 12px',
                     background: C.primaryContainer,
-                    color: '#736670',
+                    color: 'var(--c-text-muted)',
                     border: 'none',
                     borderRadius: 8,
                     fontSize: 12,

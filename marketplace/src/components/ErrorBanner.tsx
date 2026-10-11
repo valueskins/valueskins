@@ -11,11 +11,11 @@ export default function ErrorBanner({ message, onDismiss, style }: Props) {
   return (
     <div style={{
       padding: '10px 14px',
-      background: '#fef2f2',
+      background: 'var(--c-error-container)',
       color: C.error,
       borderRadius: '8px',
       fontSize: '13px',
-      border: '1px solid #fecaca',
+      border: '1px solid var(--c-error)',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',

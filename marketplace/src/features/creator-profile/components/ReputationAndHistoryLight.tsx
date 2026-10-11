@@ -29,7 +29,7 @@ const C = {
   text: 'var(--c-text)',
   textSecondary: 'var(--c-text-variant)',
   textMuted: 'var(--c-text-variant)',
-  border: '#e5e7eb',
+  border: 'var(--c-border)',
   success: 'var(--c-accent)',
   warning: 'var(--c-warning)',
   danger: 'var(--c-error)',
@@ -87,11 +87,11 @@ const ReputationAndHistoryLight: React.FC<Props> = ({ userId }) => {
       <div style={{
         marginBottom: '24px',
         padding: '14px',
-        background: '#FEE2E2',
+        background: 'var(--c-error-container)',
         borderRadius: '10px',
-        color: '#991B1B',
+        color: 'var(--c-error)',
         fontSize: '13px',
-        border: `1px solid #FECACA`,
+        border: `1px solid var(--c-error)`,
       }}>
         {error}
       </div>

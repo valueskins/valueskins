@@ -24,7 +24,7 @@ const C = {
   textMuted: '#B8B4AC',
   textSecondary: '#D6D2C8',
   primary: '#C8B89A',
-  border: '#2D2D2D',
+  border: 'var(--c-border)',
 };
 
 export default function BrandReviewList({ creatorId, showTitle = true, maxItems }: Props) {
