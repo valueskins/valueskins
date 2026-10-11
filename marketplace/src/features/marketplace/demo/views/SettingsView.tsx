@@ -6,6 +6,7 @@ import PitchText from '@/components/PitchText';
 import ProfileDetails from '@/components/ProfileDetails';
 import PayoutUpi from '@/components/PayoutUpi';
 import EmailSettings from '@/components/EmailSettings';
+import SetupBanner from '@/components/deal/SetupBanner';
 import Link from 'next/link';
 import { PROFESSION_BADGES, BRAND_CATEGORY_BADGES } from '@/features/valueskins/core/identity/AvatarOptions';
 import { STICKER_MANIFEST } from '@/features/valueskins/core/stickers/sticker-manifest';
@@ -236,6 +237,9 @@ export default function SettingsView({
         {/* Details for this account's role, saved to the account. Replaced a
             single "My Profile" form that asked a brand for a full name, an age
             range and a gender, and kept the answers in localStorage. */}
+        {/* What still has to be filled in before posting or applying. */}
+        <SetupBanner variant="checklist" />
+
         <ProfileDetails role={role === 'brand' ? 'brand' : 'creator'} />
 
         {/* Email: seen and changed here, not on another page. */}

@@ -110,6 +110,16 @@ describeDb('workflow routes (real database)', () => {
               ($4,'rt_outsider','creator','c3@rt.local',true,'ig_c3',true,'fa_3')`,
       [BRAND, CREATOR, OTHER_CREATOR, OUTSIDER]
     );
+    // Posting and applying now need a finished account: profile saved, a
+    // description written, and for creators a UPI ID with the account name.
+    await query(
+      `UPDATE users
+          SET profile_locked_at = NOW(), pitch_text = 'About this account',
+              payout_vpa = 'rt' || id || '@okhdfcbank', payout_name = 'Route Test',
+              payout_vpa_share_consent_at = NOW()
+        WHERE id = ANY($1::bigint[])`,
+      [[BRAND, CREATOR, OTHER_CREATOR, OUTSIDER]]
+    );
     for (const [token, uid] of [
       [BRAND_SESSION, BRAND], [CREATOR_SESSION, CREATOR],
       [OTHER_SESSION, OTHER_CREATOR], [OUTSIDER_SESSION, OUTSIDER],

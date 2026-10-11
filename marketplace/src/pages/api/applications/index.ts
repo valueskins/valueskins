@@ -3,7 +3,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { requireUser } from '@/lib/auth/require-user';
 import { query, queryOne } from '@/lib/db-pool';
-import { loadDeal, getUserRole, hasEmailOnFile, EMAIL_REQUIRED } from '@/lib/deal-guards';
+import { loadDeal, getUserRole, hasEmailOnFile, EMAIL_REQUIRED, incompleteSetup } from '@/lib/deal-guards';
 import { applicationsOpen } from '@/lib/deal-workflow';
 import { sendDealEmail } from '@/lib/deal-emails';
 import { checkApplicationQuota } from '@/lib/deal-quotas';
@@ -43,6 +43,8 @@ async function apply(req: NextApiRequest, res: NextApiResponse, userId: string) 
   }
 
   if (!(await hasEmailOnFile(userId))) return res.status(403).json(EMAIL_REQUIRED);
+  const unfinished = await incompleteSetup(userId, 'applying to a deal');
+  if (unfinished) return res.status(403).json(unfinished);
 
   const quota = await checkApplicationQuota(userId);
   if (!quota.allowed) {

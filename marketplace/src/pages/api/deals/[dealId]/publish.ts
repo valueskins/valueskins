@@ -7,7 +7,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { requireUser } from '@/lib/auth/require-user';
 import { queryOne } from '@/lib/db-pool';
-import { loadDeal, isBrandOwner, dealBudget } from '@/lib/deal-guards';
+import { loadDeal, isBrandOwner, dealBudget, incompleteSetup } from '@/lib/deal-guards';
 import { WORKFLOW, canTransition } from '@/lib/deal-workflow';
 import { sendDealEmail } from '@/lib/deal-emails';
 import { broadcastNewDeal } from '@/lib/deal-realtime';
@@ -22,6 +22,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const deal = await loadDeal(req.query.dealId);
   if (!deal) return res.status(404).json({ error: 'Not found' });
   if (!isBrandOwner(deal, userId)) return res.status(403).json({ error: 'Forbidden' });
+
+  // A draft saved before the account was finished cannot be slipped live.
+  const unfinished = await incompleteSetup(userId, 'publishing a deal');
+  if (unfinished) return res.status(403).json(unfinished);
 
   if (!canTransition(deal.workflow_status, WORKFLOW.OPEN)) {
     return res.status(409).json({

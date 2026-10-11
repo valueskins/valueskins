@@ -8,6 +8,7 @@ import { roleFromInstagramAccountType } from '@/lib/oauth';
 import { isInstagramHandle, handleLabel, placeholderUsername } from '@/lib/handle';
 import { scrubText, scrubEvent } from '@/lib/sentry-scrub';
 import { financials } from '@/lib/deal-api';
+import { missingSetup } from '@/lib/setup-status';
 
 describe('role comes from the Instagram account type', () => {
   it('maps a Business account to brand and a Creator account to creator', () => {
@@ -89,6 +90,40 @@ describe('error reports carry no personal data', () => {
     expect(ev.request.url).toBe('https://www.valueskins.com/settings/email');
     expect(ev.request.headers).toEqual({ 'user-agent': 'UA' });
     expect(JSON.stringify(ev)).not.toMatch(/@b\.com|@w\.com|@p\.com|9\.9\.9\.9/);
+  });
+});
+
+describe('a complete account', () => {
+  const full = {
+    email: 'a@b.com', email_verified: true, profile_locked_at: new Date(),
+    pitch_text: 'About', payout_vpa: 'a@okhdfcbank', payout_name: 'A B',
+  };
+
+  it('a creator needs profile, confirmed email, UPI ID with name, and a description', () => {
+    expect(missingSetup({ ...full, role: 'creator' })).toEqual([]);
+    expect(missingSetup({ ...full, role: 'creator', profile_locked_at: null })).toEqual(['profile']);
+    expect(missingSetup({ ...full, role: 'creator', email_verified: false })).toEqual(['email_confirm']);
+    expect(missingSetup({ ...full, role: 'creator', payout_vpa: '' })).toEqual(['upi']);
+    expect(missingSetup({ ...full, role: 'creator', payout_name: '' })).toEqual(['upi']);
+    expect(missingSetup({ ...full, role: 'creator', pitch_text: '   ' })).toEqual(['about']);
+  });
+
+  it('a brand needs the same, except a UPI ID', () => {
+    expect(missingSetup({ ...full, role: 'brand', payout_vpa: '', payout_name: '' })).toEqual([]);
+    expect(missingSetup({ ...full, role: 'brand', pitch_text: '' })).toEqual(['about']);
+  });
+
+  it('a missing email is reported once, not as two problems', () => {
+    expect(missingSetup({ ...full, role: 'brand', email: '', email_verified: false })).toEqual(['email']);
+  });
+
+  it('nothing filled in means everything is missing', () => {
+    expect(
+      missingSetup({
+        role: 'creator', email: '', email_verified: false, profile_locked_at: null,
+        pitch_text: '', payout_vpa: '', payout_name: '',
+      })
+    ).toEqual(['profile', 'email', 'upi', 'about']);
   });
 });
 

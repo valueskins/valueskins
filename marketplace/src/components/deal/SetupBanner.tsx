@@ -1,76 +1,99 @@
-// Tells a signed-in user which setup step still blocks them, with a link to
-// the page that completes it.
+// What the signed-in account still has to fill in before it can post a deal or
+// apply to one, with a link to where it is done.
 //
-// The server refuses to transact until the email is confirmed (and, for a
-// creator, a UPI ID is on file), but nothing in the workflow pages said so or
-// linked to where it is done: a new account simply hit a 403.
-import { useEffect, useState } from 'react';
+// Two forms of the same list: a short banner on the marketplace pages, and the
+// full checklist at the top of Settings. Both read /api/profile/setup-status,
+// which uses the same rule the server enforces, so what is shown here is
+// exactly what would be refused.
+import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { C, withAlpha } from '@/theme/colors';
-import { getOnboardingStatus, isOk } from '@/lib/deal-api';
 
-type Step = 'email' | 'verify_email' | 'bank_details';
+interface Status {
+  role: 'creator' | 'brand';
+  complete: boolean;
+  items: Array<{ key: string; label: string; done: boolean }>;
+}
 
-const COPY: Record<Step, { text: string; cta: string; href: string }> = {
-  email: {
-    text: 'Add your email address to start. Confirmations and deal reports are sent there.',
-    cta: 'Add email',
-    href: '/settings/email',
-  },
-  verify_email: {
-    text: 'Confirm your email address using the link we sent you.',
-    cta: 'Check or resend',
-    href: '/settings/email',
-  },
-  bank_details: {
-    text: 'Add the UPI ID brands should pay you on.',
-    cta: 'Add UPI ID',
-    href: '/settings/payout',
-  },
-};
+export default function SetupBanner({ variant = 'banner' }: { variant?: 'banner' | 'checklist' }) {
+  const [status, setStatus] = useState<Status | null>(null);
 
-export default function SetupBanner() {
-  const [step, setStep] = useState<Step | null>(null);
-
-  useEffect(() => {
-    let live = true;
-    void (async () => {
-      const res = await getOnboardingStatus();
-      if (!live || !isOk(res)) return;
-      const next = res.data.next_step;
-      // A brand pays; it is never paid, so it has no payout step.
-      if (next === 'ready' || (next === 'bank_details' && res.data.role !== 'creator')) return;
-      setStep(next);
-    })();
-    return () => { live = false; };
+  const load = useCallback(async () => {
+    try {
+      const res = await fetch('/api/profile/setup-status', { credentials: 'include' });
+      if (res.ok) setStatus(await res.json());
+    } catch {
+      /* nothing to show if it cannot be read; the server still enforces it */
+    }
   }, []);
 
-  if (!step) return null;
-  const c = COPY[step];
+  useEffect(() => { void load(); }, [load]);
+
+  // In Settings the list should tick off as each section is saved. Saving
+  // happens in sibling components, so re-read on focus and on a short timer
+  // while something is still outstanding.
+  useEffect(() => {
+    if (variant !== 'checklist' || !status || status.complete) return;
+    const onFocus = () => { void load(); };
+    window.addEventListener('focus', onFocus);
+    const id = setInterval(() => { void load(); }, 5000);
+    return () => { window.removeEventListener('focus', onFocus); clearInterval(id); };
+  }, [variant, status, load]);
+
+  if (!status) return null;
+  const todo = status.items.filter((i) => !i.done);
+  const action = status.role === 'brand' ? 'post a deal' : 'apply to deals';
+
+  const box: React.CSSProperties = {
+    background: withAlpha(C.accent, 0x14),
+    border: `1px solid ${C.accent}`,
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: variant === 'checklist' ? 24 : 12,
+    fontSize: 12,
+    color: C.text,
+    lineHeight: 1.6,
+  };
+
+  if (variant === 'banner') {
+    if (status.complete) return null;
+    return (
+      <div role="status" style={{ ...box, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+        <span>
+          Finish setting up your account before you can {action}.{' '}
+          {todo.length === 1 ? `One step left: ${todo[0].label.toLowerCase()}.` : `${todo.length} steps left.`}
+        </span>
+        <Link
+          href="/settings?setup=1"
+          style={{ color: C.text, fontWeight: 700, whiteSpace: 'nowrap', textDecoration: 'underline' }}
+        >
+          Go to Settings
+        </Link>
+      </div>
+    );
+  }
 
   return (
-    <div
-      role="status"
-      style={{
-        background: withAlpha(C.accent, 0x14),
-        border: `1px solid ${C.accent}`,
-        borderRadius: 12,
-        padding: 14,
-        marginBottom: 12,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: 12,
-        fontSize: 12,
-      }}
-    >
-      <span>{c.text}</span>
-      <Link
-        href={c.href}
-        style={{ color: C.text, fontWeight: 700, whiteSpace: 'nowrap', textDecoration: 'underline' }}
-      >
-        {c.cta}
-      </Link>
+    <div role="status" style={box}>
+      <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8 }}>
+        {status.complete
+          ? `Your account is set up. You can ${action}.`
+          : `Complete everything below before you can ${action}.`}
+      </div>
+      {status.items.map((i) => (
+        <div key={i.key} style={{ display: 'flex', gap: 10, alignItems: 'baseline', padding: '2px 0' }}>
+          <span
+            aria-hidden="true"
+            style={{ width: 34, fontSize: 10, fontWeight: 700, letterSpacing: '0.4px', color: i.done ? C.textMuted : C.text }}
+          >
+            {i.done ? 'DONE' : 'TO DO'}
+          </span>
+          <span style={{ color: i.done ? C.textMuted : C.text, textDecoration: i.done ? 'line-through' : 'none' }}>
+            {i.label}
+            <span style={{ position: 'absolute', left: -9999 }}>{i.done ? ' (done)' : ' (to do)'}</span>
+          </span>
+        </div>
+      ))}
     </div>
   );
 }
