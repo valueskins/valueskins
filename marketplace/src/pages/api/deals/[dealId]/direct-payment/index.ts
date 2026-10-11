@@ -18,6 +18,7 @@ import {
 import { dealBudget } from '@/lib/deal-guards';
 import { sendDealEmail } from '@/lib/deal-emails';
 import { broadcastDealUpdate } from '@/lib/deal-realtime';
+import { recordDealEvent } from '@/lib/deal-events';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const userId = await requireUser(req, res);
@@ -70,6 +71,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         stage,
         reference: String(reference || ''),
         note: typeof note === 'string' ? note : '',
+      });
+
+      await recordDealEvent({
+        dealId: deal.id,
+        actorId: userId,
+        type: 'PAYMENT_RECORDED',
+        detail: {
+          stage,
+          amount: result.amount,
+          reference: String(reference || '').slice(0, 80),
+          note: typeof note === 'string' ? note.slice(0, 500) : '',
+        },
       });
 
       // Tell the creator at once: they cannot confirm what they do not know

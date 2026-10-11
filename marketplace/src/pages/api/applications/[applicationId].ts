@@ -8,6 +8,7 @@ import { isUuid } from '@/lib/deal-guards';
 import { WORKFLOW, assertTransition, dealFinancials, WorkflowError } from '@/lib/deal-workflow';
 import { sendDealEmail } from '@/lib/deal-emails';
 import { broadcastDealUpdate } from '@/lib/deal-realtime';
+import { recordDealEvent } from '@/lib/deal-events';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'PATCH') return res.status(405).json({ error: 'Method not allowed' });
@@ -93,6 +94,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (outcome.code === 409) return res.status(409).json({ error: outcome.message });
 
     const { deal, app } = outcome;
+
+    await recordDealEvent({
+      dealId: deal.id,
+      actorId: userId,
+      type: 'confirmed' in outcome && outcome.confirmed ? 'CREATOR_CONFIRMED' : 'APPLICATION_DECLINED',
+      detail: { creator_id: Number(app.creator_id) },
+    });
 
     if ('confirmed' in outcome && outcome.confirmed) {
       const brand = await queryOne('SELECT username FROM users WHERE id = $1', [deal.brand_id]);

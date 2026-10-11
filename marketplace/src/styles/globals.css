@@ -469,3 +469,106 @@ html {
     scroll-behavior: auto;
   }
 }
+
+/* ── PHONES ──────────────────────────────────────────────────────────────
+   The app is styled inline, page by page, for a desktop window. These rules
+   are the one place that fits it to a phone: smaller titles, a narrower
+   frame, single columns, and controls large enough to tap. Inline styles are
+   found by the values they were given, in both spellings a browser may hold
+   them in. */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 24px !important;
+    letter-spacing: 0.08em !important;
+    line-height: 1.25 !important;
+    overflow-wrap: anywhere;
+  }
+
+  h2 {
+    font-size: 17px !important;
+    letter-spacing: 0.08em !important;
+    overflow-wrap: anywhere;
+  }
+
+  h3 { font-size: 16px !important; }
+
+  /* Page frames. */
+  [style*="padding:72px 24px 140px"], [style*="padding: 72px 24px 140px"],
+  [style*="padding:96px 24px 64px"], [style*="padding: 96px 24px 64px"] {
+    padding: 32px 18px 96px !important;
+  }
+
+  [style*="padding:120px 24px 160px"], [style*="padding: 120px 24px 160px"],
+  [style*="padding:160px 24px 140px"], [style*="padding: 160px 24px 140px"],
+  [style*="padding:140px 24px 60px"], [style*="padding: 140px 24px 60px"] {
+    padding: 56px 18px 96px !important;
+  }
+
+  /* Cards. */
+  div[style*="padding:28px;"], div[style*="padding: 28px;"],
+  div[style*="padding:32px;"], div[style*="padding: 32px;"],
+  div[style*="padding:40px;"], div[style*="padding: 40px;"],
+  section[style*="padding:28px;"], section[style*="padding: 28px;"] {
+    padding: 18px !important;
+  }
+
+  /* Three or more columns, or a main column beside a fixed side column,
+     become one column. Two equal columns still fit and are left alone. */
+  [style*="grid-template-columns:1fr 1fr 1fr"], [style*="grid-template-columns: 1fr 1fr 1fr"],
+  [style*="grid-template-columns:repeat(3"], [style*="grid-template-columns: repeat(3"],
+  [style*="grid-template-columns:repeat(4"], [style*="grid-template-columns: repeat(4"],
+  [style*="grid-template-columns:1fr 350px"], [style*="grid-template-columns: 1fr 350px"],
+  [style*="320px"][style*="grid-template-columns"],
+  [style*="minmax(300px"], [style*="minmax(250px"], [style*="minmax(240px"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* 16px stops iOS from zooming the page when a field is tapped. */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea {
+    font-size: 16px !important;
+    padding: 13px 14px !important;
+    max-width: 100%;
+  }
+
+  /* Tap targets. */
+  button,
+  a[style*="border-radius:8px"], a[style*="border-radius: 8px"],
+  a[style*="border-radius:999px"], a[style*="border-radius: 999px"] {
+    min-height: 44px;
+  }
+
+  input[type="checkbox"], input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .vs-nav-link { padding: 14px 0 !important; }
+
+  /* Long links, UPI IDs and references wrap instead of widening the page. */
+  p, li, td, dd, span, a { overflow-wrap: anywhere; }
+
+  table { display: block; max-width: 100%; overflow-x: auto; }
+
+  img, video, canvas, svg { max-width: 100%; }
+
+  /* The cookie notice: text above, buttons below, each button full width. */
+  .vs-cookie-row { grid-template-columns: 1fr !important; gap: 14px !important; }
+  .vs-cookie-row button { flex: 1 1 100%; }
+
+  /* The resume card opens as a sheet at the foot of the screen, where it
+     cannot run off the side. */
+  .vs-resume-card {
+    position: fixed !important;
+    top: auto !important;
+    left: 16px !important;
+    right: 16px !important;
+    bottom: 16px !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: 70dvh;
+    overflow-y: auto;
+  }
+}

@@ -145,6 +145,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     results.push({ name: '012_instagram_account_type.sql', success: false, error: err.message });
   }
 
+  // The record of every action on a deal (013). The deal report prints it.
+  try {
+    const dePath = path.join(process.cwd(), 'src', 'lib', 'migrations', '013_deal_events.sql');
+    const ran = await runSqlStatements(fs.readFileSync(dePath, 'utf-8'));
+    results.push({ name: `013_deal_events.sql (${ran} statements)`, success: true });
+  } catch (err: any) {
+    allPassed = false;
+    results.push({ name: '013_deal_events.sql', success: false, error: err.message });
+  }
+
   // Run escrow-v2 migration SQL
   try {
     const sqlPath = path.join(process.cwd(), 'src', 'lib', 'migrations-escrow-v2.sql');

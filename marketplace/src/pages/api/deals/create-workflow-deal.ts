@@ -7,6 +7,7 @@ import { WORKFLOW } from '@/lib/deal-workflow';
 import { sendDealEmail } from '@/lib/deal-emails';
 import { broadcastNewDeal } from '@/lib/deal-realtime';
 import { checkDealCreationQuota } from '@/lib/deal-quotas';
+import { recordDealEvent } from '@/lib/deal-events';
 
 const MAX_TITLE = 200;
 
@@ -112,6 +113,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const dealId = (row as any).id;
 
     if (shouldPublish) {
+      await recordDealEvent({ dealId, actorId: userId, type: 'DEAL_POSTED' });
+
       await broadcastNewDeal({
         id: dealId,
         title: title.trim(),

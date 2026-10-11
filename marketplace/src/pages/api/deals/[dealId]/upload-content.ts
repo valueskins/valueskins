@@ -9,6 +9,7 @@ import { sendDealEmail } from '@/lib/deal-emails';
 import { broadcastDealUpdate } from '@/lib/deal-realtime';
 import { checkUploadQuota } from '@/lib/deal-quotas';
 import { checkDriveLink, DRIVE_LINK_MESSAGES } from '@/lib/drive-link';
+import { recordDealEvent } from '@/lib/deal-events';
 
 // Spec: Google Drive links only. Anything else is rejected rather than stored,
 // so a brand is never sent to an attacker-controlled host from a deal page.
@@ -126,6 +127,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       });
     }
+
+    await recordDealEvent({
+      dealId: deal.id,
+      actorId: userId,
+      type: 'CONTENT_SUBMITTED',
+      detail: { link: link.url, resubmission: isRevision },
+    });
 
     broadcastDealUpdate({
       dealId: deal.id,

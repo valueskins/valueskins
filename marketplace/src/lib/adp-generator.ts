@@ -5,6 +5,7 @@ import PDFDocument from 'pdfkit';
 import { query, queryOne } from '@/lib/db-pool';
 import { dealFinancials } from '@/lib/deal-workflow';
 import { calculateRazorpayFees } from '@/lib/payment-workflow';
+import { listDealEvents, describeDealEvent, type DealEventRow } from '@/lib/deal-events';
 
 export interface AdpSnapshot {
   deal: any;
@@ -12,6 +13,16 @@ export interface AdpSnapshot {
   creator: any;
   payments: any[];
   financials: ReturnType<typeof dealFinancials>;
+  // Everything below is optional so a snapshot stored before these were added
+  // still renders.
+  /** The 30% and 70% payments, made by UPI and recorded on the deal. */
+  directPayments?: any[];
+  /** Every action on the deal, oldest first. */
+  events?: DealEventRow[];
+  /** Every email the platform sent about the deal. */
+  emails?: any[];
+  /** id -> username, for everyone named in the events. */
+  names?: Record<string, string>;
 }
 
 const money = (n: number) =>
@@ -20,7 +31,15 @@ const money = (n: number) =>
     maximumFractionDigits: 2,
   })} INR`;
 
-const when = (d: any) => (d ? new Date(d).toISOString().replace('T', ' ').slice(0, 19) + ' UTC' : 'n/a');
+// India time. Both parties are in India, and a UTC timestamp reads five and a
+// half hours away from what either of them remembers.
+const when = (d: any) =>
+  d
+    ? new Date(d).toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
+      }) + ' IST'
+    : 'n/a';
 
 export async function collectAdpData(dealId: string): Promise<AdpSnapshot | null> {
   const deal = await queryOne(
@@ -55,12 +74,53 @@ export async function collectAdpData(dealId: string): Promise<AdpSnapshot | null
     ),
   ]);
 
+  const [events, directRes, emailRes] = await Promise.all([
+    listDealEvents(dealId),
+    query(
+      `SELECT type, amount, reference, paid_to_vpa, note, recorded_at,
+              confirmed_at, disputed_at, dispute_reason
+         FROM direct_payments
+        WHERE deal_id = $1
+        ORDER BY recorded_at`,
+      [dealId]
+    ),
+    query(
+      `SELECT email_type, subject, sender_id, recipient_id, delivery_status, sent_at
+         FROM email_communications
+        WHERE deal_id = $1
+        ORDER BY sent_at, created_at`,
+      [dealId]
+    ),
+  ]);
+
+  // Names for everyone the record mentions: the two parties, and any creator
+  // who applied and was not picked.
+  const ids = new Set<number>();
+  for (const v of [d.brand_id, d.creator_id]) if (v) ids.add(Number(v));
+  for (const e of events) {
+    if (e.actor_id) ids.add(Number(e.actor_id));
+    if (e.detail?.creator_id) ids.add(Number(e.detail.creator_id));
+  }
+  for (const m of emailRes.rows || []) {
+    if (m.sender_id) ids.add(Number(m.sender_id));
+    if (m.recipient_id) ids.add(Number(m.recipient_id));
+  }
+  const names: Record<string, string> = {};
+  if (ids.size > 0) {
+    const who = await query('SELECT id, username FROM users WHERE id = ANY($1::bigint[])', [Array.from(ids)]);
+    for (const r of who.rows || []) names[String(r.id)] = r.username || '';
+  }
+
   return {
     deal: d,
     brand: brand as any,
     creator: creator as any,
     payments: paymentsRes.rows || [],
     financials: dealFinancials(Number(d.amount) || 0),
+    directPayments: directRes.rows || [],
+    events,
+    emails: emailRes.rows || [],
+    names,
   };
 }
 
@@ -127,44 +187,99 @@ export function renderAdpPdf(snap: AdpSnapshot): Promise<Buffer> {
         if (row.razorpay_invoice_id) kv('Razorpay invoice ID', row.razorpay_invoice_id);
       };
 
-      invoice(4, 'Invoice 1: ValueSkins Commission (GST)', byType('COMMISSION'), () => {
+      invoice(4, 'Payment 1: ValueSkins Fee (GST invoice)', byType('COMMISSION'), () => {
         kv('Base', money(f.commissionBase));
         kv('GST (18%)', money(f.commissionGst));
         if (brand?.gstin) kv('Brand GSTIN', brand.gstin);
       });
-      invoice(5, 'Invoice 2: Creator Advance Payment (Non-GST)', byType('ADVANCE'), () => {
-        kv('Creator', creator?.username ? `@${creator.username}` : 'n/a');
-        kv('Description', '30% advance payment');
-      });
-      invoice(6, 'Invoice 3: Creator Final Payment (Non-GST)', byType('FINAL'), () => {
-        kv('Creator', creator?.username ? `@${creator.username}` : 'n/a');
-        kv('Description', '70% final payment');
-      });
+      // The 30% and the 70% are paid by UPI directly to the creator and recorded
+      // on the deal. They never pass through Razorpay, so they are read from
+      // the direct payment records, which is where they actually are.
+      const direct = snap.directPayments || [];
+      const directPayment = (n: number, title: string, type: string, share: string) => {
+        h1(`${n}. ${title}`);
+        const rows = direct.filter((p) => p.type === type);
+        if (rows.length === 0) {
+          doc.text('No payment recorded for this stage.');
+          return;
+        }
+        for (const row of rows) {
+          kv('Amount', money(Number(row.amount)));
+          kv('Description', share);
+          kv('Paid to UPI ID', row.paid_to_vpa || 'n/a');
+          kv('UPI reference given by the brand', row.reference || 'n/a');
+          kv('Recorded by the brand', when(row.recorded_at));
+          if (row.confirmed_at) kv('Confirmed received by the creator', when(row.confirmed_at));
+          if (row.disputed_at) {
+            kv('Reported as not received by the creator', when(row.disputed_at));
+            if (row.dispute_reason) kv('Reason given', String(row.dispute_reason));
+          }
+          if (!row.confirmed_at && !row.disputed_at) kv('Status', 'Waiting for the creator to confirm');
+          if (rows.length > 1) doc.moveDown(0.3);
+        }
+      };
+      directPayment(5, 'Payment 2: Advance to the Creator (30%, by UPI)', 'ADVANCE', '30% advance payment');
+      directPayment(6, 'Payment 3: Final to the Creator (70%, by UPI)', 'FINAL', '70% final payment');
 
       h1('7. Delivery Proof');
-      kv('Content link', deal.content_link || 'n/a');
-      kv('Uploaded at', when(deal.content_uploaded_at));
-      kv('Revisions requested', String(deal.revision_count ?? 0));
+      kv('Final content link', deal.content_link || 'n/a');
+      kv('Submitted at', when(deal.content_uploaded_at));
+      kv('Rounds of changes requested', String((snap.events || []).filter((e) => e.event_type === 'CHANGES_REQUESTED').length || deal.revision_count || 0));
+      doc.fontSize(9).text('Every submission and every change request is listed in full in section 8.').fontSize(10);
 
-      h1('8. Razorpay Fees (absorbed by ValueSkins)');
-      const fees = [
-        ['Commission', f.commissionTotal],
-        ['Advance', f.advance],
-        ['Final', f.final],
-      ] as const;
-      let totalFees = 0;
-      for (const [label, amt] of fees) {
-        const fee = calculateRazorpayFees(amt).paymentFee;
-        totalFees += fee;
-        kv(`${label} fee (2%)`, money(fee));
+      // ---- the whole story, in order ------------------------------------
+      const names = snap.names || {};
+      const who = (id: number | null) => {
+        if (!id) return 'ValueSkins';
+        const name = names[String(id)] ? `@${names[String(id)]}` : `user ${id}`;
+        if (String(id) === String(deal.brand_id)) return `Brand ${name}`;
+        return `Creator ${name}`;
+      };
+
+      h1('8. Complete Record of the Deal');
+      const events = snap.events || [];
+      if (events.length === 0) {
+        doc.text('No actions were recorded for this deal.');
+      } else {
+        doc.fontSize(9).text(
+          'Every action taken on this deal by either party, in the order it happened. Times are India Standard Time.'
+        ).moveDown(0.4).fontSize(10);
+        for (const ev of events) {
+          const { line, quote } = describeDealEvent(ev, who);
+          doc.fontSize(9).fillColor('#555555').text(when(ev.created_at));
+          doc.fontSize(10).fillColor('#000000').text(line);
+          // What was actually written, word for word, set apart from our own
+          // description of the action.
+          if (quote) doc.fontSize(9).text(quote, { indent: 14 }).fontSize(10);
+          doc.moveDown(0.35);
+        }
       }
-      kv('Total fees', money(totalFees));
+
+      h1('9. Emails Sent About the Deal');
+      const emails = snap.emails || [];
+      if (emails.length === 0) {
+        doc.text('No emails were recorded for this deal.');
+      } else {
+        for (const m of emails) {
+          doc.fontSize(9).text(
+            `${when(m.sent_at)}  ${m.subject || m.email_type}  (to ${who(Number(m.recipient_id) || null)}${
+              m.delivery_status && m.delivery_status !== 'sent' ? `, ${m.delivery_status}` : ''
+            })`
+          );
+        }
+        doc.fontSize(10);
+      }
+
+      // Only the fee goes through Razorpay, so it is the only payment that
+      // carries a Razorpay charge.
+      h1('10. Razorpay Charge on the Fee (absorbed by ValueSkins)');
+      kv('Charge on the fee (2%)', money(calculateRazorpayFees(f.commissionTotal).paymentFee));
 
       doc
         .moveDown(1)
         .fontSize(8)
         .text(
-          'This report is generated from ValueSkins payment records. Disputes: founder@valueskins.com',
+          'This report is generated from ValueSkins records of the deal. Questions or disputes: founder@valueskins.com, or WhatsApp 88056 95324.',
           { align: 'center' }
         );
 

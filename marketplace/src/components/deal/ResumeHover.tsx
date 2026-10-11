@@ -28,6 +28,8 @@ export default function ResumeHover({ username }: { username: string }) {
       onMouseLeave={hide}
       onFocus={show}
       onBlur={hide}
+      // A phone has no hover: a tap opens it, and a tap elsewhere closes it.
+      onClick={show}
     >
       <span
         tabIndex={0}
@@ -41,6 +43,7 @@ export default function ResumeHover({ username }: { username: string }) {
         <div
           role="dialog"
           aria-label={`Resume of ${handleLabel(username)}`}
+          className="vs-resume-card"
           style={{
             position: 'absolute',
             top: '100%',

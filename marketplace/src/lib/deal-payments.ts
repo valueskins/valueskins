@@ -18,6 +18,7 @@ import {
   stageAmount,
 } from '@/lib/deal-workflow';
 import { dealBudget, type DealRow } from '@/lib/deal-guards';
+import { recordDealEvent } from '@/lib/deal-events';
 
 export type StageType = 'COMMISSION' | 'ADVANCE' | 'FINAL';
 
@@ -137,7 +138,7 @@ export async function confirmPaymentStage(args: {
   paymentId: string;
   invoiceId?: string;
 }): Promise<ConfirmedStage | null> {
-  return transaction(async (client) => {
+  const confirmed = await transaction(async (client) => {
     // Lock the payment row so two concurrent webhook deliveries serialise.
     const payRes = await client.query(
       `SELECT id, deal_id, type, amount, status
@@ -193,6 +194,17 @@ export async function confirmPaymentStage(args: {
       dealId: pay.deal_id,
     };
   });
+
+  // After the transaction, never inside it: a failure to write the record must
+  // not undo a payment that was confirmed.
+  if (confirmed && !confirmed.alreadyConfirmed && confirmed.type === 'COMMISSION') {
+    await recordDealEvent({
+      dealId: confirmed.dealId,
+      type: 'FEE_PAID',
+      detail: { amount: confirmed.amount, razorpay_payment_id: args.paymentId },
+    });
+  }
+  return confirmed;
 }
 
 export async function markPaymentFailed(orderId: string, reason: string): Promise<void> {

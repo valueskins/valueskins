@@ -7,6 +7,7 @@ import { loadDeal, isBrandOwner } from '@/lib/deal-guards';
 import { WORKFLOW, canTransition } from '@/lib/deal-workflow';
 import { sendDealEmail } from '@/lib/deal-emails';
 import { broadcastDealUpdate } from '@/lib/deal-realtime';
+import { recordDealEvent } from '@/lib/deal-events';
 
 const MAX_FEEDBACK = 5000;
 // After this many rounds the email suggests both sides consider closing the
@@ -52,6 +53,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!updated) return res.status(409).json({ error: 'Deal state changed, please reload' });
 
     const rounds = Number((updated as any).revision_count) || 0;
+
+    // deals.feedback holds only the newest request. Each one is kept here in
+    // full, so the report can show every round of changes that was asked for.
+    await recordDealEvent({
+      dealId: deal.id,
+      actorId: userId,
+      type: 'CHANGES_REQUESTED',
+      detail: { feedback, round: rounds + 1 },
+    });
 
     if (deal.creator_id) {
       await sendDealEmail({
