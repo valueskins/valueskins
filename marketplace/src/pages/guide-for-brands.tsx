@@ -65,7 +65,7 @@ export default function GuideForBrandsPage() {
             a reference when you decide your budget.
           </p>
 
-          <div style={{ ...card, marginTop: 32, background: C.surfaceContainer }}>
+          <div style={{ ...card, marginTop: 32, background: 'var(--c-surface-container)' }}>
             <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Please read this first</div>
             <div style={{ fontSize: 15, color: C.textMuted, lineHeight: 1.6 }}>
               This is only a guide. You can go above or below it. The figures are not ours: they
