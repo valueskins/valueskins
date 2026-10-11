@@ -28,7 +28,7 @@ export function Navigation() {
             alignItems: 'center',
             backdropFilter: 'blur(10px)',
             background: 'rgba(10, 10, 15, 0.9)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+            borderBottom: '1px solid var(--c-surface-container)',
         }}>
             <Link href="/" style={{
                 fontSize: '1.5rem',
@@ -51,7 +51,7 @@ export function Navigation() {
                             style={{
                                 padding: '0.5rem 1rem',
                                 borderRadius: '8px',
-                                background: isActive ? 'rgba(200, 184, 154, 0.2)' : 'transparent',
+                                background: isActive ? 'var(--c-border)' : 'transparent',
                                 color: isActive ? 'white' : '#a1a1aa',
                                 textDecoration: 'none',
                                 fontSize: '0.9rem',
@@ -71,8 +71,8 @@ export function Navigation() {
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                 <Link href="/brands/onboarding" style={{
                     padding: '0.5rem 1rem',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: 'var(--c-surface-container)',
+                    border: '1px solid var(--c-border)',
                     borderRadius: '8px',
                     color: '#a1a1aa',
                     textDecoration: 'none',

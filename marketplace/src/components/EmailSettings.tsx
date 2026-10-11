@@ -60,29 +60,29 @@ export default function EmailSettings() {
   const off = busy || !input.trim() || (!!current && !changed);
 
   const lbl: React.CSSProperties = {
-    display: 'block', fontSize: '11px', fontWeight: 700, color: C.textMuted,
+    display: 'block', fontSize: '13px', fontWeight: 700, color: C.textMuted,
     textTransform: 'uppercase', marginBottom: '6px',
   };
   const ghost: React.CSSProperties = {
     background: 'none', border: `1px solid ${C.border}`, borderRadius: '8px',
-    padding: '9px 14px', color: C.text, fontWeight: 600, fontSize: '13px', cursor: 'pointer',
+    padding: '13px 26px', color: C.text, fontWeight: 600, fontSize: '15px', cursor: 'pointer',
   };
 
   return (
-    <div style={{ marginBottom: '24px' }}>
-      <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '12px' }}>
+    <div style={{ marginBottom: '56px' }}>
+      <div style={{ fontSize: '14px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '16px' }}>
         Email Address
       </div>
-      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: '12px', padding: '16px' }}>
-        {loading && <div style={{ fontSize: '13px', color: C.textMuted }}>Loading…</div>}
+      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: '12px', padding: '28px' }}>
+        {loading && <div style={{ fontSize: '15px', color: C.textMuted }}>Loading…</div>}
 
         {!loading && current && !editing && (
           <>
             <div style={lbl}>Your email</div>
-            <div style={{ fontSize: '14px', fontWeight: 700, color: C.text, wordBreak: 'break-all', marginBottom: '6px' }}>
+            <div style={{ fontSize: '16px', fontWeight: 700, color: C.text, wordBreak: 'break-all', marginBottom: '6px' }}>
               {current}
             </div>
-            <div style={{ fontSize: '12px', color: verified ? C.textSecondary : C.warning, marginBottom: '12px', lineHeight: 1.5 }}>
+            <div style={{ fontSize: '14px', color: verified ? C.textSecondary : C.warning, marginBottom: '16px', lineHeight: 1.7 }}>
               {verified
                 ? 'Confirmed. Deal notices are sent here, and it is shown to the other side of your deals.'
                 : 'Not confirmed yet. Open the link we emailed you. Check spam if it has not arrived.'}
@@ -113,11 +113,11 @@ export default function EmailSettings() {
               placeholder="you@example.com" autoComplete="email" autoCapitalize="none"
               style={{
                 width: '100%', background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px',
-                color: C.text, padding: '10px 12px', fontSize: '13px', fontFamily: 'inherit',
-                outline: 'none', boxSizing: 'border-box', marginBottom: '10px',
+                color: C.text, padding: '13px 26px', fontSize: '15px', fontFamily: 'inherit',
+                outline: 'none', boxSizing: 'border-box', marginBottom: '16px',
               }}
             />
-            <div style={{ fontSize: '11px', color: C.textMuted, lineHeight: 1.5, marginBottom: '12px' }}>
+            <div style={{ fontSize: '13px', color: C.textMuted, lineHeight: 1.7, marginBottom: '16px' }}>
               We will email a confirmation link to this address.
               {current && verified
                 ? ' Until you open it, your account counts as unconfirmed, so paying and changing a UPI ID are paused. We also tell your current address about the change.'
@@ -127,7 +127,7 @@ export default function EmailSettings() {
               <button
                 type="submit" disabled={off}
                 style={{
-                  padding: '9px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: 700,
+                  padding: '13px 26px', borderRadius: '8px', fontSize: '15px', fontWeight: 700,
                   border: 'none', color: C.onPrimary,
                   background: off ? C.border : C.primary, cursor: off ? 'not-allowed' : 'pointer',
                 }}
@@ -147,7 +147,7 @@ export default function EmailSettings() {
           <div
             role={message.ok ? 'status' : 'alert'}
             style={{
-              marginTop: '12px', fontSize: '12px', lineHeight: 1.5, borderRadius: '8px', padding: '10px',
+              marginTop: '12px', fontSize: '14px', lineHeight: 1.7, borderRadius: '8px', padding: '10px',
               color: C.text,
               background: withAlpha(message.ok ? C.accent : C.danger, 0x14),
               border: `1px solid ${message.ok ? C.accent : C.danger}`,

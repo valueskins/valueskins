@@ -134,51 +134,51 @@ export default function BrowseDealsPage() {
     background: C.surface,
     border: `1px solid ${C.border}`,
     borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
+    padding: 28,
+    marginBottom: 20,
   };
 
   return (
     <>
       <Head><title>Browse deals · ValueSkins</title></Head>
-      <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '20px 16px 48px' }}>
-        <div style={{ maxWidth: 640, margin: '0 auto' }}>
+      <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '72px 24px 140px' }}>
+        <div style={{ maxWidth: 780, margin: '0 auto' }}>
           <MarketTabs active="current" role="creator" />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 4 }}>
-            <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Open deals</h1>
+            <h1 style={{ fontSize: 26, fontWeight: 700, margin: 0 }}>Open deals</h1>
             <button
               onClick={() => router.push('/deals/mine')}
               style={{
                 background: 'none', border: `1px solid ${C.border}`, borderRadius: 8,
-                padding: '8px 12px', color: C.text, fontWeight: 600,
-                fontSize: 12, cursor: 'pointer', whiteSpace: 'nowrap',
+                padding: '13px 26px', color: C.text, fontWeight: 600,
+                fontSize: 14, cursor: 'pointer', whiteSpace: 'nowrap',
               }}
             >
               Your deals
             </button>
           </div>
-          <p style={{ fontSize: 12, color: C.outline, margin: '0 0 16px' }}>
+          <p style={{ fontSize: 14, color: C.outline, margin: '0 0 32px' }}>
             Every open deal, no filtering. The amount is final, apply only if it works for you.
           </p>
 
           <SetupBanner />
 
           {notice && (
-            <div role="status" style={{ ...card, background: withAlpha(C.accent, 0x14), borderColor: C.accent, fontSize: 12 }}>
+            <div role="status" style={{ ...card, background: withAlpha(C.accent, 0x14), borderColor: C.accent, fontSize: 14 }}>
               {notice}
             </div>
           )}
 
-          {loading && <div style={{ fontSize: 13, color: C.outline }}>Loading…</div>}
+          {loading && <div style={{ fontSize: 15, color: C.outline }}>Loading…</div>}
 
           {error && (
-            <div role="alert" style={{ ...card, borderColor: C.error, fontSize: 13 }}>
+            <div role="alert" style={{ ...card, borderColor: C.error, fontSize: 15 }}>
               {error}
             </div>
           )}
 
           {!loading && !error && deals.length === 0 && (
-            <div style={{ ...card, fontSize: 13, color: C.outline }}>
+            <div style={{ ...card, fontSize: 15, color: C.outline }}>
               No open deals right now. New ones appear here as brands post them.
             </div>
           )}
@@ -191,8 +191,8 @@ export default function BrowseDealsPage() {
               <div key={deal.id} style={card}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginBottom: 6 }}>
                   <div style={{ minWidth: 0 }}>
-                    <div style={{ fontSize: 14, fontWeight: 700 }}>{deal.title}</div>
-                    <div style={{ fontSize: 11, color: C.outline }}>
+                    <div style={{ fontSize: 16, fontWeight: 700 }}>{deal.title}</div>
+                    <div style={{ fontSize: 13, color: C.outline }}>
                       <ResumeHover username={deal.brand_username} />
                       {deal.brand_followers ? ` · ${deal.brand_followers.toLocaleString()} followers` : ''}
                     </div>
@@ -200,34 +200,34 @@ export default function BrowseDealsPage() {
                   <div style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
                     {/* What the creator actually receives, not the gross budget:
                         showing the budget alone overstates it by the commission. */}
-                    <div style={{ fontSize: 14, fontWeight: 700 }}>
+                    <div style={{ fontSize: 16, fontWeight: 700 }}>
                       ₹{F.creatorTotal.toLocaleString('en-IN')}
                     </div>
-                    <div style={{ fontSize: 10, color: C.outline }}>you receive</div>
+                    <div style={{ fontSize: 12, color: C.outline }}>you receive</div>
                   </div>
                 </div>
 
-                <div style={{ fontSize: 12, color: C.textMuted, lineHeight: 1.5, marginBottom: 10, whiteSpace: 'pre-wrap' }}>
+                <div style={{ fontSize: 14, color: C.textMuted, lineHeight: 1.7, marginBottom: 20, whiteSpace: 'pre-wrap' }}>
                   {deal.description.length > 260
                     ? `${deal.description.slice(0, 260)}…`
                     : deal.description}
                 </div>
 
-                <div style={{ display: 'flex', gap: 14, marginBottom: 12, flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: 14, marginBottom: 20, flexWrap: 'wrap' }}>
                   {[
                     ['Apply by', deal.application_deadline],
                     ['Deliver by', deal.content_upload_deadline],
                   ].map(([k, v]) => (
                     <div key={String(k)}>
-                      <div style={{ fontSize: 10, color: C.outline, textTransform: 'uppercase' }}>{k}</div>
-                      <div style={{ fontSize: 12 }}>
+                      <div style={{ fontSize: 12, color: C.outline, textTransform: 'uppercase' }}>{k}</div>
+                      <div style={{ fontSize: 14 }}>
                         {v ? new Date(String(v)).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : '-'}
                       </div>
                     </div>
                   ))}
                   <div>
-                    <div style={{ fontSize: 10, color: C.outline, textTransform: 'uppercase' }}>Applicants</div>
-                    <div style={{ fontSize: 12 }}>{Number(deal.application_count) || 0}</div>
+                    <div style={{ fontSize: 12, color: C.outline, textTransform: 'uppercase' }}>Applicants</div>
+                    <div style={{ fontSize: 14 }}>{Number(deal.application_count) || 0}</div>
                   </div>
                 </div>
 
@@ -240,7 +240,7 @@ export default function BrowseDealsPage() {
                       background: deal.already_applied || closed ? C.border : C.primary,
                       border: 'none', borderRadius: 8, padding: '10px',
                       color: deal.already_applied || closed ? C.text : C.onPrimary,
-                      fontWeight: 600, fontSize: 13,
+                      fontWeight: 600, fontSize: 15,
                       cursor: deal.already_applied || closed ? 'not-allowed' : 'pointer',
                       opacity: deal.already_applied || closed ? 0.6 : 1,
                     }}
@@ -254,7 +254,7 @@ export default function BrowseDealsPage() {
                     onClick={() => router.push(`/deals/${deal.id}`)}
                     style={{
                       background: 'none', border: `1px solid ${C.border}`, borderRadius: 8,
-                      padding: '10px 14px', color: C.text, fontWeight: 600, fontSize: 13, cursor: 'pointer',
+                      padding: '13px 26px', color: C.text, fontWeight: 600, fontSize: 15, cursor: 'pointer',
                     }}
                   >
                     Details

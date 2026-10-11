@@ -273,8 +273,8 @@ export function ValueSkinEditModal({
           <div
             style={{
               padding: '10px 12px',
-              background: '#fee2e2',
-              border: '1px solid #fca5a5',
+              background: 'var(--c-error-container)',
+              border: '1px solid var(--c-error)',
               borderRadius: '8px',
               fontSize: '13px',
               color: 'var(--c-error)',
@@ -289,11 +289,11 @@ export function ValueSkinEditModal({
           <div
             style={{
               padding: '10px 12px',
-              background: '#dcfce7',
-              border: '1px solid #86efac',
+              background: 'var(--c-surface-container)',
+              border: '1px solid var(--c-border)',
               borderRadius: '8px',
               fontSize: '13px',
-              color: '#166534',
+              color: 'var(--c-text)',
               marginBottom: '16px',
             }}
           >
@@ -326,7 +326,7 @@ export function ValueSkinEditModal({
             style={{
               padding: '8px 16px',
               background: C.primary,
-              color: '#fff',
+              color: 'var(--c-on-primary)',
               border: 'none',
               borderRadius: '8px',
               fontSize: '14px',

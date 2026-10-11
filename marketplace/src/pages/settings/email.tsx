@@ -90,39 +90,39 @@ export default function EmailSettingsPage() {
 
   const card: React.CSSProperties = {
     background: C.surface, border: `1px solid ${C.border}`,
-    borderRadius: 12, padding: 18, marginBottom: 12,
+    borderRadius: 12, padding: 28, marginBottom: 20,
   };
 
   return (
     <>
       <Head><title>Email · ValueSkins</title></Head>
-      <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '24px 16px 48px' }}>
-        <div style={{ maxWidth: 460, margin: '0 auto' }}>
-          <h1 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 4px' }}>Your email</h1>
-          <p style={{ fontSize: 12, color: C.outline, margin: '0 0 16px' }}>
+      <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '72px 24px 140px' }}>
+        <div style={{ maxWidth: 600, margin: '0 auto' }}>
+          <h1 style={{ fontSize: 26, fontWeight: 700, margin: '0 0 4px' }}>Your email</h1>
+          <p style={{ fontSize: 14, color: C.outline, margin: '0 0 32px' }}>
             Invoices, payout confirmations and your deal reports are sent here, so it has to be
             confirmed before you can transact.
           </p>
 
-          {loading && <div style={{ fontSize: 13, color: C.outline }}>Loading…</div>}
+          {loading && <div style={{ fontSize: 15, color: C.outline }}>Loading…</div>}
 
           {notice && (
-            <div role="status" style={{ ...card, borderColor: C.accent, background: withAlpha(C.accent, 0x14), fontSize: 13 }}>
+            <div role="status" style={{ ...card, borderColor: C.accent, background: withAlpha(C.accent, 0x14), fontSize: 15 }}>
               {notice}
             </div>
           )}
           {error && (
-            <div role="alert" style={{ ...card, borderColor: C.error, fontSize: 13 }}>
+            <div role="alert" style={{ ...card, borderColor: C.error, fontSize: 15 }}>
               {error}
             </div>
           )}
 
           {!loading && (step === 'bank_details' || step === 'ready') && (
             <div style={{ ...card, borderColor: C.accent, background: withAlpha(C.accent, 0x14) }}>
-              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>
+              <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>
                 {current} is confirmed
               </div>
-              <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 10 }}>
+              <div style={{ fontSize: 14, color: C.textMuted, marginBottom: 20 }}>
                 {step === 'bank_details'
                   ? 'Next: add your payout details.'
                   : 'Your account is ready.'}
@@ -130,8 +130,8 @@ export default function EmailSettingsPage() {
               <button
                 onClick={() => router.push(step === 'bank_details' ? '/settings/payout' : '/deals/browse')}
                 style={{
-                  background: C.primary, border: 'none', borderRadius: 8, padding: '10px 14px',
-                  color: C.onPrimary, fontWeight: 600, fontSize: 13, cursor: 'pointer',
+                  background: C.primary, border: 'none', borderRadius: 8, padding: '13px 26px',
+                  color: C.onPrimary, fontWeight: 600, fontSize: 15, cursor: 'pointer',
                 }}
               >
                 {step === 'bank_details' ? 'Add payout details' : 'Browse deals'}
@@ -144,8 +144,8 @@ export default function EmailSettingsPage() {
               {step === 'verify_email' && (
                 <div
                   style={{
-                    fontSize: 12, color: C.text, background: withAlpha(C.warning, 0x14),
-                    border: `1px solid ${C.warning}`, borderRadius: 8, padding: 10, marginBottom: 12,
+                    fontSize: 14, color: C.text, background: withAlpha(C.warning, 0x14),
+                    border: `1px solid ${C.warning}`, borderRadius: 8, padding: 18, marginBottom: 20,
                   }}
                 >
                   We sent a confirmation link to <strong>{current}</strong>. Open it to finish.
@@ -153,7 +153,7 @@ export default function EmailSettingsPage() {
                 </div>
               )}
 
-              <label htmlFor="email" style={{ fontSize: 11, fontWeight: 600, color: C.outline, display: 'block', marginBottom: 4 }}>
+              <label htmlFor="email" style={{ fontSize: 13, fontWeight: 600, color: C.outline, display: 'block', marginBottom: 4 }}>
                 Email address
               </label>
               <input
@@ -167,15 +167,15 @@ export default function EmailSettingsPage() {
                 required
                 style={{
                   width: '100%', background: C.surfaceAlt, border: `1px solid ${C.border}`,
-                  borderRadius: 8, color: C.text, padding: '10px 12px', fontSize: 13,
-                  fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box', marginBottom: 12,
+                  borderRadius: 8, color: C.text, padding: '13px 26px', fontSize: 15,
+                  fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box', marginBottom: 20,
                 }}
               />
 
               {/* Changing a confirmed address clears the verified flag server
                   side, so say so rather than letting it surprise anyone. */}
               {step === 'verify_email' && input.trim() !== current && (
-                <div style={{ fontSize: 11, color: C.outline, marginBottom: 10 }}>
+                <div style={{ fontSize: 13, color: C.outline, marginBottom: 20 }}>
                   Changing the address will send the confirmation to the new one instead.
                 </div>
               )}
@@ -184,10 +184,10 @@ export default function EmailSettingsPage() {
                 type="submit"
                 disabled={busy || !input.trim()}
                 style={{
-                  width: '100%', padding: '12px',
+                  width: '100%', padding: '16px',
                   background: busy || !input.trim() ? C.border : C.primary,
                   border: 'none', borderRadius: 8, color: C.onPrimary,
-                  fontWeight: 700, fontSize: 13,
+                  fontWeight: 700, fontSize: 15,
                   cursor: busy || !input.trim() ? 'not-allowed' : 'pointer',
                 }}
               >

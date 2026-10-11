@@ -8,7 +8,7 @@ import EmptyState from '@/components/EmptyState';
 
 const C = {
   bg: 'var(--c-bg)', surface: '#111827', text: '#E0E0DA', textMuted: 'var(--c-text-variant)',
-  primary: 'var(--c-accent)', success: 'var(--c-accent)', danger: 'var(--c-error)', warning: 'var(--c-warning)', border: '#1A1A1A',
+  primary: 'var(--c-accent)', success: 'var(--c-accent)', danger: 'var(--c-error)', warning: 'var(--c-warning)', border: 'var(--c-border)',
 };
 
 export default function PaymentHistoryPage() {
@@ -44,7 +44,7 @@ export default function PaymentHistoryPage() {
 
   return (
     <MarketplaceLayout title="Payment History" hideBottomNav>
-      <div style={{ padding: '16px', color: C.text, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+      <div style={{ padding: '16px', color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
         <h1 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>Payment History</h1>
 
         <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>

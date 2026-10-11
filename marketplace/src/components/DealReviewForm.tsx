@@ -8,7 +8,7 @@ const C = {
   surface: '#f9fafb',
   text: 'var(--c-text)',
   textSecondary: 'var(--c-text-variant)',
-  border: '#e5e7eb',
+  border: 'var(--c-border)',
   error: 'var(--c-error)',
   success: 'var(--c-accent)',
 };
@@ -184,11 +184,11 @@ export default function DealReviewForm({
       {error && (
         <div style={{
           padding: '12px 16px',
-          background: '#fee2e2',
+          background: 'var(--c-error-container)',
           color: C.error,
           borderRadius: '8px',
           marginBottom: '16px',
-          border: `1px solid #fecaca`,
+          border: `1px solid var(--c-error)`,
         }}>
           {error}
         </div>

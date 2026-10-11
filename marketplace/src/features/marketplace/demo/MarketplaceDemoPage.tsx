@@ -2332,7 +2332,7 @@ bio: profileBio
           },
         },
         prefill: { name: profileName || '' },
-        theme: { color: '#000' },
+        theme: { color: 'var(--c-text)' },
       };
 
       const rzp = new (window as any).Razorpay(options);
@@ -2655,7 +2655,7 @@ bio: profileBio
   };
 
   return (
-    <div style={{ background: C.bg, minHeight: '100vh', display: 'flex', flexDirection: 'column', color: C.text, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif", overflowX: 'clip' }}>
+    <div style={{ background: C.bg, minHeight: '100vh', display: 'flex', flexDirection: 'column', color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif", overflowX: 'clip' }}>
 
       {/* The spine lives up here now, beside the wordmark, rather than as a
           fixed bar on the floor. Sticky, so it stays reachable on long pages —
@@ -2785,7 +2785,7 @@ bio: profileBio
                       <video
                         src={creatorPitchVideoUrl}
                         controls
-                        style={{ width:'100%', borderRadius:10, maxHeight:220, background:'#000' }}
+                        style={{ width:'100%', borderRadius:10, maxHeight:220, background:'var(--c-surface)' }}
                       />
                       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:6 }}>
                         <span style={{ fontSize:11, color:C.textMuted }}>{creatorPitchVideoName}</span>
@@ -3012,17 +3012,17 @@ bio: profileBio
             <div style={{ width:'72px', height:'72px', borderRadius:'50%', background:`linear-gradient(135deg, ${C.primary}, var(--c-accent))`, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px' }}>
               <span style={{ fontSize:'28px', fontWeight:800, color:'var(--c-surface-lowest)' }}>{levelUpTo}</span>
             </div>
-            <div style={{ fontSize:'22px', fontWeight:800, color:'#1A1A1A', marginBottom:'8px' }}>Level Up</div>
-            <div style={{ fontSize:'15px', color:'#666', marginBottom:'8px', lineHeight:1.5 }}>
+            <div style={{ fontSize:'22px', fontWeight:800, color:'var(--c-text)', marginBottom:'8px' }}>Level Up</div>
+            <div style={{ fontSize:'15px', color:'var(--c-text-muted)', marginBottom:'8px', lineHeight:1.5 }}>
               You reached Level {levelUpTo}
             </div>
-            <div style={{ fontSize:'13px', color:'#999', marginBottom:'28px' }}>
+            <div style={{ fontSize:'13px', color:'var(--c-text-muted)', marginBottom:'28px' }}>
               Deal completed successfully. Your reputation has been updated.
             </div>
             <div style={{ display:'flex', justifyContent:'center', gap:'32px', marginBottom:'28px' }}>
               <div style={{ textAlign:'center' }}>
-                <div style={{ fontSize:'28px', fontWeight:800, color:'#CCC' }}>{levelUpFrom}</div>
-                <div style={{ fontSize:'0.75rem', color:'#999', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.5px', marginTop:'2px' }}>Before</div>
+                <div style={{ fontSize:'28px', fontWeight:800, color:'var(--c-text)' }}>{levelUpFrom}</div>
+                <div style={{ fontSize:'0.75rem', color:'var(--c-text-muted)', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.5px', marginTop:'2px' }}>Before</div>
               </div>
               <div style={{ display:'flex', alignItems:'center', color:C.primary, fontSize:'20px' }}>&rarr;</div>
               <div style={{ textAlign:'center' }}>
@@ -3228,7 +3228,7 @@ bio: profileBio
                         <button onClick={() => setAvailableForDeals(!availableForDeals)} style={{ width:36, height:20, borderRadius:20, border:'none', background: availableForDeals ? C.success : C.border, cursor:'pointer', display:'flex', alignItems:'center', padding: availableForDeals ? '0 2px 0 16px' : '0 16px 0 2px', transition:'all 0.2s' }}>
                           <div style={{ width:16, height:16, borderRadius:'50%', background:'var(--c-surface-lowest)', transition:'all 0.2s' }} />
                         </button>
-                        {availableForDeals && <span style={{ fontSize:'0.75rem', fontWeight:700, color:C.success, background:'rgba(200, 184, 154,0.1)', padding:'2px 8px', borderRadius:'12px' }}>Taking deals</span>}
+                        {availableForDeals && <span style={{ fontSize:'0.75rem', fontWeight:700, color:C.success, background:'var(--c-border)', padding:'2px 8px', borderRadius:'12px' }}>Taking deals</span>}
                       </div>
                       <div style={{ display:'flex', gap:'6px', alignItems:'center' }}>
                         {(['opportunities','pipeline'] as const).map(tab => (
@@ -3622,7 +3622,7 @@ bio: profileBio
                                   {/* Creator sees brand's offer — respond with accept or counter */}
                                   {(dealRoomPhase === 'pending' || dealRoomPhase === 'brief') && (
                                     <>
-                                      <div style={{ background: 'rgba(200, 184, 154,0.06)', borderRadius: '8px', padding: '12px', marginBottom: '12px', border: `1px solid rgba(200, 184, 154,0.2)` }}>
+                                      <div style={{ background: 'var(--c-surface-container)', borderRadius: '8px', padding: '12px', marginBottom: '12px', border: `1px solid var(--c-border)` }}>
                                         <div style={{ fontSize: '0.75rem', fontWeight: 700, color: C.primary, marginBottom: '6px' }}>Brand Offer Received</div>
                                         <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '4px' }}>
                                           <span style={{ fontSize: '22px', fontWeight: 800, color: C.text }}>${parseInt(dealOfferAmount || opp.budget?.replace(/[^0-9]/g, '') || '5000').toLocaleString()}</span>
@@ -3731,7 +3731,7 @@ bio: profileBio
                                     if (activeDeal?.formalOfferSentByCreator) {
                                       return (
                                         <div style={{ textAlign: 'center', padding: '24px 12px' }}>
-                                          <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'rgba(200, 184, 154,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                                          <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'var(--c-surface-container)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
                                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={C.primary} strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                                           </div>
                                           <div style={{ fontSize: '14px', fontWeight: 700, color: C.text, marginBottom: '6px' }}>Final Offer Submitted</div>
@@ -3877,7 +3877,7 @@ bio: profileBio
                                             {!signed && <span>Sign your name to continue.</span>}
                                           </div>
                                         )}
-                                        <div style={{ background: 'rgba(200, 184, 154,0.06)', border: '1px solid rgba(200, 184, 154,0.2)', borderRadius: '8px', padding: '10px', marginBottom: '10px', fontSize: '0.75rem', color: C.textSecondary, lineHeight: 1.5 }}>
+                                        <div style={{ background: 'var(--c-surface-container)', border: '1px solid var(--c-border)', borderRadius: '8px', padding: '10px', marginBottom: '10px', fontSize: '0.75rem', color: C.textSecondary, lineHeight: 1.5 }}>
                                           ⚠️ Once you accept, terms are locked. Check all details carefully, no edits after signing.
                                         </div>
                                         <div style={{ display: 'flex', gap: '8px' }}>
@@ -3983,7 +3983,7 @@ bio: profileBio
                                       // C2C COLLAB — no money, just content
                                       return (
                                         <>
-                                          <div style={{ padding: '12px', background: 'rgba(200, 184, 154,0.08)', borderRadius: '10px', marginBottom: '10px', border: '1px solid rgba(200, 184, 154,0.2)' }}>
+                                          <div style={{ padding: '12px', background: 'var(--c-surface-container)', borderRadius: '10px', marginBottom: '10px', border: '1px solid var(--c-border)' }}>
                                             <div style={{ fontSize: '13px', fontWeight: 700, color: C.accent, marginBottom: '4px' }}>Collaboration confirmed</div>
                                             <div style={{ fontSize: '0.75rem', color: C.textSecondary, marginBottom: '8px' }}>You're ready to create content together. Terms are locked and recorded.</div>
                                             <div style={{ fontSize: '12px', fontWeight: 700, color: C.text, marginBottom: '6px' }}>Collaborating with {opp.brand}</div>
@@ -4672,7 +4672,7 @@ bio: profileBio
                                             const advanceAmt = Math.round(agreedPrice * 0.3);
                                             return (
                                               <div style={{ textAlign:'center', padding:'16px 0' }}>
-                                                <div style={{ width:'44px', height:'44px', borderRadius:'50%', background:'rgba(200, 184, 154,0.1)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 12px' }}>
+                                                <div style={{ width:'44px', height:'44px', borderRadius:'50%', background:'var(--c-border)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 12px' }}>
                                                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={C.success} strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                                                 </div>
                                                 <div style={{ fontSize:'14px', fontWeight:700, color:C.success, marginBottom:'4px' }}>Escrow Funded</div>
@@ -4687,7 +4687,7 @@ bio: profileBio
                                           return (
                                             <div style={{ padding:'8px 0 16px' }}>
                                               {/* Phase status bar — creator view */}
-                                              <div style={{ display:'flex', alignItems:'center', gap:'4px', marginBottom:'16px', padding:'8px 10px', background:'rgba(200, 184, 154,0.06)', borderRadius:'8px', border:'1px solid rgba(200, 184, 154,0.2)' }}>
+                                              <div style={{ display:'flex', alignItems:'center', gap:'4px', marginBottom:'16px', padding:'8px 10px', background:'var(--c-surface-container)', borderRadius:'8px', border:'1px solid var(--c-border)' }}>
                                                 {[
                                                   { label:'Offer', done: true },
                                                   { label:'Accepted', done: true },
@@ -4771,7 +4771,7 @@ bio: profileBio
                                                   {hasGoogleDriveLink ? (
                                                     <div style={{ display:'flex', alignItems:'center', gap:'8px', padding:'8px 10px', background:C.surfaceAlt, borderRadius:'6px' }}>
                                                       <a href={deliverableLinks[0]} target="_blank" rel="noopener noreferrer" style={{ flex:1, fontSize:'0.75rem', color:C.primary, textDecoration:'none', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{deliverableLinks[0]}</a>
-                                                      <div style={{ fontSize:'9px', fontWeight:700, color:C.success, background:'rgba(200, 184, 154,0.1)', padding:'2px 7px', borderRadius:'6px', flexShrink:0 }}>Submitted</div>
+                                                      <div style={{ fontSize:'9px', fontWeight:700, color:C.success, background:'var(--c-border)', padding:'2px 7px', borderRadius:'6px', flexShrink:0 }}>Submitted</div>
                                                     </div>
                                                   ) : (
                                                     <div style={{ display:'flex', gap:'6px' }}>
@@ -4785,7 +4785,7 @@ bio: profileBio
                                                   {hasSocialLink ? (
                                                     <div style={{ display:'flex', alignItems:'center', gap:'8px', padding:'8px 10px', background:C.surfaceAlt, borderRadius:'6px' }}>
                                                       <a href={deliverableLinks[1]} target="_blank" rel="noopener noreferrer" style={{ flex:1, fontSize:'0.75rem', color:C.primary, textDecoration:'none', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{deliverableLinks[1]}</a>
-                                                      <div style={{ fontSize:'9px', fontWeight:700, color:C.success, background:'rgba(200, 184, 154,0.1)', padding:'2px 7px', borderRadius:'6px', flexShrink:0 }}>Submitted</div>
+                                                      <div style={{ fontSize:'9px', fontWeight:700, color:C.success, background:'var(--c-border)', padding:'2px 7px', borderRadius:'6px', flexShrink:0 }}>Submitted</div>
                                                     </div>
                                                   ) : (
                                                     <div style={{ display:'flex', gap:'6px' }}>
@@ -4839,7 +4839,7 @@ bio: profileBio
                                                 </button>
                                               )}
                                               {atLeastOneSubmitted && (submittedForReview || activeDeal?.creatorDealLifecycle === 'submitted') && activeDeal?.creatorDealLifecycle !== 'approved' && (
-                                                <div style={{ width:'100%', padding:'10px', background:'rgba(200, 184, 154,0.08)', border:`1px solid rgba(200, 184, 154,0.25)`, borderRadius:'8px', color:C.primary, fontWeight:600, fontSize:'13px', textAlign:'center', marginBottom:'8px' }}>
+                                                <div style={{ width:'100%', padding:'10px', background:'var(--c-surface-container)', border:`1px solid var(--c-border)`, borderRadius:'8px', color:C.primary, fontWeight:600, fontSize:'13px', textAlign:'center', marginBottom:'8px' }}>
                                                   ⏳ Waiting for brand&apos;s approval
                                                 </div>
                                               )}
@@ -5007,13 +5007,13 @@ bio: profileBio
                                           <>
                                             <div style={{ fontSize:'0.75rem', fontWeight:700, color:C.textMuted, textTransform:'uppercase', letterSpacing:'0.6px', marginBottom:'10px' }}>Goods Tracking</div>
                                             {status === 'goods_preparing' && (
-                                              <div style={{ background:'rgba(160,138,94,0.06)', border:`1px solid rgba(160,138,94,0.2)`, borderRadius:'8px', padding:'12px', marginBottom:'12px' }}>
+                                              <div style={{ background:'var(--c-surface-container)', border:`1px solid var(--c-border)`, borderRadius:'8px', padding:'12px', marginBottom:'12px' }}>
                                                 <div style={{ fontSize:'13px', fontWeight:700, color:C.text, marginBottom:'4px' }}>Brand is Preparing Your Product</div>
                                                 <div style={{ fontSize:'0.75rem', color:C.textSecondary }}>Your product is being selected and packaged. You will receive tracking information once it ships.</div>
                                               </div>
                                             )}
                                             {status === 'goods_shipped' && (
-                                              <div style={{ background:'rgba(200, 184, 154,0.06)', border:`1px solid rgba(200, 184, 154,0.2)`, borderRadius:'8px', padding:'12px', marginBottom:'12px' }}>
+                                              <div style={{ background:'var(--c-surface-container)', border:`1px solid var(--c-border)`, borderRadius:'8px', padding:'12px', marginBottom:'12px' }}>
                                                 <div style={{ fontSize:'13px', fontWeight:700, color:C.text, marginBottom:'4px' }}>Your Product is On The Way</div>
                                                 <div style={{ fontSize:'0.75rem', color:C.textSecondary, marginBottom:'8px' }}>
                                                   Tracking: <strong>{trackingInput || 'Tracking info shown by brand'}</strong>
@@ -5031,7 +5031,7 @@ bio: profileBio
                                               </div>
                                             )}
                                             {status === 'goods_delivered' && (
-                                              <div style={{ background:'rgba(200, 184, 154,0.06)', border:`1px solid rgba(200, 184, 154,0.2)`, borderRadius:'8px', padding:'12px', marginBottom:'12px' }}>
+                                              <div style={{ background:'var(--c-surface-container)', border:`1px solid var(--c-border)`, borderRadius:'8px', padding:'12px', marginBottom:'12px' }}>
                                                 <div style={{ fontSize:'13px', fontWeight:700, color:C.text, marginBottom:'4px' }}>Product Received</div>
                                                 <div style={{ fontSize:'0.75rem', color:C.textSecondary, marginBottom:'8px' }}>Great! Now create content featuring this product. You have until the deadline to submit.</div>
                                                 <button onClick={() => {
@@ -5047,7 +5047,7 @@ bio: profileBio
                                               </div>
                                             )}
                                             {status === 'content_due' && (
-                                              <div style={{ background:'rgba(160,138,94,0.06)', border:`1px solid rgba(160,138,94,0.2)`, borderRadius:'8px', padding:'12px', marginBottom:'12px' }}>
+                                              <div style={{ background:'var(--c-surface-container)', border:`1px solid var(--c-border)`, borderRadius:'8px', padding:'12px', marginBottom:'12px' }}>
                                                 <div style={{ fontSize:'13px', fontWeight:700, color:C.text, marginBottom:'4px' }}>Create Content</div>
                                                 <div style={{ fontSize:'0.75rem', color:C.textSecondary, marginBottom:'8px' }}>Submit a link to your published content featuring the product</div>
                                                 <input
@@ -5076,7 +5076,7 @@ bio: profileBio
                                               </div>
                                             )}
                                             {status === 'content_submitted' && (
-                                              <div style={{ background:'rgba(160,138,94,0.06)', border:`1px solid rgba(160,138,94,0.2)`, borderRadius:'8px', padding:'12px', marginBottom:'12px' }}>
+                                              <div style={{ background:'var(--c-surface-container)', border:`1px solid var(--c-border)`, borderRadius:'8px', padding:'12px', marginBottom:'12px' }}>
                                                 <div style={{ fontSize:'13px', fontWeight:700, color:C.text, marginBottom:'4px' }}>Content Submitted</div>
                                                 <div style={{ fontSize:'0.75rem', color:C.textSecondary }}>Your content is awaiting brand approval. This typically takes 24-48 hours.</div>
                                               </div>
@@ -5106,7 +5106,7 @@ bio: profileBio
                                           <>
                                             <div style={{ fontSize:'0.75rem', fontWeight:700, color:C.textMuted, textTransform:'uppercase', letterSpacing:'0.6px', marginBottom:'10px' }}>Content Collaboration</div>
                                             {status === 'content_creating' && (
-                                              <div style={{ background:'rgba(160,138,94,0.06)', border:`1px solid rgba(160,138,94,0.2)`, borderRadius:'8px', padding:'12px', marginBottom:'12px' }}>
+                                              <div style={{ background:'var(--c-surface-container)', border:`1px solid var(--c-border)`, borderRadius:'8px', padding:'12px', marginBottom:'12px' }}>
                                                 <div style={{ fontSize:'13px', fontWeight:700, color:C.text, marginBottom:'4px' }}>In Progress</div>
                                                 <div style={{ fontSize:'0.75rem', color:C.textSecondary, marginBottom:'8px' }}>Submit your content link when ready</div>
                                                 <input
@@ -5135,7 +5135,7 @@ bio: profileBio
                                               </div>
                                             )}
                                             {status === 'content_submitted' && (
-                                              <div style={{ background:'rgba(160,138,94,0.06)', border:`1px solid rgba(160,138,94,0.2)`, borderRadius:'8px', padding:'12px', marginBottom:'12px' }}>
+                                              <div style={{ background:'var(--c-surface-container)', border:`1px solid var(--c-border)`, borderRadius:'8px', padding:'12px', marginBottom:'12px' }}>
                                                 <div style={{ fontSize:'13px', fontWeight:700, color:C.text, marginBottom:'4px' }}>Submitted</div>
                                                 <div style={{ fontSize:'0.75rem', color:C.textSecondary }}>Waiting for collaborator approval</div>
                                               </div>
@@ -6174,7 +6174,7 @@ bio: profileBio
                         </>)})()}
                       </div>
                       {(() => { const c = INR_CURRENCY; return (
-                      <div style={{ marginTop:'10px', padding:'10px', background:'rgba(200, 184, 154,0.06)', border:'1px solid rgba(200, 184, 154,0.2)', borderRadius:'8px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                      <div style={{ marginTop:'10px', padding:'10px', background:'var(--c-surface-container)', border:'1px solid var(--c-border)', borderRadius:'8px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
                         <span style={{ fontSize:'12px', color:C.textSecondary, fontWeight:600 }}>Total escrow deposit</span>
                         <span style={{ fontSize:'20px', fontWeight:800, color:C.success }}>{c.symbol}{(pendingCampaignForEscrow.escrowPool||0).toLocaleString()}</span>
                       </div>
@@ -6674,7 +6674,7 @@ bio: profileBio
                       <div style={{ fontSize: '0.75rem', color: C.textSecondary, marginTop: '2px' }}>Brands with fewer than N completed deals must be vouched before cold outreach</div>
                     </div>
                     <button onClick={() => setSafetyNewBrandWarmIntro(p => !p)}
-                      style={{ width: '44px', height: '24px', borderRadius: '12px', border: 'none', backgroundColor: safetyNewBrandWarmIntro ? C.primary : 'rgba(255,255,255,0.15)', cursor: 'pointer', position: 'relative', flexShrink: 0, transition: 'background-color 0.2s' }}>
+                      style={{ width: '44px', height: '24px', borderRadius: '12px', border: 'none', backgroundColor: safetyNewBrandWarmIntro ? C.primary : 'var(--c-border)', cursor: 'pointer', position: 'relative', flexShrink: 0, transition: 'background-color 0.2s' }}>
                       <div style={{ width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'var(--c-surface-lowest)', position: 'absolute', top: '2px', left: safetyNewBrandWarmIntro ? '22px' : '2px', transition: 'left 0.2s' }} />
                     </button>
                   </div>
@@ -6710,7 +6710,7 @@ bio: profileBio
                         <div style={{ fontSize: '0.75rem', color: C.textSecondary, marginTop: '1px' }}>{desc}</div>
                       </div>
                       <button onClick={() => set((p: boolean) => !p)}
-                        style={{ width: '40px', height: '22px', borderRadius: '11px', border: 'none', backgroundColor: value ? C.primary : 'rgba(255,255,255,0.12)', cursor: 'pointer', position: 'relative', flexShrink: 0, transition: 'background-color 0.2s' }}>
+                        style={{ width: '40px', height: '22px', borderRadius: '11px', border: 'none', backgroundColor: value ? C.primary : 'var(--c-border)', cursor: 'pointer', position: 'relative', flexShrink: 0, transition: 'background-color 0.2s' }}>
                         <div style={{ width: '18px', height: '18px', borderRadius: '50%', backgroundColor: 'var(--c-surface-lowest)', position: 'absolute', top: '2px', left: value ? '20px' : '2px', transition: 'left 0.2s' }} />
                       </button>
                     </div>
@@ -6773,7 +6773,7 @@ bio: profileBio
                       <div style={{ fontSize: '0.75rem', color: C.textMuted, marginTop: '1px' }}>{desc}</div>
                     </div>
                     <button onClick={() => set((p: boolean) => !p)}
-                      style={{ width: '40px', height: '22px', borderRadius: '11px', border: 'none', backgroundColor: value ? C.primary : 'rgba(255,255,255,0.1)', cursor: 'pointer', position: 'relative', flexShrink: 0, transition: 'background-color 0.2s' }}>
+                      style={{ width: '40px', height: '22px', borderRadius: '11px', border: 'none', backgroundColor: value ? C.primary : 'var(--c-border)', cursor: 'pointer', position: 'relative', flexShrink: 0, transition: 'background-color 0.2s' }}>
                       <div style={{ width: '18px', height: '18px', borderRadius: '50%', backgroundColor: 'var(--c-surface-lowest)', position: 'absolute', top: '2px', left: value ? '20px' : '2px', transition: 'left 0.2s' }} />
                     </button>
                   </div>
@@ -6842,7 +6842,7 @@ bio: profileBio
                   </div>
                   <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '10px' }}>
                     {['Familiar UX', 'No context switching', 'Existing notification system'].map(f => (
-                      <span key={f} style={{ padding: '3px 8px', borderRadius: '4px', fontSize: '9px', fontWeight: 600, background: 'rgba(255,255,255,0.06)', color: C.textSecondary }}>{f}</span>
+                      <span key={f} style={{ padding: '3px 8px', borderRadius: '4px', fontSize: '9px', fontWeight: 600, background: 'var(--c-surface-container)', color: C.textSecondary }}>{f}</span>
                     ))}
                   </div>
                 </div>
@@ -6981,12 +6981,12 @@ bio: profileBio
                       <button
                         key={prof.name}
                         onClick={() => setStoreCategory(prof.name)}
-                        onMouseEnter={(e) => { if (!active) { e.currentTarget.style.background = 'rgba(200,184,154,0.07)'; const m = e.currentTarget.firstElementChild as HTMLElement; if (m) m.style.opacity = '1'; } }}
+                        onMouseEnter={(e) => { if (!active) { e.currentTarget.style.background = 'var(--c-surface-container)'; const m = e.currentTarget.firstElementChild as HTMLElement; if (m) m.style.opacity = '1'; } }}
                         onMouseLeave={(e) => { if (!active) { e.currentTarget.style.background = 'transparent'; const m = e.currentTarget.firstElementChild as HTMLElement; if (m) m.style.opacity = '0'; } }}
                         style={{
                           position: 'relative', width: '100%', minHeight: '52px', display: 'flex', alignItems: 'center', gap: '10px',
                           padding: '0 12px', border: 'none', borderBottom: `1px solid ${C.border}`,
-                          background: active ? 'rgba(200,184,154,0.14)' : 'transparent',
+                          background: active ? 'var(--c-surface-container)' : 'transparent',
                           borderRadius: active ? '6px' : 0, cursor: 'pointer', textAlign: 'left',
                           transition: 'background 160ms cubic-bezier(0.16,1,0.3,1)',
                         }}
@@ -7082,7 +7082,7 @@ bio: profileBio
                             key={sub}
                             onClick={() => !isFull && purchaseProfession(sub)}
                             disabled={!!isFull}
-                            onMouseEnter={(e) => { if (!isFull) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = C.accent; e.currentTarget.style.background = 'rgba(200,184,154,0.07)'; } }}
+                            onMouseEnter={(e) => { if (!isFull) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = C.accent; e.currentTarget.style.background = 'var(--c-surface-container)'; } }}
                             onMouseLeave={(e) => { if (!isFull) { e.currentTarget.style.transform = 'none'; e.currentTarget.style.borderColor = (isActiveHere || isOwned) ? C.accent : C.border; e.currentTarget.style.background = (isActiveHere || isOwned) ? withAlpha(C.primary, 0x12) : C.card; } }}
                             style={{
                               transition: 'transform 180ms cubic-bezier(0.16,1,0.3,1), border-color 180ms linear, background 180ms linear',

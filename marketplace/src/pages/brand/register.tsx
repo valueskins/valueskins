@@ -16,7 +16,7 @@ const containerStyle: CSSProperties = {
   minHeight: '100vh',
   background: `linear-gradient(135deg, ${C.bg} 0%, rgba(30, 41, 59, 0.8) 100%)`,
   padding: '40px 20px',
-  fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+  fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
 };
 
 const contentStyle: CSSProperties = {
@@ -85,8 +85,8 @@ const benefitDescStyle: CSSProperties = {
 };
 
 const pricingInfoStyle: CSSProperties = {
-  background: 'rgba(200, 184, 154, 0.05)',
-  border: `1px solid rgba(200, 184, 154, 0.2)`,
+  background: 'var(--c-surface-container)',
+  border: `1px solid var(--c-border)`,
   borderRadius: 16,
   padding: 16,
   display: 'grid',
@@ -236,7 +236,7 @@ export default function BrandRegisterPage({ registrationFeeCents = 99900 }: Bran
           {process.env.NODE_ENV === 'development' && (
             <div
               style={{
-                background: 'rgba(200, 184, 154, 0.05)',
+                background: 'var(--c-surface-container)',
                 border: `1px dashed ${C.border}`,
                 borderRadius: 12,
                 padding: 12,

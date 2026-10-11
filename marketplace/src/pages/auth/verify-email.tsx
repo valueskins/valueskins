@@ -84,18 +84,18 @@ export default function VerifyEmail() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '28px', fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
       <div style={{ width: '100%', maxWidth: '440px', textAlign: 'center' }}>
         <div style={{ fontSize: '48px', marginBottom: '16px' }}>📧</div>
         <h1 style={{ fontSize: '24px', fontWeight: 700, color: C.text, marginBottom: '8px' }}>Verify your email</h1>
-        <p style={{ fontSize: '15px', color: C.textSecondary, marginBottom: '32px', lineHeight: 1.5 }}>
+        <p style={{ fontSize: '17px', color: C.textSecondary, marginBottom: '32px', lineHeight: 1.5 }}>
           Enter the verification code sent to your email, or click the link in the email.
         </p>
 
-        {error && <div style={{ padding: '10px', background: '#fef2f2', color: C.error, borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>{error}</div>}
-        {success && <div style={{ padding: '10px', background: '#f0fdf4', color: C.success, borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>{success}</div>}
+        {error && <div style={{ padding: '10px', background: 'var(--c-error-container)', color: C.error, borderRadius: '8px', fontSize: '15px', marginBottom: '16px' }}>{error}</div>}
+        {success && <div style={{ padding: '10px', background: 'var(--c-surface-container)', color: C.success, borderRadius: '8px', fontSize: '15px', marginBottom: '16px' }}>{success}</div>}
 
-        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginBottom: '48px' }}>
           {code.map((digit, i) => (
             <input
               key={i}
@@ -127,7 +127,7 @@ export default function VerifyEmail() {
         <button
           onClick={handleCodeSubmit}
           disabled={loading || code.join('').length !== 6}
-          style={{ width: '100%', padding: '12px', background: code.join('').length === 6 ? C.primary : C.border, color: '#fff', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: code.join('').length === 6 ? 'pointer' : 'not-allowed', marginBottom: '12px' }}
+          style={{ width: '100%', padding: '12px', background: code.join('').length === 6 ? C.primary : C.border, color: 'var(--c-text)', border: 'none', borderRadius: '8px', fontSize: '17px', fontWeight: 600, cursor: code.join('').length === 6 ? 'pointer' : 'not-allowed', marginBottom: '16px' }}
         >
           {loading ? 'Verifying...' : 'Verify email'}
         </button>
@@ -135,12 +135,12 @@ export default function VerifyEmail() {
         <button
           onClick={handleResend}
           disabled={resending}
-          style={{ background: 'transparent', color: C.primary, border: 'none', fontSize: '13px', cursor: 'pointer' }}
+          style={{ background: 'transparent', color: C.primary, border: 'none', fontSize: '15px', cursor: 'pointer' }}
         >
           {resending ? 'Sending...' : 'Resend verification email'}
         </button>
 
-        <p style={{ marginTop: '24px', fontSize: '13px' }}>
+        <p style={{ marginTop: '24px', fontSize: '15px' }}>
           <Link href="/auth/onboarding" style={{ color: C.textSecondary }}>Skip for now</Link>
         </p>
       </div>

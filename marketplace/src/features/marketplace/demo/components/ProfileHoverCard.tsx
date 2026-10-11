@@ -73,7 +73,7 @@ const C = {
   text: '#0A0A0A',
   textSecondary: 'var(--c-text-muted)',
   textMuted: '#B8B4AC',
-  border: '#E0E0DA',
+  border: 'var(--c-border)',
   success: 'var(--c-accent)',
 };
 
@@ -130,7 +130,7 @@ export function InstagramResumeBlock({ ig }: { ig: HoverInstagram }) {
       borderRadius: '10px',
       overflow: 'hidden',
       border: '1px solid rgba(225,48,108,0.28)',
-      background: '#FFF',
+      background: 'var(--c-surface)',
     }}>
       {/* Instagram header */}
       <div style={{
@@ -143,7 +143,7 @@ export function InstagramResumeBlock({ ig }: { ig: HoverInstagram }) {
           <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
           <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
         </svg>
-        <span style={{ fontSize: '11px', fontWeight: 800, color: '#fff', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
+        <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--c-text)', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
           Instagram · Virtual Resume
         </span>
       </div>
@@ -155,7 +155,7 @@ export function InstagramResumeBlock({ ig }: { ig: HoverInstagram }) {
           background: 'rgba(0,102,204,0.06)', border: '1px solid rgba(0,102,204,0.18)',
           fontSize: '10.5px', lineHeight: 1.45, color: '#334', marginBottom: '8px',
         }}>
-          <span style={{ fontWeight: 800, color: '#0066CC', fontFamily: 'monospace' }}>instagram_business_basic</span>
+          <span style={{ fontWeight: 800, color: 'var(--c-text)', fontFamily: 'monospace' }}>instagram_business_basic</span>
           <span style={{ color: '#667' }}>, {IG_BASIC_NOTE}</span>
         </div>
 
@@ -165,17 +165,17 @@ export function InstagramResumeBlock({ ig }: { ig: HoverInstagram }) {
             width: '40px', height: '40px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0,
             background: 'linear-gradient(135deg, #F58529, #DD2A7B, #8134AF)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontSize: '16px', fontWeight: 800,
+            color: 'var(--c-text)', fontSize: '16px', fontWeight: 800,
           }}>
             <span style={{
-              width: '34px', height: '34px', borderRadius: '50%', background: '#141414',
+              width: '34px', height: '34px', borderRadius: '50%', background: 'var(--c-surface)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
               {(ig.name || ig.username || '?').charAt(0).toUpperCase()}
             </span>
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A0A0A', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--c-text)', display: 'flex', alignItems: 'center', gap: '5px' }}>
               @{ig.username || 'creator'}
               {ig.verified && (
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="#0066CC" aria-label="Verified">
@@ -203,7 +203,7 @@ export function InstagramResumeBlock({ ig }: { ig: HoverInstagram }) {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '6px', marginBottom: '6px' }}>
           {igStats.map((s) => (
             <div key={s.label} style={{ textAlign: 'center', padding: '4px 2px', background: '#F7F7F2', borderRadius: '6px', border: '1px solid #ECECE6' }}>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: '#0A0A0A' }}>{s.value}</div>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--c-text)' }}>{s.value}</div>
               <div style={{ fontSize: '9px', fontWeight: 700, color: '#AAA49B', textTransform: 'uppercase', letterSpacing: '0.4px' }}>{s.label}</div>
             </div>
           ))}
@@ -213,7 +213,7 @@ export function InstagramResumeBlock({ ig }: { ig: HoverInstagram }) {
         {(ig.bio || ig.website) && (
           <div style={{ fontSize: '11px', color: '#556', lineHeight: 1.4, marginBottom: '6px' }}>
             {ig.bio && <div style={{ whiteSpace: 'pre-wrap' }}>{ig.bio}</div>}
-            {ig.website && <div style={{ color: '#0066CC', fontWeight: 600, marginTop: '2px', wordBreak: 'break-all' }}>{ig.website}</div>}
+            {ig.website && <div style={{ color: 'var(--c-text)', fontWeight: 600, marginTop: '2px', wordBreak: 'break-all' }}>{ig.website}</div>}
           </div>
         )}
       </div>
@@ -225,14 +225,14 @@ export function InstagramResumeBlock({ ig }: { ig: HoverInstagram }) {
           background: 'rgba(221,42,123,0.06)', border: '1px solid rgba(221,42,123,0.2)',
           fontSize: '10.5px', lineHeight: 1.45, color: '#334', marginBottom: '8px',
         }}>
-          <span style={{ fontWeight: 800, color: '#DD2A7B', fontFamily: 'monospace' }}>instagram_business_manage_insights</span>
+          <span style={{ fontWeight: 800, color: 'var(--c-text)', fontFamily: 'monospace' }}>instagram_business_manage_insights</span>
           <span style={{ color: '#667' }}>, {IG_INSIGHTS_NOTE}</span>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
           {insights.map((m) => (
             <div key={m.label} style={{ padding: '8px', background: '#F7F7F2', borderRadius: '8px', border: '1px solid #ECECE6' }}>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: '#DD2A7B' }}>{m.value}</div>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--c-text)' }}>{m.value}</div>
               <div style={{ fontSize: '9px', fontWeight: 700, color: '#AAA49B', textTransform: 'uppercase', letterSpacing: '0.4px' }}>{m.label}</div>
             </div>
           ))}
@@ -282,12 +282,12 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
         width: '320px',
         background: 'var(--c-surface-lowest)',
         borderRadius: '16px',
-        border: '1px solid #E0E0DA',
+        border: '1px solid var(--c-border)',
         boxShadow: '0 12px 40px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.06)',
         overflow: 'hidden',
         pointerEvents: 'auto',
         fontSize: '13px',
-        color: '#0A0A0A',
+        color: 'var(--c-text)',
       }}
     >
       {/* Header */}
@@ -302,7 +302,7 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
         {/* Avatar */}
         <div style={{
           width: '48px', height: '48px', borderRadius: '50%',
-          background: 'rgba(255,255,255,0.2)',
+          background: 'var(--c-border)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: '22px', fontWeight: 800, color: 'var(--c-surface-lowest)',
           flexShrink: 0, overflow: 'hidden',
@@ -323,7 +323,7 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
         {profile.role === 'creator' && profile.skin && (
           <div style={{
             display: 'flex', alignItems: 'center', gap: '4px',
-            background: 'rgba(255,255,255,0.2)',
+            background: 'var(--c-border)',
             borderRadius: '20px', padding: '4px 10px',
             fontSize: '11px', fontWeight: 600,
           }}>
@@ -339,9 +339,9 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
             display: 'flex', alignItems: 'center', gap: '8px',
             marginBottom: '10px',
             padding: '8px 10px',
-            background: '#F5F5F0',
+            background: 'var(--c-surface)',
             borderRadius: '8px',
-            border: '1px solid #E0E0DA',
+            border: '1px solid var(--c-border)',
           }}>
             <div style={{
               width: '28px', height: '28px', borderRadius: '50%',
@@ -352,21 +352,21 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
               {level}
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: '#0A0A0A' }}>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--c-text)' }}>
                 Level {level} · {levelInfo.label}
               </div>
               {progress && (
                 <div style={{ marginTop: '4px' }}>
                   <div style={{
                     height: '3px', borderRadius: '2px',
-                    background: '#E0E0DA', overflow: 'hidden',
+                    background: 'var(--c-surface)', overflow: 'hidden',
                   }}>
                     <div style={{
                       width: `${progress.progress * 100}%`, height: '100%',
                       background: levelInfo.color, borderRadius: '2px',
                     }} />
                   </div>
-                  <div style={{ fontSize: '10px', color: '#B8B4AC', marginTop: '2px' }}>
+                  <div style={{ fontSize: '10px', color: 'var(--c-text-muted)', marginTop: '2px' }}>
                     {progress.current}/{progress.needed} to next level
                   </div>
                 </div>
@@ -379,14 +379,14 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
         {(profile.location || profile.email) && (
           <div style={{ marginBottom: '10px', display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '12px' }}>
             {profile.location && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0A0A0A' }}>
-                <span style={{ color: '#B8B4AC', fontWeight: 600 }}>📍 Location:</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--c-text)' }}>
+                <span style={{ color: 'var(--c-text-muted)', fontWeight: 600 }}>📍 Location:</span>
                 <span>{profile.location}</span>
               </div>
             )}
             {profile.email && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0A0A0A' }}>
-                <span style={{ color: '#B8B4AC', fontWeight: 600 }}>✉️ Email:</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--c-text)' }}>
+                <span style={{ color: 'var(--c-text-muted)', fontWeight: 600 }}>✉️ Email:</span>
                 <span style={{ fontSize: '11px', wordBreak: 'break-all' }}>{profile.email}</span>
               </div>
             )}
@@ -417,7 +417,7 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
               </div>
             )}
             <div>
-              <div style={{ fontSize: '12px', fontWeight: 600, color: '#0A0A0A' }}>
+              <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--c-text)' }}>
                 {profile.skin}
               </div>
             </div>
@@ -429,10 +429,10 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
           <div style={{
             marginBottom: '10px',
             padding: '6px 10px',
-            background: '#F5F5F0',
+            background: 'var(--c-surface)',
             borderRadius: '8px',
-            border: '1px solid #E0E0DA',
-            fontSize: '12px', fontWeight: 600, color: '#0A0A0A',
+            border: '1px solid var(--c-border)',
+            fontSize: '12px', fontWeight: 600, color: 'var(--c-text)',
           }}>
             📏 Height: {profile.height}
           </div>
@@ -444,14 +444,14 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
             {profile.address && (
               <div style={{
                 padding: '8px 10px',
-                background: '#F5F5F0',
+                background: 'var(--c-surface)',
                 borderRadius: '8px',
-                border: '1px solid #E0E0DA',
+                border: '1px solid var(--c-border)',
               }}>
-                <div style={{ fontSize: '10px', fontWeight: 700, color: '#B8B4AC', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
+                <div style={{ fontSize: '10px', fontWeight: 700, color: 'var(--c-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
                   Address
                 </div>
-                <div style={{ fontSize: '12px', color: '#0A0A0A', lineHeight: 1.4 }}>
+                <div style={{ fontSize: '12px', color: 'var(--c-text)', lineHeight: 1.4 }}>
                   {profile.address}
                 </div>
               </div>
@@ -459,14 +459,14 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
             {profile.whatTheyDo && (
               <div style={{
                 padding: '8px 10px',
-                background: '#F5F5F0',
+                background: 'var(--c-surface)',
                 borderRadius: '8px',
-                border: '1px solid #E0E0DA',
+                border: '1px solid var(--c-border)',
               }}>
-                <div style={{ fontSize: '10px', fontWeight: 700, color: '#B8B4AC', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
+                <div style={{ fontSize: '10px', fontWeight: 700, color: 'var(--c-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
                   What They Do
                 </div>
-                <div style={{ fontSize: '12px', color: '#0A0A0A', lineHeight: 1.4 }}>
+                <div style={{ fontSize: '12px', color: 'var(--c-text)', lineHeight: 1.4 }}>
                   {profile.whatTheyDo}
                 </div>
               </div>
@@ -483,8 +483,8 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
                 padding: '4px 0', fontSize: '12px',
                 borderBottom: '1px solid var(--c-surface)',
               }}>
-                <span style={{ color: '#B8B4AC' }}>{key}</span>
-                <span style={{ fontWeight: 600, color: '#0A0A0A' }}>{val}</span>
+                <span style={{ color: 'var(--c-text-muted)' }}>{key}</span>
+                <span style={{ fontWeight: 600, color: 'var(--c-text)' }}>{val}</span>
               </div>
             ))}
           </div>
@@ -495,11 +495,11 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
           <div style={{
             marginBottom: '10px',
             padding: '8px 10px',
-            background: '#F5F5F0',
+            background: 'var(--c-surface)',
             borderRadius: '8px',
-            border: '1px solid #E0E0DA',
+            border: '1px solid var(--c-border)',
           }}>
-            <div style={{ fontSize: '10px', fontWeight: 700, color: '#B8B4AC', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
+            <div style={{ fontSize: '10px', fontWeight: 700, color: 'var(--c-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
               About
             </div>
             <div style={{ fontSize: '12px', color: 'var(--c-text-muted)', lineHeight: 1.4 }}>
@@ -513,11 +513,11 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
           <div style={{
             marginBottom: '10px',
             padding: '8px 10px',
-            background: '#F5F5F0',
+            background: 'var(--c-surface)',
             borderRadius: '8px',
-            border: '1px solid #E0E0DA',
+            border: '1px solid var(--c-border)',
           }}>
-            <div style={{ fontSize: '10px', fontWeight: 700, color: '#B8B4AC', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
+            <div style={{ fontSize: '10px', fontWeight: 700, color: 'var(--c-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
               Bio
             </div>
             <div style={{ fontSize: '12px', color: 'var(--c-text-muted)', lineHeight: 1.4 }}>
@@ -533,22 +533,22 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
             marginBottom: '10px',
           }}>
             {(profile.role === 'brand' ? [
-              { label: 'Deals', value: profile.metrics.dealsCompleted, color: '#0A0A0A' },
+              { label: 'Deals', value: profile.metrics.dealsCompleted, color: 'var(--c-text)' },
               { label: 'Avg Deal', value: `₹${profile.metrics.avgDealValue > 0 ? (profile.metrics.avgDealValue / 100).toLocaleString() : '0'}`, color: 'var(--c-accent)' },
               { label: 'Rating', value: `${profile.metrics.brandRating}/5`, color: 'var(--c-accent)' },
             ] : [
-              { label: 'Deals', value: profile.metrics.dealsCompleted, color: '#0A0A0A' },
+              { label: 'Deals', value: profile.metrics.dealsCompleted, color: 'var(--c-text)' },
               { label: 'Avg Deal', value: `₹${(profile.metrics.avgDealValue / 100).toLocaleString()}`, color: 'var(--c-accent)' },
-              { label: 'On Time', value: `${profile.metrics.onTimeRate}%`, color: '#A08A5E' },
+              { label: 'On Time', value: `${profile.metrics.onTimeRate}%`, color: 'var(--c-text)' },
               { label: 'Rating', value: `${profile.metrics.brandRating}/5`, color: 'var(--c-accent)' },
             ]).map(stat => (
               <div key={stat.label} style={{
                 padding: '6px 8px',
-                background: '#F5F5F0',
+                background: 'var(--c-surface)',
                 borderRadius: '6px',
-                border: '1px solid #E0E0DA',
+                border: '1px solid var(--c-border)',
               }}>
-                <div style={{ fontSize: '9px', fontWeight: 700, color: '#B8B4AC', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                <div style={{ fontSize: '9px', fontWeight: 700, color: 'var(--c-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                   {stat.label}
                 </div>
                 <div style={{ fontSize: '14px', fontWeight: 700, color: stat.color }}>
@@ -567,27 +567,27 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
           }}>
             <div style={{
               padding: '6px 8px',
-              background: '#F5F5F0',
+              background: 'var(--c-surface)',
               borderRadius: '6px',
-              border: '1px solid #E0E0DA',
+              border: '1px solid var(--c-border)',
             }}>
-              <div style={{ fontSize: '9px', fontWeight: 700, color: '#B8B4AC', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              <div style={{ fontSize: '9px', fontWeight: 700, color: 'var(--c-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                 Followers
               </div>
-              <div style={{ fontSize: '14px', fontWeight: 700, color: '#0A0A0A' }}>
+              <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--c-text)' }}>
                 {(profile.metrics.followers / 1000).toFixed(1)}K
               </div>
             </div>
             <div style={{
               padding: '6px 8px',
-              background: '#F5F5F0',
+              background: 'var(--c-surface)',
               borderRadius: '6px',
-              border: '1px solid #E0E0DA',
+              border: '1px solid var(--c-border)',
             }}>
-              <div style={{ fontSize: '9px', fontWeight: 700, color: '#B8B4AC', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              <div style={{ fontSize: '9px', fontWeight: 700, color: 'var(--c-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                 Engagement
               </div>
-              <div style={{ fontSize: '14px', fontWeight: 700, color: '#0A0A0A' }}>
+              <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--c-text)' }}>
                 {profile.metrics.engagement}%
               </div>
             </div>
@@ -604,18 +604,18 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
           <div style={{
             marginBottom: '10px',
             padding: '8px 10px',
-            background: '#F5F5F0',
+            background: 'var(--c-surface)',
             borderRadius: '8px',
-            border: '1px solid #E0E0DA',
+            border: '1px solid var(--c-border)',
           }}>
-            <div style={{ fontSize: '10px', fontWeight: 700, color: '#B8B4AC', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>
+            <div style={{ fontSize: '10px', fontWeight: 700, color: 'var(--c-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>
               Rate Card
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
               {Object.entries(profile.rateCard).filter(([, v]) => v).map(([k, v]) => (
                 <div key={k} style={{
                   fontSize: '11px', fontWeight: 600,
-                  background: '#E0E0DA', borderRadius: '4px',
+                  background: 'var(--c-surface)', borderRadius: '4px',
                   padding: '2px 8px', color: 'var(--c-text-muted)',
                 }}>
                   {k}: ₹{v}
@@ -629,7 +629,7 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
         {profile.role === 'creator' && profile.availableFrom && (
           <div style={{
             display: 'flex', alignItems: 'center', gap: '6px',
-            fontSize: '11px', color: '#B8B4AC', marginBottom: '6px',
+            fontSize: '11px', color: 'var(--c-text-muted)', marginBottom: '6px',
           }}>
             <span>Available from {profile.availableFrom}</span>
           </div>
@@ -638,7 +638,7 @@ function HoverCard({ profile, x, y }: { profile: HoverProfile; x: number; y: num
         {/* Completed deals count */}
         {profile.completedDeals !== undefined && profile.completedDeals > 0 && (
           <div style={{
-            fontSize: '11px', color: '#B8B4AC', textAlign: 'center',
+            fontSize: '11px', color: 'var(--c-text-muted)', textAlign: 'center',
             padding: '6px', borderTop: '1px solid var(--c-surface)', marginTop: '4px',
           }}>
             {profile.completedDeals} deal{profile.completedDeals !== 1 ? 's' : ''} completed

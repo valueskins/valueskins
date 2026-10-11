@@ -7,8 +7,8 @@ interface BrandVerificationBadgeProps {
 
 export default function BrandVerificationBadge({ status, brandName }: BrandVerificationBadgeProps) {
   const statusStyles = {
-    verified: { background: 'rgba(200, 184, 154, 0.1)', color: '#166534', text: 'Verified' },
-    pending: { background: 'rgba(200, 184, 154, 0.1)', color: '#92400e', text: 'Pending' },
+    verified: { background: 'var(--c-border)', color: 'var(--c-text)', text: 'Verified' },
+    pending: { background: 'var(--c-border)', color: 'var(--c-text)', text: 'Pending' },
     rejected: { background: 'rgba(176, 65, 62, 0.1)', color: 'var(--c-error)', text: 'Rejected' },
   };
 

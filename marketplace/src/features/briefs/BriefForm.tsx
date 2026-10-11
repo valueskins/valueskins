@@ -7,7 +7,7 @@ import type { ProfessionCount } from '@/pages/api/creators/count-by-profession';
 const C = {
   bg: '#0A0A0A', surface: '#1A1A1A', surfaceAlt: '#2D2D2D',
   text: '#F5F5F0', textMuted: '#B8B4AC', primary: '#C8B89A',
-  success: 'var(--c-accent)', border: '#2D2D2D',
+  success: 'var(--c-accent)', border: 'var(--c-border)',
 };
 
 const PLATFORMS = [
@@ -87,7 +87,7 @@ export default function BriefForm({ onSaved }: { onSaved: () => void }) {
   }));
 
   return (
-    <div style={{ color: C.text, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+    <div style={{ color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
       <h2 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px' }}>Create a Brief</h2>
       <p style={{ fontSize: '13px', color: C.textMuted, marginBottom: '16px' }}>Describe what you're looking for. We'll match you with relevant creators.</p>
 
@@ -112,7 +112,7 @@ export default function BriefForm({ onSaved }: { onSaved: () => void }) {
 
         <div>
           <label style={{ fontSize: '12px', color: C.textMuted, marginBottom: '8px', display: 'block' }}>
-            Creator Niches <span style={{ color: '#555' }}>({form.required_niches.length} selected)</span>
+            Creator Niches <span style={{ color: 'var(--c-text-muted)' }}>({form.required_niches.length} selected)</span>
           </label>
 
           <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '8px' }}>
@@ -163,7 +163,7 @@ export default function BriefForm({ onSaved }: { onSaved: () => void }) {
                         {count !== undefined && (
                           <span style={{
                             fontSize: '10px', color: isSelected ? C.primary : '#555',
-                            background: 'rgba(255,255,255,0.05)', padding: '1px 5px',
+                            background: 'var(--c-surface-container)', padding: '1px 5px',
                             borderRadius: '8px',
                           }}>
                             {count}
@@ -207,7 +207,7 @@ export default function BriefForm({ onSaved }: { onSaved: () => void }) {
           style={{ padding: '10px', background: C.bg, border: `1px solid ${C.border}`, borderRadius: '6px', color: C.text, fontSize: '14px' }} />
 
         <button onClick={handleSave} disabled={saving}
-          style={{ padding: '10px', background: C.primary, color: '#000', border: 'none', borderRadius: '6px', fontWeight: 600, cursor: 'pointer', opacity: saving ? 0.6 : 1, fontSize: '14px' }}>
+          style={{ padding: '10px', background: C.primary, color: 'var(--c-on-primary)', border: 'none', borderRadius: '6px', fontWeight: 600, cursor: 'pointer', opacity: saving ? 0.6 : 1, fontSize: '14px' }}>
           {saving ? 'Saving...' : 'Create Brief'}
         </button>
       </div>

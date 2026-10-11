@@ -12,7 +12,7 @@ export default function FeedPage() {
     minHeight: '100vh',
     background: C.bg,
     color: C.text,
-    fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+    fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
     padding: '40px 20px',
     display: 'flex',
     alignItems: 'center',
@@ -53,7 +53,7 @@ export default function FeedPage() {
   const buttonStyle = {
     padding: '12px 24px',
     background: C.primary,
-    color: '#fff',
+    color: 'var(--c-on-primary)',
     border: 'none',
     borderRadius: '8px',
     fontSize: '14px',

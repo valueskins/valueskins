@@ -4,19 +4,19 @@ import { withAlpha } from '@/theme/colors';
 import { useState } from 'react';
 
 const C = {
-  bg: '#0A0A0A',
-  surface: '#1A1A1A',
-  border: '#2D2D2D',
-  text: '#F5F5F0',
-  textSecondary: '#D6D2C8',
+  bg: 'var(--c-bg)',
+  surface: 'var(--c-surface)',
+  border: 'var(--c-border)',
+  text: 'var(--c-text)',
+  textSecondary: 'var(--c-text-muted)',
   error: 'var(--c-error)',
-  errorBg: '#7f1d1d',
+  errorBg: 'var(--c-error-container)',
   success: 'var(--c-accent)',
-  successBg: '#052e16',
+  successBg: 'var(--c-surface-container)',
   warning: 'var(--c-warning)',
-  warningBg: '#451a03',
+  warningBg: 'var(--c-surface-container)',
   info: 'var(--c-accent)',
-  infoBg: '#1e3a5f',
+  infoBg: 'var(--c-surface-container)',
 };
 
 const sections = [
@@ -176,15 +176,15 @@ export function AccountDeletionSection() {
   if (success) {
     return (
       <div style={{
-        padding: '20px',
+        padding: '28px',
         background: C.successBg,
         border: `1px solid ${withAlpha(C.success, 0x40)}`,
         borderRadius: '8px',
       }}>
-        <div style={{ color: C.success, fontWeight: 700, fontSize: '15px', marginBottom: '8px' }}>
+        <div style={{ color: C.success, fontWeight: 700, fontSize: '17px', marginBottom: '8px' }}>
           Deletion Scheduled
         </div>
-        <div style={{ fontSize: '13px', color: C.text, lineHeight: '1.5' }}>
+        <div style={{ fontSize: '15px', color: C.text, lineHeight: '1.5' }}>
           A PDF export of your data and work history has been downloaded to your computer.
           <br /><br />
           Your account will be permanently deleted after <strong>30 days</strong>.
@@ -205,24 +205,24 @@ export function AccountDeletionSection() {
       border: `1px solid ${withAlpha(C.error, 0x40)}`,
       borderRadius: '8px',
       padding: '12px',
-      marginBottom: '12px',
+      marginBottom: '16px',
     }}>
-      <div style={{ fontWeight: 700, fontSize: '13px', color: C.error, marginBottom: '6px' }}>
+      <div style={{ fontWeight: 700, fontSize: '15px', color: C.error, marginBottom: '6px' }}>
         {title}
       </div>
-      <div style={{ fontSize: '12px', color: C.text, lineHeight: '1.6' }}>
+      <div style={{ fontSize: '14px', color: C.text, lineHeight: '1.6' }}>
         {children}
       </div>
     </div>
   );
 
   return (
-    <div style={{ padding: '20px', borderTop: `1px solid ${C.border}`, marginTop: '20px' }}>
+    <div style={{ padding: '28px', borderTop: `1px solid ${C.border}`, marginTop: '20px' }}>
       <div style={{ marginBottom: '16px' }}>
-        <h3 style={{ fontSize: '14px', fontWeight: 700, color: C.error, marginBottom: '8px' }}>
+        <h3 style={{ fontSize: '16px', fontWeight: 700, color: C.error, marginBottom: '8px' }}>
           Danger Zone
         </h3>
-        <p style={{ fontSize: '13px', color: C.textSecondary, margin: 0 }}>
+        <p style={{ fontSize: '15px', color: C.textSecondary, margin: 0 }}>
           Permanently delete your account and all associated data.
           A PDF export of everything we have on file will be downloaded first.
         </p>
@@ -231,12 +231,12 @@ export function AccountDeletionSection() {
       <button
         onClick={() => setShowDeleteModal(true)}
         style={{
-          padding: '10px 16px',
+          padding: '13px 26px',
           background: C.error,
-          color: '#fff',
+          color: 'var(--c-on-primary)',
           border: 'none',
           borderRadius: '6px',
-          fontSize: '13px',
+          fontSize: '15px',
           fontWeight: 600,
           cursor: 'pointer',
         }}
@@ -254,7 +254,7 @@ export function AccountDeletionSection() {
           justifyContent: 'center',
           zIndex: 9999,
           overflow: 'auto',
-          padding: '20px',
+          padding: '28px',
         }} onClick={() => setShowDeleteModal(false)}>
           <div
             style={{
@@ -272,7 +272,7 @@ export function AccountDeletionSection() {
             <h2 style={{ fontSize: '18px', fontWeight: 700, color: C.error, marginBottom: '4px' }}>
               Permanent Account Deletion
             </h2>
-            <p style={{ fontSize: '12px', color: C.textSecondary, marginBottom: '16px' }}>
+            <p style={{ fontSize: '14px', color: C.textSecondary, marginBottom: '16px' }}>
               This action permanently deletes your account. Please read everything below before proceeding.
             </p>
 
@@ -308,7 +308,7 @@ export function AccountDeletionSection() {
                   color: C.info,
                   border: `1px solid ${withAlpha(C.info, 0x40)}`,
                   borderRadius: '6px',
-                  fontSize: '12px',
+                  fontSize: '14px',
                   fontWeight: 600,
                   cursor: 'pointer',
                   marginBottom: '16px',
@@ -331,10 +331,10 @@ export function AccountDeletionSection() {
                       marginBottom: '8px',
                     }}
                   >
-                    <div style={{ fontSize: '12px', fontWeight: 700, color: C.text, marginBottom: '6px' }}>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: C.text, marginBottom: '6px' }}>
                       {section.title}
                     </div>
-                    <ul style={{ margin: 0, padding: '0 0 0 16px', fontSize: '11px', color: C.textSecondary, lineHeight: '1.7' }}>
+                    <ul style={{ margin: 0, padding: '0 0 0 16px', fontSize: '13px', color: C.textSecondary, lineHeight: '1.7' }}>
                       {section.items.map((item, i) => (
                         <li key={i}>{item}</li>
                       ))}
@@ -346,7 +346,7 @@ export function AccountDeletionSection() {
 
             <div style={{ marginBottom: '16px' }}>
               <label style={{ display: 'block', marginBottom: '8px' }}>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: C.textSecondary, marginBottom: '6px' }}>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: C.textSecondary, marginBottom: '6px' }}>
                   Type this exactly to confirm:
                 </div>
                 <code style={{
@@ -356,7 +356,7 @@ export function AccountDeletionSection() {
                   border: `1px solid ${C.border}`,
                   borderRadius: '6px',
                   color: C.warning,
-                  fontSize: '12px',
+                  fontSize: '14px',
                   marginBottom: '8px',
                   wordBreak: 'break-all',
                   fontWeight: 700,
@@ -373,12 +373,12 @@ export function AccountDeletionSection() {
                   placeholder="Type confirmation phrase here"
                   style={{
                     width: '100%',
-                    padding: '10px 12px',
+                    padding: '13px 26px',
                     border: `1px solid ${C.border}`,
                     background: C.bg,
                     color: C.text,
                     borderRadius: '6px',
-                    fontSize: '13px',
+                    fontSize: '15px',
                     boxSizing: 'border-box',
                   }}
                 />
@@ -387,12 +387,12 @@ export function AccountDeletionSection() {
 
             {error && (
               <div style={{
-                padding: '8px 12px',
+                padding: '13px 26px',
                 background: C.errorBg,
                 border: `1px solid ${withAlpha(C.error, 0x40)}`,
                 borderRadius: '6px',
                 color: C.error,
-                fontSize: '12px',
+                fontSize: '14px',
                 marginBottom: '16px',
               }}>
                 {error}
@@ -410,12 +410,12 @@ export function AccountDeletionSection() {
                 disabled={isDeleting}
                 style={{
                   flex: 1,
-                  padding: '10px 16px',
+                  padding: '13px 26px',
                   background: 'transparent',
                   color: C.textSecondary,
                   border: `1px solid ${C.border}`,
                   borderRadius: '6px',
-                  fontSize: '13px',
+                  fontSize: '15px',
                   fontWeight: 600,
                   cursor: isDeleting ? 'default' : 'pointer',
                   opacity: isDeleting ? 0.6 : 1,
@@ -428,12 +428,12 @@ export function AccountDeletionSection() {
                 disabled={isDeleting || confirmationPhrase !== 'PERMANENTLY DELETE MY ACCOUNT'}
                 style={{
                   flex: 1,
-                  padding: '10px 16px',
-                  background: confirmationPhrase === 'PERMANENTLY DELETE MY ACCOUNT' ? C.error : C.error + '60',
-                  color: '#fff',
+                  padding: '13px 26px',
+                  background: confirmationPhrase === 'PERMANENTLY DELETE MY ACCOUNT' ? C.error : 'var(--c-border)',
+                  color: 'var(--c-text)',
                   border: 'none',
                   borderRadius: '6px',
-                  fontSize: '13px',
+                  fontSize: '15px',
                   fontWeight: 600,
                   cursor: isDeleting || confirmationPhrase !== 'PERMANENTLY DELETE MY ACCOUNT' ? 'default' : 'pointer',
                   opacity: isDeleting || confirmationPhrase !== 'PERMANENTLY DELETE MY ACCOUNT' ? 0.6 : 1,

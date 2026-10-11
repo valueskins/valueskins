@@ -15,15 +15,15 @@ import { ValueSkinSprite } from '@/features/profiles/ProfileView';
 // exact values by the spec. Currency stays unset (GP3 / flagged F1) — the
 // symbol arrives as a prop.
 
-const FONT = "'Inter', 'Helvetica Neue', Arial, sans-serif";
+const FONT = "'Poppins', 'Helvetica Neue', Arial, sans-serif";
 
 // Sand is identical in both themes, so these stay literal (BRANDING §4).
 const WARM_SAND = '#C8B89A';
 const DEEP_SAND = '#A08A5E';
 const NEAR_BLACK = '#0A0A0A';
-const SAND_HAIR = 'rgba(160,138,94,0.28)';
-const SAND_RING = '0 0 0 3px rgba(160,138,94,0.16)';
-const SAND_TINT = 'rgba(200,184,154,0.14)';
+const SAND_HAIR = 'var(--c-border)';
+const SAND_RING = '0 0 0 3px var(--c-surface-container)';
+const SAND_TINT = 'var(--c-surface-container)';
 const EASE = 'cubic-bezier(0.16,1,0.3,1)';
 
 export const CAMPAIGN_DRAFT_KEY = 'valueskins_campaign_draft';
@@ -701,7 +701,7 @@ export default function CampaignComposer({
           )}
 
           <Row span={2} two={formTwoCol}>
-            <div style={{ border: `1px solid ${SAND_HAIR}`, borderRadius: '10px', padding: '16px', background: 'rgba(200,184,154,0.05)' }}>
+            <div style={{ border: `1px solid ${SAND_HAIR}`, borderRadius: '10px', padding: '16px', background: 'var(--c-surface-container)' }}>
               <div style={{ fontSize: '0.9375rem', fontWeight: 600, color: C.text, marginBottom: '4px' }}>Other information</div>
               <div style={helpStyle}>
                 Extra details that help creators plan the shoot and know exactly what you expect. Optional.
@@ -763,33 +763,33 @@ export default function CampaignComposer({
             top: twoCol ? '96px' : undefined,
             borderRadius: '16px', padding: '24px',
             background: 'linear-gradient(155deg,#0A0A0A 0%,#17150F 55%,#22201A 100%)',
-            border: `1px solid rgba(200,184,154,0.22)`,
+            border: `1px solid var(--c-border)`,
             boxShadow: '0 40px 80px -42px rgba(10,10,10,0.6)',
           }}
         >
-          <div style={{ fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#8A867E', marginBottom: '16px' }}>
+          <div style={{ fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--c-text-muted)', marginBottom: '16px' }}>
             Creators will see
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px' }}>
-            <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'rgba(245,245,240,0.04)', border: '1px solid rgba(200,184,154,0.30)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'rgba(245,245,240,0.04)', border: '1px solid var(--c-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <ValueSkinSprite size={30} />
             </div>
             <div style={{ minWidth: 0 }}>
-              <div style={{ fontSize: '0.9375rem', fontWeight: 600, color: '#F5F5F0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <div style={{ fontSize: '0.9375rem', fontWeight: 600, color: 'var(--c-text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {draft.brandName || 'Your brand'}
               </div>
-              <div style={{ fontSize: '0.8125rem', color: '#8A867E' }}>
+              <div style={{ fontSize: '0.8125rem', color: 'var(--c-text-muted)' }}>
                 {draft.profession || 'Profession not set'}
               </div>
             </div>
           </div>
 
-          <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#F5F5F0', lineHeight: 1.25, letterSpacing: '-0.01em' }}>
+          <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--c-text)', lineHeight: 1.25, letterSpacing: '-0.01em' }}>
             {draft.title || 'Campaign title'}
           </div>
 
-          <div style={{ fontSize: '0.875rem', color: '#C9C5BC', lineHeight: 1.6, marginTop: '10px' }}>
+          <div style={{ fontSize: '0.875rem', color: 'var(--c-text-muted)', lineHeight: 1.6, marginTop: '10px' }}>
             {draft.description || 'Your description assembles here as you type.'}
           </div>
 
@@ -797,7 +797,7 @@ export default function CampaignComposer({
             <span style={{ fontSize: '0.75rem', fontWeight: 600, padding: '6px 13px', borderRadius: '20px', background: WARM_SAND, color: NEAR_BLACK }}>
               {draft.compensation}
             </span>
-            <span style={{ fontSize: '0.75rem', fontWeight: 600, padding: '6px 13px', borderRadius: '20px', border: '1px solid rgba(200,184,154,0.35)', color: WARM_SAND }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 600, padding: '6px 13px', borderRadius: '20px', border: '1px solid var(--c-border)', color: WARM_SAND }}>
               {draft.contentLanguage}
             </span>
           </div>
@@ -806,57 +806,57 @@ export default function CampaignComposer({
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             <div>
-              <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#8A867E' }}>Budget</div>
-              <div style={{ fontSize: '1.375rem', fontWeight: 700, color: '#F5F5F0', marginTop: '6px', letterSpacing: '-0.02em' }}>
+              <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--c-text-muted)' }}>Budget</div>
+              <div style={{ fontSize: '1.375rem', fontWeight: 700, color: 'var(--c-text)', marginTop: '6px', letterSpacing: '-0.02em' }}>
                 {draft.budget ? `${currencySymbol}${parseInt(draft.budget, 10).toLocaleString()}` : '-'}
               </div>
             </div>
             <div>
-              <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#8A867E' }}>Deliverables</div>
-              <div style={{ fontSize: '0.875rem', color: '#C9C5BC', marginTop: '6px', lineHeight: 1.5 }}>{draft.deliverables || '-'}</div>
+              <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--c-text-muted)' }}>Deliverables</div>
+              <div style={{ fontSize: '0.875rem', color: 'var(--c-text-muted)', marginTop: '6px', lineHeight: 1.5 }}>{draft.deliverables || '-'}</div>
             </div>
             <div>
-              <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#8A867E' }}>Deliver by</div>
-              <div style={{ fontSize: '0.875rem', color: '#C9C5BC', marginTop: '6px' }}>{draft.deliveryDeadline || '-'}</div>
+              <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--c-text-muted)' }}>Deliver by</div>
+              <div style={{ fontSize: '0.875rem', color: 'var(--c-text-muted)', marginTop: '6px' }}>{draft.deliveryDeadline || '-'}</div>
             </div>
           </div>
 
           {draft.scriptFileName || draft.scriptText.trim() ? (
             <div style={{ marginTop: '20px' }}>
-              <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#8A867E', marginBottom: '6px' }}>Script</div>
+              <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--c-text-muted)', marginBottom: '6px' }}>Script</div>
               {draft.scriptFileName && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8125rem', fontWeight: 600, color: WARM_SAND, marginBottom: '4px' }}>
                   📎 {draft.scriptFileName}
                 </div>
               )}
               {draft.scriptText.trim() && (
-                <div style={{ fontSize: '0.8125rem', color: '#C9C5BC', lineHeight: 1.5 }}>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--c-text-muted)', lineHeight: 1.5 }}>
                   {draft.scriptText.trim().slice(0, 140)}{draft.scriptText.trim().length > 140 ? '…' : ''}
                 </div>
               )}
             </div>
           ) : (
             <div style={{ marginTop: '20px' }}>
-              <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#8A867E', marginBottom: '6px' }}>Script</div>
-              <div style={{ fontSize: '0.8125rem', color: '#8A867E' }}>No script, creator writes it</div>
+              <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--c-text-muted)', marginBottom: '6px' }}>Script</div>
+              <div style={{ fontSize: '0.8125rem', color: 'var(--c-text-muted)' }}>No script, creator writes it</div>
             </div>
           )}
 
           {(draft.shootLocation || draft.expectations || draft.otherNotes) && (
             <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid rgba(245,245,240,0.10)' }}>
-              <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#8A867E', marginBottom: '8px' }}>Other information</div>
+              <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--c-text-muted)', marginBottom: '8px' }}>Other information</div>
               {draft.shootLocation && (
-                <div style={{ fontSize: '0.8125rem', color: '#C9C5BC', marginBottom: '4px' }}>
-                  <span style={{ fontWeight: 600, color: '#F5F5F0' }}>Shoot:</span> {draft.shootLocation}
+                <div style={{ fontSize: '0.8125rem', color: 'var(--c-text-muted)', marginBottom: '4px' }}>
+                  <span style={{ fontWeight: 600, color: 'var(--c-text)' }}>Shoot:</span> {draft.shootLocation}
                 </div>
               )}
               {draft.expectations && (
-                <div style={{ fontSize: '0.8125rem', color: '#C9C5BC', marginBottom: '4px', lineHeight: 1.5 }}>
-                  <span style={{ fontWeight: 600, color: '#F5F5F0' }}>Expectations:</span> {draft.expectations}
+                <div style={{ fontSize: '0.8125rem', color: 'var(--c-text-muted)', marginBottom: '4px', lineHeight: 1.5 }}>
+                  <span style={{ fontWeight: 600, color: 'var(--c-text)' }}>Expectations:</span> {draft.expectations}
                 </div>
               )}
               {draft.otherNotes && (
-                <div style={{ fontSize: '0.8125rem', color: '#C9C5BC', lineHeight: 1.5 }}>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--c-text-muted)', lineHeight: 1.5 }}>
                   {draft.otherNotes}
                 </div>
               )}
@@ -865,11 +865,11 @@ export default function CampaignComposer({
 
           {escrowTotal > 0 && (
             <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid rgba(245,245,240,0.10)' }}>
-              <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#8A867E' }}>Total escrow required</div>
+              <div style={{ fontSize: '0.6875rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--c-text-muted)' }}>Total escrow required</div>
               <div style={{ fontSize: '1.375rem', fontWeight: 700, color: DEEP_SAND, marginTop: '6px', letterSpacing: '-0.02em' }}>
                 {currencySymbol}{escrowTotal.toLocaleString()}
               </div>
-              <div style={{ fontSize: '0.75rem', color: '#8A867E', marginTop: '4px' }}>
+              <div style={{ fontSize: '0.75rem', color: 'var(--c-text-muted)', marginTop: '4px' }}>
                 Held in escrow, released on approval.
               </div>
             </div>

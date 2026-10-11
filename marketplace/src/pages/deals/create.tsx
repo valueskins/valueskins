@@ -79,7 +79,7 @@ export default function CreateDealPage() {
             style={{
               width: '100%',
               padding: '10px 12px',
-              border: '1px solid #d1d5db',
+              border: '1px solid var(--c-border)',
               borderRadius: '6px',
               fontSize: '14px',
               fontFamily: 'inherit',
@@ -100,7 +100,7 @@ export default function CreateDealPage() {
             style={{
               width: '100%',
               padding: '10px 12px',
-              border: '1px solid #d1d5db',
+              border: '1px solid var(--c-border)',
               borderRadius: '6px',
               fontSize: '14px',
               fontFamily: 'inherit',
@@ -124,7 +124,7 @@ export default function CreateDealPage() {
             style={{
               width: '100%',
               padding: '10px 12px',
-              border: '1px solid #d1d5db',
+              border: '1px solid var(--c-border)',
               borderRadius: '6px',
               fontSize: '14px',
               fontFamily: 'inherit',
@@ -146,7 +146,7 @@ export default function CreateDealPage() {
             style={{
               width: '100%',
               padding: '10px 12px',
-              border: '1px solid #d1d5db',
+              border: '1px solid var(--c-border)',
               borderRadius: '6px',
               fontSize: '14px',
               fontFamily: 'inherit',
@@ -164,7 +164,7 @@ export default function CreateDealPage() {
           style={{
             padding: '12px 16px',
             background: selectedSkin && !loading ? '#0A0A0A' : '#d1d5db',
-            color: '#ffffff',
+            color: 'var(--c-text)',
             border: 'none',
             borderRadius: '6px',
             fontWeight: 600,

@@ -8,7 +8,7 @@ import { C } from '@/theme/colors';
 import ValueSkinsLogo from '@/components/ValueSkinsLogo';
 import DriftingSkins from '@/components/DriftingSkins';
 
-const FONT = "'Inter', 'Helvetica Neue', Arial, sans-serif";
+const FONT = "'Poppins', 'Helvetica Neue', Arial, sans-serif";
 
 // prefers-reduced-motion — reveals resolve to visible, count-up/parallax off.
 function usePrefersReducedMotion() {
@@ -168,7 +168,7 @@ export default function HomePage() {
           position: 'relative',
           maxWidth: '960px',
           margin: '0 auto',
-          padding: '80px 24px 60px',
+          padding: '160px 24px 140px',
           textAlign: 'center',
           opacity: heroFade,
           transform: `translateY(-${heroLift}px)`,
@@ -210,13 +210,13 @@ export default function HomePage() {
       </div>
 
       {/* How it works, in four lines. The full version is /how-it-works. */}
-      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '60px 24px 20px' }}>
+      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '140px 24px 60px' }}>
         <Reveal reduced={reduced}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: C.text, textAlign: 'center', marginBottom: '48px' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: C.text, textAlign: 'center', marginBottom: '72px' }}>
             How it works
           </h2>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '32px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '40px' }}>
           {[
             { step: '01', title: 'A brand posts a deal', desc: 'What it needs, the deadline and the amount. The amount is final.' },
             { step: '02', title: 'Creators apply', desc: 'Every creator sees every open deal. The brand picks one.' },
@@ -226,7 +226,7 @@ export default function HomePage() {
             <Reveal key={item.step} reduced={reduced} delay={i * 90}>
               <div style={{
                 background: C.surface, border: `1px solid ${C.border}`, borderRadius: '10px',
-                padding: '28px', height: '100%',
+                padding: '40px', height: '100%',
               }}>
                 <div style={{ fontSize: '0.75rem', fontWeight: 700, color: C.accent, marginBottom: '12px', letterSpacing: '0.1em' }}>
                   STEP {item.step}
@@ -245,7 +245,7 @@ export default function HomePage() {
       </div>
 
       {/* What it costs. One number, stated once. */}
-      <div style={{ maxWidth: '760px', margin: '0 auto', padding: '40px 24px 60px', textAlign: 'center' }}>
+      <div style={{ maxWidth: '760px', margin: '0 auto', padding: '120px 24px 160px', textAlign: 'center' }}>
         <Reveal reduced={reduced}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: C.text, margin: '0 0 12px' }}>
             What it costs

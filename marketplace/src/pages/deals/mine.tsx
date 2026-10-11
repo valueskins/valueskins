@@ -100,7 +100,7 @@ export default function MyDealsPage() {
 
   const card: React.CSSProperties = {
     background: C.surface, border: `1px solid ${C.border}`,
-    borderRadius: 12, padding: 16, marginBottom: 10,
+    borderRadius: 12, padding: 28, marginBottom: 20,
   };
 
   // Deals needing the creator's attention come first: a confirmed deal waiting
@@ -118,13 +118,13 @@ export default function MyDealsPage() {
   return (
     <>
       <Head><title>Your deals · ValueSkins</title></Head>
-      <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '24px 16px 48px' }}>
-        <div style={{ maxWidth: 640, margin: '0 auto' }}>
+      <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '72px 24px 140px' }}>
+        <div style={{ maxWidth: 780, margin: '0 auto' }}>
           <MarketTabs active="current" role="creator" />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <div>
-              <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Your deals</h1>
-              <p style={{ fontSize: 12, color: C.outline, margin: '2px 0 0' }}>
+              <h1 style={{ fontSize: 26, fontWeight: 700, margin: 0 }}>Your deals</h1>
+              <p style={{ fontSize: 14, color: C.outline, margin: '2px 0 0' }}>
                 Everything you have applied to.
               </p>
             </div>
@@ -132,8 +132,8 @@ export default function MyDealsPage() {
               onClick={() => router.push('/deals/browse')}
               style={{
                 background: C.primary, border: 'none', borderRadius: 8,
-                padding: '10px 14px', color: C.onPrimary, fontWeight: 600,
-                fontSize: 13, cursor: 'pointer',
+                padding: '13px 26px', color: C.onPrimary, fontWeight: 600,
+                fontSize: 15, cursor: 'pointer',
               }}
             >
               Browse deals
@@ -142,14 +142,14 @@ export default function MyDealsPage() {
 
           <SetupBanner />
 
-          {!rows && !error && <div style={{ fontSize: 13, color: C.outline }}>Loading…</div>}
+          {!rows && !error && <div style={{ fontSize: 15, color: C.outline }}>Loading…</div>}
 
           {error && (
-            <div role="alert" style={{ ...card, borderColor: C.error, fontSize: 13 }}>{error}</div>
+            <div role="alert" style={{ ...card, borderColor: C.error, fontSize: 15 }}>{error}</div>
           )}
 
           {sorted?.length === 0 && (
-            <div style={{ ...card, fontSize: 13, color: C.outline }}>
+            <div style={{ ...card, fontSize: 15, color: C.outline }}>
               You have not applied to anything yet. Open deals are on the browse page.
             </div>
           )}
@@ -165,23 +165,23 @@ export default function MyDealsPage() {
                 <div style={{ ...card, cursor: 'pointer', opacity: dim ? 0.6 : 1 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ fontSize: 14, fontWeight: 700, color: C.text }}>{r.title}</div>
-                      <div style={{ fontSize: 11, color: C.outline, marginTop: 2 }}>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: C.text }}>{r.title}</div>
+                      <div style={{ fontSize: 13, color: C.outline, marginTop: 2 }}>
                         {APPLICATION_LABEL[r.status]}
                         {r.status === 'CONFIRMED' ? ` · ${action.label.toLowerCase()}` : ''}
                       </div>
                     </div>
                     <div style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: C.text }}>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: C.text }}>
                         ₹{F.creatorTotal.toLocaleString('en-IN')}
                       </div>
-                      <div style={{ fontSize: 10, color: C.outline }}>you receive</div>
+                      <div style={{ fontSize: 12, color: C.outline }}>you receive</div>
                     </div>
                   </div>
                   {yourMove && (
                     <div
                       style={{
-                        marginTop: 10, fontSize: 11, color: C.text,
+                        marginTop: 10, fontSize: 13, color: C.text,
                         background: withAlpha(C.primary, 0x1e),
                         border: `1px solid ${C.primary}`,
                         borderRadius: 6, padding: '5px 9px', display: 'inline-block',

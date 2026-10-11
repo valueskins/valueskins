@@ -9,7 +9,7 @@ import LoadingState from '@/components/LoadingState';
 const C = {
   bg: '#0A0A0A',
   surface: '#1A1A1A',
-  border: '#2D2D2D',
+  border: 'var(--c-border)',
   text: '#F5F5F0',
   textSecondary: '#D6D2C8',
   primary: '#0066CC',
@@ -72,7 +72,7 @@ export default function MyValueSkinPage() {
           <div style={{
             padding: '16px',
             background: 'rgba(176, 65, 62, 0.1)',
-            color: '#fca5a5',
+            color: 'var(--c-error)',
             border: '1px solid var(--c-error)',
             borderRadius: '8px',
             marginBottom: '20px',
@@ -190,7 +190,7 @@ export default function MyValueSkinPage() {
                 width: '100%',
                 padding: '12px',
                 background: C.primary,
-                color: '#fff',
+                color: 'var(--c-on-primary)',
                 border: 'none',
                 borderRadius: '8px',
                 fontSize: '14px',
@@ -209,7 +209,7 @@ export default function MyValueSkinPage() {
               style={{
                 padding: '12px',
                 background: C.primary,
-                color: '#fff',
+                color: 'var(--c-on-primary)',
                 border: 'none',
                 borderRadius: '8px',
                 fontSize: '14px',

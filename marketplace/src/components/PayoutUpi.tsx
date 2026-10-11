@@ -85,16 +85,16 @@ export default function PayoutUpi({ role = 'creator' }: { role?: 'creator' | 'br
 
   const card: React.CSSProperties = {
     background: C.surface, border: `1px solid ${C.border}`,
-    borderRadius: 12, padding: 18, marginBottom: 12,
+    borderRadius: 12, padding: 28, marginBottom: 20,
   };
   const input = (invalid?: boolean): React.CSSProperties => ({
     width: '100%', background: C.surfaceAlt,
     border: `1px solid ${invalid ? C.error : C.border}`,
-    borderRadius: 8, color: C.text, padding: '10px 12px',
-    fontSize: 13, fontFamily: 'inherit', outline: 'none',
-    boxSizing: 'border-box', marginBottom: 10,
+    borderRadius: 8, color: C.text, padding: '13px 26px',
+    fontSize: 15, fontFamily: 'inherit', outline: 'none',
+    boxSizing: 'border-box', marginBottom: 20,
   });
-  const lbl: React.CSSProperties = { fontSize: 11, fontWeight: 600, color: C.outline, display: 'block', marginBottom: 4 };
+  const lbl: React.CSSProperties = { fontSize: 13, fontWeight: 600, color: C.outline, display: 'block', marginBottom: 4 };
   const showForm = !loading && emailReady !== false && (!saved || editing);
 
   return (
@@ -104,7 +104,7 @@ export default function PayoutUpi({ role = 'creator' }: { role?: 'creator' | 'br
             role="note"
             style={{
               ...card, borderColor: C.warning, background: withAlpha(C.warning, 0x14),
-              fontSize: 12, lineHeight: 1.6,
+              fontSize: 14, lineHeight: 1.6,
             }}
           >
             <strong>We do not currently use any third-party UPI verification.</strong> We cannot
@@ -112,22 +112,22 @@ export default function PayoutUpi({ role = 'creator' }: { role?: 'creator' | 'br
             payment sent to a wrong UPI ID cannot be recalled.
           </div>
 
-          {loading && <div style={{ fontSize: 13, color: C.outline }}>Loading…</div>}
+          {loading && <div style={{ fontSize: 15, color: C.outline }}>Loading…</div>}
 
           {notice && (
-            <div role="status" style={{ ...card, borderColor: C.accent, background: withAlpha(C.accent, 0x14), fontSize: 12 }}>
+            <div role="status" style={{ ...card, borderColor: C.accent, background: withAlpha(C.accent, 0x14), fontSize: 14 }}>
               {notice}
             </div>
           )}
 
           {!loading && emailReady === false && (
             <div style={{ ...card, borderColor: C.warning, background: withAlpha(C.warning, 0x14) }}>
-              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>Confirm your email first</div>
-              <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 8 }}>
+              <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Confirm your email first</div>
+              <div style={{ fontSize: 14, color: C.textMuted, marginBottom: 8 }}>
                 Payment confirmations and your deal reports are sent there, so it has to be
                 confirmed before a UPI ID can be saved.
               </div>
-              <Link href="/settings/email" style={{ color: C.text, fontSize: 12, fontWeight: 700 }}>
+              <Link href="/settings/email" style={{ color: C.text, fontSize: 14, fontWeight: 700 }}>
                 Go to email settings
               </Link>
             </div>
@@ -136,9 +136,9 @@ export default function PayoutUpi({ role = 'creator' }: { role?: 'creator' | 'br
           {!loading && saved && !editing && (
             <div style={card}>
               <div style={lbl}>Your UPI ID</div>
-              <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 6, wordBreak: 'break-all' }}>{saved}</div>
+              <div style={{ fontSize: 17, fontWeight: 700, marginBottom: 6, wordBreak: 'break-all' }}>{saved}</div>
               <div style={lbl}>Name on the account</div>
-              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>
+              <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 8 }}>
                 {savedName || (
                   <span style={{ color: C.warning, fontWeight: 500 }}>
                     {isCreator
@@ -147,7 +147,7 @@ export default function PayoutUpi({ role = 'creator' }: { role?: 'creator' | 'br
                   </span>
                 )}
               </div>
-              <div style={{ fontSize: 11, color: C.outline, lineHeight: 1.5, marginBottom: 12 }}>
+              <div style={{ fontSize: 13, color: C.outline, lineHeight: 1.7, marginBottom: 20 }}>
                 Check this is exactly right. A UPI payment sent to the wrong ID cannot be recalled.
                 {isCreator
                   ? 'It is shown only to you and to brands you are confirmed on.'
@@ -158,7 +158,7 @@ export default function PayoutUpi({ role = 'creator' }: { role?: 'creator' | 'br
                   onClick={() => { setEditing(true); setName(savedName); setNotice(null); setError(null); }}
                   style={{
                     background: 'none', border: `1px solid ${C.border}`, borderRadius: 8,
-                    padding: '9px 14px', color: C.text, fontWeight: 600, fontSize: 13, cursor: 'pointer',
+                    padding: '13px 26px', color: C.text, fontWeight: 600, fontSize: 15, cursor: 'pointer',
                   }}
                 >
                   Change UPI ID
@@ -188,7 +188,7 @@ export default function PayoutUpi({ role = 'creator' }: { role?: 'creator' | 'br
                 style={input(mismatch)}
               />
               {mismatch && (
-                <div role="alert" style={{ fontSize: 12, color: C.error, margin: '-4px 0 10px' }}>
+                <div role="alert" style={{ fontSize: 14, color: C.error, margin: '-4px 0 10px' }}>
                   The two UPI IDs do not match.
                 </div>
               )}
@@ -200,7 +200,7 @@ export default function PayoutUpi({ role = 'creator' }: { role?: 'creator' | 'br
                 autoComplete="name" maxLength={80}
                 style={input(errorField === 'account_name')}
               />
-              <div style={{ fontSize: 11, color: C.outline, lineHeight: 1.5, margin: '-4px 0 10px' }}>
+              <div style={{ fontSize: 13, color: C.outline, lineHeight: 1.7, margin: '-4px 0 10px' }}>
                 The brand sees this next to your UPI ID and checks it against the name their UPI
                 app shows before paying.
               </div>
@@ -211,7 +211,7 @@ export default function PayoutUpi({ role = 'creator' }: { role?: 'creator' | 'br
                 <label
                   style={{
                     display: 'flex', gap: 10, alignItems: 'flex-start',
-                    fontSize: 12, color: C.textMuted, lineHeight: 1.55,
+                    fontSize: 14, color: C.textMuted, lineHeight: 1.7,
                     margin: '4px 0 12px', cursor: 'pointer',
                   }}
                 >
@@ -229,16 +229,16 @@ export default function PayoutUpi({ role = 'creator' }: { role?: 'creator' | 'br
               )}
 
               {error && (
-                <div role="alert" style={{ fontSize: 12, color: C.error, marginBottom: 10 }}>
+                <div role="alert" style={{ fontSize: 14, color: C.error, marginBottom: 20 }}>
                   {error}
                 </div>
               )}
 
               <div
                 style={{
-                  fontSize: 11, color: C.outline, lineHeight: 1.55,
+                  fontSize: 13, color: C.outline, lineHeight: 1.7,
                   background: C.surfaceAlt, border: `1px solid ${C.border}`,
-                  borderRadius: 8, padding: 10, marginBottom: 12,
+                  borderRadius: 8, padding: 18, marginBottom: 20,
                 }}
               >
                 UPI only. We do not accept or store bank account numbers.{' '}
@@ -253,10 +253,10 @@ export default function PayoutUpi({ role = 'creator' }: { role?: 'creator' | 'br
                   type="submit"
                   disabled={!canSubmit}
                   style={{
-                    flex: 1, padding: '12px',
+                    flex: 1, padding: '16px',
                     background: canSubmit ? C.primary : C.border,
                     border: 'none', borderRadius: 8, color: C.onPrimary,
-                    fontWeight: 700, fontSize: 13,
+                    fontWeight: 700, fontSize: 15,
                     cursor: canSubmit ? 'pointer' : 'not-allowed',
                   }}
                 >
@@ -268,7 +268,7 @@ export default function PayoutUpi({ role = 'creator' }: { role?: 'creator' | 'br
                     onClick={() => { setEditing(false); setUpi(''); setUpiAgain(''); setConsent(false); setError(null); }}
                     style={{
                       padding: '12px 16px', background: 'none', border: `1px solid ${C.border}`,
-                      borderRadius: 8, color: C.text, fontWeight: 600, fontSize: 13, cursor: 'pointer',
+                      borderRadius: 8, color: C.text, fontWeight: 600, fontSize: 15, cursor: 'pointer',
                     }}
                   >
                     Cancel

@@ -50,7 +50,7 @@ export default function TwoFactorAuth() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
       <div style={{ width: '100%', maxWidth: '440px', textAlign: 'center' }}>
         <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔐</div>
         <h1 style={{ fontSize: '24px', fontWeight: 700, color: C.text, marginBottom: '8px' }}>Two-factor authentication</h1>
@@ -58,7 +58,7 @@ export default function TwoFactorAuth() {
           Enter the code from your authenticator app.
         </p>
 
-        {error && <div style={{ padding: '10px', background: '#fef2f2', color: C.error, borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>{error}</div>}
+        {error && <div style={{ padding: '10px', background: 'var(--c-error-container)', color: C.error, borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>{error}</div>}
 
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginBottom: '24px' }}>
           {code.map((digit, i) => (
@@ -86,7 +86,7 @@ export default function TwoFactorAuth() {
         <button
           onClick={handleVerify}
           disabled={loading || code.join('').length !== 6}
-          style={{ width: '100%', padding: '12px', background: code.join('').length === 6 ? C.primary : C.border, color: '#fff', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: code.join('').length === 6 ? 'pointer' : 'not-allowed', marginBottom: '12px' }}
+          style={{ width: '100%', padding: '12px', background: code.join('').length === 6 ? C.primary : C.border, color: 'var(--c-text)', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: code.join('').length === 6 ? 'pointer' : 'not-allowed', marginBottom: '12px' }}
         >
           {loading ? 'Verifying...' : 'Verify'}
         </button>

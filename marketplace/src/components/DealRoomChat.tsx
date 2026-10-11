@@ -91,9 +91,9 @@ export default function DealRoomChat({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        background: '#ffffff',
+        background: 'var(--c-surface)',
         borderRadius: '8px',
-        border: '1px solid #e5e7eb',
+        border: '1px solid var(--c-border)',
         overflow: 'hidden',
       }}
     >
@@ -102,10 +102,10 @@ export default function DealRoomChat({
         <div
           style={{
             padding: '12px 16px',
-            background: 'rgba(200, 184, 154, 0.1)',
-            borderBottom: '1px solid rgba(200, 184, 154, 0.3)',
+            background: 'var(--c-border)',
+            borderBottom: '1px solid var(--c-border)',
             fontSize: '12px',
-            color: '#92400e',
+            color: 'var(--c-text)',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -121,7 +121,7 @@ export default function DealRoomChat({
               border: 'none',
               cursor: 'pointer',
               fontSize: '16px',
-              color: '#92400e',
+              color: 'var(--c-text)',
               padding: '0 8px',
             }}
           >
@@ -134,8 +134,8 @@ export default function DealRoomChat({
       <div
         style={{
           padding: '16px',
-          borderBottom: '1px solid #e5e7eb',
-          background: '#f9fafb',
+          borderBottom: '1px solid var(--c-border)',
+          background: 'var(--c-surface)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -192,8 +192,8 @@ export default function DealRoomChat({
           onClick={handleCalendarExport}
           style={{
             padding: '8px 12px',
-            background: '#0A0A0A',
-            color: '#ffffff',
+            background: 'var(--c-surface)',
+            color: 'var(--c-text)',
             border: 'none',
             borderRadius: '6px',
             fontSize: '12px',
@@ -215,7 +215,7 @@ export default function DealRoomChat({
             background: 'rgba(10, 10, 10, 0.04)',
             borderBottom: '1px solid rgba(10, 10, 10, 0.15)',
             fontSize: '12px',
-            color: '#2D2D2D',
+            color: 'var(--c-text)',
             lineHeight: 1.5,
           }}
         >
@@ -292,8 +292,8 @@ export default function DealRoomChat({
       <div
         style={{
           padding: '16px',
-          borderTop: '1px solid #e5e7eb',
-          background: '#ffffff',
+          borderTop: '1px solid var(--c-border)',
+          background: 'var(--c-surface)',
           display: 'flex',
           gap: '8px',
         }}
@@ -312,7 +312,7 @@ export default function DealRoomChat({
           style={{
             flex: 1,
             padding: '10px 12px',
-            border: '1px solid #d1d5db',
+            border: '1px solid var(--c-border)',
             borderRadius: '6px',
             fontSize: '14px',
             fontFamily: 'inherit',
@@ -323,8 +323,8 @@ export default function DealRoomChat({
           onClick={handleSend}
           style={{
             padding: '10px 16px',
-            background: '#0A0A0A',
-            color: '#ffffff',
+            background: 'var(--c-surface)',
+            color: 'var(--c-text)',
             border: 'none',
             borderRadius: '6px',
             fontWeight: 600,

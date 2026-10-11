@@ -75,14 +75,14 @@ export default function Modules() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: C.surface, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+      <div style={{ minHeight: '100vh', background: C.surface, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
         <div style={{ color: C.textSecondary }}>Loading...</div>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: C.surface, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: C.surface, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '32px 20px' }}>
         <div style={{ marginBottom: '8px' }}>
           <Link href="/account/settings" style={{ color: C.textSecondary, fontSize: '13px', textDecoration: 'none' }}>← Back to settings</Link>
@@ -92,7 +92,7 @@ export default function Modules() {
           Enable or disable platform capabilities. Your account stays the same, no separate signups needed.
         </p>
 
-        {error && <div style={{ padding: '10px 14px', background: '#fef2f2', color: C.error, borderRadius: '8px', fontSize: '13px', marginBottom: '16px', border: '1px solid #fecaca' }}>{error}</div>}
+        {error && <div style={{ padding: '10px 14px', background: 'var(--c-error-container)', color: C.error, borderRadius: '8px', fontSize: '13px', marginBottom: '16px', border: '1px solid var(--c-error)' }}>{error}</div>}
 
         {Object.entries(MODULE_DETAILS).map(([code, details]) => {
           const active = modules.find(m => m.code === code)?.is_active ?? false;

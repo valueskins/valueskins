@@ -10,8 +10,8 @@ export default function ServerError() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '20px',
-      fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+      padding: '28px',
+      fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
     }}>
       <div style={{ textAlign: 'center' }}>
         <div style={{
@@ -31,7 +31,7 @@ export default function ServerError() {
           Server Error
         </h1>
         <p style={{
-          fontSize: '16px',
+          fontSize: '18px',
           color: C.textSecondary,
           marginBottom: '32px',
           maxWidth: '400px',
@@ -42,7 +42,7 @@ export default function ServerError() {
           display: 'inline-block',
           padding: '12px 24px',
           background: C.primary,
-          color: '#fff',
+          color: 'var(--c-on-primary)',
           textDecoration: 'none',
           borderRadius: '8px',
           fontWeight: 600,

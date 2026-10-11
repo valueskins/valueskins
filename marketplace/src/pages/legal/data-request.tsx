@@ -3,12 +3,12 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 const C = {
-  bg: '#0A0A0A',
-  surface: 'rgba(10, 10, 10, 0.86)',
-  border: 'rgba(184, 180, 172, 0.18)',
-  text: '#F5F5F0',
-  textSecondary: '#B8B4AC',
-  primary: '#C8B89A',
+  bg: 'var(--c-bg)',
+  surface: 'var(--c-surface)',
+  border: 'var(--c-border)',
+  text: 'var(--c-text)',
+  textSecondary: 'var(--c-text-muted)',
+  primary: 'var(--c-primary)',
 };
 
 export default function DataRequestPage() {
@@ -37,7 +37,7 @@ export default function DataRequestPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '60px 20px' }}>
+    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '120px 24px 160px' }}>
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
         <Link href="/legal" style={{ color: C.primary, textDecoration: 'none', fontSize: '14px', marginBottom: '32px', display: 'inline-block' }}>
           Back to Legal
@@ -48,8 +48,8 @@ export default function DataRequestPage() {
           Exercise your rights under GDPR (Europe), CCPA (California), and DPDP Act (India). We will process your request within 30 days.
         </p>
 
-        {error && <div style={{ padding: '10px 14px', background: '#fef2f2', color: 'var(--c-error)', borderRadius: '8px', fontSize: '13px', marginBottom: '16px', border: '1px solid #fecaca' }}>{error}</div>}
-        {message && <div style={{ padding: '10px 14px', background: '#f0fdf4', color: 'var(--c-accent)', borderRadius: '8px', fontSize: '13px', marginBottom: '16px', border: '1px solid #bbf7d0' }}>{message}</div>}
+        {error && <div style={{ padding: '10px 14px', background: 'var(--c-error-container)', color: 'var(--c-error)', borderRadius: '8px', fontSize: '13px', marginBottom: '16px', border: '1px solid var(--c-error)' }}>{error}</div>}
+        {message && <div style={{ padding: '10px 14px', background: 'var(--c-surface-container)', color: 'var(--c-accent)', borderRadius: '8px', fontSize: '13px', marginBottom: '16px', border: '1px solid #bbf7d0' }}>{message}</div>}
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
@@ -76,7 +76,7 @@ export default function DataRequestPage() {
             </div>
           </div>
 
-          <button type="submit" disabled={loading} style={{ width: '100%', padding: '12px', background: C.primary, color: '#000', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1 }}>
+          <button type="submit" disabled={loading} style={{ width: '100%', padding: '12px', background: C.primary, color: 'var(--c-on-primary)', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1 }}>
             {loading ? 'Submitting...' : 'Submit request'}
           </button>
         </form>

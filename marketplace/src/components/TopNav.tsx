@@ -5,10 +5,9 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 
-// The app has three places: the marketplace, settings, and a page explaining
-// how it all works. The navigation is the screen's width divided equally
-// between them, at the top.
-export const TOP_NAV_HEIGHT = 56;
+// The header of the signed-in app: the name on the left, and the three places
+// the app has in the middle. Marketplace, Settings, How it works.
+export const TOP_NAV_HEIGHT = 76;
 
 export default function TopNav() {
   const router = useRouter();
@@ -61,47 +60,67 @@ export default function TopNav() {
 
   return (
     <>
-      {/* Pages below start under the bar. */}
       <style>{`
         body { padding-top: ${TOP_NAV_HEIGHT}px; }
         @keyframes vsNavLoad { 0% { transform: translateX(-100%); } 100% { transform: translateX(350%); } }
+        .vs-nav { padding: 0 40px; }
+        .vs-nav-side { flex: 1 1 0; }
+        .vs-nav-menu { gap: 44px; }
+        .vs-nav-link { position: relative; padding: 6px 0; }
+        .vs-nav-link::after {
+          content: ""; position: absolute; left: 0; bottom: 0; height: 1px; width: 0;
+          background: var(--c-text); transition: width 0.2s ease;
+        }
+        .vs-nav-link:hover::after, .vs-nav-link[aria-current="page"]::after { width: 100%; }
+        /* On a phone there is no room for the name beside the menu, so the
+           menu takes the full width and stays reachable. */
+        @media (max-width: 720px) {
+          .vs-nav { padding: 0 16px; }
+          .vs-nav-side { display: none; }
+          .vs-nav-menu { gap: 0; width: 100%; justify-content: space-between; }
+        }
       `}</style>
       <nav
         aria-label="Primary"
+        className="vs-nav"
         style={{
           position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9000,
-          height: TOP_NAV_HEIGHT, display: 'grid',
-          gridTemplateColumns: `repeat(${sections.length}, 1fr)`,
+          height: TOP_NAV_HEIGHT, display: 'flex', alignItems: 'center',
           background: 'var(--c-bg)', borderBottom: '1px solid var(--c-border)',
-          fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+          fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
         }}
       >
-        {sections.map((s, i) => {
-          const active = pending ? pending === s.label : s.match(router.pathname);
-          return (
-            <Link
-              key={s.label}
-              href={s.href}
-              aria-current={active ? 'page' : undefined}
-              onClick={() => { if (!s.match(router.pathname)) setPending(s.label); }}
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                textDecoration: 'none',
-                fontSize: '0.875rem', letterSpacing: '0.04em',
-                fontWeight: active ? 700 : 500,
-                color: active ? 'var(--c-text)' : 'var(--c-text-muted)',
-                background: active ? 'var(--c-surface)' : 'transparent',
-                borderLeft: i === 0 ? 'none' : '1px solid var(--c-border)',
-                // The active half is marked along its whole bottom edge.
-                boxShadow: active ? 'inset 0 -2px 0 var(--c-accent)' : 'none',
-                // Instant: no fade between the click and the highlight.
-                transition: 'none',
-              }}
-            >
-              {s.label}
-            </Link>
-          );
-        })}
+        <div className="vs-nav-side">
+          <span style={{ fontWeight: 700, letterSpacing: '0.18em', fontSize: 18, color: 'var(--c-text)' }}>
+            VALUESKINS
+          </span>
+        </div>
+
+        <div className="vs-nav-menu" style={{ display: 'flex', alignItems: 'center' }}>
+          {sections.map((s) => {
+            const active = pending ? pending === s.label : s.match(router.pathname);
+            return (
+              <Link
+                key={s.label}
+                href={s.href}
+                className="vs-nav-link"
+                aria-current={active ? 'page' : undefined}
+                onClick={() => { if (!s.match(router.pathname)) setPending(s.label); }}
+                style={{
+                  textDecoration: 'none', textTransform: 'uppercase',
+                  fontSize: 12, letterSpacing: '0.14em', whiteSpace: 'nowrap',
+                  fontWeight: active ? 600 : 400,
+                  color: active ? 'var(--c-text)' : 'var(--c-text-muted)',
+                }}
+              >
+                {s.label}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Mirrors the left side so the menu sits in the true centre. */}
+        <div className="vs-nav-side" />
 
         {/* A moving line under the bar while the next page is on its way. */}
         {loading && (
@@ -111,7 +130,7 @@ export default function TopNav() {
           >
             <div
               style={{
-                width: '30%', height: '100%', background: 'var(--c-accent)',
+                width: '30%', height: '100%', background: 'var(--c-text)',
                 animation: 'vsNavLoad 0.9s linear infinite',
               }}
             />

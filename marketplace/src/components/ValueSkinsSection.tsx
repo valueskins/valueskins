@@ -11,7 +11,7 @@ export default function ValueSkinsSection({ userId, token }: ValueSkinsSectionPr
   return (
     <div style={{ background: '#2a2a2a', padding: '20px', borderRadius: '8px', border: '1px solid #444', marginBottom: '20px' }}>
       <h3 style={{ marginBottom: '15px' }}>🎖️ ValueSkins Credentials</h3>
-      <p style={{ color: '#999', marginBottom: '15px' }}>Verified social media accounts with sticker badges</p>
+      <p style={{ color: 'var(--c-text-muted)', marginBottom: '15px' }}>Verified social media accounts with sticker badges</p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: '10px', marginBottom: '20px' }}>
         {['instagram'].map(platform => {
@@ -23,7 +23,7 @@ export default function ValueSkinsSection({ userId, token }: ValueSkinsSectionPr
               style={{
                 padding: '12px',
                 background: hasLinked ? '#1a3a1a' : '#333',
-                border: hasLinked ? '1px solid #00cc66' : '1px solid #444',
+                border: hasLinked ? '1px solid var(--c-border)' : '1px solid #444',
                 borderRadius: '4px',
                 color: hasLinked ? '#00cc66' : '#fff',
                 cursor: hasLinked ? 'default' : 'pointer',
@@ -37,13 +37,13 @@ export default function ValueSkinsSection({ userId, token }: ValueSkinsSectionPr
       </div>
 
       {credentials.length > 0 && (
-        <div style={{ background: '#1a1a1a', padding: '15px', borderRadius: '4px', border: '1px solid #00cc66' }}>
-          <h4 style={{ marginBottom: '10px', color: '#00cc66' }}>✓ Verified Accounts</h4>
+        <div style={{ background: 'var(--c-surface)', padding: '15px', borderRadius: '4px', border: '1px solid var(--c-border)' }}>
+          <h4 style={{ marginBottom: '10px', color: 'var(--c-text)' }}>✓ Verified Accounts</h4>
           <div style={{ display: 'grid', gap: '8px' }}>
             {credentials.map((cred: any) => (
               <div key={cred.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px', background: '#2a2a2a', borderRadius: '4px' }}>
                 <span>{cred.platform?.toUpperCase()}: @{cred.handle}</span>
-                <span style={{ color: '#00cc66', fontWeight: 'bold' }}>✓</span>
+                <span style={{ color: 'var(--c-text)', fontWeight: 'bold' }}>✓</span>
               </div>
             ))}
           </div>

@@ -110,12 +110,12 @@ export default function AdminLogin() {
           {error && (
             <div style={{
               padding: '12px',
-              background: '#fee2e2',
+              background: 'var(--c-error-container)',
               color: 'var(--c-error)',
               borderRadius: '8px',
               fontSize: '14px',
               marginBottom: '20px',
-              border: '1px solid #fecaca'
+              border: '1px solid var(--c-error)'
             }}>
               {error}
             </div>
@@ -128,7 +128,7 @@ export default function AdminLogin() {
               width: '100%',
               padding: '12px',
               background: C.primary,
-              color: '#000',
+              color: 'var(--c-on-primary)',
               border: 'none',
               borderRadius: '8px',
               fontSize: '14px',

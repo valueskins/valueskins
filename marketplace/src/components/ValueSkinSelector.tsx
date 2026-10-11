@@ -33,7 +33,7 @@ export default function ValueSkinSelector({ userId, onSelect, selectedSkin }: Va
         style={{
           width: '100%',
           padding: '10px 12px',
-          border: '1px solid #d1d5db',
+          border: '1px solid var(--c-border)',
           borderRadius: '6px',
           fontSize: '14px',
           fontFamily: 'inherit',

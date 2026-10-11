@@ -76,7 +76,7 @@ export class ProductionErrorBoundary extends React.Component<Props, State> {
               alignItems: 'center',
               justifyContent: 'center',
               padding: '20px',
-              fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+              fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
             }}
           >
             <div
@@ -134,7 +134,7 @@ export class ProductionErrorBoundary extends React.Component<Props, State> {
                   style={{
                     padding: '10px 20px',
                     background: C.primary,
-                    color: '#fff',
+                    color: 'var(--c-on-primary)',
                     border: 'none',
                     borderRadius: '8px',
                     fontWeight: 600,
@@ -193,8 +193,8 @@ export function ApiErrorDisplay({ error, isLoading, onRetry, fallback }: ApiErro
       <div
         style={{
           padding: '16px',
-          background: '#fee2e2',
-          border: '1px solid #fecaca',
+          background: 'var(--c-error-container)',
+          border: '1px solid var(--c-error)',
           borderRadius: '8px',
           color: 'var(--c-error)',
           fontSize: '14px',
@@ -212,7 +212,7 @@ export function ApiErrorDisplay({ error, isLoading, onRetry, fallback }: ApiErro
             style={{
               padding: '6px 12px',
               background: 'var(--c-error)',
-              color: '#fff',
+              color: 'var(--c-on-primary)',
               border: 'none',
               borderRadius: '4px',
               cursor: isLoading ? 'not-allowed' : 'pointer',

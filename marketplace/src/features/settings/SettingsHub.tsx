@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { C } from '@/theme/colors';
 import LoadingState from '@/components/LoadingState';
 
-const FONT = "'Inter', 'Helvetica Neue', Arial, sans-serif";
+const FONT = "'Poppins', 'Helvetica Neue', Arial, sans-serif";
 const T = {
   bg: C.bg,
   surface: C.surface,
@@ -25,7 +25,7 @@ const T = {
   deepSand: '#A08A5E',
   danger: C.danger,
   border: C.border,
-  sandBorder: 'rgba(160,138,94,0.28)',
+  sandBorder: 'var(--c-border)',
 };
 
 interface Account {
@@ -322,7 +322,7 @@ export default function SettingsHub({
               borderRadius: '18px', padding: '26px 28px', marginBottom: '22px',
               position: 'relative', overflow: 'hidden',
               background: 'linear-gradient(160deg,#0A0A0A 0%,#161512 60%,#20201B 100%)',
-              border: '1px solid rgba(200,184,154,0.24)',
+              border: '1px solid var(--c-border)',
             }}>
               <span aria-hidden="true" style={{
                 position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -330,17 +330,17 @@ export default function SettingsHub({
               }} />
               <div style={{
                 position: 'relative', zIndex: 1, width: '92px', height: '92px', flex: 'none',
-                background: 'rgba(245,245,240,0.05)', border: '1px solid rgba(200,184,154,0.3)',
+                background: 'rgba(245,245,240,0.05)', border: '1px solid var(--c-border)',
                 borderRadius: '14px', padding: '10px',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
                 <ValueSkinSprite size={64} />
               </div>
               <div style={{ position: 'relative', zIndex: 1, flex: 1, minWidth: '180px' }}>
-                <div style={{ fontSize: '24px', fontWeight: 700, color: '#F5F5F0' }}>
+                <div style={{ fontSize: '24px', fontWeight: 700, color: 'var(--c-text)' }}>
                   {displayName || account.display_name || 'Your name'}
                 </div>
-                <div style={{ fontSize: '14px', color: '#B8B4AC', marginTop: '3px' }}>
+                <div style={{ fontSize: '14px', color: 'var(--c-text-muted)', marginTop: '3px' }}>
                   {account.email || 'No email set'}
                 </div>
               </div>
@@ -601,7 +601,7 @@ function Toggle({ on, onClick }: { on: boolean; onClick: () => void }) {
       aria-pressed={on}
       style={{ width: '44px', height: '24px', borderRadius: '12px', border: 'none', cursor: 'pointer', position: 'relative', background: on ? T.sand : T.border, transition: 'background 0.2s', flexShrink: 0 }}
     >
-      <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: '#F5F5F0', border: '1px solid rgba(10,10,10,0.12)', boxSizing: 'border-box', position: 'absolute', top: '3px', left: on ? '23px' : '3px', transition: 'left 0.2s' }} />
+      <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: 'var(--c-surface)', border: '1px solid rgba(10,10,10,0.12)', boxSizing: 'border-box', position: 'absolute', top: '3px', left: on ? '23px' : '3px', transition: 'left 0.2s' }} />
     </button>
   );
 }

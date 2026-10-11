@@ -166,11 +166,11 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
     background: C.surface,
     border: `1px solid ${C.border}`,
     borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
+    padding: 28,
+    marginBottom: 20,
   };
   const label: React.CSSProperties = {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: 700,
     color: C.outline,
     textTransform: 'uppercase',
@@ -181,10 +181,10 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
     background: disabled ? C.border : primary ? C.primary : 'transparent',
     border: primary ? 'none' : `1px solid ${C.border}`,
     borderRadius: 8,
-    padding: '11px 14px',
+    padding: '13px 26px',
     color: primary ? C.onPrimary : C.text,
     fontWeight: 600,
-    fontSize: 13,
+    fontSize: 15,
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.55 : 1,
   });
@@ -194,8 +194,8 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
     border: `1px solid ${C.border}`,
     borderRadius: 8,
     color: C.text,
-    padding: '9px 11px',
-    fontSize: 13,
+    padding: '13px 26px',
+    fontSize: 15,
     fontFamily: 'inherit',
     outline: 'none',
     boxSizing: 'border-box',
@@ -208,9 +208,9 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
       {/* Progress. A revision sits at the delivery stage rather than moving
           backwards, so the bar never appears to lose ground. */}
       <div style={card}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10 }}>
-          <div style={{ fontSize: 14, fontWeight: 700, color: C.text }}>{title}</div>
-          <div style={{ fontSize: 12, color: C.outline }}>{money(budget)}</div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 20 }}>
+          <div style={{ fontSize: 16, fontWeight: 700, color: C.text }}>{title}</div>
+          <div style={{ fontSize: 14, color: C.outline }}>{money(budget)}</div>
         </div>
         <div style={{ height: 4, background: C.surfaceAlt, borderRadius: 2, overflow: 'hidden', marginBottom: 8 }}>
           <div
@@ -227,7 +227,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
             <span
               key={s.status}
               style={{
-                fontSize: 10,
+                fontSize: 12,
                 padding: '2px 7px',
                 borderRadius: 999,
                 background: i <= currentIndex ? withAlpha(C.primary, 0x22) : 'transparent',
@@ -239,7 +239,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
             </span>
           ))}
         </div>
-        <div style={{ marginTop: 10, fontSize: 12, color: waitingOnMe ? C.text : C.outline }}>
+        <div style={{ marginTop: 10, fontSize: 14, color: waitingOnMe ? C.text : C.outline }}>
           {status === 'CANCELLED'
             ? 'This deal was cancelled.'
             : confirming
@@ -251,7 +251,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
                   : `Waiting on the ${action.actor}: ${action.label.toLowerCase()}`}
         </div>
         {revisionCount > 0 && (
-          <div style={{ marginTop: 4, fontSize: 11, color: C.outline }}>
+          <div style={{ marginTop: 4, fontSize: 13, color: C.outline }}>
             {revisionCount} revision{revisionCount === 1 ? '' : 's'} so far
           </div>
         )}
@@ -262,10 +262,10 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
           role={notice.kind === 'bad' ? 'alert' : 'status'}
           style={{
             ...card,
-            marginBottom: 12,
+            marginBottom: 20,
             background: withAlpha(notice.kind === 'bad' ? C.error : C.accent, 0x14),
             borderColor: notice.kind === 'bad' ? C.error : C.accent,
-            fontSize: 12,
+            fontSize: 14,
             color: C.text,
           }}
         >
@@ -282,7 +282,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
           { k: 'Advance (30%)', v: F.advance, note: '' },
           { k: 'Final (70%)', v: F.final, note: '' },
         ].map((r) => (
-          <div key={r.k} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 3 }}>
+          <div key={r.k} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, marginBottom: 3 }}>
             <span style={{ color: C.textMuted }}>
               {r.k}
               {r.note ? ` · ${r.note}` : ''}
@@ -296,7 +296,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
       {viewer === 'creator' && status === 'OPEN' && (
         <div style={card}>
           <div style={label}>Apply</div>
-          <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 10 }}>
+          <div style={{ fontSize: 14, color: C.textMuted, marginBottom: 20 }}>
             The amount is final, there is no negotiation. Apply only if {money(F.creatorTotal)} works for you.
           </div>
           <button
@@ -319,7 +319,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
       {viewer === 'brand' && status === 'DRAFT' && (
         <div style={card}>
           <div style={label}>Not live yet</div>
-          <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 10 }}>
+          <div style={{ fontSize: 14, color: C.textMuted, marginBottom: 20 }}>
             Creators cannot see this until you publish it.
           </div>
           <button
@@ -338,24 +338,24 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
           <div style={label}>
             Applicants{applications ? ` (${applications.length})` : ''}
           </div>
-          {!applications && <div style={{ fontSize: 12, color: C.outline }}>Loading…</div>}
+          {!applications && <div style={{ fontSize: 14, color: C.outline }}>Loading…</div>}
           {applications?.length === 0 && (
-            <div style={{ fontSize: 12, color: C.outline }}>No applications yet.</div>
+            <div style={{ fontSize: 14, color: C.outline }}>No applications yet.</div>
           )}
           {applications?.map((a) => (
             <div key={a.id} style={{ padding: '9px 0', borderTop: `1px solid ${C.border}` }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 13, color: C.text, fontWeight: 600 }}>
+                <div style={{ fontSize: 15, color: C.text, fontWeight: 600 }}>
                   <ResumeHover username={a.username} />
                   {a.status === 'CONFIRMED' && (
-                    <span style={{ marginLeft: 6, fontSize: 10, color: C.accent }}>CONFIRMED</span>
+                    <span style={{ marginLeft: 6, fontSize: 12, color: C.accent }}>CONFIRMED</span>
                   )}
                   {a.status === 'REJECTED' && (
-                    <span style={{ marginLeft: 6, fontSize: 10, color: C.outline }}>passed</span>
+                    <span style={{ marginLeft: 6, fontSize: 12, color: C.outline }}>passed</span>
                   )}
                 </div>
-                <div style={{ fontSize: 11, color: C.outline }}>
+                <div style={{ fontSize: 13, color: C.outline }}>
                   {(a.followers_count ?? 0).toLocaleString()} followers · {a.completed_deals} completed
                 </div>
               </div>
@@ -365,7 +365,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
                   <button
                     onClick={() => setOpenResume((v) => (v === a.username ? null : a.username))}
                     aria-expanded={openResume === a.username}
-                    style={{ ...btn(false, false), padding: '7px 11px', fontSize: 12 }}
+                    style={{ ...btn(false, false), padding: '13px 26px', fontSize: 14 }}
                   >
                     {openResume === a.username ? 'Hide' : 'History'}
                   </button>
@@ -375,7 +375,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
                       run('confirm', () => decideApplication(a.id, 'confirm'), `Confirmed ${handleLabel(a.username)}.`)
                         .then(loadApplications)
                     }
-                    style={{ ...btn(true, !!busy), padding: '7px 11px', fontSize: 12 }}
+                    style={{ ...btn(true, !!busy), padding: '13px 26px', fontSize: 14 }}
                   >
                     Confirm
                   </button>
@@ -384,7 +384,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
                     onClick={() =>
                       run('reject', () => decideApplication(a.id, 'reject')).then(loadApplications)
                     }
-                    style={{ ...btn(false, !!busy), padding: '7px 11px', fontSize: 12 }}
+                    style={{ ...btn(false, !!busy), padding: '13px 26px', fontSize: 14 }}
                   >
                     Pass
                   </button>
@@ -395,7 +395,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
             </div>
           ))}
           {status === 'OPEN' && (applications?.length ?? 0) > 0 && (
-            <div style={{ marginTop: 8, fontSize: 11, color: C.outline }}>
+            <div style={{ marginTop: 8, fontSize: 13, color: C.outline }}>
               Confirming one creator closes the deal to everyone else.
             </div>
           )}
@@ -406,7 +406,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
       {viewer === 'brand' && status === 'CONFIRMED' && (
         <div style={card}>
           <div style={label}>Step 1 of 3, commission</div>
-          <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 10 }}>
+          <div style={{ fontSize: 14, color: C.textMuted, marginBottom: 20 }}>
             {money(F.commissionTotal)} to ValueSkins. Non-refundable once paid, and the deal can no
             longer be cancelled.
           </div>
@@ -441,14 +441,14 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
                 style={{
                   background: withAlpha(C.warning, 0x14),
                   border: `1px solid ${C.warning}`,
-                  borderRadius: 8, padding: 10, marginBottom: 10,
-                  fontSize: 12, color: C.text,
+                  borderRadius: 8, padding: 18, marginBottom: 20,
+                  fontSize: 14, color: C.text,
                 }}
               >
                 {feedback}
               </div>
             )}
-            <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 8 }}>
+            <div style={{ fontSize: 14, color: C.textMuted, marginBottom: 8 }}>
               Paste a Google Drive link. Make sure the brand can open it.
             </div>
             <input
@@ -456,7 +456,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
               onChange={(e) => setLinkInput(e.target.value)}
               placeholder="https://drive.google.com/file/d/…"
               aria-label="Google Drive link"
-              style={{ ...input, marginBottom: 10 }}
+              style={{ ...input, marginBottom: 20 }}
             />
             <button
               disabled={!!busy || !linkInput.trim()}
@@ -480,12 +480,12 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
               href={contentLink}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ fontSize: 12, color: C.primary, wordBreak: 'break-all', display: 'block', marginBottom: 12 }}
+              style={{ fontSize: 14, color: C.primary, wordBreak: 'break-all', display: 'block', marginBottom: 20 }}
             >
               {contentLink}
             </a>
           )}
-          <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 6 }}>
+          <div style={{ fontSize: 14, color: C.textMuted, marginBottom: 6 }}>
             Ask for changes, or approve to release the final payment.
           </div>
           <textarea
@@ -494,7 +494,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
             placeholder="What needs changing?"
             aria-label="Revision feedback"
             rows={3}
-            style={{ ...input, marginBottom: 10, resize: 'vertical' }}
+            style={{ ...input, marginBottom: 20, resize: 'vertical' }}
           />
           <div style={{ display: 'flex', gap: 8 }}>
             <button
@@ -522,7 +522,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
       {status === 'COMPLETED' && (
         <div style={card}>
           <div style={label}>Deal report</div>
-          <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 10 }}>
+          <div style={{ fontSize: 14, color: C.textMuted, marginBottom: 20 }}>
             The agreed terms, all three invoices and the delivery proof, as one PDF.
           </div>
           <a
@@ -538,7 +538,7 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
       {viewer === 'brand' && canCancelDeal(status) && (
         <div style={card}>
           <div style={label}>Cancel</div>
-          <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 10 }}>
+          <div style={{ fontSize: 14, color: C.textMuted, marginBottom: 20 }}>
             You can cancel free of charge until the commission is paid. After that the deal must run to completion.
           </div>
           <button

@@ -128,23 +128,23 @@ export default function DirectPaymentPanel({
 
   const card: React.CSSProperties = {
     background: C.surface, border: `1px solid ${C.border}`,
-    borderRadius: 12, padding: 16, marginBottom: 12,
+    borderRadius: 12, padding: 28, marginBottom: 20,
   };
   const label: React.CSSProperties = {
-    fontSize: 11, fontWeight: 700, color: C.outline,
+    fontSize: 13, fontWeight: 700, color: C.outline,
     textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 8,
   };
   const input: React.CSSProperties = {
     width: '100%', background: C.surfaceAlt, border: `1px solid ${C.border}`,
-    borderRadius: 8, color: C.text, padding: '9px 11px', fontSize: 13,
-    fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box', marginBottom: 10,
+    borderRadius: 8, color: C.text, padding: '13px 26px', fontSize: 15,
+    fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box', marginBottom: 20,
   };
   const btn = (primary = true, off = false): React.CSSProperties => ({
     background: off ? C.border : primary ? C.primary : 'transparent',
     border: primary ? 'none' : `1px solid ${C.border}`,
-    borderRadius: 8, padding: '11px 14px',
+    borderRadius: 8, padding: '13px 26px',
     color: primary ? C.onPrimary : C.text,
-    fontWeight: 600, fontSize: 13,
+    fontWeight: 600, fontSize: 15,
     cursor: off ? 'not-allowed' : 'pointer', opacity: off ? 0.55 : 1,
   });
 
@@ -157,7 +157,7 @@ export default function DirectPaymentPanel({
       </div>
 
       {error && (
-        <div role="alert" style={{ fontSize: 12, color: C.error, marginBottom: 10 }}>{error}</div>
+        <div role="alert" style={{ fontSize: 14, color: C.error, marginBottom: 20 }}>{error}</div>
       )}
 
       {/* ---- Brand: pay, then record ---------------------------------- */}
@@ -166,41 +166,41 @@ export default function DirectPaymentPanel({
           {destination.blocked ? (
             <div
               style={{
-                fontSize: 12, color: C.text, lineHeight: 1.6,
+                fontSize: 14, color: C.text, lineHeight: 1.6,
                 background: withAlpha(C.warning, 0x14),
-                border: `1px solid ${C.warning}`, borderRadius: 8, padding: 10,
+                border: `1px solid ${C.warning}`, borderRadius: 8, padding: 18,
               }}
             >
               {BLOCKED_REASON[destination.blocked] || 'Payment details are not available yet.'}
             </div>
           ) : (
             <>
-              <p style={{ fontSize: 12, color: C.textMuted, margin: '0 0 10px', lineHeight: 1.6 }}>
+              <p style={{ fontSize: 14, color: C.textMuted, margin: '0 0 10px', lineHeight: 1.6 }}>
                 Send {money(due || 0)} to the creator&apos;s UPI, then record the reference here.
                 The deal moves on once they confirm it arrived.
               </p>
               <div
                 style={{
                   background: C.surfaceAlt, border: `1px solid ${C.border}`,
-                  borderRadius: 8, padding: 12, marginBottom: 12,
+                  borderRadius: 8, padding: 18, marginBottom: 20,
                 }}
               >
-                <div style={{ fontSize: 10, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                <div style={{ fontSize: 12, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                   Pay this UPI ID
                 </div>
                 <div
                   style={{
-                    fontSize: 16, fontWeight: 700, color: C.text,
+                    fontSize: 18, fontWeight: 700, color: C.text,
                     fontFamily: 'ui-monospace, monospace', marginTop: 4, wordBreak: 'break-all',
                   }}
                 >
                   {destination.vpa}
                 </div>
-                <div style={{ fontSize: 12, color: C.textMuted, marginTop: 6 }}>
+                <div style={{ fontSize: 14, color: C.textMuted, marginTop: 6 }}>
                   Amount: <strong style={{ color: C.text }}>{money(due || 0)}</strong>
                 </div>
                 {destination.name && (
-                  <div style={{ fontSize: 12, color: C.textMuted, marginTop: 6 }}>
+                  <div style={{ fontSize: 14, color: C.textMuted, marginTop: 6 }}>
                     Account name: <strong style={{ color: C.text }}>{destination.name}</strong>
                   </div>
                 )}
@@ -209,9 +209,9 @@ export default function DirectPaymentPanel({
               {/* The one check available before money moves. */}
               <div
                 style={{
-                  fontSize: 12, color: C.text, lineHeight: 1.6,
+                  fontSize: 14, color: C.text, lineHeight: 1.6,
                   background: withAlpha(C.warning, 0x14),
-                  border: `1px solid ${C.warning}`, borderRadius: 8, padding: 10, marginBottom: 12,
+                  border: `1px solid ${C.warning}`, borderRadius: 8, padding: 18, marginBottom: 20,
                 }}
               >
                 {destination.name
@@ -229,7 +229,7 @@ export default function DirectPaymentPanel({
                 />
               )}
 
-              <label htmlFor="ref" style={{ fontSize: 11, fontWeight: 600, color: C.outline, display: 'block', marginBottom: 4 }}>
+              <label htmlFor="ref" style={{ fontSize: 13, fontWeight: 600, color: C.outline, display: 'block', marginBottom: 4 }}>
                 UPI reference or UTR number
               </label>
               <input
@@ -263,9 +263,9 @@ export default function DirectPaymentPanel({
       {viewer === 'brand' && pending && (
         <div
           style={{
-            fontSize: 12, color: C.text, lineHeight: 1.6,
+            fontSize: 14, color: C.text, lineHeight: 1.6,
             background: withAlpha(C.warning, 0x14),
-            border: `1px solid ${C.warning}`, borderRadius: 8, padding: 12,
+            border: `1px solid ${C.warning}`, borderRadius: 8, padding: 18,
           }}
         >
           <strong>Waiting for the creator to confirm.</strong>
@@ -279,7 +279,7 @@ export default function DirectPaymentPanel({
       {/* ---- Creator: confirm or dispute ----------------------------- */}
       {viewer === 'creator' && pending && (
         <>
-          <p style={{ fontSize: 12, color: C.textMuted, margin: '0 0 10px', lineHeight: 1.6 }}>
+          <p style={{ fontSize: 14, color: C.textMuted, margin: '0 0 10px', lineHeight: 1.6 }}>
             The brand says it sent you <strong style={{ color: C.text }}>{money(pending.amount)}</strong>,
             reference <strong style={{ color: C.text }}>{pending.reference}</strong>.
             Check your bank before confirming, this is what moves the deal forward.
@@ -339,7 +339,7 @@ export default function DirectPaymentPanel({
       )}
 
       {viewer === 'creator' && !pending && stage && (
-        <p style={{ fontSize: 12, color: C.textMuted, margin: 0, lineHeight: 1.6 }}>
+        <p style={{ fontSize: 14, color: C.textMuted, margin: 0, lineHeight: 1.6 }}>
           Waiting for the brand to send the {stage === 'ADVANCE' ? 'advance' : 'final payment'} of{' '}
           {money(due || 0)} to your UPI.
         </p>
@@ -350,7 +350,7 @@ export default function DirectPaymentPanel({
         <div style={{ marginTop: 14, borderTop: `1px solid ${C.border}`, paddingTop: 10 }}>
           <div style={{ ...label, marginBottom: 6 }}>Record</div>
           {payments.map((p) => (
-            <div key={p.id} style={{ fontSize: 11, color: C.textMuted, padding: '3px 0' }}>
+            <div key={p.id} style={{ fontSize: 13, color: C.textMuted, padding: '3px 0' }}>
               {p.type === 'ADVANCE' ? 'Advance' : 'Final'} · {money(p.amount)} · {p.reference}
               {p.confirmed_at && <span style={{ color: C.accent }}> · confirmed</span>}
               {p.disputed_at && (

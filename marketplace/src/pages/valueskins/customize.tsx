@@ -31,7 +31,7 @@ export default function ValueSkinsCustomizer() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, color: C.onSurface, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif", paddingTop: 64 }}>
+    <div style={{ minHeight: '100vh', background: C.bg, color: C.onSurface, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif", paddingTop: 64 }}>
       {/* TopNav */}
       <nav style={{ position: 'fixed', top: 0, width: '100%', zIndex: 50, background: 'rgba(255, 247, 251, 0.7)', backdropFilter: 'blur(12px)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 40px', height: 64, maxWidth: 1200, margin: '0 auto' }}>
@@ -88,7 +88,7 @@ export default function ValueSkinsCustomizer() {
               <h1 style={{ fontSize: 32, fontWeight: 400, marginBottom: 8, lineHeight: '40px' }}>Etheric Bloom v.2</h1>
               <p style={{ fontSize: 16, color: C.textMuted }}>Premium skin collection • Designer Series</p>
             </div>
-            <span style={{ background: C.primaryContainer, color: '#736670', padding: '8px 16px', borderRadius: 12, fontSize: 12, fontWeight: 500 }}>Level 42</span>
+            <span style={{ background: C.primaryContainer, color: 'var(--c-text-muted)', padding: '8px 16px', borderRadius: 12, fontSize: 12, fontWeight: 500 }}>Level 42</span>
           </div>
         </section>
 

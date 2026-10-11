@@ -99,27 +99,27 @@ export default function BrandDealsPage({ deals = [] }: { deals: DealRow[] }) {
     background: C.surface,
     border: `1px solid ${C.border}`,
     borderRadius: 12,
-    padding: 16,
-    marginBottom: 10,
+    padding: 28,
+    marginBottom: 20,
   };
 
   return (
     <>
       <Head><title>Your deals · ValueSkins</title></Head>
-      <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '24px 16px 48px' }}>
-        <div style={{ maxWidth: 640, margin: '0 auto' }}>
+      <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '72px 24px 140px' }}>
+        <div style={{ maxWidth: 780, margin: '0 auto' }}>
           <MarketTabs active="current" role="brand" />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <div>
-              <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Current deals</h1>
-              <p style={{ fontSize: 12, color: C.outline, margin: '2px 0 0' }}>{deals.length} in progress</p>
+              <h1 style={{ fontSize: 26, fontWeight: 700, margin: 0 }}>Current deals</h1>
+              <p style={{ fontSize: 14, color: C.outline, margin: '2px 0 0' }}>{deals.length} in progress</p>
             </div>
             <button
               onClick={() => router.push('/campaigns/create')}
               style={{
                 background: C.primary, border: 'none', borderRadius: 8,
-                padding: '10px 14px', color: C.onPrimary, fontWeight: 600,
-                fontSize: 13, cursor: 'pointer',
+                padding: '13px 26px', color: C.onPrimary, fontWeight: 600,
+                fontSize: 15, cursor: 'pointer',
               }}
             >
               Post a deal
@@ -129,7 +129,7 @@ export default function BrandDealsPage({ deals = [] }: { deals: DealRow[] }) {
           <SetupBanner />
 
           {deals.length === 0 && (
-            <div style={{ ...card, fontSize: 13, color: C.outline }}>
+            <div style={{ ...card, fontSize: 15, color: C.outline }}>
               No deals yet. Post one and creators will be able to apply.
             </div>
           )}
@@ -144,8 +144,8 @@ export default function BrandDealsPage({ deals = [] }: { deals: DealRow[] }) {
                 <div style={{ ...card, cursor: 'pointer' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ fontSize: 14, fontWeight: 700, color: C.text }}>{d.title}</div>
-                      <div style={{ fontSize: 11, color: C.outline, marginTop: 2 }}>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: C.text }}>{d.title}</div>
+                      <div style={{ fontSize: 13, color: C.outline, marginTop: 2 }}>
                         {STATUS_LABEL[d.workflow_status] || d.workflow_status}
                         {d.creator_username ? ` · ${handleLabel(d.creator_username)}` : ''}
                         {d.workflow_status === 'OPEN'
@@ -154,10 +154,10 @@ export default function BrandDealsPage({ deals = [] }: { deals: DealRow[] }) {
                       </div>
                     </div>
                     <div style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: C.text }}>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: C.text }}>
                         ₹{budget.toLocaleString('en-IN')}
                       </div>
-                      <div style={{ fontSize: 10, color: C.outline }}>
+                      <div style={{ fontSize: 12, color: C.outline }}>
                         creator gets ₹{F.creatorTotal.toLocaleString('en-IN')}
                       </div>
                     </div>
@@ -167,7 +167,7 @@ export default function BrandDealsPage({ deals = [] }: { deals: DealRow[] }) {
                   {yourMove && (
                     <div
                       style={{
-                        marginTop: 10, fontSize: 11, color: C.text,
+                        marginTop: 10, fontSize: 13, color: C.text,
                         background: withAlpha(C.primary, 0x1e),
                         border: `1px solid ${C.primary}`,
                         borderRadius: 6, padding: '5px 9px', display: 'inline-block',

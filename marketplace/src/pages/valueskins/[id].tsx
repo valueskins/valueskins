@@ -36,7 +36,7 @@ export default function SkinDetail() {
   const skin = id ? skinDetails[id as string] || skinDetails['1'] : skinDetails['1'];
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, color: C.onSurface, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif", paddingTop: 64 }}>
+    <div style={{ minHeight: '100vh', background: C.bg, color: C.onSurface, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif", paddingTop: 64 }}>
       {/* TopNav */}
       <nav style={{ position: 'fixed', top: 0, width: '100%', zIndex: 50, background: 'rgba(255, 247, 251, 0.7)', backdropFilter: 'blur(12px)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 40px', height: 64, maxWidth: 1200, margin: '0 auto' }}>
@@ -88,7 +88,7 @@ export default function SkinDetail() {
             </div>
 
             <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
-              <span style={{ padding: '4px 12px', background: C.primaryContainer, color: '#736670', borderRadius: 999, fontSize: 12, fontWeight: 600 }}>{skin.rarity}</span>
+              <span style={{ padding: '4px 12px', background: C.primaryContainer, color: 'var(--c-text-muted)', borderRadius: 999, fontSize: 12, fontWeight: 600 }}>{skin.rarity}</span>
               <span style={{ padding: '4px 12px', background: C.surface, color: C.outline, border: `1px solid ${C.outlineVariant}`, borderRadius: 999, fontSize: 12, fontWeight: 600 }}>{skin.category}</span>
             </div>
           </div>

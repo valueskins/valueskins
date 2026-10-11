@@ -80,7 +80,7 @@ export default function VerifyPhone() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
       <div style={{ width: '100%', maxWidth: '440px', textAlign: 'center' }}>
         {step === 'phone' ? (
           <>
@@ -90,8 +90,8 @@ export default function VerifyPhone() {
               Enter your phone number to receive a verification code.
             </p>
 
-            {error && <div style={{ padding: '10px', background: '#fef2f2', color: C.error, borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>{error}</div>}
-            {success && <div style={{ padding: '10px', background: '#f0fdf4', color: C.success, borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>{success}</div>}
+            {error && <div style={{ padding: '10px', background: 'var(--c-error-container)', color: C.error, borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>{error}</div>}
+            {success && <div style={{ padding: '10px', background: 'var(--c-surface-container)', color: C.success, borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>{success}</div>}
 
             <div style={{ marginBottom: '16px' }}>
               <input
@@ -114,7 +114,7 @@ export default function VerifyPhone() {
             <button
               onClick={handleRequestOtp}
               disabled={loading || phone.length < 10}
-              style={{ width: '100%', padding: '12px', background: phone.length >= 10 ? C.primary : C.border, color: '#fff', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: phone.length >= 10 ? 'pointer' : 'not-allowed' }}
+              style={{ width: '100%', padding: '12px', background: phone.length >= 10 ? C.primary : C.border, color: 'var(--c-text)', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: phone.length >= 10 ? 'pointer' : 'not-allowed' }}
             >
               {loading ? 'Sending...' : 'Send verification code'}
             </button>
@@ -127,8 +127,8 @@ export default function VerifyPhone() {
               Enter the 6-digit code sent to {phone}.
             </p>
 
-            {error && <div style={{ padding: '10px', background: '#fef2f2', color: C.error, borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>{error}</div>}
-            {success && <div style={{ padding: '10px', background: '#f0fdf4', color: C.success, borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>{success}</div>}
+            {error && <div style={{ padding: '10px', background: 'var(--c-error-container)', color: C.error, borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>{error}</div>}
+            {success && <div style={{ padding: '10px', background: 'var(--c-surface-container)', color: C.success, borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>{success}</div>}
 
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginBottom: '24px' }}>
               {code.map((digit, i) => (
@@ -162,7 +162,7 @@ export default function VerifyPhone() {
             <button
               onClick={handleVerifyOtp}
               disabled={loading || code.join('').length !== 6}
-              style={{ width: '100%', padding: '12px', background: code.join('').length === 6 ? C.primary : C.border, color: '#fff', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: code.join('').length === 6 ? 'pointer' : 'not-allowed', marginBottom: '12px' }}
+              style={{ width: '100%', padding: '12px', background: code.join('').length === 6 ? C.primary : C.border, color: 'var(--c-text)', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: code.join('').length === 6 ? 'pointer' : 'not-allowed', marginBottom: '12px' }}
             >
               {loading ? 'Verifying...' : 'Verify phone'}
             </button>

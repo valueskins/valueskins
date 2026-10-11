@@ -19,7 +19,7 @@ const C = {
   textSecondary: '#D6D2C8',
   primary: '#C8B89A',
   success: 'var(--c-accent)',
-  border: '#2D2D2D',
+  border: 'var(--c-border)',
 };
 
 export default function BrandReviewForm({ dealId, creatorId, creatorName, onSubmitted, onCancel }: Props) {
@@ -112,7 +112,7 @@ export default function BrandReviewForm({ dealId, creatorId, creatorName, onSubm
           background: 'rgba(176, 65, 62, 0.13)',
           border: '1px solid var(--c-error)',
           borderRadius: '8px',
-          color: '#fca5a5',
+          color: 'var(--c-error)',
           fontSize: '12px',
           marginBottom: '12px',
         }}>
@@ -173,7 +173,7 @@ export default function BrandReviewForm({ dealId, creatorId, creatorName, onSubm
             style={{
               padding: '8px 20px',
               background: C.primary,
-              color: '#000',
+              color: 'var(--c-on-primary)',
               border: 'none',
               borderRadius: '8px',
               fontWeight: 700,

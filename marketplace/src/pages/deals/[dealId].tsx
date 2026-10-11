@@ -103,9 +103,9 @@ export default function DealPage() {
     background: C.bg,
     color: C.text,
     fontFamily: 'inherit',
-    padding: '20px 16px 48px',
+    padding: '72px 24px 140px',
   };
-  const wrap: React.CSSProperties = { maxWidth: 640, margin: '0 auto' };
+  const wrap: React.CSSProperties = { maxWidth: 780, margin: '0 auto' };
 
   return (
     <>
@@ -116,20 +116,20 @@ export default function DealPage() {
             onClick={() => router.push('/deals/browse')}
             style={{
               background: 'none', border: 'none', color: C.outline,
-              fontSize: 12, cursor: 'pointer', padding: 0, marginBottom: 14,
+              fontSize: 14, cursor: 'pointer', padding: 0, marginBottom: 14,
             }}
           >
             ← Back to deals
           </button>
 
-          {loading && <div style={{ fontSize: 13, color: C.outline }}>Loading…</div>}
+          {loading && <div style={{ fontSize: 15, color: C.outline }}>Loading…</div>}
 
           {error && (
             <div
               role="alert"
               style={{
                 background: C.surface, border: `1px solid ${C.error}`,
-                borderRadius: 12, padding: 16, fontSize: 13,
+                borderRadius: 12, padding: 28, fontSize: 15,
               }}
             >
               {error}
@@ -141,14 +141,14 @@ export default function DealPage() {
               <div
                 style={{
                   background: C.surface, border: `1px solid ${C.border}`,
-                  borderRadius: 12, padding: 16, marginBottom: 12,
+                  borderRadius: 12, padding: 28, marginBottom: 20,
                 }}
               >
-                <div style={{ fontSize: 11, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>
+                <div style={{ fontSize: 13, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>
                   {deal.viewer === 'brand' ? 'Your deal' : 'Brand deal'}
                   {deal.counterpart ? ` · ${handleLabel(deal.counterpart.username)}` : ''}
                 </div>
-                <div style={{ fontSize: 13, color: C.textMuted, whiteSpace: 'pre-wrap', lineHeight: 1.55 }}>
+                <div style={{ fontSize: 15, color: C.textMuted, whiteSpace: 'pre-wrap', lineHeight: 1.7 }}>
                   {deal.description}
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 12 }}>
@@ -158,8 +158,8 @@ export default function DealPage() {
                     ['Deal ends', deal.deal_deadline],
                   ].map(([k, v]) => (
                     <div key={String(k)}>
-                      <div style={{ fontSize: 10, color: C.outline, textTransform: 'uppercase' }}>{k}</div>
-                      <div style={{ fontSize: 12, color: C.text }}>
+                      <div style={{ fontSize: 12, color: C.outline, textTransform: 'uppercase' }}>{k}</div>
+                      <div style={{ fontSize: 14, color: C.text }}>
                         {v ? new Date(String(v)).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}
                       </div>
                     </div>

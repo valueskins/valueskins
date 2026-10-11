@@ -7,7 +7,7 @@ import MarketplaceLayout from '@/components/MarketplaceLayout';
 const C = {
   bg: '#0A0A0A', surface: '#1A1A1A', surfaceAlt: '#2D2D2D',
   text: '#F5F5F0', textMuted: '#B8B4AC', primary: '#C8B89A',
-  success: 'var(--c-accent)', warning: 'var(--c-warning)', danger: 'var(--c-error)', border: '#2D2D2D',
+  success: 'var(--c-accent)', warning: 'var(--c-warning)', danger: 'var(--c-error)', border: 'var(--c-border)',
 };
 
 export default function BriefDetailPage() {
@@ -41,7 +41,7 @@ export default function BriefDetailPage() {
 
   return (
     <MarketplaceLayout title="Brief" hideBottomNav>
-      <div style={{ padding: '16px', color: C.text, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+      <div style={{ padding: '16px', color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
         <button onClick={() => router.push('/briefs')} style={{ background: 'none', border: 'none', color: C.primary, cursor: 'pointer', marginBottom: '16px', fontSize: '14px' }}>&larr; Back</button>
 
         <div style={{ padding: '20px', background: C.surface, borderRadius: '8px', border: `1px solid ${C.border}`, marginBottom: '16px' }}>
@@ -63,7 +63,7 @@ export default function BriefDetailPage() {
         </div>
 
         <button onClick={findMatches} disabled={matching}
-          style={{ width: '100%', padding: '10px', background: C.primary, color: '#000', border: 'none', borderRadius: '6px', fontWeight: 600, cursor: 'pointer', opacity: matching ? 0.6 : 1, marginBottom: '16px' }}>
+          style={{ width: '100%', padding: '10px', background: C.primary, color: 'var(--c-on-primary)', border: 'none', borderRadius: '6px', fontWeight: 600, cursor: 'pointer', opacity: matching ? 0.6 : 1, marginBottom: '16px' }}>
           {matching ? 'Finding matches...' : 'Find Matching Creators'}
         </button>
 

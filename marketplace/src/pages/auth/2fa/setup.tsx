@@ -9,7 +9,7 @@ const C = {
   bg: '#ffffff',
   text: 'var(--c-text)',
   textSecondary: 'var(--c-text-variant)',
-  border: '#e5e7eb',
+  border: 'var(--c-border)',
   error: 'var(--c-error)',
   success: 'var(--c-accent)',
 };
@@ -72,13 +72,13 @@ export default function TwoFactorSetup() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '28px', fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
       <div style={{ width: '100%', maxWidth: '480px' }}>
         {step === 'show' && (
           <div>
             <h1 style={{ fontSize: '24px', fontWeight: 700, color: C.text, marginBottom: '8px' }}>Set up two-factor authentication</h1>
-            {error && <div style={{ padding: '10px', background: '#fef2f2', color: C.error, borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>{error}</div>}
-            <ol style={{ fontSize: '14px', color: C.textSecondary, lineHeight: 2, marginBottom: '24px', paddingLeft: '20px' }}>
+            {error && <div style={{ padding: '10px', background: 'var(--c-error-container)', color: C.error, borderRadius: '8px', fontSize: '15px', marginBottom: '16px' }}>{error}</div>}
+            <ol style={{ fontSize: '16px', color: C.textSecondary, lineHeight: 2, marginBottom: '48px', paddingLeft: '20px' }}>
               <li>Install an authenticator app (Google Authenticator, Authy, etc.)</li>
               <li>Scan the QR code below or enter the secret key manually</li>
               <li>Enter the 6-digit code from the app to verify</li>
@@ -88,21 +88,21 @@ export default function TwoFactorSetup() {
                 <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrUrl)}`} alt="QR Code" style={{ width: '200px', height: '200px', borderRadius: '12px' }} />
               </div>
             )}
-            <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px', padding: '12px', marginBottom: '24px', textAlign: 'center' }}>
-              <span style={{ fontSize: '13px', color: C.textSecondary }}>Secret: </span>
-              <code style={{ fontSize: '14px', color: C.text, fontWeight: 600 }}>{secret}</code>
+            <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px', padding: '12px', marginBottom: '48px', textAlign: 'center' }}>
+              <span style={{ fontSize: '15px', color: C.textSecondary }}>Secret: </span>
+              <code style={{ fontSize: '16px', color: C.text, fontWeight: 600 }}>{secret}</code>
             </div>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: C.text, marginBottom: '8px' }}>Recovery codes (save these):</p>
-                    <div style={{ background: '#F5F5F0', border: `1px solid ${C.border}`, borderRadius: '8px', padding: '16px', marginBottom: '12px' }}>
+            <p style={{ fontSize: '15px', fontWeight: 600, color: C.text, marginBottom: '8px' }}>Recovery codes (save these):</p>
+                    <div style={{ background: 'var(--c-surface)', border: `1px solid ${C.border}`, borderRadius: '8px', padding: '28px', marginBottom: '16px' }}>
               {codes.map((code, i) => (
-                <div key={i} style={{ fontFamily: 'monospace', fontSize: '14px', color: C.text, padding: '2px 0' }}>{code}</div>
+                <div key={i} style={{ fontFamily: 'monospace', fontSize: '16px', color: C.text, padding: '2px 0' }}>{code}</div>
               ))}
             </div>
-            <button onClick={copyCodes} style={{ background: 'transparent', color: C.primary, border: 'none', fontSize: '13px', cursor: 'pointer', marginBottom: '20px' }}>
+            <button onClick={copyCodes} style={{ background: 'transparent', color: C.primary, border: 'none', fontSize: '15px', cursor: 'pointer', marginBottom: '48px' }}>
               {copied ? 'Copied!' : 'Copy codes'}
             </button>
-            <input type="text" placeholder="Enter 6-digit code from app" value={verifyCode} onChange={e => setVerifyCode(e.target.value.replace(/\D/g, '').slice(0, 6))} style={{ width: '100%', padding: '12px', border: `1px solid ${C.border}`, borderRadius: '8px', fontSize: '14px', marginBottom: '12px', textAlign: 'center', letterSpacing: '8px', boxSizing: 'border-box' }} />
-            <button onClick={handleVerify} disabled={loading || verifyCode.length < 6} style={{ width: '100%', padding: '12px', background: verifyCode.length < 6 ? C.border : C.primary, color: '#fff', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: verifyCode.length < 6 ? 'not-allowed' : 'pointer' }}>
+            <input type="text" placeholder="Enter 6-digit code from app" value={verifyCode} onChange={e => setVerifyCode(e.target.value.replace(/\D/g, '').slice(0, 6))} style={{ width: '100%', padding: '12px', border: `1px solid ${C.border}`, borderRadius: '8px', fontSize: '16px', marginBottom: '16px', textAlign: 'center', letterSpacing: '8px', boxSizing: 'border-box' }} />
+            <button onClick={handleVerify} disabled={loading || verifyCode.length < 6} style={{ width: '100%', padding: '12px', background: verifyCode.length < 6 ? C.border : C.primary, color: 'var(--c-text)', border: 'none', borderRadius: '8px', fontSize: '17px', fontWeight: 600, cursor: verifyCode.length < 6 ? 'not-allowed' : 'pointer' }}>
               {loading ? 'Verifying...' : 'Verify & enable'}
             </button>
           </div>
@@ -111,8 +111,8 @@ export default function TwoFactorSetup() {
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '48px', marginBottom: '16px' }}>✅</div>
             <h1 style={{ fontSize: '24px', fontWeight: 700, color: C.text, marginBottom: '8px' }}>2FA enabled</h1>
-            <p style={{ fontSize: '15px', color: C.textSecondary, marginBottom: '24px' }}>Your account is now protected with two-factor authentication.</p>
-            <button onClick={() => router.push('/account/settings')} style={{ padding: '12px 24px', background: C.primary, color: C.onPrimary, border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>
+            <p style={{ fontSize: '17px', color: C.textSecondary, marginBottom: '48px' }}>Your account is now protected with two-factor authentication.</p>
+            <button onClick={() => router.push('/account/settings')} style={{ padding: '12px 24px', background: C.primary, color: C.onPrimary, border: 'none', borderRadius: '8px', fontSize: '17px', fontWeight: 600, cursor: 'pointer' }}>
               Back to settings
             </button>
           </div>

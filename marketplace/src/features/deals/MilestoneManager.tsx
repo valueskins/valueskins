@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 const C = {
   bg: '#0A0A0A', surface: '#1A1A1A', surfaceAlt: '#2D2D2D',
   text: '#F5F5F0', textMuted: '#B8B4AC', primary: '#C8B89A',
-  success: 'var(--c-accent)', warning: 'var(--c-warning)', danger: 'var(--c-error)', border: '#2D2D2D',
+  success: 'var(--c-accent)', warning: 'var(--c-warning)', danger: 'var(--c-error)', border: 'var(--c-border)',
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -71,7 +71,7 @@ export default function MilestoneManager({ dealId, isCreator }: { dealId: number
         <h3 style={{ fontSize: '15px', fontWeight: 600, margin: 0, color: C.text }}>Milestones</h3>
         {!isCreator && (
           <button onClick={() => setNewMs({ title: '', description: '', amount: '', due_date: '' })}
-            style={{ padding: '4px 10px', background: C.primary, color: '#000', border: 'none', borderRadius: '4px', fontWeight: 600, cursor: 'pointer', fontSize: '12px' }}>
+            style={{ padding: '4px 10px', background: C.primary, color: 'var(--c-on-primary)', border: 'none', borderRadius: '4px', fontWeight: 600, cursor: 'pointer', fontSize: '12px' }}>
             + Add
           </button>
         )}
@@ -102,10 +102,10 @@ export default function MilestoneManager({ dealId, isCreator }: { dealId: number
               </div>
               <div style={{ display: 'flex', gap: '6px', marginTop: '8px' }}>
                 {isCreator && m.status === 'pending' && (
-                  <button onClick={() => updateStatus(m.id, 'in_progress')} style={{ padding: '4px 8px', background: C.primary, color: '#000', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 600 }}>Start</button>
+                  <button onClick={() => updateStatus(m.id, 'in_progress')} style={{ padding: '4px 8px', background: C.primary, color: 'var(--c-on-primary)', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 600 }}>Start</button>
                 )}
                 {m.status === 'in_progress' && (
-                  <button onClick={() => updateStatus(m.id, 'completed')} style={{ padding: '4px 8px', background: C.success, color: '#000', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 600 }}>Complete</button>
+                  <button onClick={() => updateStatus(m.id, 'completed')} style={{ padding: '4px 8px', background: C.success, color: 'var(--c-on-primary)', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 600 }}>Complete</button>
                 )}
                 {m.due_date && <span style={{ fontSize: '11px', color: C.textMuted, marginLeft: 'auto' }}>Due: {new Date(m.due_date).toLocaleDateString()}</span>}
               </div>
@@ -128,7 +128,7 @@ export default function MilestoneManager({ dealId, isCreator }: { dealId: number
               style={{ padding: '8px', background: C.bg, border: `1px solid ${C.border}`, borderRadius: '4px', color: C.text, fontSize: '13px' }} />
           </div>
           <button onClick={addMilestone} disabled={saving || !newMs.title || !newMs.amount}
-            style={{ padding: '8px', background: C.primary, color: '#000', border: 'none', borderRadius: '4px', fontWeight: 600, cursor: 'pointer', fontSize: '13px', opacity: saving ? 0.6 : 1 }}>
+            style={{ padding: '8px', background: C.primary, color: 'var(--c-on-primary)', border: 'none', borderRadius: '4px', fontWeight: 600, cursor: 'pointer', fontSize: '13px', opacity: saving ? 0.6 : 1 }}>
             {saving ? 'Adding...' : 'Add Milestone'}
           </button>
         </div>

@@ -223,7 +223,7 @@ export default function OnboardingBrand() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, padding: '20px', fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: C.bg, padding: '20px', fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
         {/* Header */}
         <div style={{ marginBottom: '32px' }}>
@@ -598,7 +598,7 @@ export default function OnboardingBrand() {
                 flex: 1,
                 padding: '12px',
                 background: C.primary,
-                color: '#000',
+                color: 'var(--c-on-primary)',
                 border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
@@ -615,7 +615,7 @@ export default function OnboardingBrand() {
                 flex: 1,
                 padding: '12px',
                 background: loading ? C.border : C.primary,
-                color: '#000',
+                color: 'var(--c-text)',
                 border: 'none',
                 borderRadius: '8px',
                 cursor: loading ? 'not-allowed' : 'pointer',

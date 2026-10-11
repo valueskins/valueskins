@@ -121,7 +121,7 @@ export default function RazorpayTestPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
       <div style={{ maxWidth: 760, margin: '0 auto', padding: '48px 20px' }}>
         <h1 style={{ margin: '0 0 12px', fontSize: 32 }}>Razorpay Test Environment</h1>
         <p style={{ margin: '0 0 28px', color: C.muted }}>
@@ -206,7 +206,7 @@ const inputStyle: CSSProperties = {
   width: '100%',
   borderRadius: 12,
   border: `1px solid ${C.border}`,
-  background: '#0A0A0A',
+  background: 'var(--c-surface)',
   color: C.text,
   padding: '12px 14px',
   boxSizing: 'border-box',

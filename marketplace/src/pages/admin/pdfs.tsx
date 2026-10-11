@@ -90,11 +90,11 @@ export default function AdminPDFs() {
         {error && (
           <div style={{
             padding: '16px',
-            background: '#fee2e2',
+            background: 'var(--c-error-container)',
             color: 'var(--c-error)',
             borderRadius: '8px',
             marginBottom: '20px',
-            border: `1px solid #fecaca`
+            border: `1px solid var(--c-error)`
           }}>
             {error}
           </div>
@@ -124,7 +124,7 @@ export default function AdminPDFs() {
                       <a href={pdf.url} target="_blank" rel="noopener noreferrer" style={{
                         padding: '4px 12px',
                         background: C.primary,
-                        color: '#000',
+                        color: 'var(--c-on-primary)',
                         textDecoration: 'none',
                         borderRadius: '4px',
                         fontSize: '12px',

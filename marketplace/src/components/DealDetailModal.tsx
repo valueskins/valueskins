@@ -33,7 +33,7 @@ export default function DealDetailModal({ deal, onClose, onApply }: DealDetailMo
     >
       <div
         style={{
-          background: '#ffffff',
+          background: 'var(--c-surface)',
           borderRadius: '12px',
           maxWidth: '600px',
           width: '90%',
@@ -46,7 +46,7 @@ export default function DealDetailModal({ deal, onClose, onApply }: DealDetailMo
         {/* Header */}
         <div style={{
           padding: '24px',
-          borderBottom: '1px solid #e5e7eb',
+          borderBottom: '1px solid var(--c-border)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'start',
@@ -82,23 +82,23 @@ export default function DealDetailModal({ deal, onClose, onApply }: DealDetailMo
             marginBottom: '24px',
           }}>
             <div style={{
-              background: '#f0fdf4',
-              border: '1px solid #86efac',
+              background: 'var(--c-surface-container)',
+              border: '1px solid var(--c-border)',
               borderRadius: '8px',
               padding: '16px',
             }}>
-              <div style={{ fontSize: '12px', color: '#166534', fontWeight: 600 }}>BUDGET</div>
+              <div style={{ fontSize: '12px', color: 'var(--c-text)', fontWeight: 600 }}>BUDGET</div>
               <div style={{ fontSize: '24px', fontWeight: 700, color: 'var(--c-accent)', marginTop: '8px' }}>
                 ${deal.budget.toLocaleString()}
               </div>
             </div>
             <div style={{
-              background: '#fef3c7',
+              background: 'var(--c-surface-container)',
               border: '1px solid #fcd34d',
               borderRadius: '8px',
               padding: '16px',
             }}>
-              <div style={{ fontSize: '12px', color: '#92400e', fontWeight: 600 }}>DEADLINE</div>
+              <div style={{ fontSize: '12px', color: 'var(--c-text)', fontWeight: 600 }}>DEADLINE</div>
               <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--c-warning)', marginTop: '8px' }}>
                 {deal.deadline}
               </div>
@@ -110,7 +110,7 @@ export default function DealDetailModal({ deal, onClose, onApply }: DealDetailMo
             <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--c-text)', marginBottom: '8px' }}>
               About This Deal
             </h3>
-            <p style={{ fontSize: '14px', color: '#4b5563', lineHeight: '1.6' }}>
+            <p style={{ fontSize: '14px', color: 'var(--c-text-muted)', lineHeight: '1.6' }}>
               {deal.description}
             </p>
           </section>
@@ -125,8 +125,8 @@ export default function DealDetailModal({ deal, onClose, onApply }: DealDetailMo
                 <div
                   key={idx}
                   style={{
-                    background: '#f3f4f6',
-                    border: '1px solid #d1d5db',
+                    background: 'var(--c-surface)',
+                    border: '1px solid var(--c-border)',
                     borderRadius: '6px',
                     padding: '12px',
                     display: 'flex',
@@ -152,7 +152,7 @@ export default function DealDetailModal({ deal, onClose, onApply }: DealDetailMo
             <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--c-text)', marginBottom: '12px' }}>
               Requirements
             </h3>
-            <ul style={{ fontSize: '13px', color: '#4b5563', lineHeight: '1.8', paddingLeft: '20px' }}>
+            <ul style={{ fontSize: '13px', color: 'var(--c-text-muted)', lineHeight: '1.8', paddingLeft: '20px' }}>
               {deal.requirements.map((req, idx) => (
                 <li key={idx}>{req}</li>
               ))}
@@ -161,8 +161,8 @@ export default function DealDetailModal({ deal, onClose, onApply }: DealDetailMo
 
           {/* Terms */}
           <div style={{
-            background: '#f9fafb',
-            border: '1px solid #e5e7eb',
+            background: 'var(--c-surface)',
+            border: '1px solid var(--c-border)',
             borderRadius: '6px',
             padding: '12px',
             marginBottom: '24px',
@@ -182,7 +182,7 @@ export default function DealDetailModal({ deal, onClose, onApply }: DealDetailMo
         {/* Footer */}
         <div style={{
           padding: '16px 24px',
-          borderTop: '1px solid #e5e7eb',
+          borderTop: '1px solid var(--c-border)',
           display: 'flex',
           gap: '12px',
           justifyContent: 'flex-end',
@@ -191,8 +191,8 @@ export default function DealDetailModal({ deal, onClose, onApply }: DealDetailMo
             onClick={onClose}
             style={{
               padding: '10px 20px',
-              border: '1px solid #d1d5db',
-              background: '#ffffff',
+              border: '1px solid var(--c-border)',
+              background: 'var(--c-surface)',
               borderRadius: '6px',
               fontSize: '14px',
               fontWeight: 600,
@@ -206,12 +206,12 @@ export default function DealDetailModal({ deal, onClose, onApply }: DealDetailMo
             onClick={onApply}
             style={{
               padding: '10px 24px',
-              background: '#0A0A0A',
+              background: 'var(--c-surface)',
               border: 'none',
               borderRadius: '6px',
               fontSize: '14px',
               fontWeight: 600,
-              color: '#ffffff',
+              color: 'var(--c-text)',
               cursor: 'pointer',
             }}
           >

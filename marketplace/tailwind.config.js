@@ -71,11 +71,11 @@ module.exports = {
         // `sans` overrides Tailwind's own default stack. Without it, preflight
         // sets ui-sans-serif on html and anything not explicitly styled fell
         // back to the OS UI font — so the app was rendering in two typefaces.
-        // G2: Inter is the only one, and it is the wordmark's face.
-        sans: ['Inter', "'Helvetica Neue'", 'Arial', 'sans-serif'],
-        'headline': ['Inter', 'sans-serif'],
-        'body': ['Inter', 'sans-serif'],
-        'label': ['Inter', 'sans-serif'],
+        // G2: Poppins is the only one, and it is the wordmark's face.
+        sans: ['Poppins', "'Helvetica Neue'", 'Arial', 'sans-serif'],
+        'headline': ['Poppins', 'sans-serif'],
+        'body': ['Poppins', 'sans-serif'],
+        'label': ['Poppins', 'sans-serif'],
       },
       boxShadow: {
         'glow': '0 0 32px rgba(200, 184, 154, 0.15)',

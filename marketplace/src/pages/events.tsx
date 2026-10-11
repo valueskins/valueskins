@@ -15,7 +15,7 @@ const styles = {
     // and BRANDING §4 bans blues outright. §10.2 permits a tonal, single-family
     // gradient, so this is Near Black to Charcoal with nothing else in it.
     background: 'linear-gradient(180deg, var(--c-bg) 0%, var(--c-surface) 55%, var(--c-surface-highest) 100%)',
-    fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+    fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
     padding: '20px',
   } as React.CSSProperties,
   card: {
@@ -30,12 +30,12 @@ const styles = {
   title: {
     fontSize: '28px',
     fontWeight: 800,
-    color: '#B8B4AC',
+    color: 'var(--c-text-muted)',
     marginBottom: '16px',
   } as React.CSSProperties,
   subtitle: {
     fontSize: '15px',
-    color: '#64748b',
+    color: 'var(--c-text-muted)',
     margin: 0,
     lineHeight: '1.6',
   } as React.CSSProperties,
@@ -45,7 +45,7 @@ const styles = {
     background: 'rgba(184, 180, 172, 0.1)',
     border: '1px solid rgba(184, 180, 172, 0.2)',
     borderRadius: '999px',
-    color: '#B8B4AC',
+    color: 'var(--c-text-muted)',
     fontSize: '12px',
     fontWeight: 600,
     marginBottom: '24px',

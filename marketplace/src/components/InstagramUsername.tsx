@@ -6,7 +6,7 @@ export default function InstagramUsername({ handle }: { handle: string }) {
   const clean = handle.replace(/^@/, '');
   const style: React.CSSProperties = {
     color: C.text,
-    fontSize: 20,
+    fontSize: 28,
     fontWeight: 700,
     textDecoration: 'none',
   };
@@ -18,7 +18,7 @@ export default function InstagramUsername({ handle }: { handle: string }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 16,
+        padding: 28,
       }}
     >
       {isInstagramHandle(clean) ? (
@@ -27,7 +27,7 @@ export default function InstagramUsername({ handle }: { handle: string }) {
         </a>
       ) : (
         // No link: we do not know the username, so there is nothing to link to.
-        <span style={{ ...style, fontSize: 14, fontWeight: 500, color: C.outline }}>
+        <span style={{ ...style, fontSize: 16, fontWeight: 500, color: C.outline }}>
           {handleLabel(clean)}
         </span>
       )}

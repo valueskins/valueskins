@@ -127,7 +127,7 @@ export default function ValueSkinsSettings() {
                 display: 'inline-block',
                 padding: '12px 24px',
                 background: C.primary,
-                color: '#fff',
+                color: 'var(--c-on-primary)',
                 borderRadius: '8px',
                 textDecoration: 'none',
                 fontWeight: '600',
@@ -191,7 +191,7 @@ export default function ValueSkinsSettings() {
                               style={{
                                 padding: '8px 16px',
                                 background: imagePreview && !uploading ? C.primary : C.textSecondary,
-                                color: '#fff',
+                                color: 'var(--c-text)',
                                 border: 'none',
                                 borderRadius: '6px',
                                 fontSize: '12px',
@@ -225,7 +225,7 @@ export default function ValueSkinsSettings() {
                           style={{
                             padding: '8px 16px',
                             background: C.primary,
-                            color: '#fff',
+                            color: 'var(--c-on-primary)',
                             border: 'none',
                             borderRadius: '6px',
                             fontSize: '12px',

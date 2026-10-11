@@ -4,12 +4,12 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 
 const C = {
-  primary: '#0A0A0A',
-  bg: '#ffffff',
-  surface: '#f9fafb',
+  primary: 'var(--c-primary)',
+  bg: 'var(--c-bg)',
+  surface: 'var(--c-surface)',
   text: 'var(--c-text)',
-  textSecondary: 'var(--c-text-variant)',
-  border: '#e5e7eb',
+  textSecondary: 'var(--c-text-muted)',
+  border: 'var(--c-border)',
   error: 'var(--c-error)',
   success: 'var(--c-accent)',
 };
@@ -27,7 +27,7 @@ const cardStyle: CSSProperties = {
   background: C.bg,
   border: `1px solid ${C.border}`,
   borderRadius: '12px',
-  padding: '20px',
+  padding: '28px',
 };
 
 export default function LocationsSettings() {
@@ -128,32 +128,32 @@ export default function LocationsSettings() {
         <title>Manage Locations - ValueSkins</title>
       </Head>
 
-      <div style={{ minHeight: '100vh', background: C.surface, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '32px 20px' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 700, color: C.text, marginBottom: '24px' }}>
+      <div style={{ minHeight: '100vh', background: C.surface, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '72px 24px 140px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 700, color: C.text, marginBottom: '48px' }}>
             📍 Your Locations
           </h1>
 
-          <p style={{ color: C.textSecondary, marginBottom: '24px' }}>
+          <p style={{ color: C.textSecondary, marginBottom: '48px' }}>
             Add multiple locations to help brands find you and to indicate where you're available for collaborations.
           </p>
 
           {error && (
-            <div style={{ padding: '12px 16px', background: '#fee2e2', color: C.error, borderRadius: '8px', marginBottom: '16px', border: `1px solid #fecaca` }}>
+            <div style={{ padding: '12px 16px', background: 'var(--c-error-container)', color: C.error, borderRadius: '8px', marginBottom: '16px', border: `1px solid var(--c-error)` }}>
               {error}
             </div>
           )}
 
           {success && (
-            <div style={{ padding: '12px 16px', background: '#f0fdf4', color: C.success, borderRadius: '8px', marginBottom: '16px', border: `1px solid #bbf7d0` }}>
+            <div style={{ padding: '12px 16px', background: 'var(--c-surface-container)', color: C.success, borderRadius: '8px', marginBottom: '16px', border: `1px solid #bbf7d0` }}>
               {success}
             </div>
           )}
 
           {/* Existing Locations */}
           {locations.length > 0 && (
-            <div style={{ ...cardStyle, marginBottom: '24px' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 600, color: C.text, marginBottom: '16px' }}>
+            <div style={{ ...cardStyle, marginBottom: '48px' }}>
+              <h2 style={{ fontSize: '18px', fontWeight: 600, color: C.text, marginBottom: '16px' }}>
                 Your Locations ({locations.length})
               </h2>
 
@@ -176,7 +176,7 @@ export default function LocationsSettings() {
                         {location.city}, {location.state && location.state + ', '}{location.country}
                       </div>
                       {location.latitude && location.longitude && (
-                        <div style={{ fontSize: '12px', color: C.textSecondary }}>
+                        <div style={{ fontSize: '14px', color: C.textSecondary }}>
                           {location.latitude.toFixed(4)}, {location.longitude.toFixed(4)}
                         </div>
                       )}
@@ -188,10 +188,10 @@ export default function LocationsSettings() {
                         style={{
                           padding: '6px 12px',
                           background: C.primary,
-                          color: '#fff',
+                          color: 'var(--c-on-primary)',
                           border: 'none',
                           borderRadius: '6px',
-                          fontSize: '12px',
+                          fontSize: '14px',
                           cursor: 'pointer',
                         }}
                       >
@@ -202,11 +202,11 @@ export default function LocationsSettings() {
                         onClick={() => location.id && handleDeleteLocation(location.id)}
                         style={{
                           padding: '6px 12px',
-                          background: '#fee2e2',
+                          background: 'var(--c-error-container)',
                           color: C.error,
                           border: 'none',
                           borderRadius: '6px',
-                          fontSize: '12px',
+                          fontSize: '14px',
                           cursor: 'pointer',
                         }}
                       >
@@ -221,13 +221,13 @@ export default function LocationsSettings() {
 
           {/* Add/Edit Form */}
           <div style={cardStyle}>
-            <h2 style={{ fontSize: '16px', fontWeight: 600, color: C.text, marginBottom: '16px' }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 600, color: C.text, marginBottom: '16px' }}>
               {editingId ? 'Edit Location' : 'Add New Location'}
             </h2>
 
             <div style={{ display: 'grid', gap: '16px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: C.text, marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '15px', fontWeight: 600, color: C.text, marginBottom: '6px' }}>
                   City *
                 </label>
                 <input
@@ -240,14 +240,14 @@ export default function LocationsSettings() {
                     padding: '10px',
                     border: `1px solid ${C.border}`,
                     borderRadius: '8px',
-                    fontSize: '14px',
+                    fontSize: '16px',
                     boxSizing: 'border-box',
                   }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: C.text, marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '15px', fontWeight: 600, color: C.text, marginBottom: '6px' }}>
                   State/Province
                 </label>
                 <input
@@ -260,14 +260,14 @@ export default function LocationsSettings() {
                     padding: '10px',
                     border: `1px solid ${C.border}`,
                     borderRadius: '8px',
-                    fontSize: '14px',
+                    fontSize: '16px',
                     boxSizing: 'border-box',
                   }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: C.text, marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '15px', fontWeight: 600, color: C.text, marginBottom: '6px' }}>
                   Country *
                 </label>
                 <input
@@ -280,7 +280,7 @@ export default function LocationsSettings() {
                     padding: '10px',
                     border: `1px solid ${C.border}`,
                     borderRadius: '8px',
-                    fontSize: '14px',
+                    fontSize: '16px',
                     boxSizing: 'border-box',
                   }}
                 />
@@ -288,7 +288,7 @@ export default function LocationsSettings() {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: C.text, marginBottom: '6px' }}>
+                  <label style={{ display: 'block', fontSize: '15px', fontWeight: 600, color: C.text, marginBottom: '6px' }}>
                     Latitude (optional)
                   </label>
                   <input
@@ -302,14 +302,14 @@ export default function LocationsSettings() {
                       padding: '10px',
                       border: `1px solid ${C.border}`,
                       borderRadius: '8px',
-                      fontSize: '14px',
+                      fontSize: '16px',
                       boxSizing: 'border-box',
                     }}
                   />
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: C.text, marginBottom: '6px' }}>
+                  <label style={{ display: 'block', fontSize: '15px', fontWeight: 600, color: C.text, marginBottom: '6px' }}>
                     Longitude (optional)
                   </label>
                   <input
@@ -323,7 +323,7 @@ export default function LocationsSettings() {
                       padding: '10px',
                       border: `1px solid ${C.border}`,
                       borderRadius: '8px',
-                      fontSize: '14px',
+                      fontSize: '16px',
                       boxSizing: 'border-box',
                     }}
                   />
@@ -337,10 +337,10 @@ export default function LocationsSettings() {
                   style={{
                     padding: '10px 24px',
                     background: saving ? C.border : C.primary,
-                    color: '#fff',
+                    color: 'var(--c-text)',
                     border: 'none',
                     borderRadius: '8px',
-                    fontSize: '14px',
+                    fontSize: '16px',
                     fontWeight: 600,
                     cursor: saving ? 'not-allowed' : 'pointer',
                   }}
@@ -356,11 +356,11 @@ export default function LocationsSettings() {
                     }}
                     style={{
                       padding: '10px 24px',
-                      background: '#fff',
+                      background: 'var(--c-surface)',
                       color: C.text,
                       border: `1px solid ${C.border}`,
                       borderRadius: '8px',
-                      fontSize: '14px',
+                      fontSize: '16px',
                       fontWeight: 600,
                       cursor: 'pointer',
                     }}
@@ -377,11 +377,11 @@ export default function LocationsSettings() {
               onClick={() => router.push('/account/settings')}
               style={{
                 padding: '10px 24px',
-                background: '#fff',
+                background: 'var(--c-surface)',
                 color: C.text,
                 border: `1px solid ${C.border}`,
                 borderRadius: '8px',
-                fontSize: '14px',
+                fontSize: '16px',
                 fontWeight: 600,
                 cursor: 'pointer',
               }}

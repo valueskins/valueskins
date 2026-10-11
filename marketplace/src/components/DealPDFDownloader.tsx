@@ -85,17 +85,17 @@ export default function DealPDFDownloader({ dealId, dealPhase, onDownload }: Dea
   }, [dealId, canGenerate]);
 
   return (
-    <div style={{ padding: '16px', background: 'rgba(200, 184, 154, 0.1)', borderRadius: '8px', border: '1px solid rgba(200, 184, 154, 0.2)' }}>
+    <div style={{ padding: '16px', background: 'var(--c-border)', borderRadius: '8px', border: '1px solid var(--c-border)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-        <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 600, color: '#F5F5F0' }}>Deal Proof Documents</h3>
+        <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 600, color: 'var(--c-text)' }}>Deal Proof Documents</h3>
         {canGenerate && (
           <button
             onClick={handleGeneratePDF}
             disabled={loading}
             style={{
               padding: '8px 16px',
-              background: '#C8B89A',
-              color: '#000',
+              background: 'var(--c-primary)',
+              color: 'var(--c-on-primary)',
               border: 'none',
               borderRadius: '6px',
               fontSize: '12px',
@@ -112,7 +112,7 @@ export default function DealPDFDownloader({ dealId, dealPhase, onDownload }: Dea
       {error && (
         <div style={{
           padding: '8px',
-          background: '#fee2e2',
+          background: 'var(--c-error-container)',
           color: 'var(--c-error)',
           borderRadius: '4px',
           fontSize: '12px',
@@ -123,7 +123,7 @@ export default function DealPDFDownloader({ dealId, dealPhase, onDownload }: Dea
       )}
 
       {!canGenerate && (
-        <p style={{ fontSize: '12px', color: '#B8B4AC', margin: 0 }}>
+        <p style={{ fontSize: '12px', color: 'var(--c-text-muted)', margin: 0 }}>
           PDF generation available once deal is in progress
         </p>
       )}
@@ -135,7 +135,7 @@ export default function DealPDFDownloader({ dealId, dealPhase, onDownload }: Dea
             style={{
               background: 'transparent',
               border: 'none',
-              color: '#C8B89A',
+              color: 'var(--c-text)',
               cursor: 'pointer',
               fontSize: '12px',
               fontWeight: 600,
@@ -161,8 +161,8 @@ export default function DealPDFDownloader({ dealId, dealPhase, onDownload }: Dea
                     alignItems: 'center',
                   }}
                 >
-                  <div style={{ fontSize: '11px', color: '#B8B4AC' }}>
-                    <div style={{ fontWeight: 600, color: '#F5F5F0' }}>v{versions.length - idx}</div>
+                  <div style={{ fontSize: '11px', color: 'var(--c-text-muted)' }}>
+                    <div style={{ fontWeight: 600, color: 'var(--c-text)' }}>v{versions.length - idx}</div>
                     <div>{version.timestamp}</div>
                   </div>
                   <a
@@ -170,8 +170,8 @@ export default function DealPDFDownloader({ dealId, dealPhase, onDownload }: Dea
                     download
                     style={{
                       padding: '4px 12px',
-                      background: '#C8B89A',
-                      color: '#000',
+                      background: 'var(--c-primary)',
+                      color: 'var(--c-on-primary)',
                       textDecoration: 'none',
                       borderRadius: '4px',
                       fontSize: '11px',

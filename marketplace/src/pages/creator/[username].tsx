@@ -9,7 +9,7 @@ const C = {
   surface: '#1A1A1A',
   text: '#F5F5F0',
   textSecondary: '#D6D2C8',
-  border: '#2D2D2D',
+  border: 'var(--c-border)',
   success: 'var(--c-accent)',
   accent: 'var(--c-warning)',
 };
@@ -99,7 +99,7 @@ export default function CreatorProfilePage() {
     minHeight: '100vh',
     background: C.bg,
     color: C.text,
-    fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+    fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
     padding: '40px 20px',
   };
 
@@ -123,7 +123,7 @@ export default function CreatorProfilePage() {
     height: '150px',
     borderRadius: '12px',
     background: C.primary,
-    color: '#fff',
+    color: 'var(--c-on-primary)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -157,7 +157,7 @@ export default function CreatorProfilePage() {
   const idBadgeStyle: CSSProperties = {
     display: 'inline-block',
     padding: '6px 12px',
-    background: 'rgba(200, 184, 154, 0.1)',
+    background: 'var(--c-border)',
     color: C.success,
     borderRadius: '6px',
     fontSize: '12px',
@@ -240,8 +240,8 @@ export default function CreatorProfilePage() {
 
   const statusBadgeStyle = (status: string): CSSProperties => {
     const colors: Record<string, [string, string]> = {
-      completed: ['rgba(200, 184, 154, 0.1)', C.success],
-      'in-progress': ['rgba(200, 184, 154, 0.1)', C.accent],
+      completed: ['var(--c-border)', C.success],
+      'in-progress': ['var(--c-border)', C.accent],
       pending: ['rgba(184, 180, 172, 0.1)', C.textSecondary],
     };
     const [bg, color] = colors[status] || colors.pending;
@@ -273,7 +273,7 @@ export default function CreatorProfilePage() {
           <div style={{
             padding: '24px',
             background: 'rgba(176, 65, 62, 0.1)',
-            color: '#fca5a5',
+            color: 'var(--c-error)',
             borderRadius: '8px',
             border: '1px solid var(--c-error)',
             marginBottom: '24px',
@@ -285,7 +285,7 @@ export default function CreatorProfilePage() {
             style={{
               padding: '10px 24px',
               background: C.primary,
-              color: '#fff',
+              color: 'var(--c-on-primary)',
               border: 'none',
               borderRadius: '8px',
               cursor: 'pointer',
@@ -333,7 +333,7 @@ export default function CreatorProfilePage() {
                   <span style={{
                     display: 'inline-block',
                     padding: '6px 12px',
-                    background: 'rgba(200, 184, 154, 0.1)',
+                    background: 'var(--c-border)',
                     color: C.accent,
                     borderRadius: '6px',
                     fontSize: '12px',

@@ -92,7 +92,7 @@ export default function AdminDashboard() {
           style={{
             padding: '8px 16px',
             background: C.danger,
-            color: '#fff',
+            color: 'var(--c-on-primary)',
             border: 'none',
             borderRadius: '6px',
             fontSize: '14px',
@@ -119,11 +119,11 @@ export default function AdminDashboard() {
         {error && (
           <div style={{
             padding: '16px',
-            background: '#fee2e2',
+            background: 'var(--c-error-container)',
             color: 'var(--c-error)',
             borderRadius: '8px',
             marginBottom: '20px',
-            border: `1px solid #fecaca`
+            border: `1px solid var(--c-error)`
           }}>
             {error}
           </div>
