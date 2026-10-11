@@ -45,6 +45,12 @@ jest.mock('@/lib/razorpay', () => {
     })),
   };
 });
+// The Drive check opens the link over the network. These tests use made-up
+// links, so it is told they are public here and tested on its own elsewhere.
+jest.mock('@/lib/drive-link', () => ({
+  ...jest.requireActual('@/lib/drive-link'),
+  checkDriveLink: jest.fn(async () => 'public'),
+}));
 // Email sending would try SMTP; the audit-trail row is what matters here.
 jest.mock('@/lib/deal-emails', () => ({
   sendDealEmail: jest.fn(async () => ({ sent: true })),

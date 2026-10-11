@@ -142,7 +142,7 @@ const TEMPLATES: Record<DealEmailType, (d: any) => Built> = {
     subject: `Changes requested: ${d.title}`,
     ...layout('The brand requested changes', [
       `Deal: <strong>${d.title}</strong>`,
-      `Feedback: ${d.feedback}`,
+      `<strong>What the brand wants changed</strong><br><span style="white-space:pre-wrap">${escapeForEmail(d.feedback || '')}</span>`,
       'Upload a new link when the changes are done.',
     ], { label: 'Re-upload content', url: dealUrl(d.deal_id) }),
   }),

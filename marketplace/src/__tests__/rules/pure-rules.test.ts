@@ -9,6 +9,7 @@ import { isInstagramHandle, handleLabel, placeholderUsername } from '@/lib/handl
 import { scrubText, scrubEvent } from '@/lib/sentry-scrub';
 import { financials } from '@/lib/deal-api';
 import { missingSetup } from '@/lib/setup-status';
+import { checkDriveLink } from '@/lib/drive-link';
 
 describe('role comes from the Instagram account type', () => {
   it('maps a Business account to brand and a Creator account to creator', () => {
@@ -124,6 +125,49 @@ describe('a complete account', () => {
         pitch_text: '', payout_vpa: '', payout_name: '',
       })
     ).toEqual(['profile', 'email', 'upi', 'about']);
+  });
+});
+
+describe('a delivered Drive link must open for a stranger', () => {
+  const LINK = 'https://drive.google.com/file/d/abc/view';
+  const reply = (status: number, headers: Record<string, string> = {}, body = '<title>clip.mp4 - Google Drive</title>') =>
+    ({ status, headers: { get: (k: string) => headers[k.toLowerCase()] ?? null }, text: async () => body }) as any;
+  const check = (...replies: any[]) => {
+    const f = jest.fn();
+    replies.forEach((r) => f.mockResolvedValueOnce(r));
+    return checkDriveLink(LINK, f as any);
+  };
+
+  it('a link anyone can view is public', async () => {
+    expect(await check(reply(200))).toBe('public');
+  });
+
+  it('a link that sends you to Google sign-in is private', async () => {
+    expect(await check(reply(302, { location: 'https://accounts.google.com/ServiceLogin?continue=x' }))).toBe('private');
+    expect(await check(reply(403))).toBe('private');
+    expect(await check(reply(200, {}, '<title>Google Drive: Sign-in</title>'))).toBe('private');
+  });
+
+  it('a link that does not exist is missing', async () => {
+    expect(await check(reply(404))).toBe('missing');
+  });
+
+  it('follows a redirect within Google Drive and judges where it ends', async () => {
+    expect(
+      await check(reply(302, { location: 'https://drive.google.com/file/d/abc/view?usp=sharing' }), reply(200))
+    ).toBe('public');
+  });
+
+  it('never follows a redirect to another site', async () => {
+    const f = jest.fn().mockResolvedValueOnce(reply(302, { location: 'https://evil.example/steal' }));
+    expect(await checkDriveLink(LINK, f as any)).toBe('unknown');
+    expect(f).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not blame the creator when Google cannot be reached', async () => {
+    expect(await check(reply(503))).toBe('unknown');
+    const f = jest.fn().mockRejectedValueOnce(new Error('timeout'));
+    expect(await checkDriveLink(LINK, f as any)).toBe('unknown');
   });
 });
 
