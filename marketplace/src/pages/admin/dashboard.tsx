@@ -28,7 +28,7 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1000px', margin: '0 auto', color: C.text, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+    <div style={{ padding: '24px', maxWidth: '1000px', margin: '0 auto', color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
       <h1 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '20px' }}>Admin Dashboard</h1>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '12px', marginBottom: '24px' }}>

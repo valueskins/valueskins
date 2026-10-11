@@ -177,19 +177,19 @@ const LIMITS: Array<{ group: string; items: Array<{ title: string; body: string 
 ];
 
 export default function HowItWorksPage() {
-  const h2: React.CSSProperties = { fontSize: 16, fontWeight: 700, color: C.text, margin: '36px 0 14px' };
+  const h2: React.CSSProperties = { fontSize: 18, fontWeight: 700, color: C.text, margin: '72px 0 24px' };
   const card: React.CSSProperties = {
-    background: C.surface, border: `1px solid ${C.border}`, borderRadius: 12, padding: 16, marginBottom: 10,
+    background: C.surface, border: `1px solid ${C.border}`, borderRadius: 12, padding: 28, marginBottom: 20,
   };
-  const cell: React.CSSProperties = { padding: '9px 0', borderTop: `1px solid ${C.border}`, fontSize: 13 };
+  const cell: React.CSSProperties = { padding: '9px 0', borderTop: `1px solid ${C.border}`, fontSize: 15 };
 
   return (
     <>
       <Head><title>How it works · ValueSkins</title></Head>
-      <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '28px 16px 64px' }}>
-        <div style={{ maxWidth: 640, margin: '0 auto' }}>
-          <h1 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 8px' }}>How it works</h1>
-          <p style={{ fontSize: 14, color: C.textMuted, lineHeight: 1.6, margin: 0 }}>
+      <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '72px 24px 140px' }}>
+        <div style={{ maxWidth: 780, margin: '0 auto' }}>
+          <h1 style={{ fontSize: 30, fontWeight: 700, margin: '0 0 8px' }}>How it works</h1>
+          <p style={{ fontSize: 16, color: C.textMuted, lineHeight: 1.6, margin: 0 }}>
             Brands post paid deals. Creators apply. The amount is fixed, and the creator is paid
             directly.
           </p>
@@ -197,19 +197,19 @@ export default function HowItWorksPage() {
           <h2 style={h2}>Step by step</h2>
           {STEPS.map((s, i) => (
             <div key={s.title} style={{ ...card, display: 'flex', gap: 14 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: C.accent, minWidth: 22 }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: C.accent, minWidth: 22 }}>
                 {String(i + 1).padStart(2, '0')}
               </div>
               <div>
-                <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{s.title}</div>
-                <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6 }}>{s.body}</div>
+                <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>{s.title}</div>
+                <div style={{ fontSize: 15, color: C.textMuted, lineHeight: 1.6 }}>{s.body}</div>
               </div>
             </div>
           ))}
 
           <h2 style={h2}>An example</h2>
           <div style={card}>
-            <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6, marginBottom: 10 }}>
+            <div style={{ fontSize: 15, color: C.textMuted, lineHeight: 1.6, marginBottom: 20 }}>
               A brand posts a deal for ₹10,000.
             </div>
             {[
@@ -228,26 +228,26 @@ export default function HowItWorksPage() {
           <h2 style={h2}>The rules</h2>
           {RULES.map((r) => (
             <div key={r.title} style={card}>
-              <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{r.title}</div>
-              <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6 }}>{r.body}</div>
+              <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>{r.title}</div>
+              <div style={{ fontSize: 15, color: C.textMuted, lineHeight: 1.6 }}>{r.body}</div>
             </div>
           ))}
 
           <h2 style={h2}>Our drawbacks and assumptions</h2>
-          <p style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6, margin: '0 0 6px' }}>
+          <p style={{ fontSize: 15, color: C.textMuted, lineHeight: 1.6, margin: '0 0 6px' }}>
             We try to do right by both brands and creators, but we are still new. Here is what we
             are not able to offer yet. We would rather you hear it from us now, and we plan to
             improve each of these as we grow. Thank you for your patience.
           </p>
           {LIMITS.map((g) => (
             <div key={g.group}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.6px', margin: '20px 0 8px' }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.6px', margin: '20px 0 8px' }}>
                 {g.group}
               </div>
               {g.items.map((r) => (
                 <div key={r.title} style={card}>
-                  <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{r.title}</div>
-                  <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6 }}>{r.body}</div>
+                  <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>{r.title}</div>
+                  <div style={{ fontSize: 15, color: C.textMuted, lineHeight: 1.6 }}>{r.body}</div>
                 </div>
               ))}
             </div>
@@ -255,14 +255,14 @@ export default function HowItWorksPage() {
 
           <h2 style={h2}>If something goes wrong</h2>
           <div style={card}>
-            <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6 }}>
+            <div style={{ fontSize: 15, color: C.textMuted, lineHeight: 1.6 }}>
               Email{' '}
               <a href="mailto:founder@valueskins.com" style={{ color: C.text }}>founder@valueskins.com</a>{' '}
               with the deal and what happened. A person reads it and replies to both sides.
             </div>
           </div>
 
-          <p style={{ fontSize: 12, color: C.outline, marginTop: 24 }}>
+          <p style={{ fontSize: 14, color: C.outline, marginTop: 24 }}>
             The full terms are in the <Link href="/legal/terms" style={{ color: C.text }}>Terms of Service</Link>.
           </p>
         </div>

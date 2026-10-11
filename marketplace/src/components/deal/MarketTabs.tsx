@@ -20,12 +20,9 @@ export default function MarketTabs({
   return (
     <nav
       aria-label="Deals"
-      style={{
-        display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0, marginBottom: 20,
-        border: `1px solid ${C.border}`, borderRadius: 10, overflow: 'hidden',
-      }}
+      style={{ display: 'flex', gap: 40, borderBottom: `1px solid ${C.border}`, marginBottom: 56 }}
     >
-      {tabs.map((t, i) => {
+      {tabs.map((t) => {
         const on = t.key === active;
         return (
           <Link
@@ -33,12 +30,12 @@ export default function MarketTabs({
             href={t.href}
             aria-current={on ? 'page' : undefined}
             style={{
-              padding: '11px 12px', textAlign: 'center', textDecoration: 'none',
-              fontSize: 13, fontWeight: on ? 700 : 500,
+              padding: '0 0 16px', textDecoration: 'none', textTransform: 'uppercase',
+              fontSize: 12, letterSpacing: '0.14em',
+              fontWeight: on ? 600 : 400,
               color: on ? C.text : C.textMuted,
-              background: on ? C.surface : 'transparent',
-              borderLeft: i === 0 ? 'none' : `1px solid ${C.border}`,
-              boxShadow: on ? `inset 0 -2px 0 ${C.accent}` : 'none',
+              // The underline sits on the rule beneath the tabs.
+              boxShadow: on ? `0 1px 0 ${C.text}` : 'none',
               transition: 'none',
             }}
           >

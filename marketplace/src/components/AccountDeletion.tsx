@@ -4,19 +4,19 @@ import { withAlpha } from '@/theme/colors';
 import { useState } from 'react';
 
 const C = {
-  bg: '#0A0A0A',
-  surface: '#1A1A1A',
-  border: '#2D2D2D',
-  text: '#F5F5F0',
-  textSecondary: '#D6D2C8',
+  bg: 'var(--c-bg)',
+  surface: 'var(--c-surface)',
+  border: 'var(--c-border)',
+  text: 'var(--c-text)',
+  textSecondary: 'var(--c-text-muted)',
   error: 'var(--c-error)',
-  errorBg: '#7f1d1d',
+  errorBg: 'var(--c-error-container)',
   success: 'var(--c-accent)',
-  successBg: '#052e16',
+  successBg: 'var(--c-surface-container)',
   warning: 'var(--c-warning)',
-  warningBg: '#451a03',
+  warningBg: 'var(--c-surface-container)',
   info: 'var(--c-accent)',
-  infoBg: '#1e3a5f',
+  infoBg: 'var(--c-surface-container)',
 };
 
 const sections = [
@@ -429,7 +429,7 @@ export function AccountDeletionSection() {
                 style={{
                   flex: 1,
                   padding: '10px 16px',
-                  background: confirmationPhrase === 'PERMANENTLY DELETE MY ACCOUNT' ? C.error : C.error + '60',
+                  background: confirmationPhrase === 'PERMANENTLY DELETE MY ACCOUNT' ? C.error : 'var(--c-border)',
                   color: '#fff',
                   border: 'none',
                   borderRadius: '6px',

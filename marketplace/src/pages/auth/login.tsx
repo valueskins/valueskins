@@ -18,9 +18,9 @@ import { ValueSkinSprite } from '@/features/profiles/ProfileView';
 // AUTH: Google OAuth is commented out and replaced by Instagram OAuth
 // (Instagram Login via Meta). See handleInstagramAuth below.
 
-const FONT = "'Inter', 'Helvetica Neue', Arial, sans-serif";
+const FONT = "'Poppins', 'Helvetica Neue', Arial, sans-serif";
 const EASE = 'cubic-bezier(0.16,1,0.3,1)';
-const DEEP_SAND = '#A08A5E';
+const DEEP_SAND = '#111111';
 
 type Theme = 'dark' | 'light';
 
@@ -37,15 +37,14 @@ const T = {
     btnShadow: '0 10px 30px -12px rgba(200,184,154,0.45)',
   },
   light: {
-    surface:
-      'radial-gradient(60% 45% at 84% -8%, rgba(160,138,94,0.16), transparent 60%), linear-gradient(155deg,#F4F3EE,#EEE9DE 58%,#E6E0D2)',
-    head: '#0A0A0A',
-    body: '#2D2D2D',
-    muted: '#6E6A60',
-    hair: 'rgba(160,138,94,0.22)',
-    btnBg: '#0A0A0A',
-    btnLabel: '#F5F5F0',
-    btnShadow: '0 10px 30px -12px rgba(45,45,45,0.35)',
+    surface: '#ffffff',
+    head: '#111111',
+    body: '#666666',
+    muted: '#767676',
+    hair: '#e3e3e3',
+    btnBg: '#111111',
+    btnLabel: '#ffffff',
+    btnShadow: 'none',
   },
 } as const;
 
@@ -63,7 +62,7 @@ export default function Login() {
   const [hover, setHover] = useState(false);
   const [pressed, setPressed] = useState(false);
   // Fixed dark — the auth screen has no theme toggle.
-  const theme: Theme = 'dark';
+  const theme: Theme = 'light';
   const [mounted, setMounted] = useState(false);
   const [reduced, setReduced] = useState(false);
 

@@ -45,7 +45,7 @@ export default function TwoFactorDisable() {
 
   if (done) {
     return (
-      <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+      <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
         <div style={{ textAlign: 'center' }}>
           <h1 style={{ fontSize: '24px', fontWeight: 700, color: C.text, marginBottom: '8px' }}>2FA disabled</h1>
           <button onClick={() => router.push('/account/settings')} style={{ padding: '12px 24px', background: C.primary, color: C.onPrimary, border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>
@@ -57,7 +57,7 @@ export default function TwoFactorDisable() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
       <div style={{ width: '100%', maxWidth: '440px' }}>
         <h1 style={{ fontSize: '24px', fontWeight: 700, color: C.text, marginBottom: '8px' }}>Disable two-factor authentication</h1>
         <p style={{ fontSize: '15px', color: C.textSecondary, marginBottom: '24px' }}>Enter a code from your authenticator app to confirm.</p>

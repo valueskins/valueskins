@@ -24,7 +24,7 @@ export default function SettingsRedirect() {
         justifyContent: 'center',
         background: '#0A0A0A',
         color: '#8A867E',
-        fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+        fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
       }}
     >
       Opening Settings…

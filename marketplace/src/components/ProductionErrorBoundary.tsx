@@ -76,7 +76,7 @@ export class ProductionErrorBoundary extends React.Component<Props, State> {
               alignItems: 'center',
               justifyContent: 'center',
               padding: '20px',
-              fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+              fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
             }}
           >
             <div

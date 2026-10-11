@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useState, useRef } from 'react';
 
-const C = { bg: '#0A0A0A', text: '#F5F5F0', textSecondary: '#B8B4AC', primary: '#C8B89A', success: 'var(--c-accent)', error: '#f87171' };
+const C = { bg: 'var(--c-bg)', text: 'var(--c-text)', textSecondary: 'var(--c-text-muted)', primary: 'var(--c-primary)', success: 'var(--c-accent)', error: 'var(--c-error)' };
 
 export default function VerifyProof() {
   const [result, setResult] = useState<{ valid: boolean; checks: any; details: any; computedChainTip?: string; reportedChainTip?: string } | null>(null);
@@ -41,7 +41,7 @@ export default function VerifyProof() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '60px 20px' }}>
+    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '120px 24px 160px' }}>
       <div style={{ maxWidth: '700px', margin: '0 auto' }}>
         <Link href="/" style={{ color: C.primary, textDecoration: 'none', fontSize: '14px', marginBottom: '32px', display: 'inline-block' }}>← Back</Link>
         <h1 style={{ fontSize: '28px', fontWeight: 800, marginBottom: '8px' }}>Verify Deal Proof</h1>

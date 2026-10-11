@@ -31,7 +31,7 @@ export default function ValueSkinsCustomizer() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, color: C.onSurface, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif", paddingTop: 64 }}>
+    <div style={{ minHeight: '100vh', background: C.bg, color: C.onSurface, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif", paddingTop: 64 }}>
       {/* TopNav */}
       <nav style={{ position: 'fixed', top: 0, width: '100%', zIndex: 50, background: 'rgba(255, 247, 251, 0.7)', backdropFilter: 'blur(12px)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 40px', height: 64, maxWidth: 1200, margin: '0 auto' }}>

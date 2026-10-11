@@ -38,17 +38,17 @@ const C = {
   border: 'var(--c-border)',
   borderLight: 'var(--c-border-light)',
   success: 'var(--c-accent)',
-  successBg: 'rgba(200, 184, 154, 0.08)',
-  successBorder: 'rgba(200, 184, 154, 0.25)',
+  successBg: 'var(--c-surface-container)',
+  successBorder: 'var(--c-border)',
   warning: 'var(--c-warning)',
-  warningBg: 'rgba(200, 184, 154, 0.08)',
-  warningBorder: 'rgba(200, 184, 154, 0.25)',
+  warningBg: 'var(--c-surface-container)',
+  warningBorder: 'var(--c-border)',
   danger: 'var(--c-error)',
-  dangerBg: 'rgba(176, 65, 62, 0.08)',
-  dangerBorder: 'rgba(176, 65, 62, 0.25)',
+  dangerBg: 'var(--c-error-container)',
+  dangerBorder: 'var(--c-error)',
   accent: 'var(--c-accent)',
-  accentBg: 'rgba(160, 138, 94, 0.08)',
-  accentBorder: 'rgba(160, 138, 94, 0.25)',
+  accentBg: 'var(--c-surface-container)',
+  accentBorder: 'var(--c-border)',
 };
 
 const BRAND_CATEGORIES: Record<string, { name: string; subCategories: string[] }> = {
@@ -61,7 +61,7 @@ function getStickerForProfession(profession: string): string | undefined {
 
 function Modal({ onClose, children }: { onClose: () => void; children: React.ReactNode }) {
   return (
-    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.65)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(17,17,17,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
       <div style={{ background: C.card, borderRadius: '20px', padding: '24px', maxWidth: '500px', width: '95vw', maxHeight: '90vh', overflowY: 'auto', position: 'relative' }}>
         <button onClick={onClose} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', color: C.textMuted, fontSize: '24px', cursor: 'pointer', lineHeight: 1 }}>x</button>
         {children}
@@ -220,19 +220,19 @@ export default function SettingsView({
     <>
       {/* Toast */}
       {purchaseToast && (
-        <div style={{ position: 'fixed', bottom: '24px', left: '50%', transform: 'translateX(-50%)', background: C.text, color: 'var(--c-surface-lowest)', padding: '10px 20px', borderRadius: '10px', fontSize: '13px', fontWeight: 600, zIndex: 99999, boxShadow: '0 4px 12px rgba(0,0,0,0.25)' }}>
+        <div style={{ position: 'fixed', bottom: '24px', left: '50%', transform: 'translateX(-50%)', background: C.text, color: 'var(--c-surface-lowest)', padding: '10px 20px', borderRadius: '10px', fontSize: '15px', fontWeight: 600, zIndex: 99999, boxShadow: '0 4px 12px rgba(0,0,0,0.25)' }}>
           {purchaseToast}
         </div>
       )}
 
       {/* Header */}
-      <div style={{ height: '60px', borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '20px', paddingRight: '20px', fontWeight: 'bold', fontSize: '16px', background: C.surface }}>
+      <div style={{ height: '60px', borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '20px', paddingRight: '20px', fontWeight: 'bold', fontSize: '18px', background: C.surface }}>
         <div>
           Settings
-          <span style={{ fontSize: '11px', fontWeight: 600, color: C.textSecondary, marginLeft: '10px' }}>ValueSkins preferences</span>
+          <span style={{ fontSize: '13px', fontWeight: 600, color: C.textSecondary, marginLeft: '10px' }}>ValueSkins preferences</span>
         </div>
       </div>
-      <div style={{ padding: '20px', maxWidth: 640, margin: '0 auto' }}>
+      <div style={{ padding: '20px', maxWidth: 780, margin: '0 auto' }}>
 
         {/* Details for this account's role, saved to the account. Replaced a
             single "My Profile" form that asked a brand for a full name, an age
@@ -247,8 +247,8 @@ export default function SettingsView({
 
         {/* Both roles can see and change their UPI ID here. A creator's is shown
             to the brand that confirms them; a brand's is shown to nobody. */}
-        <div style={{ marginBottom: '24px' }}>
-          <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '12px' }}>UPI ID</div>
+        <div style={{ marginBottom: '56px' }}>
+          <div style={{ fontSize: '14px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '16px' }}>UPI ID</div>
           <PayoutUpi role={role === 'brand' ? 'brand' : 'creator'} />
         </div>
 
@@ -257,25 +257,25 @@ export default function SettingsView({
 
         {/* ── Brand Profile ── */}
         {role === 'brand' && (
-          <div style={{ marginBottom: '24px' }}>
+          <div style={{ marginBottom: '56px' }}>
             {(() => {
               const open = creatorSettingsOpen === 'brandProfile';
               return (
                 <>
                   <button onClick={() => setCreatorSettingsOpen(open ? null : 'brandProfile')} style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: C.card, border: `1px solid ${C.border}`, borderRadius: open ? '10px 10px 0 0' : '10px', padding: '12px 14px', cursor: 'pointer', color: C.text }}>
-                    <span style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase', color: C.textMuted }}>Brand Profile</span>
-                    <span style={{ fontSize: '14px', color: C.textMuted }}>{open ? '\u25B2' : '\u25BC'}</span>
+                    <span style={{ fontSize: '14px', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase', color: C.textMuted }}>Brand Profile</span>
+                    <span style={{ fontSize: '16px', color: C.textMuted }}>{open ? '\u25B2' : '\u25BC'}</span>
                   </button>
                   {open && (
-                    <div style={{ background: C.card, border: `1px solid ${C.border}`, borderTop: 'none', borderRadius: '0 0 10px 10px', padding: '14px' }}>
-                      <div style={{ fontSize: '11px', color: C.textSecondary, marginBottom: '12px', lineHeight: 1.5 }}>
+                    <div style={{ background: C.card, border: `1px solid ${C.border}`, borderTop: 'none', borderRadius: '0 0 10px 10px', padding: '28px' }}>
+                      <div style={{ fontSize: '13px', color: C.textSecondary, marginBottom: '16px', lineHeight: 1.7 }}>
                         Define your brand profile so creators understand who you are. Select one option from each category.
                       </div>
                       {Object.values(BRAND_CATEGORIES).map((cat) => {
                         const currentSelection = activeBrandProfileSelections[cat.name];
                         return (
                           <div key={cat.name} style={{ marginBottom: '14px' }}>
-                            <div style={{ fontSize: '10px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.6px', textTransform: 'uppercase', marginBottom: '8px' }}>{cat.name}</div>
+                            <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.6px', textTransform: 'uppercase', marginBottom: '8px' }}>{cat.name}</div>
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                               {cat.subCategories.map((sub) => {
                                 const selected = currentSelection === sub;
@@ -287,7 +287,7 @@ export default function SettingsView({
                                       if (!selected) { setPurchaseToast(`${cat.name}: ${sub}`); setTimeout(() => setPurchaseToast(null), 2000); }
                                     }}
                                     style={{
-                                      padding: '5px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: selected ? 600 : 400,
+                                      padding: '5px 12px', borderRadius: '8px', fontSize: '14px', fontWeight: selected ? 600 : 400,
                                       background: selected ? `${withAlpha(C.primary, 0x15)}` : C.bg,
                                       border: `1px solid ${selected ? C.primary : C.border}`,
                                       color: selected ? C.primary : C.textSecondary,
@@ -316,34 +316,34 @@ export default function SettingsView({
         {role !== 'brand' && (<>
 
           {/* Availability */}
-          <div style={{ marginBottom: '24px' }}>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '12px' }}>
+          <div style={{ marginBottom: '56px' }}>
+            <div style={{ fontSize: '14px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '16px' }}>
               Availability
             </div>
-            <div style={{ fontSize: '11px', color: C.textSecondary, marginBottom: '12px', lineHeight: 1.4 }}>
+            <div style={{ fontSize: '13px', color: C.textSecondary, marginBottom: '16px', lineHeight: 1.7 }}>
               You are assumed available for deals at all times. Set dates below only if you are taking a break.
             </div>
-            <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: '10px', padding: '14px' }}>
-              <div style={{ fontSize: '11px', fontWeight: 700, color: C.textMuted, textTransform: 'uppercase', marginBottom: '10px' }}>Not available from</div>
-              <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+            <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: '10px', padding: '28px' }}>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: C.textMuted, textTransform: 'uppercase', marginBottom: '16px' }}>Not available from</div>
+              <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '10px', color: C.textMuted, marginBottom: '4px' }}>From</div>
+                  <div style={{ fontSize: '12px', color: C.textMuted, marginBottom: '4px' }}>From</div>
                   <input type="date" value={notAvailableFrom} onChange={e => setNotAvailableFrom(e.target.value)}
-                    style={{ width: '100%', background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px', color: C.text, padding: '8px 10px', fontSize: '12px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' as const }} />
+                    style={{ width: '100%', background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px', color: C.text, padding: '14px 16px', fontSize: '14px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' as const }} />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '10px', color: C.textMuted, marginBottom: '4px' }}>To</div>
+                  <div style={{ fontSize: '12px', color: C.textMuted, marginBottom: '4px' }}>To</div>
                   <input type="date" value={notAvailableTo} onChange={e => setNotAvailableTo(e.target.value)}
-                    style={{ width: '100%', background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px', color: C.text, padding: '8px 10px', fontSize: '12px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' as const }} />
+                    style={{ width: '100%', background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px', color: C.text, padding: '14px 16px', fontSize: '14px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' as const }} />
                 </div>
               </div>
               {(notAvailableFrom || notAvailableTo) && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ fontSize: '11px', color: 'var(--c-warning)' }}>
+                  <div style={{ fontSize: '13px', color: 'var(--c-warning)' }}>
                     You will appear as unavailable during this period.
                   </div>
                   <button onClick={() => { setNotAvailableFrom(''); setNotAvailableTo(''); }}
-                    style={{ background: 'none', border: `1px solid ${C.border}`, borderRadius: '6px', padding: '4px 10px', fontSize: '10px', color: C.textSecondary, cursor: 'pointer' }}>
+                    style={{ background: 'none', border: `1px solid ${C.border}`, borderRadius: '6px', padding: '4px 10px', fontSize: '12px', color: C.textSecondary, cursor: 'pointer' }}>
                     Clear
                   </button>
                 </div>
@@ -356,21 +356,21 @@ export default function SettingsView({
             <button onClick={() => setCreatorShowSafetySettings(p => !p)} style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: C.card, border: `1px solid ${C.border}`, borderRadius: creatorShowSafetySettings ? '10px 10px 0 0' : '10px', padding: '12px 14px', cursor: 'pointer', color: C.text }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={C.textMuted} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <span style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase', color: C.textMuted }}>Inbox & Safety</span>
+                <span style={{ fontSize: '14px', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase', color: C.textMuted }}>Inbox & Safety</span>
               </div>
-              <span style={{ fontSize: '14px', color: C.textMuted }}>{creatorShowSafetySettings ? '\u25B2' : '\u25BC'}</span>
+              <span style={{ fontSize: '16px', color: C.textMuted }}>{creatorShowSafetySettings ? '\u25B2' : '\u25BC'}</span>
             </button>
             {creatorShowSafetySettings && (
-              <div style={{ background: C.card, border: `1px solid ${C.border}`, borderTop: 'none', borderRadius: '0 0 10px 10px', padding: '14px' }}>
+              <div style={{ background: C.card, border: `1px solid ${C.border}`, borderTop: 'none', borderRadius: '0 0 10px 10px', padding: '28px' }}>
                 {/* ── [v1 COMMENTED OUT] Brand-niche filters — v1 is niche-agnostic (lifestyle & fashion only). See Things-Commented-Out.md. */}
-                  {false && <div style={{ marginBottom: '12px' }}>
-                  <div style={{ fontSize: '10px', fontWeight: 700, color: C.textMuted, marginBottom: '6px', textTransform: 'uppercase' }}>Only accept proposals from these brand niches</div>
+                  {false && <div style={{ marginBottom: '16px' }}>
+                  <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, marginBottom: '6px', textTransform: 'uppercase' }}>Only accept proposals from these brand niches</div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
                     {['Fashion & Beauty Organisation', 'F&B Organisation', 'Travel Organisation', 'Music Organisation', 'Tech Organisation', 'Education Organisation', 'Entertainment Organisation'].map(n => {
                       const active = creatorAllowedNiches.includes(n);
                       return (
                         <button key={n} onClick={() => setCreatorAllowedNiches(prev => active ? prev.filter(x => x !== n) : [...prev, n])}
-                          style={{ padding: '3px 9px', borderRadius: '12px', fontSize: '11px', cursor: 'pointer', fontWeight: 600,
+                          style={{ padding: '3px 9px', borderRadius: '12px', fontSize: '13px', cursor: 'pointer', fontWeight: 600,
                             background: active ? `${withAlpha(C.primary, 0x20)}` : C.bg,
                             color: active ? C.primary : C.textSecondary,
                             border: `1px solid ${active ? C.primary : C.border}`,
@@ -379,29 +379,29 @@ export default function SettingsView({
                     })}
                   </div>
                   {creatorAllowedNiches.length === 0 && (
-                    <div style={{ fontSize: '10px', color: C.textMuted, marginTop: '4px' }}>None selected = all niches allowed</div>
+                    <div style={{ fontSize: '12px', color: C.textMuted, marginTop: '4px' }}>None selected = all niches allowed</div>
                   )}
                 </div>}
                 <div style={{ marginBottom: '4px' }}>
-                  <div style={{ fontSize: '10px', fontWeight: 700, color: C.textMuted, marginBottom: '6px', textTransform: 'uppercase' }}>Blocked Brands</div>
+                  <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, marginBottom: '6px', textTransform: 'uppercase' }}>Blocked Brands</div>
                   {creatorBlockedBrands.length === 0 ? (
-                    <div style={{ fontSize: '11px', color: C.textMuted, padding: '8px', background: C.bg, borderRadius: '7px', textAlign: 'center' }}>No brands blocked</div>
+                    <div style={{ fontSize: '13px', color: C.textMuted, padding: '8px', background: C.bg, borderRadius: '7px', textAlign: 'center' }}>No brands blocked</div>
                   ) : (
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
                       {creatorBlockedBrands.map(b => (
-                        <span key={b} style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '3px 8px', borderRadius: '12px', fontSize: '11px', background: 'rgba(176, 65, 62,0.1)', color: C.textMuted, border: '1px solid rgba(176, 65, 62,0.2)' }}>
+                        <span key={b} style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '3px 8px', borderRadius: '12px', fontSize: '13px', background: 'rgba(176, 65, 62,0.1)', color: C.textMuted, border: '1px solid var(--c-error)' }}>
                           {b}
-                          <button onClick={() => setCreatorBlockedBrands(prev => prev.filter(x => x !== b))} style={{ background: 'none', border: 'none', color: C.textMuted, cursor: 'pointer', fontSize: '12px', padding: 0, lineHeight: 1 }}>x</button>
+                          <button onClick={() => setCreatorBlockedBrands(prev => prev.filter(x => x !== b))} style={{ background: 'none', border: 'none', color: C.textMuted, cursor: 'pointer', fontSize: '14px', padding: 0, lineHeight: 1 }}>x</button>
                         </span>
                       ))}
                     </div>
                   )}
                   <button onClick={() => { const name = prompt('Block brand name:'); if (name?.trim()) setCreatorBlockedBrands(prev => [...prev, name.trim()]); }}
-                    style={{ marginTop: '6px', padding: '5px 10px', borderRadius: '6px', fontSize: '11px', fontWeight: 600, background: 'transparent', border: `1px solid ${C.border}`, color: C.textSecondary, cursor: 'pointer' }}>
+                    style={{ marginTop: '6px', padding: '5px 10px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, background: 'transparent', border: `1px solid ${C.border}`, color: C.textSecondary, cursor: 'pointer' }}>
                     + Block a brand
                   </button>
                 </div>
-                <div style={{ marginTop: '12px', padding: '9px 11px', background: 'rgba(0,102,204,0.05)', borderRadius: '7px', fontSize: '10px', color: C.textSecondary, lineHeight: 1.6 }}>
+                <div style={{ marginTop: '12px', padding: '13px 26px', background: 'var(--c-surface-container)', borderRadius: '7px', fontSize: '12px', color: C.textSecondary, lineHeight: 1.6 }}>
                   Platform-level limits set by Meta also apply and cannot be turned off by you. These are your <em>personal</em> controls on top.
                 </div>
               </div>
@@ -415,8 +415,8 @@ export default function SettingsView({
         {/* ── END CREATOR-ONLY SETTINGS ── */}
 
         {/* Privacy & Data Controls */}
-        <div style={{ marginBottom: '12px' }}>
-          <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '12px' }}>
+        <div style={{ marginBottom: '16px' }}>
+          <div style={{ fontSize: '14px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '16px' }}>
             Privacy & Data Controls
           </div>
           <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: '12px', overflow: 'hidden' }}>
@@ -432,13 +432,13 @@ export default function SettingsView({
                   borderBottom: i === 0 ? `1px solid ${C.border}` : 'none',
                   transition: 'background 0.15s',
                 }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)'; }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--c-surface-container)'; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
               >
-                <span style={{ fontSize: '16px' }}>{icon}</span>
+                <span style={{ fontSize: '18px' }}>{icon}</span>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '13px', fontWeight: 600, color }}>{label}</div>
-                  <div style={{ fontSize: '11px', color: C.textSecondary, marginTop: '1px' }}>{sub}</div>
+                  <div style={{ fontSize: '15px', fontWeight: 600, color }}>{label}</div>
+                  <div style={{ fontSize: '13px', color: C.textSecondary, marginTop: '1px' }}>{sub}</div>
                 </div>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={C.textMuted} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="9 18 15 12 9 6" />

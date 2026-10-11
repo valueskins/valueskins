@@ -6,7 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 // Role Selection (Front Door) — per ui-specs/Role Selection.md, with the single
 // phase-2 change from ui-specs/phase-2/Welcome screen.md (GP1): the role cards
 // are entry points into auth, not direct role routers. Visuals are unchanged.
-const FONT = "'Inter', 'Helvetica Neue', Arial, sans-serif";
+const FONT = "'Poppins', 'Helvetica Neue', Arial, sans-serif";
 
 // GP1: a role picked before OAuth is held transiently and applied after login.
 // It is a convenience pre-selection, never the commit.

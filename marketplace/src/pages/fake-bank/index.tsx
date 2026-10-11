@@ -127,7 +127,7 @@ export default function FakeBankPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif", paddingBottom: 40 }}>
+    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif", paddingBottom: 40 }}>
       <div style={{ maxWidth: 960, margin: '0 auto', padding: '40px 20px' }}>
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 32, flexWrap: 'wrap', gap: 12 }}>

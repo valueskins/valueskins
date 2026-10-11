@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import MarketplaceLayout from '@/components/MarketplaceLayout';
 
 const C = {
-  bg: 'var(--c-bg)', surface: '#111827', text: '#E0E0DA', textMuted: 'var(--c-text-variant)',
-  primary: 'var(--c-accent)', success: 'var(--c-accent)', border: '#1A1A1A',
+  bg: 'var(--c-bg)', surface: 'var(--c-surface)', text: 'var(--c-text)', textMuted: 'var(--c-text-muted)',
+  primary: 'var(--c-primary)', success: 'var(--c-accent)', border: 'var(--c-border)',
 };
 
 export default function NotificationSettingsPage() {
@@ -39,7 +39,7 @@ export default function NotificationSettingsPage() {
 
   return (
     <MarketplaceLayout title="Notifications" hideBottomNav>
-      <div style={{ padding: '16px', color: C.text, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+      <div style={{ padding: '16px', color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
         <h1 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Notification Preferences</h1>
         <p style={{ fontSize: '13px', color: C.textMuted, marginBottom: '20px' }}>Choose how you receive updates from ValueSkins.</p>
 

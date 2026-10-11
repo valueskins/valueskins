@@ -41,7 +41,7 @@ export default function BriefDetailPage() {
 
   return (
     <MarketplaceLayout title="Brief" hideBottomNav>
-      <div style={{ padding: '16px', color: C.text, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+      <div style={{ padding: '16px', color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
         <button onClick={() => router.push('/briefs')} style={{ background: 'none', border: 'none', color: C.primary, cursor: 'pointer', marginBottom: '16px', fontSize: '14px' }}>&larr; Back</button>
 
         <div style={{ padding: '20px', background: C.surface, borderRadius: '8px', border: `1px solid ${C.border}`, marginBottom: '16px' }}>

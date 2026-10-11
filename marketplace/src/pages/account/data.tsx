@@ -3,7 +3,7 @@ import { withAlpha } from '@/theme/colors';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-const C = { bg: '#0A0A0A', surface: 'rgba(10, 10, 10, 0.86)', border: 'rgba(184, 180, 172, 0.18)', text: '#F5F5F0', textSecondary: '#B8B4AC', primary: '#C8B89A', danger: '#fca5a5' };
+const C = { bg: 'var(--c-bg)', surface: 'var(--c-surface)', border: 'var(--c-border)', text: 'var(--c-text)', textSecondary: 'var(--c-text-muted)', primary: 'var(--c-primary)', danger: 'var(--c-error)' };
 
 export default function MyData() {
   const [user, setUser] = useState<any>(null);

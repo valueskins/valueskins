@@ -15,12 +15,12 @@ import React from 'react';
 // Pass `theme` now ONLY to pin the mark against a surface that is itself
 // hardcoded to one treatment (e.g. the login page's fixed dark hero).
 
-const FONT_STACK = "'Inter', 'Helvetica Neue', Arial, sans-serif";
+const FONT_STACK = "'Poppins', 'Helvetica Neue', Arial, sans-serif";
 
 // BRANDING §3 exact values, for the pinned cases.
 const FIXED = {
-  dark:  { word: '#F5F5F0', tag: '#B8B4AC', dot: '#C8B89A' },
-  light: { word: '#0A0A0A', tag: '#2D2D2D', dot: '#A08A5E' },
+  dark:  { word: 'var(--c-logo-word)', tag: 'var(--c-logo-tag)', dot: 'var(--c-logo-dot)' },
+  light: { word: 'var(--c-logo-word)', tag: 'var(--c-logo-tag)', dot: 'var(--c-logo-dot)' },
 };
 
 const THEMED = { word: 'var(--c-logo-word)', tag: 'var(--c-logo-tag)', dot: 'var(--c-logo-dot)' };

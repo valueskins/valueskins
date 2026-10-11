@@ -1,18 +1,18 @@
 'use client';
 import Link from 'next/link';
-const C = { bg: '#0A0A0A', surface: 'rgba(10, 10, 10, 0.86)', border: 'rgba(184, 180, 172, 0.18)', text: '#F5F5F0', textSecondary: '#B8B4AC', primary: '#C8B89A' };
+const C = { bg: 'var(--c-bg)', surface: 'var(--c-surface)', border: 'var(--c-border)', text: 'var(--c-text)', textSecondary: 'var(--c-text-muted)', primary: 'var(--c-primary)' };
 
 export default function Contact() {
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '60px 20px' }}>
+    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '120px 24px 160px' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         <Link href="/" style={{ color: C.primary, textDecoration: 'none', fontSize: '14px', marginBottom: '32px', display: 'inline-block' }}>← Back</Link>
         <h1 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '12px' }}>Contact Us</h1>
-        <p style={{ color: C.textSecondary, marginBottom: '40px' }}>We would love to hear from you</p>
+        <p style={{ color: C.textSecondary, marginBottom: '64px' }}>We would love to hear from you</p>
 
-        <div style={{ lineHeight: '1.8', color: C.textSecondary }}>
+        <div style={{ lineHeight: '1.9', color: C.textSecondary }}>
 
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>Get in Touch</h2>
+          <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '56px', marginBottom: '16px' }}>Get in Touch</h2>
 
           <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: '12px', padding: '24px', marginTop: '16px', marginBottom: '24px' }}>
             <div style={{ marginBottom: '20px' }}>

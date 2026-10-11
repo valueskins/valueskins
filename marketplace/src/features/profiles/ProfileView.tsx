@@ -14,7 +14,7 @@ const SlapToProfile = dynamic(() => import('@/features/valueskins/SlapToProfile'
 // Kept free of auth and data-fetching so it can be rendered both by the real
 // /profile/me page and by /demo/profile with sample data.
 
-const FONT = "'Inter', 'Helvetica Neue', Arial, sans-serif";
+const FONT = "'Poppins', 'Helvetica Neue', Arial, sans-serif";
 const EASE = 'cubic-bezier(0.16,1,0.3,1)';
 const WARM_SAND = '#C8B89A';
 const DEEP_SAND = '#A08A5E';

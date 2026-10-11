@@ -40,7 +40,7 @@ export default function BriefsPage() {
 
   return (
     <MarketplaceLayout title="Briefs" hideBottomNav>
-      <div style={{ padding: '16px', color: C.text, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+      <div style={{ padding: '16px', color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <h1 style={{ fontSize: '22px', fontWeight: 700, margin: 0 }}>Briefs</h1>
           <button onClick={() => setShowForm(!showForm)}

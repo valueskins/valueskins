@@ -67,7 +67,7 @@ export default function PastDealsPage({
 }) {
   const card: React.CSSProperties = {
     background: C.surface, border: `1px solid ${C.border}`,
-    borderRadius: 12, padding: 16, marginBottom: 10,
+    borderRadius: 12, padding: 28, marginBottom: 20,
   };
   const when = (v: string | null) =>
     v ? new Date(v).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
@@ -75,24 +75,24 @@ export default function PastDealsPage({
   return (
     <>
       <Head><title>Past deals · ValueSkins</title></Head>
-      <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '24px 16px 48px' }}>
-        <div style={{ maxWidth: 640, margin: '0 auto' }}>
+      <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '72px 24px 140px' }}>
+        <div style={{ maxWidth: 780, margin: '0 auto' }}>
           <MarketTabs active="past" role={role} />
 
-          <h1 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 4px' }}>Past deals</h1>
-          <p style={{ fontSize: 12, color: C.outline, margin: '0 0 16px' }}>
+          <h1 style={{ fontSize: 26, fontWeight: 700, margin: '0 0 4px' }}>Past deals</h1>
+          <p style={{ fontSize: 14, color: C.outline, margin: '0 0 32px' }}>
             Finished deals stay here. You can download the report for a completed deal whenever
             you need it.
           </p>
 
           {failed && (
-            <div role="alert" style={{ ...card, borderColor: C.error, fontSize: 13 }}>
+            <div role="alert" style={{ ...card, borderColor: C.error, fontSize: 15 }}>
               Could not load your past deals. Please refresh the page.
             </div>
           )}
 
           {!failed && deals.length === 0 && (
-            <div style={{ ...card, fontSize: 13, color: C.outline }}>
+            <div style={{ ...card, fontSize: 15, color: C.outline }}>
               No past deals yet. A deal moves here once it is completed or cancelled.
             </div>
           )}
@@ -106,16 +106,16 @@ export default function PastDealsPage({
               <div key={d.id} style={card}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginBottom: 6 }}>
                   <div style={{ minWidth: 0 }}>
-                    <div style={{ fontSize: 14, fontWeight: 700 }}>{d.title}</div>
-                    <div style={{ fontSize: 11, color: C.outline }}>
+                    <div style={{ fontSize: 16, fontWeight: 700 }}>{d.title}</div>
+                    <div style={{ fontSize: 13, color: C.outline }}>
                       {d.counterpart_username ? `${handleLabel(d.counterpart_username)} · ` : ''}
                       {completed ? 'Completed' : 'Cancelled'}
                       {d.finished_at ? ` · ${when(d.finished_at)}` : ''}
                     </div>
                   </div>
                   <div style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-                    <div style={{ fontSize: 14, fontWeight: 700 }}>₹{figure.toLocaleString('en-IN')}</div>
-                    <div style={{ fontSize: 10, color: C.outline }}>
+                    <div style={{ fontSize: 16, fontWeight: 700 }}>₹{figure.toLocaleString('en-IN')}</div>
+                    <div style={{ fontSize: 12, color: C.outline }}>
                       {role === 'creator' ? 'you received' : 'deal amount'}
                     </div>
                   </div>
@@ -129,7 +129,7 @@ export default function PastDealsPage({
                       href={`/api/deals/${d.id}/download-adp`}
                       style={{
                         background: C.primary, color: C.onPrimary, borderRadius: 8,
-                        padding: '9px 13px', fontSize: 12, fontWeight: 700, textDecoration: 'none',
+                        padding: '13px 26px', fontSize: 14, fontWeight: 700, textDecoration: 'none',
                       }}
                     >
                       Download report (PDF)
@@ -139,7 +139,7 @@ export default function PastDealsPage({
                     href={`/deals/${d.id}`}
                     style={{
                       border: `1px solid ${C.border}`, color: C.text, borderRadius: 8,
-                      padding: '9px 13px', fontSize: 12, fontWeight: 600, textDecoration: 'none',
+                      padding: '13px 26px', fontSize: 14, fontWeight: 600, textDecoration: 'none',
                       background: completed ? 'transparent' : withAlpha(C.primary, 0x08),
                     }}
                   >

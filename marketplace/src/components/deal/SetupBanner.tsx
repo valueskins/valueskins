@@ -48,9 +48,9 @@ export default function SetupBanner({ variant = 'banner' }: { variant?: 'banner'
     background: withAlpha(C.accent, 0x14),
     border: `1px solid ${C.accent}`,
     borderRadius: 12,
-    padding: 14,
+    padding: 28,
     marginBottom: variant === 'checklist' ? 24 : 12,
-    fontSize: 12,
+    fontSize: 14,
     color: C.text,
     lineHeight: 1.6,
   };
@@ -75,7 +75,7 @@ export default function SetupBanner({ variant = 'banner' }: { variant?: 'banner'
 
   return (
     <div role="status" style={box}>
-      <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8 }}>
+      <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 8 }}>
         {status.complete
           ? `Your account is set up. You can ${action}.`
           : `Complete everything below before you can ${action}.`}
@@ -84,7 +84,7 @@ export default function SetupBanner({ variant = 'banner' }: { variant?: 'banner'
         <div key={i.key} style={{ display: 'flex', gap: 10, alignItems: 'baseline', padding: '2px 0' }}>
           <span
             aria-hidden="true"
-            style={{ width: 34, fontSize: 10, fontWeight: 700, letterSpacing: '0.4px', color: i.done ? C.textMuted : C.text }}
+            style={{ width: 34, fontSize: 12, fontWeight: 700, letterSpacing: '0.4px', color: i.done ? C.textMuted : C.text }}
           >
             {i.done ? 'DONE' : 'TO DO'}
           </span>

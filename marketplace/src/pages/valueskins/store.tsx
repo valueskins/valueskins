@@ -24,7 +24,7 @@ export default function StoreRedirect() {
         justifyContent: 'center',
         background: 'var(--c-bg)',
         color: 'var(--c-text-muted)',
-        fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+        fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
       }}
     >
       Opening the Store…

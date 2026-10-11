@@ -43,7 +43,7 @@ export default function MarketplacePage() {
     minHeight: '100vh',
     background: C.bg,
     color: C.text,
-    fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+    fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
     padding: '40px 20px',
   };
 

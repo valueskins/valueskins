@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { C } from '@/theme/colors';
 import LoadingState from '@/components/LoadingState';
 
-const FONT = "'Inter', 'Helvetica Neue', Arial, sans-serif";
+const FONT = "'Poppins', 'Helvetica Neue', Arial, sans-serif";
 const T = {
   bg: C.bg,
   surface: C.surface,

@@ -57,7 +57,7 @@ export default function DealCommunications({ dealId }: { dealId: string }) {
 
   const card: React.CSSProperties = {
     background: C.surface, border: `1px solid ${C.border}`,
-    borderRadius: 12, padding: 16, marginBottom: 12,
+    borderRadius: 12, padding: 28, marginBottom: 20,
   };
 
   return (
@@ -73,25 +73,25 @@ export default function DealCommunications({ dealId }: { dealId: string }) {
       >
         <span
           style={{
-            fontSize: 11, fontWeight: 700, color: C.outline,
+            fontSize: 13, fontWeight: 700, color: C.outline,
             textTransform: 'uppercase', letterSpacing: '0.5px',
           }}
         >
           Record of notifications{entries ? ` (${entries.length})` : ''}
         </span>
-        <span style={{ fontSize: 11, color: C.outline }}>{open ? 'Hide' : 'Show'}</span>
+        <span style={{ fontSize: 13, color: C.outline }}>{open ? 'Hide' : 'Show'}</span>
       </button>
 
       {open && (
         <div style={{ marginTop: 10 }}>
-          <div style={{ fontSize: 11, color: C.outline, marginBottom: 8, lineHeight: 1.5 }}>
+          <div style={{ fontSize: 13, color: C.outline, marginBottom: 8, lineHeight: 1.7 }}>
             Every notification sent about this deal, visible to both parties. Timestamps are UTC.
           </div>
 
-          {!entries && !error && <div style={{ fontSize: 11, color: C.outline }}>Loading…</div>}
-          {error && <div style={{ fontSize: 11, color: C.error }}>{error}</div>}
+          {!entries && !error && <div style={{ fontSize: 13, color: C.outline }}>Loading…</div>}
+          {error && <div style={{ fontSize: 13, color: C.error }}>{error}</div>}
           {entries?.length === 0 && (
-            <div style={{ fontSize: 11, color: C.outline }}>Nothing sent yet.</div>
+            <div style={{ fontSize: 13, color: C.outline }}>Nothing sent yet.</div>
           )}
 
           {entries?.map((e) => {
@@ -107,24 +107,24 @@ export default function DealCommunications({ dealId }: { dealId: string }) {
               >
                 <span
                   style={{
-                    fontSize: 10, color: C.outline, whiteSpace: 'nowrap',
+                    fontSize: 12, color: C.outline, whiteSpace: 'nowrap',
                     fontVariantNumeric: 'tabular-nums',
                   }}
                 >
                   {new Date(e.sent_at).toISOString().replace('T', ' ').slice(0, 16)}
                 </span>
                 <span style={{ flex: 1, minWidth: 0 }}>
-                  <span style={{ fontSize: 12, color: C.text }}>
+                  <span style={{ fontSize: 14, color: C.text }}>
                     {TYPE_LABEL[e.email_type] || e.email_type}
                   </span>
                   {e.recipient_username && (
-                    <span style={{ fontSize: 10, color: C.outline }}> → {handleLabel(e.recipient_username)}</span>
+                    <span style={{ fontSize: 12, color: C.outline }}> → {handleLabel(e.recipient_username)}</span>
                   )}
                 </span>
                 {failed && (
                   <span
                     style={{
-                      fontSize: 9, color: C.error, border: `1px solid ${C.error}`,
+                      fontSize: 11, color: C.error, border: `1px solid ${C.error}`,
                       background: withAlpha(C.error, 0x14),
                       borderRadius: 4, padding: '1px 5px', whiteSpace: 'nowrap',
                     }}

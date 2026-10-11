@@ -2,12 +2,12 @@
 import Link from 'next/link';
 
 const C = {
-  bg: '#0A0A0A',
-  surface: 'rgba(10, 10, 10, 0.86)',
-  border: 'rgba(184, 180, 172, 0.18)',
-  text: '#F5F5F0',
-  textSecondary: '#B8B4AC',
-  primary: '#C8B89A',
+  bg: 'var(--c-bg)',
+  surface: 'var(--c-surface)',
+  border: 'var(--c-border)',
+  text: 'var(--c-text)',
+  textSecondary: 'var(--c-text-muted)',
+  primary: 'var(--c-primary)',
 };
 
 const sections = [
@@ -42,7 +42,7 @@ const sections = [
 
 export default function LegalHub() {
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '60px 20px' }}>
+    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '120px 24px 160px' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         <Link href="/" style={{ color: C.primary, textDecoration: 'none', fontSize: '14px', marginBottom: '32px', display: 'inline-block' }}>
           Back to Home
@@ -54,7 +54,7 @@ export default function LegalHub() {
         </p>
 
         {sections.map(section => (
-          <div key={section.title} style={{ marginBottom: '40px' }}>
+          <div key={section.title} style={{ marginBottom: '64px' }}>
             <h2 style={{ fontSize: '18px', fontWeight: 700, color: C.text, marginBottom: '16px', paddingBottom: '8px', borderBottom: `1px solid ${C.border}` }}>
               {section.title}
             </h2>

@@ -26,7 +26,7 @@ export default function OnboardingEnhanced() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
       <div style={{ width: '100%', maxWidth: '500px' }}>
         <h1 style={{ fontSize: '28px', fontWeight: 700, color: C.text, marginBottom: '12px', textAlign: 'center' }}>Welcome to ValueSkins</h1>
         <p style={{ color: C.textSecondary, marginBottom: '40px', textAlign: 'center', fontSize: '16px' }}>

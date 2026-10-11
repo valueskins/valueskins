@@ -88,7 +88,7 @@ export default function BrowseCampaigns({ initialCampaigns = [], initialPaginati
 
   return (
     <MarketplaceLayout title="Browse Campaigns" hideHeader>
-      <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto', color: C.text, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+      <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto', color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
         <h1 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px' }}>Browse Campaigns</h1>
 
         <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>

@@ -2,28 +2,28 @@
 import Link from 'next/link';
 
 const C = {
-  bg: '#0A0A0A',
-  surface: 'rgba(10, 10, 10, 0.86)',
-  border: 'rgba(184, 180, 172, 0.18)',
-  text: '#F5F5F0',
-  textSecondary: '#B8B4AC',
-  primary: '#C8B89A',
+  bg: 'var(--c-bg)',
+  surface: 'var(--c-surface)',
+  border: 'var(--c-border)',
+  text: 'var(--c-text)',
+  textSecondary: 'var(--c-text-muted)',
+  primary: 'var(--c-primary)',
 };
 
 export default function GrievanceOfficer() {
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '60px 20px' }}>
+    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '120px 24px 160px' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         <Link href="/" style={{ color: C.primary, textDecoration: 'none', fontSize: '14px', marginBottom: '32px', display: 'inline-block' }}>
           Back to Home
         </Link>
 
         <h1 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '12px' }}>Grievance Officer</h1>
-        <p style={{ color: C.textSecondary, marginBottom: '40px' }}>
+        <p style={{ color: C.textSecondary, marginBottom: '64px' }}>
           In compliance with the Information Technology Act, 2000 and the DPDP Act, 2023
         </p>
 
-        <div style={{ lineHeight: '1.8', color: C.textSecondary }}>
+        <div style={{ lineHeight: '1.9', color: C.textSecondary }}>
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '32px', marginBottom: '12px' }}>Contact Information</h2>
           <p>
             If you have any complaints, concerns, or queries regarding your data, privacy, or use of the platform, you may contact our Grievance Officer:

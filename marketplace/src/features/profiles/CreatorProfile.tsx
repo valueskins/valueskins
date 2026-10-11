@@ -10,7 +10,7 @@ import LoadingState from '@/components/LoadingState';
 // Tabbed editor (was accordion), live completion bar, reputation read-only,
 // near-black Save (no gold), sand accents (no green/orange/red). All existing
 // features + API calls preserved.
-const FONT = "'Inter', 'Helvetica Neue', Arial, sans-serif";
+const FONT = "'Poppins', 'Helvetica Neue', Arial, sans-serif";
 
 const C = {
   bg: TH.bg,

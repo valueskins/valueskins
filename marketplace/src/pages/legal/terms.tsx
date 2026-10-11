@@ -1,13 +1,13 @@
 'use client';
 import Link from 'next/link';
 
-const C = { bg: '#0A0A0A', text: '#F5F5F0', textSecondary: '#B8B4AC', primary: '#C8B89A' };
+const C = { bg: 'var(--c-bg)', text: 'var(--c-text)', textSecondary: 'var(--c-text-muted)', primary: 'var(--c-primary)' };
 
 const EMAIL = 'founder@valueskins.com';
 
 function H({ children }: { children: React.ReactNode }) {
   return (
-    <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '24px', marginBottom: '12px' }}>
+    <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, marginTop: '56px', marginBottom: '16px' }}>
       {children}
     </h2>
   );
@@ -19,12 +19,12 @@ function Mail() {
 
 export default function Terms() {
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '60px 20px' }}>
+    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '120px 24px 160px' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         <Link href="/" style={{ color: C.primary, textDecoration: 'none', fontSize: '14px', marginBottom: '32px', display: 'inline-block' }}>Back</Link>
         <h1 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '12px' }}>Terms of Service</h1>
-        <p style={{ color: C.textSecondary, marginBottom: '40px' }}>Last updated: October 8, 2026</p>
-        <div style={{ lineHeight: '1.8', color: C.textSecondary }}>
+        <p style={{ color: C.textSecondary, marginBottom: '64px' }}>Last updated: October 8, 2026</p>
+        <div style={{ lineHeight: '1.9', color: C.textSecondary }}>
 
           <H>1. Agreement to Our Legal Terms</H>
           <p>We are Valueskins Pvt. Ltd. (Company, we, us, our), a private limited company incorporated in India.</p>

@@ -10,7 +10,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     background: 'linear-gradient(180deg, #07111f 0%, #0A0A0A 40%, #111827 100%)',
-    fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+    fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
     padding: '20px',
   } as React.CSSProperties,
   card: {

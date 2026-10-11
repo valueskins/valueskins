@@ -147,7 +147,7 @@ export default function AppHeader({
                   // Was 10px on the bottom bar. This is the readable size.
                   fontSize: '0.9375rem',
                   fontWeight: active ? 600 : 500,
-                  fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+                  fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
                   cursor: 'pointer',
                   transition: 'background 160ms cubic-bezier(0.16,1,0.3,1), color 160ms linear',
                 }}

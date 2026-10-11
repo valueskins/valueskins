@@ -72,11 +72,11 @@ export default function PitchText({ role = 'creator' }: { role?: 'creator' | 'br
 
   return (
     <div style={{ marginBottom: '16px' }}>
-      <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '12px' }}>
+      <div style={{ fontSize: '14px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '16px' }}>
         {copy.title}
       </div>
-      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: '12px', padding: '16px' }}>
-        <label htmlFor="pitch-text" style={{ display: 'block', fontSize: '12px', color: C.textSecondary, marginBottom: '10px', lineHeight: 1.5 }}>
+      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: '12px', padding: '28px' }}>
+        <label htmlFor="pitch-text" style={{ display: 'block', fontSize: '14px', color: C.textSecondary, marginBottom: '16px', lineHeight: 1.7 }}>
           {copy.help}
         </label>
         <textarea
@@ -88,13 +88,13 @@ export default function PitchText({ role = 'creator' }: { role?: 'creator' | 'br
           placeholder={loading ? 'Loading…' : copy.placeholder}
           style={{
             width: '100%', background: C.bg, border: `1px solid ${over ? C.danger : C.border}`,
-            borderRadius: '8px', color: C.text, padding: '10px 12px', fontSize: '13px',
+            borderRadius: '8px', color: C.text, padding: '13px 26px', fontSize: '15px',
             fontFamily: 'inherit', outline: 'none', resize: 'vertical', boxSizing: 'border-box',
-            lineHeight: 1.5,
+            lineHeight: 1.7,
           }}
         />
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginTop: 10 }}>
-          <span style={{ fontSize: '11px', color: over ? C.danger : C.textMuted }}>
+          <span style={{ fontSize: '13px', color: over ? C.danger : C.textMuted }}>
             {text.length}/{MAX}
             {message && (
               <span role="status" style={{ marginLeft: 10, color: message.ok ? C.textSecondary : C.danger }}>
@@ -106,7 +106,7 @@ export default function PitchText({ role = 'creator' }: { role?: 'creator' | 'br
             onClick={save}
             disabled={busy || loading || !dirty || over}
             style={{
-              padding: '9px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: 700,
+              padding: '13px 26px', borderRadius: '8px', fontSize: '15px', fontWeight: 700,
               border: 'none', color: C.onPrimary,
               background: busy || loading || !dirty || over ? C.border : C.primary,
               cursor: busy || loading || !dirty || over ? 'not-allowed' : 'pointer',

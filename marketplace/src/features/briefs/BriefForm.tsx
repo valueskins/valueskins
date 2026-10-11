@@ -87,7 +87,7 @@ export default function BriefForm({ onSaved }: { onSaved: () => void }) {
   }));
 
   return (
-    <div style={{ color: C.text, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+    <div style={{ color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
       <h2 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px' }}>Create a Brief</h2>
       <p style={{ fontSize: '13px', color: C.textMuted, marginBottom: '16px' }}>Describe what you're looking for. We'll match you with relevant creators.</p>
 

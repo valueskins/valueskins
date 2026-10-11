@@ -43,9 +43,9 @@ export class ErrorBoundary extends React.Component<
           <div
             style={{
               padding: '40px',
-              background: '#fee',
+              background: 'var(--c-error-container)',
               borderRadius: '8px',
-              color: '#c00',
+              color: 'var(--c-error)',
               fontFamily: 'monospace',
             }}
           >
@@ -55,8 +55,8 @@ export class ErrorBoundary extends React.Component<
               onClick={() => this.setState({ hasError: false })}
               style={{
                 padding: '8px 16px',
-                background: '#c00',
-                color: '#fff',
+                background: 'var(--c-primary)',
+                color: 'var(--c-on-primary)',
                 border: 'none',
                 borderRadius: '4px',
                 cursor: 'pointer',

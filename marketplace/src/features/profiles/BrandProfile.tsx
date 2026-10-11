@@ -20,7 +20,7 @@ const C = {
   border: '#2D2D2D',
 };
 
-const FONT = "'Inter', 'Helvetica Neue', Arial, sans-serif";
+const FONT = "'Poppins', 'Helvetica Neue', Arial, sans-serif";
 
 interface BrandProfileData {
   display_name: string;

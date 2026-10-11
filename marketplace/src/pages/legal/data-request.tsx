@@ -3,12 +3,12 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 const C = {
-  bg: '#0A0A0A',
-  surface: 'rgba(10, 10, 10, 0.86)',
-  border: 'rgba(184, 180, 172, 0.18)',
-  text: '#F5F5F0',
-  textSecondary: '#B8B4AC',
-  primary: '#C8B89A',
+  bg: 'var(--c-bg)',
+  surface: 'var(--c-surface)',
+  border: 'var(--c-border)',
+  text: 'var(--c-text)',
+  textSecondary: 'var(--c-text-muted)',
+  primary: 'var(--c-primary)',
 };
 
 export default function DataRequestPage() {
@@ -37,7 +37,7 @@ export default function DataRequestPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '60px 20px' }}>
+    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '120px 24px 160px' }}>
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
         <Link href="/legal" style={{ color: C.primary, textDecoration: 'none', fontSize: '14px', marginBottom: '32px', display: 'inline-block' }}>
           Back to Legal

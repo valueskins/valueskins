@@ -104,32 +104,32 @@ export default function ProfileDetails({ role }: { role: Role }) {
   const off = busy || loading || (locked ? !followersChanged : !understood);
 
   const label: React.CSSProperties = {
-    display: 'block', fontSize: '11px', fontWeight: 700, color: C.textMuted,
+    display: 'block', fontSize: '13px', fontWeight: 700, color: C.textMuted,
     textTransform: 'uppercase', marginBottom: '6px',
   };
   const input = (field: string): React.CSSProperties => ({
     width: '100%', background: C.bg,
     border: `1px solid ${message && !message.ok && message.field === field ? C.danger : C.border}`,
-    borderRadius: '8px', color: C.text, padding: '10px 12px', fontSize: '13px',
+    borderRadius: '8px', color: C.text, padding: '13px 26px', fontSize: '15px',
     fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box', marginBottom: '14px',
   });
   const fixed = (k: string, v: string) => (
     <div key={k} style={{ marginBottom: '14px' }}>
       <div style={label}>{k}</div>
-      <div style={{ fontSize: '13px', color: C.text, fontWeight: 600, wordBreak: 'break-word' }}>{v || 'Not given'}</div>
+      <div style={{ fontSize: '15px', color: C.text, fontWeight: 600, wordBreak: 'break-word' }}>{v || 'Not given'}</div>
     </div>
   );
 
   return (
-    <div style={{ marginBottom: '24px' }}>
-      <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '12px' }}>
+    <div style={{ marginBottom: '56px' }}>
+      <div style={{ fontSize: '14px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '16px' }}>
         Profile
       </div>
 
       {/* Said before anything is typed, not after. */}
       <div
         style={{
-          fontSize: '12px', color: C.text, lineHeight: 1.6, marginBottom: '12px',
+          fontSize: '14px', color: C.text, lineHeight: 1.6, marginBottom: '16px',
           background: withAlpha(C.accent, 0x14), border: `1px solid ${C.accent}`,
           borderRadius: '10px', padding: '12px 14px',
         }}
@@ -138,7 +138,7 @@ export default function ProfileDetails({ role }: { role: Role }) {
         your profile.
       </div>
 
-      <form onSubmit={save} style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: '12px', padding: '16px' }}>
+      <form onSubmit={save} style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: '12px', padding: '28px' }}>
         {/* The form is on screen from the first paint. It used to wait for the
             saved details to arrive, and until they did the card was an empty
             box the same colour as the page, which read as "nothing here". The
@@ -149,10 +149,10 @@ export default function ProfileDetails({ role }: { role: Role }) {
         {(
           <div style={{ marginBottom: '14px', paddingBottom: '14px', borderBottom: `1px solid ${C.border}` }}>
             <div style={label}>Account type</div>
-            <div style={{ fontSize: '14px', color: C.text, fontWeight: 700 }}>
+            <div style={{ fontSize: '16px', color: C.text, fontWeight: 700 }}>
               {role === 'brand' ? 'Brand' : 'Creator'}
             </div>
-            <div style={{ fontSize: '11px', color: C.textMuted, lineHeight: 1.5, marginTop: 4 }}>
+            <div style={{ fontSize: '13px', color: C.textMuted, lineHeight: 1.7, marginTop: 4 }}>
               {role === 'brand'
                 ? 'Your Instagram account is a Business account, so you post deals.'
                 : 'Your Instagram account is a Creator account, so you apply to deals.'}
@@ -168,7 +168,7 @@ export default function ProfileDetails({ role }: { role: Role }) {
             {role === 'creator' && fixed('Gender', gender)}
             {role === 'brand' && fixed('Website', website)}
             {fixed('City', city)}
-            <div style={{ fontSize: '11px', color: C.textMuted, lineHeight: 1.5, margin: '-4px 0 14px' }}>
+            <div style={{ fontSize: '13px', color: C.textMuted, lineHeight: 1.7, margin: '-4px 0 14px' }}>
               These were saved once and cannot be changed.
               {role === 'creator' ? ' Your age goes up by one each year without you doing anything.' : ''}
             </div>
@@ -241,7 +241,7 @@ export default function ProfileDetails({ role }: { role: Role }) {
               onChange={(e) => { setFollowers(e.target.value); setMessage(null); }}
               style={input('followers')}
             />
-            <div style={{ fontSize: '11px', color: C.textMuted, lineHeight: 1.5, margin: '-8px 0 14px' }}>
+            <div style={{ fontSize: '13px', color: C.textMuted, lineHeight: 1.7, margin: '-8px 0 14px' }}>
               You can update this whenever it changes. The new number shows on your profile straight away.
             </div>
           </>
@@ -250,8 +250,8 @@ export default function ProfileDetails({ role }: { role: Role }) {
         {!locked && (
           <label
             style={{
-              display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: '12px',
-              color: C.text, lineHeight: 1.55, marginBottom: '14px', cursor: 'pointer',
+              display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: '14px',
+              color: C.text, lineHeight: 1.7, marginBottom: '14px', cursor: 'pointer',
             }}
           >
             <input
@@ -269,13 +269,13 @@ export default function ProfileDetails({ role }: { role: Role }) {
         </fieldset>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
-          <span role="status" style={{ fontSize: '11px', color: message?.ok === false ? C.danger : C.textSecondary }}>
+          <span role="status" style={{ fontSize: '13px', color: message?.ok === false ? C.danger : C.textSecondary }}>
             {message?.text || (loading ? 'Loading your saved details…' : '')}
           </span>
           <button
             type="submit" disabled={off}
             style={{
-              padding: '9px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: 700,
+              padding: '13px 26px', borderRadius: '8px', fontSize: '15px', fontWeight: 700,
               border: 'none', color: C.onPrimary,
               background: off ? C.border : C.primary, cursor: off ? 'not-allowed' : 'pointer',
             }}

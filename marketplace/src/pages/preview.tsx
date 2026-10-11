@@ -36,7 +36,7 @@ export default function PreviewPage() {
           background: '#A08A5E',
           color: '#0A0A0A',
           textAlign: 'center',
-          fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+          fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
           fontSize: '11px',
           fontWeight: 700,
           letterSpacing: '0.08em',

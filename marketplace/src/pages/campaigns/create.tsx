@@ -176,32 +176,32 @@ export default function CreateCampaign() {
 
   const field: React.CSSProperties = { marginBottom: 20 };
   const lbl: React.CSSProperties = {
-    display: 'block', fontSize: 12, fontWeight: 600,
+    display: 'block', fontSize: 14, fontWeight: 600,
     color: C.outline, marginBottom: 6,
   };
   const input: React.CSSProperties = {
     width: '100%', background: C.surfaceAlt, border: `1px solid ${C.border}`,
-    borderRadius: 8, color: C.text, padding: '10px 12px', fontSize: 14,
+    borderRadius: 8, color: C.text, padding: '13px 26px', fontSize: 16,
     fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box',
   };
 
   return (
     <>
       <Head><title>Post a deal · ValueSkins</title></Head>
-      <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '24px 16px 48px' }}>
+      <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '72px 24px 140px' }}>
         <div style={{ maxWidth: 560, margin: '0 auto' }}>
           <button
             onClick={() => router.push('/campaigns')}
             style={{
               background: 'none', border: 'none', color: C.outline,
-              fontSize: 12, cursor: 'pointer', padding: 0, marginBottom: 14,
+              fontSize: 14, cursor: 'pointer', padding: 0, marginBottom: 14,
             }}
           >
             ← Your deals
           </button>
 
-          <h1 style={{ fontSize: 20, fontWeight: 700, margin: '0 0 4px' }}>Post a deal</h1>
-          <p style={{ fontSize: 12, color: C.outline, margin: '0 0 22px' }}>
+          <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>Post a deal</h1>
+          <p style={{ fontSize: 14, color: C.outline, margin: '0 0 22px' }}>
             Instagram collabs. The amount you set is final, so creators either apply or they do not.
           </p>
 
@@ -227,7 +227,7 @@ export default function CreateCampaign() {
                 aria-describedby="budget-help"
               />
               {!budgetValid && (
-                <div id="budget-help" style={{ fontSize: 12, color: budgetText ? C.error : C.outline, marginTop: 6 }}>
+                <div id="budget-help" style={{ fontSize: 14, color: budgetText ? C.error : C.outline, marginTop: 6 }}>
                   {!budgetText
                     ? 'Enter the total you will spend. The breakdown appears as you type.'
                     : budget > MAX_BUDGET
@@ -246,13 +246,13 @@ export default function CreateCampaign() {
                 style={{
                   background: withAlpha(C.primary, 0x12),
                   border: `1px solid ${C.accent}`,
-                  borderRadius: 10, padding: 16, marginTop: 12,
+                  borderRadius: 10, padding: 28, marginTop: 12,
                 }}
               >
                 <div
                   style={{
-                    fontSize: 11, fontWeight: 700, color: C.text,
-                    textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 12,
+                    fontSize: 13, fontWeight: 700, color: C.text,
+                    textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 20,
                   }}
                 >
                   Payment breakdown
@@ -264,14 +264,14 @@ export default function CreateCampaign() {
                 ] as [string, string, boolean][]).map(([k, v, strong]) => (
                   <div
                     key={k}
-                    style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6 }}
+                    style={{ display: 'flex', justifyContent: 'space-between', fontSize: 15, marginBottom: 6 }}
                   >
                     <span style={{ color: C.textMuted }}>{k}</span>
                     <span style={{ color: C.text, fontWeight: strong ? 700 : 500 }}>{v}</span>
                   </div>
                 ))}
                 <div style={{ borderTop: `1px solid ${C.border}`, marginTop: 10, paddingTop: 10 }}>
-                  <div style={{ fontSize: 11, color: C.outline, marginBottom: 6 }}>
+                  <div style={{ fontSize: 13, color: C.outline, marginBottom: 6 }}>
                     You pay the creator directly, in two parts
                   </div>
                   {([
@@ -280,7 +280,7 @@ export default function CreateCampaign() {
                   ] as [string, number][]).map(([k, v]) => (
                     <div
                       key={k}
-                      style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 3 }}
+                      style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, marginBottom: 3 }}
                     >
                       <span style={{ color: C.textMuted }}>{k}</span>
                       <span style={{ color: C.text, fontWeight: 600 }}>
@@ -303,15 +303,15 @@ export default function CreateCampaign() {
                     key={k.key}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 12,
-                      padding: '10px 12px', background: C.surface,
+                      padding: '13px 26px', background: C.surface,
                       borderTop: i === 0 ? 'none' : `1px solid ${C.border}`,
                     }}
                   >
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 14, fontWeight: counts[k.key] > 0 ? 700 : 500 }}>
+                      <div style={{ fontSize: 16, fontWeight: counts[k.key] > 0 ? 700 : 500 }}>
                         {k.label}
                       </div>
-                      <div style={{ fontSize: 11, color: C.outline }}>{k.hint}</div>
+                      <div style={{ fontSize: 13, color: C.outline }}>{k.hint}</div>
                     </div>
                     <button
                       type="button" aria-label={`One fewer ${k.label}`}
@@ -320,7 +320,7 @@ export default function CreateCampaign() {
                       style={{
                         width: 32, height: 32, borderRadius: 6,
                         border: `1px solid ${C.border}`, background: 'transparent',
-                        color: C.text, fontSize: 16,
+                        color: C.text, fontSize: 18,
                         cursor: counts[k.key] === 0 ? 'not-allowed' : 'pointer',
                         opacity: counts[k.key] === 0 ? 0.4 : 1,
                       }}
@@ -330,7 +330,7 @@ export default function CreateCampaign() {
                     <div
                       aria-live="polite"
                       style={{
-                        minWidth: 26, textAlign: 'center', fontSize: 15,
+                        minWidth: 26, textAlign: 'center', fontSize: 17,
                         fontWeight: 700, fontVariantNumeric: 'tabular-nums',
                         color: counts[k.key] > 0 ? C.text : C.outline,
                       }}
@@ -343,7 +343,7 @@ export default function CreateCampaign() {
                       style={{
                         width: 32, height: 32, borderRadius: 6, border: 'none',
                         background: C.primary, color: C.onPrimary,
-                        fontSize: 16, cursor: 'pointer',
+                        fontSize: 18, cursor: 'pointer',
                       }}
                     >
                       +
@@ -351,7 +351,7 @@ export default function CreateCampaign() {
                   </div>
                 ))}
               </div>
-              <div style={{ fontSize: 11, color: totalItems ? C.textMuted : C.error, marginTop: 6 }}>
+              <div style={{ fontSize: 13, color: totalItems ? C.textMuted : C.error, marginTop: 6 }}>
                 {totalItems ? deliverableSummary : 'Add at least one deliverable.'}
               </div>
             </div>
@@ -361,7 +361,7 @@ export default function CreateCampaign() {
               <label style={lbl}>Timeline</label>
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                 <div style={{ flex: 1, minWidth: 150 }}>
-                  <label htmlFor="approval" style={{ ...lbl, fontSize: 11, marginBottom: 4 }}>
+                  <label htmlFor="approval" style={{ ...lbl, fontSize: 13, marginBottom: 4 }}>
                     Final approval by
                   </label>
                   <input
@@ -372,7 +372,7 @@ export default function CreateCampaign() {
                   />
                 </div>
                 <div style={{ flex: 1, minWidth: 150 }}>
-                  <label htmlFor="posting" style={{ ...lbl, fontSize: 11, marginBottom: 4 }}>
+                  <label htmlFor="posting" style={{ ...lbl, fontSize: 13, marginBottom: 4 }}>
                     Final posting by
                   </label>
                   <input
@@ -383,7 +383,7 @@ export default function CreateCampaign() {
                   />
                 </div>
               </div>
-              <div style={{ fontSize: 11, color: C.outline, marginTop: 6 }}>
+              <div style={{ fontSize: 13, color: C.outline, marginTop: 6 }}>
                 Applications close partway to the approval date, so whoever you pick has time to shoot.
               </div>
             </div>
@@ -407,7 +407,7 @@ export default function CreateCampaign() {
             </div>
 
             {error && (
-              <div role="alert" style={{ color: C.error, fontSize: 13, marginBottom: 12 }}>
+              <div role="alert" style={{ color: C.error, fontSize: 15, marginBottom: 20 }}>
                 {error}
               </div>
             )}
@@ -416,10 +416,10 @@ export default function CreateCampaign() {
               type="submit"
               disabled={loading || totalItems === 0 || !budgetValid}
               style={{
-                width: '100%', padding: '14px',
+                width: '100%', padding: '28px',
                 background: loading || totalItems === 0 || !budgetValid ? C.border : C.primary,
                 color: C.onPrimary, border: 'none', borderRadius: 8,
-                fontSize: 15, fontWeight: 700,
+                fontSize: 17, fontWeight: 700,
                 cursor: loading || totalItems === 0 || !budgetValid ? 'not-allowed' : 'pointer',
               }}
             >

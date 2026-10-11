@@ -4,12 +4,12 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 
 const C = {
-  primary: '#0A0A0A',
-  bg: '#ffffff',
-  surface: '#f9fafb',
+  primary: 'var(--c-primary)',
+  bg: 'var(--c-bg)',
+  surface: 'var(--c-surface)',
   text: 'var(--c-text)',
-  textSecondary: 'var(--c-text-variant)',
-  border: '#e5e7eb',
+  textSecondary: 'var(--c-text-muted)',
+  border: 'var(--c-border)',
   error: 'var(--c-error)',
   success: 'var(--c-accent)',
 };
@@ -128,7 +128,7 @@ export default function LocationsSettings() {
         <title>Manage Locations - ValueSkins</title>
       </Head>
 
-      <div style={{ minHeight: '100vh', background: C.surface, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+      <div style={{ minHeight: '100vh', background: C.surface, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', padding: '32px 20px' }}>
           <h1 style={{ fontSize: '24px', fontWeight: 700, color: C.text, marginBottom: '24px' }}>
             📍 Your Locations

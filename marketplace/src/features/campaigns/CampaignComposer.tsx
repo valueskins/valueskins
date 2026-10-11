@@ -15,7 +15,7 @@ import { ValueSkinSprite } from '@/features/profiles/ProfileView';
 // exact values by the spec. Currency stays unset (GP3 / flagged F1) — the
 // symbol arrives as a prop.
 
-const FONT = "'Inter', 'Helvetica Neue', Arial, sans-serif";
+const FONT = "'Poppins', 'Helvetica Neue', Arial, sans-serif";
 
 // Sand is identical in both themes, so these stay literal (BRANDING §4).
 const WARM_SAND = '#C8B89A';

@@ -42,7 +42,7 @@ export default function UpiPayButton({
   }, [link]);
 
   return (
-    <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap', marginBottom: 12 }}>
+    <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap', marginBottom: 20 }}>
       {qr && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -58,13 +58,13 @@ export default function UpiPayButton({
           href={link}
           style={{
             display: 'inline-block', background: C.primary, color: C.onPrimary,
-            borderRadius: 8, padding: '11px 14px', fontWeight: 600, fontSize: 13,
+            borderRadius: 8, padding: '13px 26px', fontWeight: 600, fontSize: 15,
             textDecoration: 'none',
           }}
         >
           Pay in UPI app
         </a>
-        <div style={{ fontSize: 11, color: C.outline, lineHeight: 1.5, marginTop: 8 }}>
+        <div style={{ fontSize: 13, color: C.outline, lineHeight: 1.7, marginTop: 8 }}>
           On a phone, tap the button. On a computer, scan the code with your UPI app.
         </div>
       </div>

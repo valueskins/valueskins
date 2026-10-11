@@ -22,129 +22,68 @@
    G7: dark is the default. The bare :root carries the dark palette so a no-JS
    render is dark, and _document stamps a stored preference before first paint. */
 
+/* One palette: white ground, near-black text, grey for secondary text and
+   hairlines. There is no dark theme. Both data-theme values resolve to the
+   same colours, so a preference stored by an older version of the site cannot
+   bring the old dark palette back. */
 :root,
-:root[data-theme="dark"] {
-  /* primary inverts: the strong action surface is Off White on Near Black */
-  --c-primary: #F5F5F0;
-  --c-primary-container: #1A1A19;
-  --c-on-primary: #0A0A0A;
-  --c-on-primary-container: #B8B4AC;
-  --c-secondary: #B8B4AC;
-
-  --c-bg: #0A0A0A;
-  --c-surface: #0F0F0E;
-  --c-surface-bright: #1F1F1D;
-  --c-surface-dim: #0A0A0A;
-  --c-surface-lowest: #0F0F0E;
-  --c-surface-low: #131312;
-  --c-surface-container: #171716;
-  --c-surface-high: #1F1F1D;
-  --c-surface-highest: #2D2D2D;
-
-  --c-text: #F5F5F0;          /* Off White */
-  --c-text-muted: #B8B4AC;    /* Muted Grey — §4's role is exactly this */
-  --c-text-variant: #B8B4AC;
-
-  --c-outline: #2D2D2D;
-  --c-outline-variant: #1F1F1D;
-  --c-border: #2D2D2D;        /* Charcoal — §6: borders/dividers on dark */
-  --c-border-light: #1F1F1D;
-
-  --c-inverse-surface: #F5F5F0;
-  --c-inverse-on-surface: #0A0A0A;
-
-  /* §4 has no red. §10.7 forbids loud red fills; this is a restrained brick
-     for inline error text and confirm dialogs only, never a resting CTA. */
-  --c-error: #D98682;
-  --c-error-container: #2A1614;
-  --c-on-error: #0A0A0A;
-  --c-on-error-container: #F3E3E1;
-
-  --c-accent: #C8B89A;        /* Warm Sand */
-  --c-accent-bright: #C8B89A;
-  --c-tertiary-container: #1F1B14;
-  --c-on-tertiary-container: #C8B89A;
-  --c-warning: #C8B89A;
-
-  /* Wordmark — BRANDING §3 exact values, dark treatment. */
-  --c-logo-word: #F5F5F0;
-  --c-logo-tag:  #B8B4AC;
-  --c-logo-dot:  #C8B89A;
-
-  /* ValueSkin pixel garment. Charcoal in both themes: a mid tone reads against
-     Near Black and against Off White, which is what the old #3B6FB0 blue was
-     doing by accident before §4 ruled it out. */
-  --c-skin-garment: #2D2D2D;
-
-  /* Form fields + rules, themed (were pinned near-black in @layer base). */
-  --c-field-bg: #0F0F0E;
-  --c-field-border: #2D2D2D;
-  --c-placeholder: #B8B4AC;
-  --c-scrollbar-track: #0A0A0A;
-  --c-scrollbar-thumb: #2D2D2D;
-  --c-scrollbar-thumb-hover: #B8B4AC;
-  --c-selection-text: #F5F5F0;
-}
-
-/* Light — Off White ground, Near Black text, Charcoal for secondary, Deep Sand
-   as the accent (§4 gives Deep Sand exactly that role on off-white surfaces).
-   Cards sit flat on the ground and separate with a Deep Sand hairline rather
-   than a white fill — §6: "Borders & dividers: hairline sand or light grey
-   (light). Thin, quiet." */
+:root[data-theme="dark"],
 :root[data-theme="light"] {
-  --c-primary: #0A0A0A;
-  --c-primary-container: #EFEADF;
-  --c-on-primary: #F5F5F0;
-  --c-on-primary-container: #2D2D2D;
-  --c-secondary: #2D2D2D;
+  --c-primary: #111111;
+  --c-primary-container: #f5f5f5;
+  --c-on-primary: #ffffff;
+  --c-on-primary-container: #111111;
+  --c-secondary: #666666;
 
-  --c-bg: #F5F5F0;            /* Off White */
-  --c-surface: #F5F5F0;
-  --c-surface-bright: #F5F5F0;
-  --c-surface-dim: #EFEADF;
-  --c-surface-lowest: #F5F5F0;
-  --c-surface-low: #F5F5F0;
-  --c-surface-container: #F2EEE4;
-  --c-surface-high: #EFEADF;
-  --c-surface-highest: #EAE2D0;
+  --c-bg: #ffffff;
+  --c-surface: #ffffff;
+  --c-surface-bright: #ffffff;
+  --c-surface-dim: #f5f5f5;
+  --c-surface-lowest: #ffffff;
+  --c-surface-low: #fafafa;
+  --c-surface-container: #f5f5f5;
+  --c-surface-high: #f0f0f0;
+  --c-surface-highest: #e3e3e3;
 
-  --c-text: #0A0A0A;          /* Near Black */
-  --c-text-muted: #2D2D2D;    /* Charcoal — §4's light-surface secondary */
-  --c-text-variant: #2D2D2D;
+  --c-text: #111111;
+  --c-text-muted: #666666;
+  --c-text-variant: #666666;
 
-  --c-outline: #A08A5E;
-  --c-outline-variant: rgba(160, 138, 94, 0.24);
-  --c-border: rgba(160, 138, 94, 0.34);   /* Deep Sand hairline */
-  --c-border-light: rgba(160, 138, 94, 0.18);
+  /* Used across the app as the colour of small secondary text, so it is a
+     readable grey rather than a hairline colour. */
+  --c-outline: #767676;
+  --c-outline-variant: #e3e3e3;
+  --c-border: #e3e3e3;
+  --c-border-light: #eeeeee;
 
-  --c-inverse-surface: #0A0A0A;
-  --c-inverse-on-surface: #F5F5F0;
+  --c-inverse-surface: #111111;
+  --c-inverse-on-surface: #ffffff;
 
-  --c-error: #B0413E;
-  --c-error-container: #F3E3E1;
-  --c-on-error: #F5F5F0;
-  --c-on-error-container: #7A2B29;
+  /* The one colour that is not black, white or grey: errors. */
+  --c-error: #b42318;
+  --c-error-container: #fdecea;
+  --c-on-error: #ffffff;
+  --c-on-error-container: #7a1810;
 
-  --c-accent: #A08A5E;        /* Deep Sand */
-  --c-accent-bright: #C8B89A;
-  --c-tertiary-container: #EFEADF;
-  --c-on-tertiary-container: #A08A5E;
-  --c-warning: #A08A5E;
+  --c-accent: #111111;
+  --c-accent-bright: #111111;
+  --c-tertiary-container: #f5f5f5;
+  --c-on-tertiary-container: #111111;
+  --c-warning: #111111;
 
-  /* Wordmark — BRANDING §3 exact values, light treatment. */
-  --c-logo-word: #0A0A0A;
-  --c-logo-tag:  #2D2D2D;
-  --c-logo-dot:  #A08A5E;
+  --c-logo-word: #111111;
+  --c-logo-tag:  #666666;
+  --c-logo-dot:  #111111;
 
   --c-skin-garment: #2D2D2D;
 
-  --c-field-bg: #F5F5F0;
-  --c-field-border: rgba(160, 138, 94, 0.34);
-  --c-placeholder: #2D2D2D;
-  --c-scrollbar-track: #EFEADF;
-  --c-scrollbar-thumb: rgba(160, 138, 94, 0.40);
-  --c-scrollbar-thumb-hover: #A08A5E;
-  --c-selection-text: #0A0A0A;
+  --c-field-bg: #ffffff;
+  --c-field-border: #e3e3e3;
+  --c-placeholder: #999999;
+  --c-scrollbar-track: #ffffff;
+  --c-scrollbar-thumb: #d0d0d0;
+  --c-scrollbar-thumb-hover: #999999;
+  --c-selection-text: #111111;
 }
 
 body {
@@ -152,20 +91,11 @@ body {
   color: var(--c-text);
 }
 
-/* The light ground carries a faint Off White → Warm Sand wash. Tonal and
-   single-family, which §10.2 permits; the top-left two-thirds of the page
-   still reads as flat #F5F5F0. On a fixed pseudo-layer rather than
-   background-attachment:fixed, which janks on iOS and would otherwise stretch
-   the radial down a 17,000px legal page. */
-:root[data-theme="light"] body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(72% 55% at 84% -10%, rgba(200, 184, 154, 0.18), transparent 60%),
-    linear-gradient(150deg, #F5F5F0 0%, #F2EEE4 62%, #EAE2D0 100%);
+/* Native controls (checkboxes, date pickers, scrollbars) follow this. The
+   boot script may still stamp "dark" from an old stored preference, so it is
+   pinned here. */
+html {
+  color-scheme: light !important;
 }
 
 
@@ -196,7 +126,7 @@ body {
     /* themed — the palette block above owns the actual colours */
     background: var(--c-bg);
     color: var(--c-text);
-    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Poppins', 'Helvetica Neue', Arial, sans-serif;
     font-size: 1rem; /* G6: 16px base, no smaller root */
     line-height: 1.6;
     /* dvh, never vh — mobile browser chrome makes 100vh overflow */
@@ -211,7 +141,7 @@ body {
 
   /* G3: sand selection, never pink */
   ::selection {
-    background: rgba(200, 184, 154, 0.28);
+    background: rgba(17, 17, 17, 0.12);
     color: var(--c-selection-text);
   }
 
@@ -236,8 +166,8 @@ body {
   /* G3/G5: sand focus ring, never pink/blue */
   :focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(160, 138, 94, 0.5);
-    border-color: rgba(160, 138, 94, 0.5);
+    box-shadow: 0 0 0 2px rgba(17, 17, 17, 0.35);
+    border-color: rgba(17, 17, 17, 0.35);
   }
 
   a, button, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"]) {
@@ -245,10 +175,53 @@ body {
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    letter-spacing: -0.02em;
     line-height: 1.3;
+  }
+
+  /* Page and section titles: upper case, widely spaced. !important because
+     nearly every heading in the app sets its own inline style, and a title
+     that kept its old tight spacing on one page is what "not uniform" means. */
+  h1, h2 {
+    text-transform: uppercase;
+    letter-spacing: 0.14em !important;
+  }
+
+  /* Every button is a pill with small, spaced, upper-case text. Inline styles
+     across the app give buttons their own radius and casing; this is the one
+     place that makes them all the same. Text inputs are untouched. */
+  button {
+    border-radius: 999px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  button {
+    font-size: 12px !important;
+    font-weight: 600;
+  }
+
+  /* Text fields share one size and shape. */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea {
+    border-radius: 10px !important;
+    font-size: 15px !important;
+    line-height: 1.5;
+  }
+
+  /* Field labels and small headings above cards: spaced capitals, like the
+     section titles, so every label on the site reads the same way. */
+  label {
+    letter-spacing: 0.08em;
+  }
+
+  /* Links inside running text are underlined: with one text colour, the
+     underline is the only thing that marks them as links. */
+  p a, li a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   h1 { font-size: 28px; }
@@ -275,7 +248,7 @@ body {
     color: var(--c-text);
     border-radius: 6px;
     padding: 10px 14px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 1rem; /* G6: inputs >= 16px to avoid iOS zoom-on-focus */
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
@@ -283,7 +256,7 @@ body {
   /* G3/G5: sand focus ring on inputs, never pink */
   input:focus, textarea:focus, select:focus {
     border-color: var(--c-accent);
-    box-shadow: 0 0 0 3px rgba(160, 138, 94, 0.16);
+    box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.10);
     outline: none;
   }
 
@@ -293,7 +266,7 @@ body {
 
   button {
     cursor: pointer;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
   }
 
   hr {
@@ -308,7 +281,7 @@ body {
     align-items: center;
     gap: 0.75rem;
     padding: 0.6rem 1rem;
-    color: #737373;
+    color: var(--c-text-muted);
     font-size: 14px;
     font-weight: 400;
     letter-spacing: -0.01em;
@@ -318,31 +291,31 @@ body {
   }
 
   .nav-item:hover {
-    color: #e5e5e5;
-    background: rgba(255, 255, 255, 0.03);
+    color: var(--c-text);
+    background: var(--c-surface-container);
   }
 
   .nav-item-active {
-    color: #fff;
-    background: rgba(200, 184, 154, 0.12);
-    border-left: 2px solid #C8B89A;
+    color: var(--c-text);
+    background: var(--c-surface-container);
+    border-left: 2px solid var(--c-accent);
   }
 
   .btn-primary {
-    background: #0A0A0A;
-    color: #fff;
+    background: var(--c-primary);
+    color: var(--c-on-primary);
     font-weight: 500;
     padding: 10px 20px;
     border-radius: 8px;
     border: none;
     font-size: 14px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     letter-spacing: -0.01em;
   }
 
   .btn-primary:hover {
-    background: #2D2D2D;
+    background: var(--c-primary);
     transform: translateY(-1px);
     box-shadow: 0 4px 16px rgba(10, 10, 10, 0.25);
   }
@@ -353,47 +326,47 @@ body {
 
   .btn-secondary {
     background: transparent;
-    border: 1px solid #1a1a1a;
-    color: #a3a3a3;
+    border: 1px solid var(--c-border);
+    color: var(--c-text-muted);
     padding: 10px 20px;
     border-radius: 8px;
     font-weight: 400;
     font-size: 14px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .btn-secondary:hover {
-    border-color: #333;
-    color: #e5e5e5;
-    background: rgba(255, 255, 255, 0.02);
+    border-color: var(--c-border);
+    color: var(--c-on-primary);
+    background: var(--c-surface-container);
   }
 
   .card-surface {
-    background: #0a0a0a;
+    background: var(--c-surface);
     padding: 20px;
     border-radius: 10px;
-    border: 1px solid #1a1a1a;
+    border: 1px solid var(--c-border);
     transition: border-color 0.2s ease;
   }
 
   .card-surface:hover {
-    border-color: #262626;
+    border-color: var(--c-border);
   }
 
   .card-surface-high {
-    background: #0a0a0a;
+    background: var(--c-surface);
     padding: 20px;
     border-radius: 10px;
-    border: 1px solid #1a1a1a;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--c-border);
+    box-shadow: none;
   }
 
   .card-glow {
-    background: #0a0a0a;
+    background: var(--c-surface);
     padding: 1.5rem;
     border-radius: 10px;
-    border: 1px solid #1a1a1a;
+    border: 1px solid var(--c-border);
     position: relative;
   }
 
@@ -401,51 +374,51 @@ body {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: #0a0a0a;
+    background: var(--c-surface);
     overflow: hidden;
-    border: 1px solid #1a1a1a;
+    border: 1px solid var(--c-border);
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   .tag-primary {
-    background: rgba(200, 184, 154, 0.14);
-    color: #C8B89A;
+    background: var(--c-surface-container);
+    color: var(--c-text);
     padding: 2px 10px;
     font-size: 11px;
     border-radius: 999px;
     font-weight: 500;
     letter-spacing: 0.02em;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
   }
 
   .tag-secondary {
-    background: rgba(255, 255, 255, 0.04);
-    color: #a3a3a3;
+    background: var(--c-surface-container);
+    color: var(--c-text-muted);
     padding: 2px 10px;
     font-size: 11px;
     border-radius: 999px;
     font-weight: 400;
     letter-spacing: 0.02em;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
   }
 }
 
 @layer utilities {
   .text-headline {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
     letter-spacing: -0.02em;
   }
 
   .text-label {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-size: 11px;
     font-weight: 500;
-    color: #737373;
+    color: var(--c-text-muted);
   }
 
 }

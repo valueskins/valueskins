@@ -61,15 +61,15 @@ export default function CreatorResume({ username }: { username: string }) {
     background: C.surfaceAlt,
     border: `1px solid ${C.border}`,
     borderRadius: 8,
-    padding: 12,
+    padding: 18,
     marginTop: 8,
     textAlign: 'left',
   };
 
-  if (loading) return <div style={{ ...box, fontSize: 11, color: C.outline }}>Loading history…</div>;
+  if (loading) return <div style={{ ...box, fontSize: 13, color: C.outline }}>Loading history…</div>;
   if (error || !resume) {
     return (
-      <div style={{ ...box, fontSize: 11, color: C.outline }}>
+      <div style={{ ...box, fontSize: 13, color: C.outline }}>
         Could not load this creator&apos;s history.
       </div>
     );
@@ -82,7 +82,7 @@ export default function CreatorResume({ username }: { username: string }) {
 
   return (
     <div style={box}>
-      <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 6 }}>
+      <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 6 }}>
         {linkable ? (
           <a
             href={instagramUrl(handle)}
@@ -95,14 +95,14 @@ export default function CreatorResume({ username }: { username: string }) {
         ) : (
           <span style={{ color: C.outline, fontWeight: 500 }}>{handleLabel(handle)}</span>
         )}
-        <span style={{ marginLeft: 8, fontSize: 10, fontWeight: 600, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+        <span style={{ marginLeft: 8, fontSize: 12, fontWeight: 600, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
           {resume.role === 'brand' ? 'Brand' : 'Creator'}
         </span>
       </div>
 
       {/* The essentials: name, age, gender, location. */}
       {(resume.name || resume.age || resume.gender || resume.city) && (
-        <div style={{ fontSize: 11, color: C.textMuted, marginBottom: 8, lineHeight: 1.5 }}>
+        <div style={{ fontSize: 13, color: C.textMuted, marginBottom: 8, lineHeight: 1.7 }}>
           {[
             resume.name,
             resume.age ? `${resume.age} yrs` : '',
@@ -113,7 +113,7 @@ export default function CreatorResume({ username }: { username: string }) {
       )}
 
       {resume.website && /^https?:\/\//i.test(resume.website) && (
-        <div style={{ fontSize: 11, marginBottom: 8 }}>
+        <div style={{ fontSize: 13, marginBottom: 8 }}>
           <a href={resume.website} target="_blank" rel="noopener noreferrer nofollow" style={{ color: C.text }}>
             {resume.website.replace(/^https?:\/\//i, '').replace(/\/$/, '')}
           </a>
@@ -122,25 +122,25 @@ export default function CreatorResume({ username }: { username: string }) {
 
       {/* Present only for someone who shares a deal with this user. */}
       {resume.email && (
-        <div style={{ fontSize: 11, marginBottom: 10 }}>
+        <div style={{ fontSize: 13, marginBottom: 20 }}>
           <span style={{ color: C.outline }}>Contact: </span>
           <a href={`mailto:${resume.email}`} style={{ color: C.text }}>{resume.email}</a>
         </div>
       )}
 
       {resume.pitch && (
-        <div style={{ fontSize: 11, color: C.text, lineHeight: 1.5, marginBottom: 10, whiteSpace: 'pre-wrap' }}>
+        <div style={{ fontSize: 13, color: C.text, lineHeight: 1.7, marginBottom: 20, whiteSpace: 'pre-wrap' }}>
           {resume.pitch}
         </div>
       )}
 
       {ig.bio && (
-        <div style={{ fontSize: 11, color: C.textMuted, lineHeight: 1.5, marginBottom: 10 }}>
+        <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.7, marginBottom: 20 }}>
           {ig.bio}
         </div>
       )}
 
-      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 10 }}>
+      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 20 }}>
         {[
           ['Followers', ig.followers.toLocaleString('en-IN')],
           // Zero here means Meta has not approved the analytics scope rather
@@ -150,24 +150,24 @@ export default function CreatorResume({ username }: { username: string }) {
           ['Earned', stats.total_value ? `₹${Math.round(stats.total_value).toLocaleString('en-IN')}` : '-'],
         ].map(([k, v]) => (
           <div key={k}>
-            <div style={{ fontSize: 9, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.4px' }}>{k}</div>
-            <div style={{ fontSize: 12, color: C.text, fontWeight: 600 }}>{v}</div>
+            <div style={{ fontSize: 11, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.4px' }}>{k}</div>
+            <div style={{ fontSize: 14, color: C.text, fontWeight: 600 }}>{v}</div>
           </div>
         ))}
       </div>
 
-      <div style={{ fontSize: 9, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: 4 }}>
+      <div style={{ fontSize: 11, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: 4 }}>
         Recent completed deals
       </div>
       {deals.length === 0 ? (
-        <div style={{ fontSize: 11, color: C.outline }}>
+        <div style={{ fontSize: 13, color: C.outline }}>
           No completed deals yet, this would be their first.
         </div>
       ) : (
         deals.slice(0, 10).map((d) => (
           <div
             key={d.id}
-            style={{ display: 'flex', justifyContent: 'space-between', gap: 8, fontSize: 11, padding: '3px 0' }}
+            style={{ display: 'flex', justifyContent: 'space-between', gap: 8, fontSize: 13, padding: '3px 0' }}
           >
             <span style={{ color: C.textMuted, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {d.title}
@@ -182,7 +182,7 @@ export default function CreatorResume({ username }: { username: string }) {
 
       <div
         style={{
-          marginTop: 8, fontSize: 9, color: C.outline,
+          marginTop: 8, fontSize: 11, color: C.outline,
           borderTop: `1px solid ${C.border}`, paddingTop: 6,
         }}
       >

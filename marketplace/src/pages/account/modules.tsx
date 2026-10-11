@@ -75,14 +75,14 @@ export default function Modules() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: C.surface, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+      <div style={{ minHeight: '100vh', background: C.surface, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
         <div style={{ color: C.textSecondary }}>Loading...</div>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: C.surface, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: C.surface, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '32px 20px' }}>
         <div style={{ marginBottom: '8px' }}>
           <Link href="/account/settings" style={{ color: C.textSecondary, fontSize: '13px', textDecoration: 'none' }}>← Back to settings</Link>

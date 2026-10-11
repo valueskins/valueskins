@@ -2655,7 +2655,7 @@ bio: profileBio
   };
 
   return (
-    <div style={{ background: C.bg, minHeight: '100vh', display: 'flex', flexDirection: 'column', color: C.text, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif", overflowX: 'clip' }}>
+    <div style={{ background: C.bg, minHeight: '100vh', display: 'flex', flexDirection: 'column', color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif", overflowX: 'clip' }}>
 
       {/* The spine lives up here now, beside the wordmark, rather than as a
           fixed bar on the floor. Sticky, so it stays reachable on long pages —

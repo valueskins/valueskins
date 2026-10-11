@@ -8,7 +8,7 @@ import { PROFESSION_BADGES } from '@/features/valueskins/core/identity/AvatarOpt
 // 5 consolidated steps with a live creator-card preview. Sand accents, no
 // emoji, near-black primary button (no gold fill). The onboarding-complete
 // API call + payload are UNCHANGED — this is a UI + inputs pass.
-const FONT = "'Inter', 'Helvetica Neue', Arial, sans-serif";
+const FONT = "'Poppins', 'Helvetica Neue', Arial, sans-serif";
 
 type Step = 'role-select' | 'identity' | 'valueskin' | 'howyouwork' | 'rate' | 'review';
 

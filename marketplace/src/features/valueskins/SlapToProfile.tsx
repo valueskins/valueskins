@@ -141,7 +141,7 @@ export default function SlapToProfile({
             color: '#C8B89A',
             fontSize: '0.75rem',
             fontWeight: 700,
-            fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+            fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
           }}
         >
           <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#C8B89A' }} />

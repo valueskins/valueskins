@@ -91,7 +91,7 @@ export default function CalendarPage({ userId, displayName, googleAccountId, dea
   const hasLocationDeals = deals && deals.length > 0;
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: "'Inter', sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: "'Poppins', sans-serif" }}>
       {/* Header */}
       <div style={{ borderBottom: `1px solid ${C.border}`, padding: '20px 24px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

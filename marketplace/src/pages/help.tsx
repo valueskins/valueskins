@@ -3,9 +3,9 @@ import { useState } from 'react';
 import MarketplaceLayout from '@/components/MarketplaceLayout';
 
 const C = {
-  bg: 'var(--c-bg)', surface: '#111827', surfaceAlt: '#1A1A1A',
-  text: '#E0E0DA', textMuted: 'var(--c-text-variant)', primary: 'var(--c-accent)',
-  success: 'var(--c-accent)', border: '#1A1A1A',
+  bg: 'var(--c-bg)', surface: 'var(--c-surface)', surfaceAlt: 'var(--c-surface-container)',
+  text: 'var(--c-text)', textMuted: 'var(--c-text-muted)', primary: 'var(--c-primary)',
+  success: 'var(--c-accent)', border: 'var(--c-border)',
 };
 
 const FAQS = [
@@ -52,7 +52,7 @@ export default function HelpPage() {
 
   return (
     <MarketplaceLayout title="Help Center" hideBottomNav>
-      <div style={{ padding: '16px', color: C.text, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+      <div style={{ padding: '16px', color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
         <h1 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '4px' }}>Help Center</h1>
         <p style={{ fontSize: '13px', color: C.textMuted, marginBottom: '20px' }}>Frequently asked questions about using ValueSkins.</p>
 

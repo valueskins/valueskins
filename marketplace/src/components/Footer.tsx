@@ -9,8 +9,8 @@ export default function Footer() {
     <footer style={{
       background: C.surface,
       borderTop: `1px solid ${C.border}`,
-      padding: '40px 20px',
-      marginTop: '60px',
+      padding: '96px 24px 64px',
+      marginTop: '0',
     }}>
       <div style={{
         maxWidth: '1200px',
@@ -19,8 +19,8 @@ export default function Footer() {
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '40px',
-          marginBottom: '40px',
+          gap: '56px',
+          marginBottom: '72px',
         }}>
           {/* Brand */}
           <div>
@@ -29,7 +29,7 @@ export default function Footer() {
               fontWeight: 700,
               color: C.text,
               letterSpacing: '0.18em',
-              fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+              fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
               marginBottom: '8px',
             }}>
               VALUESKINS

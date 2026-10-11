@@ -44,7 +44,7 @@ export default function PaymentHistoryPage() {
 
   return (
     <MarketplaceLayout title="Payment History" hideBottomNav>
-      <div style={{ padding: '16px', color: C.text, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif" }}>
+      <div style={{ padding: '16px', color: C.text, fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif" }}>
         <h1 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>Payment History</h1>
 
         <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
