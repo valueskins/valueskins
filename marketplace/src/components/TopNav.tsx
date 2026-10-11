@@ -5,8 +5,9 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 
-// The header of the signed-in app: the name on the left, and the three places
-// the app has in the middle. Marketplace, Settings, How it works.
+// The header of the signed-in app: the name on the left, and the four places
+// the app has in the middle. Marketplace, Settings, How it works, Guide for
+// brands.
 export const TOP_NAV_HEIGHT = 76;
 
 export default function TopNav() {
@@ -50,6 +51,11 @@ export default function TopNav() {
       label: 'How it works',
       match: (p: string) => p.startsWith('/how-it-works'),
     },
+    {
+      href: '/guide-for-brands',
+      label: 'Guide for brands',
+      match: (p: string) => p.startsWith('/guide-for-brands'),
+    },
   ];
 
   // Fetch each section's code ahead of the click, so only its data is left to
@@ -77,7 +83,10 @@ export default function TopNav() {
         @media (max-width: 720px) {
           .vs-nav { padding: 0 16px; }
           .vs-nav-side { display: none; }
-          .vs-nav-menu { gap: 0; width: 100%; justify-content: space-between; }
+          .vs-nav-menu { gap: 14px; width: 100%; justify-content: space-between; overflow-x: auto; scrollbar-width: none; }
+          .vs-nav-menu::-webkit-scrollbar { display: none; }
+          /* Four sections have to share a phone's width. */
+          .vs-nav-link { font-size: 10px !important; letter-spacing: 0.06em !important; }
         }
       `}</style>
       <nav

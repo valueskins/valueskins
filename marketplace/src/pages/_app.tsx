@@ -29,6 +29,7 @@ const ROUTES_WITH_NAV = [
   '/account/data',
   '/profile/[id]',
   '/how-it-works',
+  '/guide-for-brands',
 ];
 
 export default function App({ Component, pageProps }: AppProps) {
