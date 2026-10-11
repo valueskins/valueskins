@@ -107,7 +107,7 @@ export default function EmailSettingsPage() {
           {loading && <div style={{ fontSize: 15, color: C.outline }}>Loading…</div>}
 
           {notice && (
-            <div role="status" style={{ ...card, borderColor: C.accent, background: withAlpha(C.accent, 0x14), fontSize: 15 }}>
+            <div role="status" style={{ ...card, borderColor: C.border, background: C.surfaceAlt, fontSize: 15 }}>
               {notice}
             </div>
           )}
@@ -118,7 +118,7 @@ export default function EmailSettingsPage() {
           )}
 
           {!loading && (step === 'bank_details' || step === 'ready') && (
-            <div style={{ ...card, borderColor: C.accent, background: withAlpha(C.accent, 0x14) }}>
+            <div style={{ ...card, borderColor: C.border, background: C.surfaceAlt }}>
               <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>
                 {current} is confirmed
               </div>
@@ -144,8 +144,8 @@ export default function EmailSettingsPage() {
               {step === 'verify_email' && (
                 <div
                   style={{
-                    fontSize: 14, color: C.text, background: withAlpha(C.warning, 0x14),
-                    border: `1px solid ${C.warning}`, borderRadius: 8, padding: 18, marginBottom: 20,
+                    fontSize: 14, color: C.text, background: C.surfaceAlt,
+                    border: `1px solid ${C.border}`, borderRadius: 8, padding: 18, marginBottom: 20,
                   }}
                 >
                   We sent a confirmation link to <strong>{current}</strong>. Open it to finish.

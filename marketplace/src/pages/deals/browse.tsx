@@ -164,7 +164,7 @@ export default function BrowseDealsPage() {
           <SetupBanner />
 
           {notice && (
-            <div role="status" style={{ ...card, background: withAlpha(C.accent, 0x14), borderColor: C.accent, fontSize: 14 }}>
+            <div role="status" style={{ ...card, background: C.surfaceAlt, borderColor: C.border, fontSize: 14 }}>
               {notice}
             </div>
           )}

@@ -439,8 +439,8 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
             {status === 'REVISION_REQUESTED' && feedback && (
               <div
                 style={{
-                  background: withAlpha(C.warning, 0x14),
-                  border: `1px solid ${C.warning}`,
+                  background: C.surfaceAlt,
+                  border: `1px solid ${C.border}`,
                   borderRadius: 8, padding: 18, marginBottom: 20,
                   fontSize: 14, color: C.text,
                 }}

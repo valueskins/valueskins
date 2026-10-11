@@ -244,8 +244,8 @@ export default function CreateCampaign() {
                   dissolving into the page as the old #f5f5f5 block did. */}
               <div
                 style={{
-                  background: withAlpha(C.primary, 0x12),
-                  border: `1px solid ${C.accent}`,
+                  background: C.surfaceAlt,
+                  border: `1px solid ${C.border}`,
                   borderRadius: 10, padding: 28, marginTop: 12,
                 }}
               >

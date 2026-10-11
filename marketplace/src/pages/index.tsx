@@ -191,8 +191,9 @@ export default function HomePage() {
             same journey wearing two labels. All routed to /auth/login. */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
           <Link href="/auth/login" style={{
-            display: 'inline-block', padding: '14px 32px', background: C.text, color: C.bg,
-            borderRadius: '8px', fontSize: '0.9375rem', fontWeight: 700, textDecoration: 'none',
+            display: 'inline-block', padding: '16px 36px', background: C.text, color: C.bg,
+            borderRadius: '999px', fontSize: '12px', fontWeight: 600, textDecoration: 'none',
+            textTransform: 'uppercase', letterSpacing: '0.12em',
             transition: 'transform 0.15s',
           }}>
             Get Started
@@ -210,13 +211,13 @@ export default function HomePage() {
       </div>
 
       {/* How it works, in four lines. The full version is /how-it-works. */}
-      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '140px 24px 60px' }}>
+      <div style={{ maxWidth: '1120px', margin: '0 auto', padding: '140px 24px 60px' }}>
         <Reveal reduced={reduced}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: C.text, textAlign: 'center', marginBottom: '72px' }}>
             How it works
           </h2>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '40px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
           {[
             { step: '01', title: 'A brand posts a deal', desc: 'What it needs, the deadline and the amount. The amount is final.' },
             { step: '02', title: 'Creators apply', desc: 'Every creator sees every open deal. The brand picks one.' },

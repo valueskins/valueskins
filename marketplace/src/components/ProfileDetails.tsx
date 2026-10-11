@@ -130,7 +130,7 @@ export default function ProfileDetails({ role }: { role: Role }) {
       <div
         style={{
           fontSize: '14px', color: C.text, lineHeight: 1.6, marginBottom: '16px',
-          background: withAlpha(C.accent, 0x14), border: `1px solid ${C.accent}`,
+          background: C.surfaceAlt, border: `1px solid ${C.border}`,
           borderRadius: '10px', padding: '12px 14px',
         }}
       >

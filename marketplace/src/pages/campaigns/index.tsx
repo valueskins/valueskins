@@ -168,7 +168,7 @@ export default function BrandDealsPage({ deals = [] }: { deals: DealRow[] }) {
                     <div
                       style={{
                         marginTop: 10, fontSize: 13, color: C.text,
-                        background: withAlpha(C.primary, 0x1e),
+                        background: C.surfaceAlt,
                         border: `1px solid ${C.primary}`,
                         borderRadius: 6, padding: '5px 9px', display: 'inline-block',
                       }}

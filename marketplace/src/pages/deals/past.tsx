@@ -140,7 +140,7 @@ export default function PastDealsPage({
                     style={{
                       border: `1px solid ${C.border}`, color: C.text, borderRadius: 8,
                       padding: '13px 26px', fontSize: 14, fontWeight: 600, textDecoration: 'none',
-                      background: completed ? 'transparent' : withAlpha(C.primary, 0x08),
+                      background: completed ? 'transparent' : C.surfaceAlt,
                     }}
                   >
                     View deal
