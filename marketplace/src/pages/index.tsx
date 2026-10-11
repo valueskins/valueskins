@@ -137,12 +137,6 @@ export default function HomePage() {
     return () => window.removeEventListener('scroll', on);
   }, [reduced]);
 
-  useEffect(() => {
-    if (loading) return;
-    if (account && account.onboarding_stage === 'complete') {
-      router.replace('/deals/browse');
-    }
-  }, [account, loading, router]);
 
   // Deliberately NOT gated on `loading`. Gating here put a blank screen in
   // front of the front door for 6-10s in production — the auth probe resolves
@@ -150,7 +144,6 @@ export default function HomePage() {
   // every visitor paid for it before seeing anything. Landing on the welcome
   // page immediately is the point; a signed-in visitor sees the hero for a
   // moment before the redirect below fires, which is the cheaper trade.
-  if (account && account.onboarding_stage === 'complete') return null;
 
   // Hero parallax + fade as you leave it (spec §2). Transform/opacity only.
   const heroFade = reduced ? 1 : Math.max(0, 1 - scrollY / 420);
@@ -188,13 +181,13 @@ export default function HomePage() {
             the account on first use, so "Get Started" and "Sign In" were the
             same journey wearing two labels. All routed to /auth/login. */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
-          <Link href="/auth/login" style={{
+          <Link href={account ? (account.role === 'brand' ? '/campaigns' : '/deals/browse') : '/auth/login'} style={{
             display: 'inline-block', padding: '16px 36px', background: C.text, color: C.bg,
             borderRadius: '999px', fontSize: '12px', fontWeight: 600, textDecoration: 'none',
             textTransform: 'uppercase', letterSpacing: '0.12em',
             transition: 'transform 0.15s',
           }}>
-            Get Started
+            {account ? 'Go to marketplace' : 'Get Started'}
           </Link>
         </div>
 

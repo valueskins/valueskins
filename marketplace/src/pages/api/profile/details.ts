@@ -12,6 +12,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { requireUser } from '@/lib/auth/require-user';
 import { query, queryOne } from '@/lib/db-pool';
+import { isInstagramHandle } from '@/lib/handle';
 import {
   GENDERS, MIN_AGE, MAX_AGE, MAX_FOLLOWERS, CURRENT_AGE_SQL, isPlaceholderName,
 } from '@/lib/profile-essentials';
@@ -43,6 +44,7 @@ function wholeNumber(raw: unknown, min: number, max: number): number | null {
 async function read(userId: string) {
   const row = await queryOne(
     `SELECT role, display_name, location, website, gender, followers_count,
+            username, instagram_handle,
             profile_locked_at, ${CURRENT_AGE_SQL} AS current_age
        FROM users WHERE id = $1`,
     [userId]
@@ -50,8 +52,12 @@ async function read(userId: string) {
   if (!row) return null;
   const u = row as any;
   const role: 'brand' | 'creator' = u.role === 'brand' ? 'brand' : 'creator';
+  // The Instagram username read at sign-in. A placeholder (stored when
+  // Instagram would not give one) is not a username and is not returned.
+  const handle = u.instagram_handle || u.username || '';
   return {
     role,
+    instagram: isInstagramHandle(handle) ? handle : null,
     locked: !!u.profile_locked_at,
     name: isPlaceholderName(u.display_name) ? '' : u.display_name,
     city: u.location || '',
