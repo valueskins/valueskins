@@ -62,6 +62,94 @@ const todayPlus = (days: number) => {
   return d.toISOString().slice(0, 10);
 };
 
+// The practical questions a creator would otherwise have to ask. There is no
+// chat, so whatever is not answered here is simply unknown to them when they
+// decide. Each has a fixed set of answers, so none can be skipped or left
+// vague, and some take a line of detail.
+interface Question {
+  key: string;
+  label: string;
+  title: string;            // how the answer is headed in the posted deal
+  options: string[];
+  note?: { label: string; placeholder: string; requiredFor?: string[] };
+}
+const QUESTIONS: Question[] = [
+  {
+    key: 'product', title: 'Product',
+    label: 'Will you send a product to the creator?',
+    options: [
+      'Yes, we will ship it to the creator',
+      'No, the creator needs to buy it or already have it',
+      'No product is involved',
+    ],
+    note: {
+      label: 'What is being sent, and does the creator keep it?',
+      placeholder: 'e.g. One pair of sneakers in their size. Theirs to keep.',
+      requiredFor: ['Yes, we will ship it to the creator'],
+    },
+  },
+  {
+    key: 'location', title: 'Location',
+    label: 'Where will the content be made?',
+    options: ['Wherever the creator chooses', 'At a place we choose'],
+    note: {
+      label: 'Where, and on what date?',
+      placeholder: 'e.g. Our store in Koregaon Park, Pune, on a weekday afternoon',
+      requiredFor: ['At a place we choose'],
+    },
+  },
+  {
+    key: 'transport', title: 'Travel',
+    label: 'Will you provide or pay for travel?',
+    options: [
+      'No travel is needed',
+      'Yes, we will arrange the transport',
+      'Yes, we will repay travel costs',
+      'No, travel is at the creator\'s own cost',
+    ],
+  },
+  {
+    key: 'costs', title: 'Other costs',
+    label: 'Will you cover any other costs?',
+    options: [
+      'There are no other costs',
+      'Yes, we will cover them',
+      'No, they are included in the deal amount',
+    ],
+    note: {
+      label: 'Which costs?',
+      placeholder: 'e.g. Props, a location fee, food on the day',
+      requiredFor: ['Yes, we will cover them'],
+    },
+  },
+  {
+    key: 'posting', title: 'Posted on',
+    label: 'Where will the content be posted?',
+    options: [
+      'On the creator\'s account',
+      'On our brand account',
+      'On both, as a collaboration post',
+    ],
+  },
+  {
+    key: 'usage', title: 'Use of the content',
+    label: 'How will you use the content afterwards?',
+    options: [
+      'Only the post itself',
+      'We may repost it on our own pages',
+      'We may also use it in paid ads',
+    ],
+    note: {
+      label: 'For how long?',
+      placeholder: 'e.g. Three months from the day it is posted',
+      requiredFor: ['We may repost it on our own pages', 'We may also use it in paid ads'],
+    },
+  },
+];
+
+// A brief shorter than this is a title, not a brief.
+const MIN_BRIEF = 60;
+
 const MIN_BUDGET = 885;
 const MAX_BUDGET = 100_000_000;
 
@@ -92,6 +180,8 @@ export default function CreateCampaign() {
   const budgetValid = budget > MIN_BUDGET && budget <= MAX_BUDGET;
   const [requirements, setRequirements] = useState('');
   const [script, setScript] = useState('');
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [notes, setNotes] = useState<Record<string, string>>({});
   const [counts, setCounts] = useState<Record<DeliverableKey, number>>({
     reels: 1, posts: 0, carousels: 0, stories: 0,
   });
@@ -126,6 +216,21 @@ export default function CreateCampaign() {
       setError('Add at least one deliverable.');
       return;
     }
+    if (requirements.trim().length < MIN_BRIEF) {
+      setError('Explain the brief in more detail. Creators decide from this alone, and there is no chat to ask questions.');
+      return;
+    }
+    for (const q of QUESTIONS) {
+      const a = answers[q.key];
+      if (!a) {
+        setError(`Please answer: ${q.label}`);
+        return;
+      }
+      if (q.note?.requiredFor?.includes(a) && !(notes[q.key] || '').trim()) {
+        setError(`Please add the detail for: ${q.label}`);
+        return;
+      }
+    }
     const approval = new Date(`${approvalDate}T12:00:00`);
     const posting = new Date(`${postingDate}T12:00:00`);
     if (approval.getTime() <= Date.now()) {
@@ -149,8 +254,13 @@ export default function CreateCampaign() {
 
     const description = [
       `Deliverables: ${deliverableSummary}`,
-      requirements && `Brief:\n${requirements}`,
-      script && `Script / direction:\n${script}`,
+      requirements && `Brief:\n${requirements.trim()}`,
+      // Every answer, one per line, so nothing has to be asked afterwards.
+      `Details:\n${QUESTIONS.map((q) => {
+        const note = (notes[q.key] || '').trim();
+        return `${q.title}: ${answers[q.key]}${note ? `. ${note}` : ''}`;
+      }).join('\n')}`,
+      script && `Script / direction:\n${script.trim()}`,
       `Approved by: ${approval.toDateString()}`,
       `Posted by: ${posting.toDateString()}`,
     ].filter(Boolean).join('\n\n');
@@ -390,11 +500,58 @@ export default function CreateCampaign() {
 
             <div style={field}>
               <label style={lbl} htmlFor="brief">Brief</label>
+              <div style={{ fontSize: 14, color: C.textMuted, lineHeight: 1.7, marginBottom: 12 }}>
+                Explain it fully. This is all a creator has to decide from, the amount is final
+                and there is no chat. Say what you are promoting, who it is for, the message you
+                want across, the look and tone, and anything that must or must not appear.
+              </div>
               <textarea
                 id="brief" value={requirements} onChange={(e) => setRequirements(e.target.value)}
-                placeholder="What do you need? Who is it for? What is the key message?"
-                required rows={4} style={{ ...input, resize: 'vertical' }}
+                placeholder="What are you promoting? Who is it for? What should the content say and show? What tone? Anything that must be included or avoided?"
+                required rows={7} minLength={MIN_BRIEF} style={{ ...input, resize: 'vertical' }}
               />
+              <div style={{ fontSize: 13, color: requirements.trim().length >= MIN_BRIEF ? C.outline : C.textMuted, marginTop: 8 }}>
+                {requirements.trim().length < MIN_BRIEF
+                  ? `${MIN_BRIEF - requirements.trim().length} more characters needed`
+                  : 'Good. The more you explain, the better the applications.'}
+              </div>
+            </div>
+
+            {/* The practical details, asked one by one so none is forgotten. */}
+            <div style={field}>
+              <div style={{ ...lbl, marginBottom: 6 }}>The details</div>
+              <div style={{ fontSize: 14, color: C.textMuted, lineHeight: 1.7, marginBottom: 20 }}>
+                Answer each one. Creators see every answer before they apply.
+              </div>
+              {QUESTIONS.map((q) => {
+                const a = answers[q.key] || '';
+                const noteNeeded = !!q.note?.requiredFor?.includes(a);
+                return (
+                  <div key={q.key} style={{ marginBottom: 24 }}>
+                    <label style={lbl} htmlFor={`q-${q.key}`}>{q.label}</label>
+                    <select
+                      id={`q-${q.key}`} value={a} required
+                      onChange={(e) => setAnswers((prev) => ({ ...prev, [q.key]: e.target.value }))}
+                      style={{ ...input, cursor: 'pointer' }}
+                    >
+                      <option value="">Choose one</option>
+                      {q.options.map((o) => <option key={o} value={o}>{o}</option>)}
+                    </select>
+                    {q.note && a && (noteNeeded || q.note.requiredFor === undefined) && (
+                      <div style={{ marginTop: 12 }}>
+                        <label style={lbl} htmlFor={`n-${q.key}`}>{q.note.label}</label>
+                        <input
+                          id={`n-${q.key}`} type="text" maxLength={240}
+                          value={notes[q.key] || ''} required={noteNeeded}
+                          onChange={(e) => setNotes((prev) => ({ ...prev, [q.key]: e.target.value }))}
+                          placeholder={q.note.placeholder}
+                          style={input}
+                        />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             <div style={field}>
