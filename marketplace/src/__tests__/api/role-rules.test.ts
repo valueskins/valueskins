@@ -61,7 +61,13 @@ const OTHER_CREATOR = 7203;
 const NO_EMAIL_CREATOR = 7204;
 const NO_EMAIL_BRAND = 7205;
 const NO_ROLE = 7206;
-const IDS = [BRAND, CREATOR, OTHER_CREATOR, NO_EMAIL_CREATOR, NO_EMAIL_BRAND, NO_ROLE];
+// Signed in and email confirmed, but nothing else filled in yet.
+const FRESH_CREATOR = 7207;
+const FRESH_BRAND = 7208;
+const IDS = [
+  BRAND, CREATOR, OTHER_CREATOR, NO_EMAIL_CREATOR, NO_EMAIL_BRAND, NO_ROLE,
+  FRESH_CREATOR, FRESH_BRAND,
+];
 const session = (id: number) => `rr-sess-${id}`;
 const asUser = (id: number) => ({ cookies: { valueskins_session: session(id) } });
 const pageCtx = (id?: number, extra: any = {}) => ({
@@ -106,8 +112,19 @@ describeDb('role rules (real database)', () => {
               ($3,'rr_other','creator','c2@rr.local',true,'rr-seed-c2','MEDIA_CREATOR'),
               ($4,'rr_noemail_c','creator','',false,'rr-seed-c3','MEDIA_CREATOR'),
               ($5,'rr_noemail_b','brand','',false,'rr-seed-b2','BUSINESS'),
-              ($6,'rr_norole',NULL,'x@rr.local',true,'rr-seed-x','')`,
+              ($6,'rr_norole',NULL,'x@rr.local',true,'rr-seed-x',''),
+              ($7,'rr_fresh_c','creator','fc@rr.local',true,'rr-seed-fc','MEDIA_CREATOR'),
+              ($8,'rr_fresh_b','brand','fb@rr.local',true,'rr-seed-fb','BUSINESS')`,
       IDS
+    );
+    // The three working accounts have finished Settings.
+    await query(
+      `UPDATE users
+          SET profile_locked_at = NOW(), pitch_text = 'About this account',
+              payout_vpa = 'rr' || id || '@okhdfcbank', payout_name = 'Role Rules',
+              payout_vpa_share_consent_at = NOW()
+        WHERE id = ANY($1::bigint[])`,
+      [[BRAND, CREATOR, OTHER_CREATOR]]
     );
     for (const id of IDS) {
       await query(
@@ -151,6 +168,16 @@ describeDb('role rules (real database)', () => {
     await createDeal(mockReq({ method: 'POST', body: dealBody(), ...asUser(NO_EMAIL_BRAND) }), res as any);
     expect(res.statusCode).toBe(403);
     expect(res.body.reason).toBe('email_required');
+  });
+
+  it('a brand that has not finished Settings cannot post a deal', async () => {
+    const res = mockRes();
+    await createDeal(mockReq({ method: 'POST', body: dealBody(), ...asUser(FRESH_BRAND) }), res as any);
+    expect(res.statusCode).toBe(403);
+    expect(res.body.reason).toBe('setup_incomplete');
+    expect(res.body.missing).toEqual(['profile', 'about']);
+    const made = await queryOne('SELECT COUNT(*)::int AS n FROM deals WHERE brand_id = $1', [FRESH_BRAND]);
+    expect(made.n).toBe(0);
   });
 
   let dealId = '';
@@ -198,6 +225,40 @@ describeDb('role rules (real database)', () => {
       mockReq({ method: 'POST', body: { deal_id: dealId }, ...asUser(NO_EMAIL_CREATOR) }), res as any
     );
     expect(res.statusCode).toBe(403);
+  });
+
+  it('a creator that has not finished Settings cannot apply', async () => {
+    const res = mockRes();
+    await applications(
+      mockReq({ method: 'POST', body: { deal_id: dealId }, ...asUser(FRESH_CREATOR) }), res as any
+    );
+    expect(res.statusCode).toBe(403);
+    expect(res.body.reason).toBe('setup_incomplete');
+    expect(res.body.missing).toEqual(['profile', 'upi', 'about']);
+    const n = await queryOne(
+      'SELECT COUNT(*)::int AS n FROM applications WHERE deal_id = $1 AND creator_id = $2',
+      [dealId, FRESH_CREATOR]
+    );
+    expect(n.n).toBe(0);
+  });
+
+  it('the setup checklist names exactly what is missing', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const setupStatus = require('@/pages/api/profile/setup-status').default;
+    const fresh = mockRes();
+    await setupStatus(mockReq({ method: 'GET', ...asUser(FRESH_CREATOR) }), fresh as any);
+    expect(fresh.body.complete).toBe(false);
+    expect(fresh.body.items.filter((i: any) => !i.done).map((i: any) => i.key)).toEqual(['profile', 'upi', 'about']);
+
+    const done = mockRes();
+    await setupStatus(mockReq({ method: 'GET', ...asUser(CREATOR) }), done as any);
+    expect(done.body.complete).toBe(true);
+
+    // A brand is never asked for a UPI ID.
+    const brand = mockRes();
+    await setupStatus(mockReq({ method: 'GET', ...asUser(BRAND) }), brand as any);
+    expect(brand.body.complete).toBe(true);
+    expect(brand.body.items.map((i: any) => i.key)).not.toContain('upi');
   });
 
   it('a creator can apply', async () => {
@@ -256,6 +317,10 @@ describeDb('role rules (real database)', () => {
       expect((await create(pageCtx(BRAND) as any)).props).toBeDefined();
     });
 
+    it('a brand that has not finished Settings is sent there instead of the form', async () => {
+      expect(dest(await create(pageCtx(FRESH_BRAND) as any))).toBe('/settings?setup=1');
+    });
+
     it('an account with no email is sent to add one first', async () => {
       expect(dest(await browse(pageCtx(NO_EMAIL_CREATOR) as any))).toBe('/settings/email');
       expect(dest(await campaigns(pageCtx(NO_EMAIL_BRAND) as any))).toBe('/settings/email');
@@ -295,13 +360,27 @@ describeDb('role rules (real database)', () => {
 
   // -- profile: saved once ----------------------------------------------------
 
+  it('a creator under 18 cannot save a profile', async () => {
+    const res = mockRes();
+    await details(
+      mockReq({
+        method: 'POST',
+        body: { name: 'Too Young', city: 'Pune', age: 17, gender: 'Male', followers: 10 },
+        ...asUser(FRESH_CREATOR),
+      }),
+      res as any
+    );
+    expect(res.statusCode).toBe(400);
+    expect(res.body.field).toBe('age');
+  });
+
   it('profile details save once; after that only followers change', async () => {
     const first = mockRes();
     await details(
       mockReq({
         method: 'POST',
         body: { name: 'Asha Rao', city: 'Pune', age: 27, gender: 'Female', followers: 1200 },
-        ...asUser(CREATOR),
+        ...asUser(FRESH_CREATOR),
       }),
       first as any
     );
@@ -313,7 +392,7 @@ describeDb('role rules (real database)', () => {
       mockReq({
         method: 'POST',
         body: { name: 'Someone Else', city: 'Delhi', age: 40, gender: 'Male', followers: 1500 },
-        ...asUser(CREATOR),
+        ...asUser(FRESH_CREATOR),
       }),
       second as any
     );
@@ -321,18 +400,20 @@ describeDb('role rules (real database)', () => {
     expect(second.body).toMatchObject({ name: 'Asha Rao', city: 'Pune', age: 27, gender: 'Female', followers: 1500 });
   });
 
-  it('a creator under 18 cannot save a profile', async () => {
-    const res = mockRes();
-    await details(
-      mockReq({
-        method: 'POST',
-        body: { name: 'Too Young', city: 'Pune', age: 17, gender: 'Male', followers: 10 },
-        ...asUser(OTHER_CREATOR),
-      }),
-      res as any
+  it('finishing Settings is what lets a creator apply', async () => {
+    // The profile was saved above. Add the two things still missing.
+    await query(
+      `UPDATE users SET pitch_text = 'I make short fashion reels.',
+              payout_vpa = 'fresh@okhdfcbank', payout_name = 'Asha Rao',
+              payout_vpa_share_consent_at = NOW()
+        WHERE id = $1`,
+      [FRESH_CREATOR]
     );
-    expect(res.statusCode).toBe(400);
-    expect(res.body.field).toBe('age');
+    const res = mockRes();
+    await applications(
+      mockReq({ method: 'POST', body: { deal_id: dealId }, ...asUser(FRESH_CREATOR) }), res as any
+    );
+    expect(res.statusCode).toBeLessThan(300);
   });
 
   // -- email on the resume ------------------------------------------------------
@@ -348,6 +429,83 @@ describeDb('role rules (real database)', () => {
     expect((await view(BRAND, 'rr_creator')).body.email).toBe('c1@rr.local');
     expect((await view(OTHER_CREATOR, 'rr_brand')).body.email).toBeNull();
     expect((await view(BRAND, 'rr_other')).body.email).toBeNull();
+  });
+
+  // -- past deals -------------------------------------------------------------
+
+  describe('past deals', () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const past = require('@/pages/deals/past').getServerSideProps;
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const brandHome = require('@/pages/campaigns/index').getServerSideProps;
+    let doneId = '';
+    let cancelledId = '';
+
+    beforeAll(async () => {
+      const done = await queryOne(
+        `INSERT INTO deals (brand_id, creator_id, title, description, amount, workflow_status)
+         VALUES ($1, $2, 'rr finished deal', 'x', 12000, 'COMPLETED') RETURNING id`,
+        [BRAND, CREATOR]
+      );
+      const cancelled = await queryOne(
+        `INSERT INTO deals (brand_id, creator_id, title, description, amount, workflow_status, cancelled_at)
+         VALUES ($1, NULL, 'rr cancelled deal', 'x', 8000, 'CANCELLED', NOW()) RETURNING id`,
+        [BRAND]
+      );
+      doneId = done.id;
+      cancelledId = cancelled.id;
+    });
+
+    const ids = (r: any) => (r.props?.deals || []).map((d: any) => d.id);
+
+    it('signed-out visitors are sent to login', async () => {
+      expect((await past(pageCtx() as any)).redirect.destination).toBe('/auth/login');
+    });
+
+    it('a brand sees its finished and cancelled deals', async () => {
+      const r = await past(pageCtx(BRAND) as any);
+      expect(r.props.role).toBe('brand');
+      expect(ids(r)).toEqual(expect.arrayContaining([doneId, cancelledId]));
+    });
+
+    it('a creator sees only the finished deals it was confirmed on', async () => {
+      const r = await past(pageCtx(CREATOR) as any);
+      expect(r.props.role).toBe('creator');
+      expect(ids(r)).toContain(doneId);
+      expect(ids(r)).not.toContain(cancelledId);
+    });
+
+    it('nobody sees a deal they were not part of', async () => {
+      expect(ids(await past(pageCtx(OTHER_CREATOR) as any))).not.toContain(doneId);
+      expect(ids(await past(pageCtx(FRESH_BRAND) as any))).toEqual([]);
+    });
+
+    it('finished deals leave the brand\'s current list', async () => {
+      const current = ((await brandHome(pageCtx(BRAND) as any)).props.deals || []).map((d: any) => d.id);
+      expect(current).not.toContain(doneId);
+      expect(current).not.toContain(cancelledId);
+      expect(current).toContain(dealId);
+    });
+
+    it('the report downloads for either party to a completed deal, and nobody else', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const downloadAdp = require('@/pages/api/deals/[dealId]/download-adp').default;
+      const get = async (who: number, id: string) => {
+        const res = mockRes();
+        await downloadAdp(mockReq({ method: 'GET', query: { dealId: id }, ...asUser(who) }), res as any);
+        return res;
+      };
+      for (const who of [BRAND, CREATOR]) {
+        const res = await get(who, doneId);
+        expect(res.statusCode).toBe(200);
+        expect(res.headers['content-type']).toBe('application/pdf');
+        expect(String(res.headers['content-disposition'])).toContain('attachment');
+        expect(Buffer.isBuffer(res.body) || res.body instanceof Uint8Array).toBe(true);
+      }
+      expect((await get(OTHER_CREATOR, doneId)).statusCode).toBe(403);
+      // A cancelled deal has no report.
+      expect((await get(BRAND, cancelledId)).statusCode).toBe(409);
+    });
   });
 
   // -- sign-in: the role is read from Instagram, never guessed -----------------

@@ -1,4 +1,5 @@
 import { query } from '@/lib/db';
+import { missingSetup, type SetupItem } from '@/lib/setup-status';
 import { SESSION_IDLE_TIMEOUT_MS, SESSION_ABSOLUTE_TIMEOUT_MS } from '@/config/constants';
 
 // Sliding idle timeout: each authenticated request pushes expires_at forward
@@ -47,13 +48,14 @@ export async function getSessionUserId(cookie: string): Promise<string | null> {
  */
 export async function getSessionUser(
   cookie: string
-): Promise<{ id: string; role: string | null; email: string } | null> {
+): Promise<{ id: string; role: string | null; email: string; setupMissing: SetupItem[] } | null> {
   const match = cookie.match(/(?:^|;\s*)valueskins_session=([^;]+)/);
   if (!match) return null;
   const sessionToken = match[1];
 
   const result = await query(
-    `SELECT u.id, u.role, u.email
+    `SELECT u.id, u.role, u.email, u.email_verified, u.profile_locked_at,
+            u.pitch_text, u.payout_vpa, u.payout_name
        FROM auth_sessions s
        JOIN users u ON u.id = s.user_id
       WHERE s.id = $1 AND s.is_active = true AND s.expires_at > NOW()`,
@@ -64,7 +66,7 @@ export async function getSessionUser(
   // Sliding expiry, off the critical path, exactly as in getSessionUserId.
   void touchSession(sessionToken);
   const u = result.rows[0];
-  return { id: String(u.id), role: u.role ?? null, email: u.email || '' };
+  return { id: String(u.id), role: u.role ?? null, email: u.email || '', setupMissing: missingSetup(u) };
 }
 
 export async function getAccountId(cookie: string): Promise<string | null> {

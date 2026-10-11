@@ -40,7 +40,7 @@ case "$health" in
 esac
 
 # Signed-out visitors never see a marketplace page.
-for p in /deals/browse /deals/mine /campaigns /campaigns/create; do
+for p in /deals/browse /deals/mine /deals/past /campaigns /campaigns/create; do
   redirects "$p" /auth/login
 done
 

@@ -3,6 +3,7 @@
 // caller is the deal's brand or its confirmed creator. Without this a user can
 // drive someone else's deal by guessing an id (IDOR).
 import { queryOne } from '@/lib/db-pool';
+import { SETUP_COLUMNS, missingSetup, setupMessage, type SetupItem, type SetupRow } from '@/lib/setup-status';
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -101,6 +102,24 @@ export const EMAIL_REQUIRED = {
   error: 'Add your email address in Settings to use the marketplace.',
   reason: 'email_required',
 } as const;
+
+// Posting a deal and applying to one both require a finished account: the
+// other side decides on the profile, reaches the user by email, and pays the
+// creator on their UPI ID. Returns null when complete, or the response body to
+// send with a 403.
+export async function incompleteSetup(
+  userId: string | number,
+  action: string
+): Promise<{ error: string; reason: 'setup_incomplete'; missing: SetupItem[] } | null> {
+  const row = (await queryOne(`SELECT ${SETUP_COLUMNS} FROM users WHERE id = $1`, [userId])) as SetupRow | null;
+  const missing = missingSetup(row);
+  if (missing.length === 0) return null;
+  return {
+    error: setupMessage(row?.role ?? null, missing, action),
+    reason: 'setup_incomplete',
+    missing,
+  };
+}
 
 // Money never comes from the client. The deal's stored budget is the only input.
 export function dealBudget(deal: DealRow): number {

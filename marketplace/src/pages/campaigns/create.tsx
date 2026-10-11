@@ -37,6 +37,11 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   if ((row as any)?.role !== 'brand') {
     return { redirect: { destination: '/settings', permanent: false } };
   }
+  // The whole of Settings comes first. Letting a brand fill in this form and
+  // refusing it at submit would waste their time.
+  if (row.setupMissing.length > 0) {
+    return { redirect: { destination: '/settings?setup=1', permanent: false } };
+  }
   return { props: {} };
 }
 

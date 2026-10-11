@@ -18,6 +18,7 @@ import { C, withAlpha } from '@/theme/colors';
 import { getFeed, applyToDeal, financials, isOk, type FeedDeal } from '@/lib/deal-api';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import SetupBanner from '@/components/deal/SetupBanner';
+import MarketTabs from '@/components/deal/MarketTabs';
 import ResumeHover from '@/components/deal/ResumeHover';
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
@@ -142,6 +143,7 @@ export default function BrowseDealsPage() {
       <Head><title>Browse deals · ValueSkins</title></Head>
       <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '20px 16px 48px' }}>
         <div style={{ maxWidth: 640, margin: '0 auto' }}>
+          <MarketTabs active="current" role="creator" />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 4 }}>
             <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Open deals</h1>
             <button
