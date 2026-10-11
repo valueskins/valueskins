@@ -180,7 +180,7 @@ describeDb('role rules (real database)', () => {
     await createDeal(mockReq({ method: 'POST', body: dealBody(), ...asUser(FRESH_BRAND) }), res as any);
     expect(res.statusCode).toBe(403);
     expect(res.body.reason).toBe('setup_incomplete');
-    expect(res.body.missing).toEqual(['profile', 'about']);
+    expect(res.body.missing).toEqual(['profile', 'upi', 'about']);
     const made = await queryOne('SELECT COUNT(*)::int AS n FROM deals WHERE brand_id = $1', [FRESH_BRAND]);
     expect(made.n).toBe(0);
   });
@@ -581,7 +581,7 @@ describeDb('role rules (real database)', () => {
       const snap = await collectAdpData(id);
       expect(snap.names[String(BRAND)]).toBe('rr_brand');
       expect(snap.names[String(CREATOR)]).toBe('rr_creator');
-      const who = (uid: number | null) => (uid === BRAND ? 'Brand @rr_brand' : 'Creator @rr_creator');
+      const who = (uid: number | null) => (Number(uid) === BRAND ? 'Brand @rr_brand' : 'Creator @rr_creator');
       const first = describeDealEvent(snap.events[0], who);
       expect(first.line).toContain('Brand @rr_brand asked for changes');
       expect(first.quote).toBe(FIRST);
