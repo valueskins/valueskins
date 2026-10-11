@@ -7,20 +7,28 @@ import { C } from '@/theme/colors';
 // what is left (see financials() in lib/deal-api).
 const STEPS: Array<{ title: string; body: string }> = [
   {
-    title: 'Sign in and set up',
-    body: 'Sign in with Instagram. The account needs to be public and either a Business account or a Creator account. A Business account is a brand here and posts deals. A Creator account is a creator here and applies to them. This is read from Instagram and is not something you pick. Add your email address, which is how the other side of a deal reaches you. Fill in your profile once in Settings. Creators also add the UPI ID they want to be paid on. Everything in Settings has to be filled in before a brand can post a deal or a creator can apply to one.',
+    title: 'Sign in with Instagram',
+    body: 'Sign in with your Instagram account. It needs to be public and either a Business account or a Creator account. A Business account is a brand here and posts deals. A Creator account is a creator here and applies to them. We read this from Instagram when you sign in. It is not something you pick, and personal accounts cannot sign in.',
+  },
+  {
+    title: 'Finish Settings',
+    body: 'Settings opens with a checklist of what is left to do. Fill in your profile: a creator gives their name, age, gender, city and follower count, and a brand gives its brand name, website, city and follower count. Add your email address and confirm it with the link we send you. Write a few lines about yourself or your brand. Creators also add the UPI ID they want to be paid on, typed twice, with the name on the account. Until everything on the checklist is done, a brand cannot post a deal and a creator cannot apply to one.',
   },
   {
     title: 'A brand posts a deal',
-    body: 'The brand writes what it needs, sets the amount, the last date to apply and the date the content is due. The brand also says whether it wants digital rights, meaning the right to reuse the content itself. If it does, it writes how and until when, and the amount already includes them. The amount is final. There is no negotiation and no chat.',
+    body: 'The first question is whether the brand wants digital rights, meaning the right to reuse the content itself, for example on its own pages or in an ad. If yes, the brand writes how, where, when and until when it will use the content, and the amount it enters already includes those rights. There is no separate fee for them. The brand then enters the amount, and the payment breakdown appears as it types. It says how many reels, posts, carousels or stories it needs, and sets the dates.',
+  },
+  {
+    title: 'The brief is written in full',
+    body: 'The brand explains what it is promoting, who it is for, the message, the tone, and anything that must or must not appear. It also answers five questions so nothing is left to guess: whether a product will be sent and whether the creator keeps it, where the content will be made, whether travel is provided or repaid, whether other costs are covered, and where the content will be posted. The amount is final. There is no negotiation and no chat.',
   },
   {
     title: 'Creators apply',
-    body: 'Every creator sees every open deal. If the amount works for you, apply. If it does not, skip it.',
+    body: 'Current deals lists every open deal. Open Details to read the full brief and every answer before you decide, and hover over the brand\'s name to see who they are. If the amount works for you, apply. If it does not, skip it.',
   },
   {
     title: 'The brand picks one creator',
-    body: 'The brand sees each applicant and can hover over a name to see their Instagram, age, gender, city, followers and past deals. It confirms one creator. That closes the deal to everyone else.',
+    body: 'The brand sees each applicant and can hover over a name to see their Instagram page, age, gender, city, followers, why brands should hire them, their past deals and their email address. It confirms one creator, which closes the deal to everyone else. The creator is emailed a copy of the brief, including the digital rights terms.',
   },
   {
     title: 'Payment 1: the ValueSkins fee',
@@ -28,30 +36,38 @@ const STEPS: Array<{ title: string; body: string }> = [
   },
   {
     title: 'Payment 2: 30% to the creator',
-    body: 'The brand pays the creator 30% of the remaining amount, straight to the creator\'s UPI ID. The brand enters the UPI reference, and the creator confirms the money arrived.',
+    body: 'The brand is shown the creator\'s UPI ID and the name on the account. It can tap Pay in UPI app on a phone, or scan the code from a computer, and the amount is already filled in. Before entering the PIN, the brand checks that its UPI app shows the same name. The brand then enters the UPI reference, and the creator confirms the money arrived.',
   },
   {
     title: 'The creator delivers',
-    body: 'The creator makes the content and shares a link to it on the deal page before the due date.',
+    body: 'The creator makes the content and submits a Google Drive link to it on the deal page before the due date. In Drive, the link has to be set to Anyone with the link. We check that the link opens for everyone before the brand is told, and if it is private we say so straight away so it can be fixed.',
   },
   {
     title: 'The brand reviews',
-    body: 'The brand either approves the content or writes what should change. If changes are asked for, the creator shares a new link.',
+    body: 'The brand opens the link and either approves the content or writes what it wants changed in the box on the deal page. The creator sees the request there and is emailed it, makes the changes, and submits a new link. This repeats until the brand approves.',
   },
   {
     title: 'Payment 3: 70% to the creator',
-    body: 'After approving, the brand pays the remaining 70% to the same UPI ID. The creator confirms it arrived.',
+    body: 'After approving, the brand pays the remaining 70% the same way, to the same UPI ID. The creator confirms it arrived.',
   },
   {
     title: 'Done',
-    body: 'The deal is complete and moves to Past deals in the marketplace. Both sides can download a PDF record of the deal from there whenever they want: who, what, how much and when.',
+    body: 'The deal is complete and moves from Current deals to Past deals. Both sides can download the deal report as a PDF from there whenever they want. It records who the two sides were, the brief and the digital rights terms, the amounts, the payments and the dates.',
   },
 ];
 
 const RULES: Array<{ title: string; body: string }> = [
   {
+    title: 'Brands post, creators apply',
+    body: 'A brand cannot apply to deals and a creator cannot post them. Which one you are comes from your Instagram account type.',
+  },
+  {
     title: 'One brand, one creator',
     body: 'Each deal has exactly one brand and one creator.',
+  },
+  {
+    title: 'Digital rights are part of the price',
+    body: 'If a deal includes digital rights, the amount already covers them and the brand may use the content only as it wrote in the deal. If a deal does not include them, the brand may not reuse the content beyond the agreed posts.',
   },
   {
     title: 'We never hold the creator\'s money',
@@ -62,12 +78,20 @@ const RULES: Array<{ title: string; body: string }> = [
     body: 'We do not use any third-party UPI verification. Please enter your UPI ID carefully, and check the name your UPI app shows before paying. A payment to a wrong UPI ID cannot be recalled.',
   },
   {
+    title: 'Your email is shared only with the other side of your deals',
+    body: 'A brand sees the email of creators who applied to its deals, and a creator sees the email of a brand whose deal they applied to. Nobody else sees it.',
+  },
+  {
     title: 'Cancelling',
     body: 'A brand can cancel a deal at no cost until it pays the fee. After the fee is paid, the deal cannot be cancelled in the app and the fee is not refunded. Creators cannot cancel a deal.',
   },
   {
     title: 'Your profile is entered once',
     body: 'Profile details are saved once. After that only your follower count can be changed on the site. If you made a mistake, email us and we will correct it.',
+  },
+  {
+    title: 'Changing your email or UPI ID',
+    body: 'Both can be changed in Settings. A new email address has to be confirmed with a fresh link before you can pay or change a UPI ID again, and we tell your old address about the change. When a UPI ID is changed we email you to say so.',
   },
 ];
 
