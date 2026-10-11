@@ -185,7 +185,22 @@ export default function ProfileDetails({ role }: { role: Role }) {
             {fixed(copy.name, name)}
             {role === 'creator' && fixed('Age', age)}
             {role === 'creator' && fixed('Gender', gender)}
-            {role === 'brand' && fixed('Website', website)}
+            {role === 'brand' && (
+              <div style={{ marginBottom: '14px' }}>
+                <div style={label}>Website</div>
+                <div style={{ fontSize: '15px', color: C.text, fontWeight: 600, wordBreak: 'break-word' }}>
+                  {/* Only a web address is ever made a link. */}
+                  {/^https?:\/\//i.test(website) ? (
+                    <a
+                      href={website} target="_blank" rel="noopener noreferrer nofollow"
+                      style={{ color: C.text, textDecoration: 'underline', textUnderlineOffset: 3 }}
+                    >
+                      {website.replace(/^https?:\/\//i, '').replace(/\/$/, '')}
+                    </a>
+                  ) : (website || 'Not given')}
+                </div>
+              </div>
+            )}
             {fixed('City', city)}
             <div style={{ fontSize: '13px', color: C.textMuted, lineHeight: 1.7, margin: '-4px 0 14px' }}>
               These were saved once and cannot be changed.

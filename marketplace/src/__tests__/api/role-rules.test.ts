@@ -259,11 +259,14 @@ describeDb('role rules (real database)', () => {
     await setupStatus(mockReq({ method: 'GET', ...asUser(CREATOR) }), done as any);
     expect(done.body.complete).toBe(true);
 
-    // A brand is never asked for a UPI ID.
+    // A brand is asked for a UPI ID as well.
     const brand = mockRes();
     await setupStatus(mockReq({ method: 'GET', ...asUser(BRAND) }), brand as any);
     expect(brand.body.complete).toBe(true);
-    expect(brand.body.items.map((i: any) => i.key)).not.toContain('upi');
+    expect(brand.body.items.map((i: any) => i.key)).toContain('upi');
+    const freshBrand = mockRes();
+    await setupStatus(mockReq({ method: 'GET', ...asUser(FRESH_BRAND) }), freshBrand as any);
+    expect(freshBrand.body.items.filter((i: any) => !i.done).map((i: any) => i.key)).toContain('upi');
   });
 
   it('a creator can apply', async () => {

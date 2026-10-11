@@ -109,8 +109,9 @@ describe('a complete account', () => {
     expect(missingSetup({ ...full, role: 'creator', pitch_text: '   ' })).toEqual(['about']);
   });
 
-  it('a brand needs the same, except a UPI ID', () => {
-    expect(missingSetup({ ...full, role: 'brand', payout_vpa: '', payout_name: '' })).toEqual([]);
+  it('a brand needs the same, UPI ID included', () => {
+    expect(missingSetup({ ...full, role: 'brand' })).toEqual([]);
+    expect(missingSetup({ ...full, role: 'brand', payout_vpa: '', payout_name: '' })).toEqual(['upi']);
     expect(missingSetup({ ...full, role: 'brand', pitch_text: '' })).toEqual(['about']);
   });
 

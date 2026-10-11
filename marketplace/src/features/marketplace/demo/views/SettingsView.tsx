@@ -249,63 +249,6 @@ export default function SettingsView({
         {/* A brand's own words, shown to creators on its resume. */}
         {role === 'brand' && <PitchText role="brand" />}
 
-        {/* ── Brand Profile ── */}
-        {role === 'brand' && (
-          <div style={{ marginBottom: '56px' }}>
-            {(() => {
-              const open = creatorSettingsOpen === 'brandProfile';
-              return (
-                <>
-                  <button onClick={() => setCreatorSettingsOpen(open ? null : 'brandProfile')} style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: C.card, border: `1px solid ${C.border}`, borderRadius: open ? '10px 10px 0 0' : '10px', padding: '12px 14px', cursor: 'pointer', color: C.text }}>
-                    <span style={{ fontSize: '14px', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase', color: C.textMuted }}>Brand Profile</span>
-                    <span style={{ fontSize: '16px', color: C.textMuted }}>{open ? '\u25B2' : '\u25BC'}</span>
-                  </button>
-                  {open && (
-                    <div style={{ background: C.card, border: `1px solid ${C.border}`, borderTop: 'none', borderRadius: '0 0 10px 10px', padding: '28px' }}>
-                      <div style={{ fontSize: '13px', color: C.textSecondary, marginBottom: '16px', lineHeight: 1.7 }}>
-                        Define your brand profile so creators understand who you are. Select one option from each category.
-                      </div>
-                      {Object.values(BRAND_CATEGORIES).map((cat) => {
-                        const currentSelection = activeBrandProfileSelections[cat.name];
-                        return (
-                          <div key={cat.name} style={{ marginBottom: '14px' }}>
-                            <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.6px', textTransform: 'uppercase', marginBottom: '8px' }}>{cat.name}</div>
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                              {cat.subCategories.map((sub) => {
-                                const selected = currentSelection === sub;
-                                return (
-                                  <button
-                                    key={sub}
-                                    onClick={() => {
-                                      setActiveBrandProfileSelections(prev => ({ ...prev, [cat.name]: selected ? '' : sub }));
-                                      if (!selected) { setPurchaseToast(`${cat.name}: ${sub}`); setTimeout(() => setPurchaseToast(null), 2000); }
-                                    }}
-                                    style={{
-                                      padding: '5px 12px', borderRadius: '8px', fontSize: '14px', fontWeight: selected ? 600 : 400,
-                                      background: selected ? `${withAlpha(C.primary, 0x15)}` : C.bg,
-                                      border: `1px solid ${selected ? C.primary : C.border}`,
-                                      color: selected ? C.primary : C.textSecondary,
-                                      cursor: 'pointer', transition: 'all 0.15s',
-                                    }}
-                                  >
-                                    {sub}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </>
-              );
-            })()}
-          </div>
-        )}
-
-
-
         {/* ── CREATOR-ONLY SETTINGS ── */}
         {role !== 'brand' && (<>
 

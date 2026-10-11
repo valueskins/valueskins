@@ -12,7 +12,7 @@ const STEPS: Array<{ title: string; body: string }> = [
   },
   {
     title: 'Finish Settings',
-    body: 'Settings opens with a checklist of what is left to do. Fill in your profile: a creator gives their name, age, gender, city and follower count, and a brand gives its brand name, website, city and follower count. Add your email address and confirm it with the link we send you. Write a few lines about yourself or your brand. Creators also add the UPI ID they want to be paid on, typed twice, with the name on the account. Until everything on the checklist is done, a brand cannot post a deal and a creator cannot apply to one.',
+    body: 'Settings opens with a checklist of what is left to do. Fill in your profile: a creator gives their name, age, gender, city and follower count, and a brand gives its brand name, website, city and follower count. Add your email address and confirm it with the link we send you. Write a few lines about yourself or your brand. Both sides add a UPI ID, typed twice, with the name on the account: a creator the one they want to be paid on, a brand the one it pays from. Until everything on the checklist is done, a brand cannot post a deal and a creator cannot apply to one.',
   },
   {
     title: 'A brand posts a deal',

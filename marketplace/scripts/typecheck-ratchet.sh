@@ -27,7 +27,8 @@ if [ "$COUNT" -gt "$BASELINE" ]; then
   echo "FAIL: $((COUNT - BASELINE)) new type error(s)."
   echo "ignoreBuildErrors means these would ship silently. Fix them."
   echo ""
-  printf '%s\n' "$OUT" | grep 'error TS' | head -40
+  # All of them: the new one is not always among the first forty.
+  printf '%s\n' "$OUT" | grep 'error TS'
   exit 1
 fi
 
