@@ -8,6 +8,7 @@ import { WORKFLOW, canTransition } from '@/lib/deal-workflow';
 import { sendDealEmail } from '@/lib/deal-emails';
 import { broadcastDealUpdate } from '@/lib/deal-realtime';
 import { checkUploadQuota } from '@/lib/deal-quotas';
+import { checkDriveLink, DRIVE_LINK_MESSAGES } from '@/lib/drive-link';
 
 // Spec: Google Drive links only. Anything else is rejected rather than stored,
 // so a brand is never sent to an attacker-controlled host from a deal page.
@@ -67,6 +68,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       used: uploadQuota.used,
       limit: uploadQuota.limit,
     });
+  }
+
+  // Before the brand is told there is something to review, make sure they will
+  // be able to open it. A private or dead link is refused here, with how to fix
+  // it, so the creator can put it right while still on the page. If Google
+  // cannot be reached the link is accepted: that is not the creator's doing.
+  const linkStatus = await checkDriveLink(link.url);
+  if (linkStatus === 'private' || linkStatus === 'missing') {
+    return res.status(400).json({
+      error: DRIVE_LINK_MESSAGES[linkStatus],
+      field: 'content_link',
+      reason: linkStatus === 'private' ? 'link_private' : 'link_not_found',
+    });
+  }
+  if (linkStatus === 'unknown') {
+    console.warn('[upload-content] could not verify link visibility', { dealId: deal.id });
   }
 
   const isRevision = deal.workflow_status === WORKFLOW.REVISION_REQUESTED;

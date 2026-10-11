@@ -449,7 +449,9 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
               </div>
             )}
             <div style={{ fontSize: 14, color: C.textMuted, marginBottom: 8 }}>
-              Paste a Google Drive link. Make sure the brand can open it.
+              Paste a Google Drive link. In Drive, set sharing to &quot;Anyone with the link&quot;
+              first. We check the link opens before sending it to the brand, and will tell you
+              if it is private.
             </div>
             <input
               value={linkInput}
@@ -486,14 +488,16 @@ export default function DealWorkflowPanel(props: DealWorkflowPanelProps) {
             </a>
           )}
           <div style={{ fontSize: 14, color: C.textMuted, marginBottom: 6 }}>
-            Ask for changes, or approve to release the final payment.
+            Approve the content, or tell the creator what to change. Write exactly what you
+            want different. The creator sees it on this page and is emailed, then sends a new
+            link.
           </div>
           <textarea
             value={feedbackInput}
             onChange={(e) => setFeedbackInput(e.target.value)}
-            placeholder="What needs changing?"
+            placeholder="The changes we want are..."
             aria-label="Revision feedback"
-            rows={3}
+            rows={5}
             style={{ ...input, marginBottom: 20, resize: 'vertical' }}
           />
           <div style={{ display: 'flex', gap: 8 }}>
