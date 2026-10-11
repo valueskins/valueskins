@@ -13,6 +13,7 @@ import { C, withAlpha } from '@/theme/colors';
 import { getMyApplications, nextAction, financials, isOk, type WorkflowStatus } from '@/lib/deal-api';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import SetupBanner from '@/components/deal/SetupBanner';
+import MarketTabs from '@/components/deal/MarketTabs';
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const { getSessionUser } = await import('@/lib/session');
@@ -67,7 +68,12 @@ export default function MyDealsPage() {
       setError(res.error);
       return;
     }
-    setRows((res.data.applications || []) as Row[]);
+    // Finished deals are under Past deals, with their reports.
+    setRows(
+      ((res.data.applications || []) as Row[]).filter(
+        (r) => r.workflow_status !== 'COMPLETED' && r.workflow_status !== 'CANCELLED'
+      )
+    );
     setError(null);
   }, [router]);
 
@@ -114,6 +120,7 @@ export default function MyDealsPage() {
       <Head><title>Your deals · ValueSkins</title></Head>
       <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '24px 16px 48px' }}>
         <div style={{ maxWidth: 640, margin: '0 auto' }}>
+          <MarketTabs active="current" role="creator" />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <div>
               <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Your deals</h1>

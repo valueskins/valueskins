@@ -431,6 +431,83 @@ describeDb('role rules (real database)', () => {
     expect((await view(BRAND, 'rr_other')).body.email).toBeNull();
   });
 
+  // -- past deals -------------------------------------------------------------
+
+  describe('past deals', () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const past = require('@/pages/deals/past').getServerSideProps;
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const brandHome = require('@/pages/campaigns/index').getServerSideProps;
+    let doneId = '';
+    let cancelledId = '';
+
+    beforeAll(async () => {
+      const done = await queryOne(
+        `INSERT INTO deals (brand_id, creator_id, title, description, amount, workflow_status)
+         VALUES ($1, $2, 'rr finished deal', 'x', 12000, 'COMPLETED') RETURNING id`,
+        [BRAND, CREATOR]
+      );
+      const cancelled = await queryOne(
+        `INSERT INTO deals (brand_id, creator_id, title, description, amount, workflow_status, cancelled_at)
+         VALUES ($1, NULL, 'rr cancelled deal', 'x', 8000, 'CANCELLED', NOW()) RETURNING id`,
+        [BRAND]
+      );
+      doneId = done.id;
+      cancelledId = cancelled.id;
+    });
+
+    const ids = (r: any) => (r.props?.deals || []).map((d: any) => d.id);
+
+    it('signed-out visitors are sent to login', async () => {
+      expect((await past(pageCtx() as any)).redirect.destination).toBe('/auth/login');
+    });
+
+    it('a brand sees its finished and cancelled deals', async () => {
+      const r = await past(pageCtx(BRAND) as any);
+      expect(r.props.role).toBe('brand');
+      expect(ids(r)).toEqual(expect.arrayContaining([doneId, cancelledId]));
+    });
+
+    it('a creator sees only the finished deals it was confirmed on', async () => {
+      const r = await past(pageCtx(CREATOR) as any);
+      expect(r.props.role).toBe('creator');
+      expect(ids(r)).toContain(doneId);
+      expect(ids(r)).not.toContain(cancelledId);
+    });
+
+    it('nobody sees a deal they were not part of', async () => {
+      expect(ids(await past(pageCtx(OTHER_CREATOR) as any))).not.toContain(doneId);
+      expect(ids(await past(pageCtx(FRESH_BRAND) as any))).toEqual([]);
+    });
+
+    it('finished deals leave the brand\'s current list', async () => {
+      const current = ((await brandHome(pageCtx(BRAND) as any)).props.deals || []).map((d: any) => d.id);
+      expect(current).not.toContain(doneId);
+      expect(current).not.toContain(cancelledId);
+      expect(current).toContain(dealId);
+    });
+
+    it('the report downloads for either party to a completed deal, and nobody else', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const downloadAdp = require('@/pages/api/deals/[dealId]/download-adp').default;
+      const get = async (who: number, id: string) => {
+        const res = mockRes();
+        await downloadAdp(mockReq({ method: 'GET', query: { dealId: id }, ...asUser(who) }), res as any);
+        return res;
+      };
+      for (const who of [BRAND, CREATOR]) {
+        const res = await get(who, doneId);
+        expect(res.statusCode).toBe(200);
+        expect(res.headers['content-type']).toBe('application/pdf');
+        expect(String(res.headers['content-disposition'])).toContain('attachment');
+        expect(Buffer.isBuffer(res.body) || res.body instanceof Uint8Array).toBe(true);
+      }
+      expect((await get(OTHER_CREATOR, doneId)).statusCode).toBe(403);
+      // A cancelled deal has no report.
+      expect((await get(BRAND, cancelledId)).statusCode).toBe(409);
+    });
+  });
+
   // -- sign-in: the role is read from Instagram, never guessed -----------------
 
   describe('sign-in', () => {

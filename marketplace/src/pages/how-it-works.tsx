@@ -44,7 +44,7 @@ const STEPS: Array<{ title: string; body: string }> = [
   },
   {
     title: 'Done',
-    body: 'The deal is complete. Both sides can download a PDF record of the deal: who, what, how much and when.',
+    body: 'The deal is complete and moves to Past deals in the marketplace. Both sides can download a PDF record of the deal from there whenever they want: who, what, how much and when.',
   },
 ];
 

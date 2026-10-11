@@ -19,6 +19,7 @@ import { query, queryOne } from '@/lib/db';
 import { C, withAlpha } from '@/theme/colors';
 import { nextAction, financials, type WorkflowStatus } from '@/lib/deal-api';
 import SetupBanner from '@/components/deal/SetupBanner';
+import MarketTabs from '@/components/deal/MarketTabs';
 import { handleLabel } from '@/lib/handle';
 
 interface DealRow {
@@ -64,6 +65,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
          FROM deals d
          LEFT JOIN users u ON u.id = d.creator_id
         WHERE d.brand_id = $1
+          AND d.workflow_status NOT IN ('COMPLETED', 'CANCELLED')
         ORDER BY d.created_at DESC
         LIMIT 100`,
       [userId]
@@ -106,10 +108,11 @@ export default function BrandDealsPage({ deals = [] }: { deals: DealRow[] }) {
       <Head><title>Your deals · ValueSkins</title></Head>
       <div style={{ minHeight: '100vh', background: C.bg, color: C.text, padding: '24px 16px 48px' }}>
         <div style={{ maxWidth: 640, margin: '0 auto' }}>
+          <MarketTabs active="current" role="brand" />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <div>
-              <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Your deals</h1>
-              <p style={{ fontSize: 12, color: C.outline, margin: '2px 0 0' }}>{deals.length} total</p>
+              <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Current deals</h1>
+              <p style={{ fontSize: 12, color: C.outline, margin: '2px 0 0' }}>{deals.length} in progress</p>
             </div>
             <button
               onClick={() => router.push('/campaigns/create')}

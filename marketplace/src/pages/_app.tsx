@@ -19,6 +19,7 @@ const ROUTES_WITHOUT_GLOBAL_FOOTER = ['/auth/login'];
 const ROUTES_WITH_NAV = [
   '/deals/browse',
   '/deals/mine',
+  '/deals/past',
   '/deals/[dealId]',
   '/campaigns',
   '/campaigns/create',
