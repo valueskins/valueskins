@@ -47,11 +47,6 @@ export function ValueSkinsLogo({ theme, size = 44, hideTagline = false, style }:
       <div style={{ color: c.word, fontWeight: 700, fontSize: size, letterSpacing: '0.18em' }}>
         VALUESKINS
       </div>
-      {!hideTagline && (
-        <div style={{ marginTop: size * 0.32, color: c.tag, fontWeight: 500, fontSize: size * 0.25, letterSpacing: '0.34em' }}>
-          TRUST <span style={{ color: c.dot }}>·</span> EARNED <span style={{ color: c.dot }}>·</span> SERIOUS
-        </div>
-      )}
     </div>
   );
 }

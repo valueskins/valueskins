@@ -34,15 +34,6 @@ export default function Footer() {
             }}>
               VALUESKINS
             </h3>
-            <div style={{
-              fontSize: '9px',
-              fontWeight: 500,
-              letterSpacing: '0.34em',
-              color: C.textSecondary,
-              marginBottom: '16px',
-            }}>
-              TRUST <span style={{ color: C.accent }}>·</span> EARNED <span style={{ color: C.accent }}>·</span> SERIOUS
-            </div>
             <p style={{
               fontSize: '13px',
               color: C.textSecondary,

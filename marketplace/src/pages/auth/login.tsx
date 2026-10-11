@@ -187,17 +187,6 @@ export default function Login() {
               >
                 VALUESKINS
               </div>
-              {/* Tagline ~25% of wordmark, dots in Deep Sand (§2) */}
-              <div
-                style={{
-                  marginTop: 12, color: t.body, fontWeight: 500,
-                  fontSize: 'clamp(9px, 1.4vw, 11px)', letterSpacing: '0.34em',
-                  ...enter(0.13),
-                }}
-              >
-                TRUST <span style={{ color: DEEP_SAND }}>·</span> EARNED{' '}
-                <span style={{ color: DEEP_SAND }}>·</span> SERIOUS
-              </div>
             </div>
 
             {/* §0b.3 — one confident line (replaces the cut sub-headline) */}
