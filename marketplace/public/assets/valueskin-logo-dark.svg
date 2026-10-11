@@ -2,7 +2,4 @@
   <title>ValueSkins — dark treatment</title>
   <rect width="900" height="340" fill="#0A0A0A"/>
   <text x="450" y="180" text-anchor="middle" font-family="'Helvetica Neue', Inter, Arial, sans-serif" font-weight="700" font-size="88" letter-spacing="16" fill="#F5F5F0">VALUESKINS</text>
-  <text x="450" y="235" text-anchor="middle" font-family="'Helvetica Neue', Inter, Arial, sans-serif" font-weight="500" font-size="22" letter-spacing="7.5">
-    <tspan fill="#B8B4AC">TRUST </tspan><tspan fill="#C8B89A">· </tspan><tspan fill="#B8B4AC">EARNED </tspan><tspan fill="#C8B89A">· </tspan><tspan fill="#B8B4AC">SERIOUS</tspan>
-  </text>
 </svg>
