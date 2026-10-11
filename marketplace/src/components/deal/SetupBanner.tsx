@@ -45,8 +45,8 @@ export default function SetupBanner({ variant = 'banner' }: { variant?: 'banner'
   const action = status.role === 'brand' ? 'post a deal' : 'apply to deals';
 
   const box: React.CSSProperties = {
-    background: withAlpha(C.accent, 0x14),
-    border: `1px solid ${C.accent}`,
+    background: C.surfaceAlt,
+    border: `1px solid ${C.border}`,
     borderRadius: 12,
     padding: 28,
     marginBottom: variant === 'checklist' ? 24 : 12,

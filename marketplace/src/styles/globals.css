@@ -202,19 +202,38 @@ html {
     font-weight: 600;
   }
 
-  /* Text fields share one size and shape. */
+  /* Text fields share one size, shape and ground. Some forms gave theirs a
+     grey fill and others white; every field is now the same. */
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
   select,
   textarea {
     border-radius: 10px !important;
     font-size: 15px !important;
     line-height: 1.5;
+    padding: 14px 16px !important;
+    background: var(--c-field-bg) !important;
+    border: 1px solid var(--c-field-border) !important;
   }
 
-  /* Field labels and small headings above cards: spaced capitals, like the
-     section titles, so every label on the site reads the same way. */
-  label {
+  /* A label attached to a field. Labels that wrap a checkbox carry a full
+     sentence and are left as ordinary text. */
+  label[for] {
+    text-transform: uppercase;
     letter-spacing: 0.08em;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: var(--c-text-muted) !important;
+  }
+
+  /* Links drawn as buttons. They are styled inline, so they are found by the
+     corner radius they were given, and made to match real buttons. */
+  a[style*="border-radius:8px"], a[style*="border-radius: 8px"] {
+    border-radius: 999px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    padding: 13px 26px !important;
   }
 
   /* Links inside running text are underlined: with one text colour, the

@@ -103,7 +103,7 @@ export default function PayoutUpi({ role = 'creator' }: { role?: 'creator' | 'br
           <div
             role="note"
             style={{
-              ...card, borderColor: C.warning, background: withAlpha(C.warning, 0x14),
+              ...card, borderColor: C.border, background: C.surfaceAlt,
               fontSize: 14, lineHeight: 1.6,
             }}
           >
@@ -115,13 +115,13 @@ export default function PayoutUpi({ role = 'creator' }: { role?: 'creator' | 'br
           {loading && <div style={{ fontSize: 15, color: C.outline }}>Loading…</div>}
 
           {notice && (
-            <div role="status" style={{ ...card, borderColor: C.accent, background: withAlpha(C.accent, 0x14), fontSize: 14 }}>
+            <div role="status" style={{ ...card, borderColor: C.border, background: C.surfaceAlt, fontSize: 14 }}>
               {notice}
             </div>
           )}
 
           {!loading && emailReady === false && (
-            <div style={{ ...card, borderColor: C.warning, background: withAlpha(C.warning, 0x14) }}>
+            <div style={{ ...card, borderColor: C.border, background: C.surfaceAlt }}>
               <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Confirm your email first</div>
               <div style={{ fontSize: 14, color: C.textMuted, marginBottom: 8 }}>
                 Payment confirmations and your deal reports are sent there, so it has to be

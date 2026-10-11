@@ -167,8 +167,8 @@ export default function DirectPaymentPanel({
             <div
               style={{
                 fontSize: 14, color: C.text, lineHeight: 1.6,
-                background: withAlpha(C.warning, 0x14),
-                border: `1px solid ${C.warning}`, borderRadius: 8, padding: 18,
+                background: C.surfaceAlt,
+                border: `1px solid ${C.border}`, borderRadius: 8, padding: 18,
               }}
             >
               {BLOCKED_REASON[destination.blocked] || 'Payment details are not available yet.'}
@@ -210,8 +210,8 @@ export default function DirectPaymentPanel({
               <div
                 style={{
                   fontSize: 14, color: C.text, lineHeight: 1.6,
-                  background: withAlpha(C.warning, 0x14),
-                  border: `1px solid ${C.warning}`, borderRadius: 8, padding: 18, marginBottom: 20,
+                  background: C.surfaceAlt,
+                  border: `1px solid ${C.border}`, borderRadius: 8, padding: 18, marginBottom: 20,
                 }}
               >
                 {destination.name
@@ -264,8 +264,8 @@ export default function DirectPaymentPanel({
         <div
           style={{
             fontSize: 14, color: C.text, lineHeight: 1.6,
-            background: withAlpha(C.warning, 0x14),
-            border: `1px solid ${C.warning}`, borderRadius: 8, padding: 18,
+            background: C.surfaceAlt,
+            border: `1px solid ${C.border}`, borderRadius: 8, padding: 18,
           }}
         >
           <strong>Waiting for the creator to confirm.</strong>

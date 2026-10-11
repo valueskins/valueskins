@@ -225,14 +225,8 @@ export default function SettingsView({
         </div>
       )}
 
-      {/* Header */}
-      <div style={{ height: '60px', borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '20px', paddingRight: '20px', fontWeight: 'bold', fontSize: '18px', background: C.surface }}>
-        <div>
-          Settings
-          <span style={{ fontSize: '13px', fontWeight: 600, color: C.textSecondary, marginLeft: '10px' }}>ValueSkins preferences</span>
-        </div>
-      </div>
-      <div style={{ padding: '20px', maxWidth: 780, margin: '0 auto' }}>
+      <div style={{ padding: '72px 24px 140px', maxWidth: 780, margin: '0 auto' }}>
+        <h1 style={{ fontSize: 26, fontWeight: 700, margin: '0 0 56px', color: C.text }}>Settings</h1>
 
         {/* Details for this account's role, saved to the account. Replaced a
             single "My Profile" form that asked a brand for a full name, an age
