@@ -6,7 +6,6 @@ import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
 import { C } from '@/theme/colors';
 import ValueSkinsLogo from '@/components/ValueSkinsLogo';
-import DriftingSkins from '@/components/DriftingSkins';
 
 const FONT = "'Poppins', 'Helvetica Neue', Arial, sans-serif";
 
@@ -159,10 +158,9 @@ export default function HomePage() {
 
   return (
     <div style={{ minHeight: '100vh', background: C.bg, fontFamily: FONT }}>
-      {/* Hero — full-bleed brand moment, same drifting ValueSkin texture as the
-          login screen (BRANDING §10.4: the skin is a recurring brand device). */}
+      {/* Hero. A plain white ground: the pixel figures that drifted behind it
+          were removed. */}
       <div style={{ position: 'relative', overflow: 'hidden' }}>
-      <DriftingSkins />
       <div
         style={{
           position: 'relative',

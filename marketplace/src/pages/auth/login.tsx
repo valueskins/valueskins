@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Head from 'next/head';
 // import { getGoogleAuthUrl } from '@/lib/oauth'; // Google OAuth — commented out (kept for reference)
 import { getInstagramAuthUrl } from '@/lib/oauth';
-import { ValueSkinSprite } from '@/features/profiles/ProfileView';
 
 // Login Page — per "login page.md" v2 (dark premium).
 // Fixed dark. The spec's light toggle (§0b) is deliberately NOT shipped here —
@@ -47,15 +46,6 @@ const T = {
     btnShadow: 'none',
   },
 } as const;
-
-// §0b.2 — drifting ValueSkin pixel identities, faint, slow float.
-const DRIFTERS = [
-  { left: '8%', top: '18%', size: 96, dur: 17, delay: 0 },
-  { left: '82%', top: '24%', size: 74, dur: 21, delay: 2.5 },
-  { left: '16%', top: '68%', size: 68, dur: 19, delay: 1.2 },
-  { left: '74%', top: '72%', size: 104, dur: 23, delay: 3.4 },
-  { left: '46%', top: '12%', size: 58, dur: 25, delay: 4.1 },
-];
 
 export default function Login() {
   const [error, setError] = useState('');
@@ -143,23 +133,6 @@ export default function Login() {
           overflow: 'hidden', // §3: one viewport, never scrolls
         }}
       >
-        {/* §0b.2 — drifting ValueSkin identities, opacity ~0.09 */}
-        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.09 }}>
-          {DRIFTERS.map((d, i) => (
-            <span
-              key={i}
-              style={{
-                position: 'absolute',
-                left: d.left,
-                top: d.top,
-                animation: reduced ? 'none' : `vsDrift ${d.dur}s ${EASE} ${d.delay}s infinite`,
-              }}
-            >
-              <ValueSkinSprite size={d.size} />
-            </span>
-          ))}
-        </div>
-
         {/* No theme toggle on the auth screen — this is a fixed dark brand
             moment. Top-left stays empty (§1); top-right is now empty too. */}
         <div style={{ position: 'relative', height: 24 }} />
@@ -289,18 +262,11 @@ export default function Login() {
       </div>
 
       <style jsx global>{`
-        @keyframes vsDrift {
-          0%, 100% { transform: translate3d(0, 0, 0); }
-          50%      { transform: translate3d(0, -22px, 0); }
-        }
         /* §6 — sand focus ring, never removed without replacement */
         .vs-login a:focus-visible,
         .vs-login button:focus-visible {
           outline: 2px solid ${DEEP_SAND};
           outline-offset: 2px;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          @keyframes vsDrift { 0%, 100% { transform: none; } }
         }
       `}</style>
     </>
