@@ -11,6 +11,7 @@ const GENDERS = ['Male', 'Female', 'Non-binary', 'Prefer not to say'];
 
 interface Details {
   role: Role;
+  instagram?: string | null;
   locked: boolean;
   name: string;
   city: string;
@@ -148,6 +149,24 @@ export default function ProfileDetails({ role }: { role: Role }) {
         {/* Taken from Instagram at sign-in, never chosen here. */}
         {(
           <div style={{ marginBottom: '14px', paddingBottom: '14px', borderBottom: `1px solid ${C.border}` }}>
+            {/* The account's Instagram name, read from Instagram at sign-in,
+                and a link to the page itself. */}
+            <div style={label}>Instagram</div>
+            <div style={{ fontSize: '16px', fontWeight: 700, marginBottom: '16px' }}>
+              {details?.instagram ? (
+                <a
+                  href={`https://www.instagram.com/${details.instagram}/`}
+                  target="_blank" rel="noopener noreferrer"
+                  style={{ color: C.text, textDecoration: 'underline', textUnderlineOffset: 3 }}
+                >
+                  @{details.instagram}
+                </a>
+              ) : (
+                <span style={{ color: C.textMuted, fontWeight: 500 }}>
+                  {loading ? 'Loading…' : 'Not available yet. Sign in again to refresh it.'}
+                </span>
+              )}
+            </div>
             <div style={label}>Account type</div>
             <div style={{ fontSize: '16px', color: C.text, fontWeight: 700 }}>
               {role === 'brand' ? 'Brand' : 'Creator'}

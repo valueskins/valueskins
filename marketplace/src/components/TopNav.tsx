@@ -91,9 +91,13 @@ export default function TopNav() {
         }}
       >
         <div className="vs-nav-side">
-          <span style={{ fontWeight: 700, letterSpacing: '0.18em', fontSize: 18, color: 'var(--c-text)' }}>
+          <Link
+            href="/"
+            aria-label="ValueSkins home"
+            style={{ fontWeight: 700, letterSpacing: '0.18em', fontSize: 18, color: 'var(--c-text)', textDecoration: 'none' }}
+          >
             VALUESKINS
-          </span>
+          </Link>
         </div>
 
         <div className="vs-nav-menu" style={{ display: 'flex', alignItems: 'center' }}>
