@@ -131,21 +131,10 @@ const QUESTIONS: Question[] = [
       'On both, as a collaboration post',
     ],
   },
-  {
-    key: 'usage', title: 'Use of the content',
-    label: 'How will you use the content afterwards?',
-    options: [
-      'Only the post itself',
-      'We may repost it on our own pages',
-      'We may also use it in paid ads',
-    ],
-    note: {
-      label: 'For how long?',
-      placeholder: 'e.g. Three months from the day it is posted',
-      requiredFor: ['We may repost it on our own pages', 'We may also use it in paid ads'],
-    },
-  },
 ];
+
+// When a brand wants digital rights, it has to say how it will use them.
+const MIN_RIGHTS_TERMS = 20;
 
 // A brief shorter than this is a title, not a brief.
 const MIN_BRIEF = 60;
@@ -180,6 +169,11 @@ export default function CreateCampaign() {
   const budgetValid = budget > MIN_BUDGET && budget <= MAX_BUDGET;
   const [requirements, setRequirements] = useState('');
   const [script, setScript] = useState('');
+  // Asked before anything else. Digital rights are never a separate charge:
+  // a brand has one budget, so if it wants them, the amount it enters is the
+  // whole price and already includes them.
+  const [rights, setRights] = useState<'' | 'yes' | 'no'>('');
+  const [rightsTerms, setRightsTerms] = useState('');
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [notes, setNotes] = useState<Record<string, string>>({});
   const [counts, setCounts] = useState<Record<DeliverableKey, number>>({
@@ -204,6 +198,14 @@ export default function CreateCampaign() {
     e.preventDefault();
     setError(null);
 
+    if (!rights) {
+      setError('Please say whether you want digital rights.');
+      return;
+    }
+    if (rights === 'yes' && rightsTerms.trim().length < MIN_RIGHTS_TERMS) {
+      setError('Say how, where, when and until when you will use the content.');
+      return;
+    }
     if (!budgetValid) {
       setError(
         budget > MAX_BUDGET
@@ -254,6 +256,11 @@ export default function CreateCampaign() {
 
     const description = [
       `Deliverables: ${deliverableSummary}`,
+      // Stated in the deal itself, so it travels with it: the deal page, the
+      // brief emailed to the creator, and the report at the end all print this.
+      rights === 'yes'
+        ? `Digital rights: Included in the deal amount. There is no separate fee.\n${rightsTerms.trim()}`
+        : 'Digital rights: Not included. The brand may not reuse the content beyond the posts agreed here.',
       requirements && `Brief:\n${requirements.trim()}`,
       // Every answer, one per line, so nothing has to be asked afterwards.
       `Details:\n${QUESTIONS.map((q) => {
@@ -316,6 +323,61 @@ export default function CreateCampaign() {
           </p>
 
           <form onSubmit={handleSubmit}>
+            <div style={{ ...field, marginBottom: 48 }}>
+              <div style={lbl}>Do you want digital rights?</div>
+              <div style={{ fontSize: 14, color: C.textMuted, lineHeight: 1.7, marginBottom: 16 }}>
+                Digital rights let you reuse the creator&apos;s content yourself, for example
+                reposting it on your pages or running it as an ad.
+              </div>
+              <div role="radiogroup" aria-label="Do you want digital rights?" style={{ display: 'flex', gap: 12 }}>
+                {([['yes', 'Yes'], ['no', 'No']] as const).map(([value, text]) => {
+                  const on = rights === value;
+                  return (
+                    <button
+                      key={value} type="button" role="radio" aria-checked={on}
+                      onClick={() => setRights(value)}
+                      style={{
+                        flex: 1, padding: '16px', cursor: 'pointer',
+                        background: on ? C.primary : 'transparent',
+                        color: on ? C.onPrimary : C.text,
+                        border: `1px solid ${on ? C.primary : C.border}`,
+                      }}
+                    >
+                      {text}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {rights === 'yes' && (
+                <div style={{ marginTop: 20 }}>
+                  <div
+                    style={{
+                      fontSize: 14, color: C.text, lineHeight: 1.7, marginBottom: 20,
+                      background: C.surfaceAlt, border: `1px solid ${C.border}`,
+                      borderRadius: 10, padding: 18,
+                    }}
+                  >
+                    The amount you enter below is your final price, and it includes digital
+                    rights. There is no separate fee for them.
+                  </div>
+                  <label style={lbl} htmlFor="rights-terms">How will you use the content?</label>
+                  <textarea
+                    id="rights-terms" value={rightsTerms} required rows={4} maxLength={1000}
+                    onChange={(e) => setRightsTerms(e.target.value)}
+                    placeholder="How, where and when you will use it, and until when. For example: reposted on our Instagram and website, and run as an Instagram ad, for three months from the day it is posted."
+                    style={{ ...input, resize: 'vertical' }}
+                  />
+                </div>
+              )}
+
+              {rights === 'no' && (
+                <div style={{ fontSize: 14, color: C.textMuted, lineHeight: 1.7, marginTop: 16 }}>
+                  You will not be able to reuse the content beyond the posts agreed in this deal.
+                </div>
+              )}
+            </div>
+
             <div style={field}>
               <label style={lbl} htmlFor="title">Campaign title</label>
               <input

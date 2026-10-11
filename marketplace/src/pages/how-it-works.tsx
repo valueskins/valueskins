@@ -12,7 +12,7 @@ const STEPS: Array<{ title: string; body: string }> = [
   },
   {
     title: 'A brand posts a deal',
-    body: 'The brand writes what it needs, sets the amount, the last date to apply and the date the content is due. The amount is final. There is no negotiation and no chat.',
+    body: 'The brand writes what it needs, sets the amount, the last date to apply and the date the content is due. The brand also says whether it wants digital rights, meaning the right to reuse the content itself. If it does, it writes how and until when, and the amount already includes them. The amount is final. There is no negotiation and no chat.',
   },
   {
     title: 'Creators apply',

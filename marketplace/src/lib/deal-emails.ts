@@ -40,6 +40,17 @@ function getTransport() {
   return nodemailer.createTransport({ jsonTransport: true });
 }
 
+// The brief is written by the brand and goes into an HTML email, so it is
+// escaped: no markup in it is ever interpreted.
+function escapeForEmail(text: string): string {
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 const money = (n: number) =>
   `${Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} INR`;
 
@@ -87,6 +98,11 @@ const TEMPLATES: Record<DealEmailType, (d: any) => Built> = {
       `Your total: ${money(d.creator_total)} (advance ${money(d.advance)}, final ${money(d.final)})`,
       `Content due: ${d.content_upload_deadline}`,
       'The brand pays the commission and your 30% advance next. You will be emailed when the advance lands.',
+      // The full brief as posted, including the digital rights terms, so the
+      // creator has their own copy of what was agreed.
+      ...(d.brief
+        ? [`<strong>Your copy of the brief</strong><br><span style="white-space:pre-wrap">${escapeForEmail(d.brief)}</span>`]
+        : []),
     ], { label: 'View deal', url: dealUrl(d.deal_id) }),
   }),
 

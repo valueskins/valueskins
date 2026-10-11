@@ -105,6 +105,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         senderId: Number(userId),
         data: {
           title: deal.title,
+          brief: deal.description,
           brand_username: (brand as any)?.username || 'the brand',
           creator_total: f.creatorTotal,
           advance: f.advance,
