@@ -1,12 +1,14 @@
 name: CI
 
-# Runs on every pull request to main. The main branch requires the "Checks"
-# job to pass before a pull request can be merged, so anything that fails here
+# Runs on every pull request to main. The main branch requires both jobs below
+# to pass before a pull request can be merged, so anything that fails here
 # cannot reach production.
 #
-# This file used to be decoration: the type check and lint could not fail
-# (`continue-on-error` plus `|| true`), and the test job was a single `echo`.
-# Changes shipped untested, which is how the same things kept breaking.
+# Built to be quick, because a slow gate gets bypassed:
+# - the two jobs run side by side, so the wait is the longer one, not the sum
+# - node_modules is cached whole, so a run with unchanged dependencies skips
+#   the install (which was the longest single step)
+# - the build reuses the previous run's compiler cache
 
 on:
   pull_request:
@@ -17,17 +19,25 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  NEXT_TELEMETRY_DISABLED: '1'
+  # Placeholders so the build and the tests never reach a real service.
+  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/vs_ci
+  RAZORPAY_KEY_ID: rzp_test_ci
+  RAZORPAY_KEY_SECRET: ci
+  NEXT_PUBLIC_APP_URL: https://www.valueskins.com
+
 jobs:
-  checks:
-    name: Checks
+  tests:
+    name: Tests
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
 
     # A real Postgres, because the tests that matter drive the real handlers
     # against a real database: who may post, who may apply, who sees what.
     services:
       postgres:
-        image: postgres:16
+        image: postgres:16-alpine
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -36,9 +46,9 @@ jobs:
           - 5432:5432
         options: >-
           --health-cmd "pg_isready -U postgres"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
+          --health-interval 2s
+          --health-timeout 3s
+          --health-retries 20
 
     defaults:
       run:
@@ -47,12 +57,6 @@ jobs:
     env:
       TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/vs_ci
       PGPASSWORD: postgres
-      # Placeholders so the build and the tests never reach a real service.
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/vs_ci
-      RAZORPAY_KEY_ID: rzp_test_ci
-      RAZORPAY_KEY_SECRET: ci
-      NEXT_PUBLIC_APP_URL: https://www.valueskins.com
-      NEXT_TELEMETRY_DISABLED: '1'
 
     steps:
       - uses: actions/checkout@v4
@@ -60,10 +64,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: marketplace/package-lock.json
+
+      - name: Restore node_modules
+        id: modules
+        uses: actions/cache@v4
+        with:
+          path: marketplace/node_modules
+          key: modules-${{ runner.os }}-node22-${{ hashFiles('marketplace/package-lock.json') }}
 
       - name: Install
+        if: steps.modules.outputs.cache-hit != 'true'
         run: npm ci
 
       - name: Type check (may not get worse)
@@ -80,6 +90,44 @@ jobs:
 
       - name: Payment invariants
         run: psql -h localhost -U postgres -d vs_ci -v ON_ERROR_STOP=1 -f scripts/verify-payment-invariants.sql
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    defaults:
+      run:
+        working-directory: marketplace
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Restore node_modules
+        id: modules
+        uses: actions/cache@v4
+        with:
+          path: marketplace/node_modules
+          key: modules-${{ runner.os }}-node22-${{ hashFiles('marketplace/package-lock.json') }}
+
+      - name: Install
+        if: steps.modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+      # Next keeps its compiler output here. Restoring the most recent one
+      # means only what changed is recompiled.
+      - name: Restore build cache
+        uses: actions/cache@v4
+        with:
+          path: marketplace/.next/cache
+          key: next-${{ runner.os }}-${{ hashFiles('marketplace/package-lock.json') }}-${{ github.sha }}
+          restore-keys: |
+            next-${{ runner.os }}-${{ hashFiles('marketplace/package-lock.json') }}-
+            next-${{ runner.os }}-
 
       - name: Build
         run: npx next build
