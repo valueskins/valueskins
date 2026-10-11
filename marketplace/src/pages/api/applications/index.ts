@@ -7,6 +7,7 @@ import { loadDeal, getUserRole, hasEmailOnFile, EMAIL_REQUIRED, incompleteSetup 
 import { applicationsOpen } from '@/lib/deal-workflow';
 import { sendDealEmail } from '@/lib/deal-emails';
 import { checkApplicationQuota } from '@/lib/deal-quotas';
+import { recordDealEvent } from '@/lib/deal-events';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const userId = await requireUser(req, res);
@@ -98,6 +99,8 @@ async function apply(req: NextApiRequest, res: NextApiResponse, userId: string) 
         },
       });
     }
+
+    await recordDealEvent({ dealId: deal.id, actorId: userId, type: 'APPLIED' });
 
     return res.status(201).json({ application_id: (inserted as any).id, status: 'APPLIED' });
   } catch (err) {

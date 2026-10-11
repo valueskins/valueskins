@@ -28,7 +28,7 @@ redirects() {
 echo "Smoke test: $BASE"
 
 # Public pages load.
-for p in / /how-it-works /auth/login /legal/terms /legal/privacy /legal/refund /help; do
+for p in / /how-it-works /guide-for-brands /auth/login /legal/terms /legal/privacy /legal/refund /help; do
   status "$p" 200
 done
 

@@ -9,6 +9,7 @@ import { loadDeal, isBrandOwner } from '@/lib/deal-guards';
 import { WORKFLOW, canCancel, cancellationBlockedReason } from '@/lib/deal-workflow';
 import { sendDealEmailToBoth } from '@/lib/deal-emails';
 import { broadcastDealUpdate } from '@/lib/deal-realtime';
+import { recordDealEvent } from '@/lib/deal-events';
 
 const MAX_REASON = 1000;
 
@@ -65,6 +66,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (result.code === 404) return res.status(404).json({ error: 'Not found' });
     if (result.code === 409) return res.status(409).json({ error: result.message });
+
+    await recordDealEvent({ dealId: deal.id, actorId: userId, type: 'DEAL_CANCELLED', detail: { reason } });
 
     if (deal.brand_id) {
       await sendDealEmailToBoth({

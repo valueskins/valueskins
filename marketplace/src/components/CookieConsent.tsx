@@ -72,6 +72,7 @@ export default function CookieConsent() {
         {!showPreferences ? (
           // Initial banner
           <div
+            className="vs-cookie-row"
             style={{
               display: 'grid',
               gridTemplateColumns: '1fr auto',

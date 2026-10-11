@@ -3,8 +3,8 @@
 // show the checklist, so they cannot disagree about what "complete" means.
 //
 // Everything on the Settings page is required for the role that sees it, with
-// two exceptions: a brand's website is optional, and a brand's UPI ID is not
-// required because nothing pays a brand.
+// one exception: a brand's website is optional. Both roles need a UPI ID,
+// because a deal is paid by UPI from one to the other.
 
 export type SetupItem = 'profile' | 'email' | 'email_confirm' | 'upi' | 'about';
 
@@ -34,16 +34,15 @@ export const SETUP_LABELS: Record<'creator' | 'brand', Record<SetupItem, string>
     profile: 'Fill in your brand profile',
     email: 'Add your email address',
     email_confirm: 'Confirm your email address',
-    upi: 'Add your UPI ID',
+    upi: 'Add your UPI ID and the name on the account',
     about: 'Write about your brand',
   },
 };
 
 /** The items this role has to complete, in the order they appear in Settings. */
 export function requiredSetup(role: string | null): SetupItem[] {
-  return role === 'brand'
-    ? ['profile', 'email', 'email_confirm', 'about']
-    : ['profile', 'email', 'email_confirm', 'upi', 'about'];
+  void role;
+  return ['profile', 'email', 'email_confirm', 'upi', 'about'];
 }
 
 export function missingSetup(u: SetupRow | null | undefined): SetupItem[] {

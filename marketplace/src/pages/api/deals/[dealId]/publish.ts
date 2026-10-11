@@ -12,6 +12,7 @@ import { WORKFLOW, canTransition } from '@/lib/deal-workflow';
 import { sendDealEmail } from '@/lib/deal-emails';
 import { broadcastNewDeal } from '@/lib/deal-realtime';
 import { checkDealCreationQuota } from '@/lib/deal-quotas';
+import { recordDealEvent } from '@/lib/deal-events';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
@@ -83,6 +84,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!updated) {
       return res.status(409).json({ error: 'Deal state changed, please reload' });
     }
+
+    await recordDealEvent({ dealId: deal.id, actorId: userId, type: 'DEAL_POSTED' });
 
     await broadcastNewDeal({
       id: deal.id,

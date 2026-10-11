@@ -15,6 +15,7 @@ import { sendDealEmailToBoth } from '@/lib/deal-emails';
 import { broadcastDealUpdate } from '@/lib/deal-realtime';
 import { generateAndRecordAdp } from '@/lib/adp-generator';
 import { WORKFLOW } from '@/lib/deal-workflow';
+import { recordDealEvent } from '@/lib/deal-events';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'PATCH') return res.status(405).json({ error: 'Method not allowed' });
@@ -42,6 +43,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         creatorId: userId,
         reason: String((req.body || {}).reason || ''),
       });
+      await recordDealEvent({
+        dealId: deal.id,
+        actorId: userId,
+        type: 'PAYMENT_DISPUTED',
+        detail: { stage, reason: String((req.body || {}).reason || '').slice(0, 1000) },
+      });
       broadcastDealUpdate({
         dealId: deal.id,
         brandId: deal.brand_id,
@@ -53,6 +60,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const result = await confirmDirectPayment({ paymentId, creatorId: userId });
+
+    // Recorded before the report is generated below, so the report includes it.
+    if (!result.alreadyConfirmed) {
+      await recordDealEvent({
+        dealId: deal.id,
+        actorId: userId,
+        type: 'PAYMENT_CONFIRMED',
+        detail: { stage: result.stage, amount: result.amount },
+      });
+      if (result.newStatus === WORKFLOW.COMPLETED) {
+        await recordDealEvent({ dealId: deal.id, type: 'DEAL_COMPLETED' });
+      }
+    }
 
     // Pushed before the slower work below, so the brand sees it immediately.
     broadcastDealUpdate({

@@ -238,11 +238,12 @@ describeDb('deal workflow end to end', () => {
       'Deal Identifiers',      // 1
       'Deal Terms',            // 2
       'Financial Breakdown',   // 3
-      'ValueSkins Commission', // 4
-      'Creator Advance',       // 5
-      'Creator Final',         // 6
+      'ValueSkins Fee',        // 4
+      'Advance to the Creator', // 5
+      'Final to the Creator',  // 6
       'Delivery Proof',        // 7
-      'Razorpay Fees',         // 8
+      'Complete Record of the Deal', // 8
+      'Razorpay Charge on the Fee',  // 10
       'ig_brand_e2e',
       'ig_creator_e2e',
       'E2E Summer Collection',

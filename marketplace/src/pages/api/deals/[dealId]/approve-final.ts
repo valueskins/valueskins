@@ -7,6 +7,7 @@ import { loadDeal, isBrandOwner, dealBudget } from '@/lib/deal-guards';
 import { WORKFLOW, canTransition, dealFinancials } from '@/lib/deal-workflow';
 import { sendDealEmail } from '@/lib/deal-emails';
 import { broadcastDealUpdate } from '@/lib/deal-realtime';
+import { recordDealEvent } from '@/lib/deal-events';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
@@ -38,6 +39,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       [deal.id, WORKFLOW.APPROVED_FOR_FINAL_PAYMENT, deal.workflow_status]
     );
     if (!updated) return res.status(409).json({ error: 'Deal state changed, please reload' });
+
+    await recordDealEvent({ dealId: deal.id, actorId: userId, type: 'CONTENT_APPROVED' });
 
     if (deal.creator_id) {
       await sendDealEmail({

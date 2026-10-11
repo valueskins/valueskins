@@ -41,6 +41,11 @@ jest.mock('@/lib/deal-realtime', () => ({
   broadcastNewDeal: jest.fn(async () => undefined),
   broadcastDealUpdate: jest.fn(() => undefined),
 }));
+// Made-up Drive links are used here; the check itself is tested on its own.
+jest.mock('@/lib/drive-link', () => ({
+  ...jest.requireActual('@/lib/drive-link'),
+  checkDriveLink: jest.fn(async () => 'public'),
+}));
 // Instagram is the one outside party at sign-in. What it "says" is set per test.
 const identity = { username: '', accountType: '' };
 jest.mock('@/lib/oauth', () => {
@@ -175,7 +180,7 @@ describeDb('role rules (real database)', () => {
     await createDeal(mockReq({ method: 'POST', body: dealBody(), ...asUser(FRESH_BRAND) }), res as any);
     expect(res.statusCode).toBe(403);
     expect(res.body.reason).toBe('setup_incomplete');
-    expect(res.body.missing).toEqual(['profile', 'about']);
+    expect(res.body.missing).toEqual(['profile', 'upi', 'about']);
     const made = await queryOne('SELECT COUNT(*)::int AS n FROM deals WHERE brand_id = $1', [FRESH_BRAND]);
     expect(made.n).toBe(0);
   });
@@ -254,11 +259,14 @@ describeDb('role rules (real database)', () => {
     await setupStatus(mockReq({ method: 'GET', ...asUser(CREATOR) }), done as any);
     expect(done.body.complete).toBe(true);
 
-    // A brand is never asked for a UPI ID.
+    // A brand is asked for a UPI ID as well.
     const brand = mockRes();
     await setupStatus(mockReq({ method: 'GET', ...asUser(BRAND) }), brand as any);
     expect(brand.body.complete).toBe(true);
-    expect(brand.body.items.map((i: any) => i.key)).not.toContain('upi');
+    expect(brand.body.items.map((i: any) => i.key)).toContain('upi');
+    const freshBrand = mockRes();
+    await setupStatus(mockReq({ method: 'GET', ...asUser(FRESH_BRAND) }), freshBrand as any);
+    expect(freshBrand.body.items.filter((i: any) => !i.done).map((i: any) => i.key)).toContain('upi');
   });
 
   it('a creator can apply', async () => {
@@ -505,6 +513,92 @@ describeDb('role rules (real database)', () => {
       expect((await get(OTHER_CREATOR, doneId)).statusCode).toBe(403);
       // A cancelled deal has no report.
       expect((await get(BRAND, cancelledId)).statusCode).toBe(409);
+    });
+  });
+
+  // -- the report holds the whole story ------------------------------------------
+
+  describe('the deal report records everything', () => {
+    /* eslint-disable @typescript-eslint/no-var-requires */
+    const suggestChanges = require('@/pages/api/deals/[dealId]/suggest-changes').default;
+    const uploadContent = require('@/pages/api/deals/[dealId]/upload-content').default;
+    const approveFinal = require('@/pages/api/deals/[dealId]/approve-final').default;
+    const { collectAdpData, renderAdpPdf } = require('@/lib/adp-generator');
+    const { describeDealEvent } = require('@/lib/deal-events');
+    /* eslint-enable @typescript-eslint/no-var-requires */
+    let id = '';
+    const FIRST = 'Round one: the logo is cut off at 0:04, please reframe.';
+    const SECOND = 'Round two: add the price at the end.';
+    const post = async (handler: any, who: number, body: any = {}) => {
+      const res = mockRes();
+      await handler(mockReq({ method: 'POST', query: { dealId: id }, body, ...asUser(who) }), res as any);
+      return res;
+    };
+
+    beforeAll(async () => {
+      const row = await queryOne(
+        `INSERT INTO deals (brand_id, creator_id, title, description, amount, workflow_status,
+                            content_link, content_uploaded_at)
+         VALUES ($1, $2, 'rr reviewed deal', 'x', 15000, 'CONTENT_UPLOADED',
+                 'https://drive.google.com/file/d/v1/view', NOW()) RETURNING id`,
+        [BRAND, CREATOR]
+      );
+      id = row.id;
+    });
+
+    it('keeps every change request in full, not just the latest', async () => {
+      expect((await post(suggestChanges, BRAND, { feedback: FIRST })).statusCode).toBe(200);
+      expect(
+        (await post(uploadContent, CREATOR, { content_link: 'https://drive.google.com/file/d/v2/view' })).statusCode
+      ).toBe(200);
+      expect((await post(suggestChanges, BRAND, { feedback: SECOND })).statusCode).toBe(200);
+      expect(
+        (await post(uploadContent, CREATOR, { content_link: 'https://drive.google.com/file/d/v3/view' })).statusCode
+      ).toBe(200);
+      expect((await post(approveFinal, BRAND)).statusCode).toBe(200);
+
+      const snap = await collectAdpData(id);
+      const types = snap.events.map((e: any) => e.event_type);
+      expect(types).toEqual([
+        'CHANGES_REQUESTED', 'CONTENT_SUBMITTED', 'CHANGES_REQUESTED', 'CONTENT_SUBMITTED', 'CONTENT_APPROVED',
+      ]);
+      const asked = snap.events.filter((e: any) => e.event_type === 'CHANGES_REQUESTED');
+      expect(asked.map((e: any) => e.detail.feedback)).toEqual([FIRST, SECOND]);
+      expect(asked.map((e: any) => e.detail.round)).toEqual([1, 2]);
+      // Each one says who did it and when.
+      for (const e of snap.events) {
+        expect(e.actor_id).not.toBeNull();
+        expect(new Date(e.created_at).getTime()).not.toBeNaN();
+      }
+      const sent = snap.events.filter((e: any) => e.event_type === 'CONTENT_SUBMITTED');
+      expect(sent.map((e: any) => e.detail.link)).toEqual([
+        'https://drive.google.com/file/d/v2/view',
+        'https://drive.google.com/file/d/v3/view',
+      ]);
+    });
+
+    it('names both parties and renders as a PDF', async () => {
+      const snap = await collectAdpData(id);
+      expect(snap.names[String(BRAND)]).toBe('rr_brand');
+      expect(snap.names[String(CREATOR)]).toBe('rr_creator');
+      const who = (uid: number | null) => (Number(uid) === BRAND ? 'Brand @rr_brand' : 'Creator @rr_creator');
+      const first = describeDealEvent(snap.events[0], who);
+      expect(first.line).toContain('Brand @rr_brand asked for changes');
+      expect(first.quote).toBe(FIRST);
+
+      const pdf: Buffer = await renderAdpPdf(snap);
+      expect(pdf.subarray(0, 4).toString()).toBe('%PDF');
+      expect(pdf.length).toBeGreaterThan(2000);
+    });
+
+    it('records applying and being confirmed', async () => {
+      const events = await query(
+        `SELECT event_type, actor_id FROM deal_events WHERE deal_id = $1 ORDER BY created_at, id`,
+        [dealId]
+      );
+      const seen = events.rows.map((r: any) => `${r.event_type}:${r.actor_id}`);
+      expect(seen).toContain(`DEAL_POSTED:${BRAND}`);
+      expect(seen).toContain(`APPLIED:${CREATOR}`);
     });
   });
 
