@@ -259,6 +259,13 @@ export default function HowItWorksPage() {
               Email{' '}
               <a href="mailto:founder@valueskins.com" style={{ color: C.text }}>founder@valueskins.com</a>{' '}
               with the deal and what happened. A person reads it and replies to both sides.
+              Or text us on WhatsApp at{' '}
+              <a
+                href="https://wa.me/918805695324" target="_blank" rel="noopener noreferrer"
+                style={{ color: C.text }}
+              >
+                88056 95324
+              </a>.
             </div>
           </div>
 
