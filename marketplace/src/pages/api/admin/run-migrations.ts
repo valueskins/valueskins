@@ -155,6 +155,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     results.push({ name: '013_deal_events.sql', success: false, error: err.message });
   }
 
+  // Request counters shared by every server instance (014).
+  try {
+    const rlPath = path.join(process.cwd(), 'src', 'lib', 'migrations', '014_rate_limits.sql');
+    const ran = await runSqlStatements(fs.readFileSync(rlPath, 'utf-8'));
+    results.push({ name: `014_rate_limits.sql (${ran} statements)`, success: true });
+  } catch (err: any) {
+    allPassed = false;
+    results.push({ name: '014_rate_limits.sql', success: false, error: err.message });
+  }
+
   // Run escrow-v2 migration SQL
   try {
     const sqlPath = path.join(process.cwd(), 'src', 'lib', 'migrations-escrow-v2.sql');
