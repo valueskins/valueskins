@@ -1,3 +1,5 @@
+import { queryOne, query } from './db-pool';
+
 interface RateLimitEntry {
   count: number;
   resetTime: number;
@@ -40,3 +42,34 @@ setInterval(() => {
     }
   }
 }, 60 * 60 * 1000);
+
+/**
+ * A limit counted in the database, so it is one limit for the whole site and
+ * not one per server instance. Returns false when the caller is over it.
+ *
+ * It allows the request when the count cannot be read: a limiter that is down
+ * must not take the site down with it.
+ */
+export async function sharedRateLimit(key: string, maxRequests: number, windowMs: number): Promise<boolean> {
+  try {
+    const row = await queryOne(
+      `INSERT INTO rate_limits (key, count, reset_at)
+       VALUES ($1, 1, NOW() + ($2::int * INTERVAL '1 millisecond'))
+       ON CONFLICT (key) DO UPDATE
+         SET count = CASE WHEN rate_limits.reset_at <= NOW() THEN 1 ELSE rate_limits.count + 1 END,
+             reset_at = CASE WHEN rate_limits.reset_at <= NOW() THEN EXCLUDED.reset_at ELSE rate_limits.reset_at END
+       RETURNING count`,
+      [key.slice(0, 200), windowMs]
+    );
+    return Number(row?.count ?? 0) <= maxRequests;
+  } catch (err) {
+    console.error('[rate-limit] shared count unavailable', (err as Error).message);
+    return true;
+  }
+}
+
+/** Removes windows that ended more than a day ago. Run by the daily job. */
+export async function clearExpiredRateLimits(): Promise<{ removed: number }> {
+  const r = await query(`DELETE FROM rate_limits WHERE reset_at < NOW() - INTERVAL '1 day'`);
+  return { removed: r.rowCount ?? 0 };
+}

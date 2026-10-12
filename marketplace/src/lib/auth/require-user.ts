@@ -1,5 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSessionUserId } from '@/lib/session';
+import { sharedRateLimit } from '@/lib/rate-limit';
+
+// Changes one account may make in a minute, across the whole site. Far above
+// what a person does by hand, and low enough to stop a script.
+const WRITES_PER_MINUTE = 60;
 
 /**
  * The single source of caller identity for API routes.
@@ -35,6 +40,15 @@ export async function requireUser(req: NextApiRequest, res: NextApiResponse): Pr
   if (!userId) {
     res.status(401).json({ error: 'Unauthorized' });
     return null;
+  }
+  // Reading is not counted; anything that changes data is.
+  const method = (req.method || 'GET').toUpperCase();
+  if (method !== 'GET' && method !== 'HEAD' && method !== 'OPTIONS' && process.env.NODE_ENV !== 'test') {
+    if (!(await sharedRateLimit(`writes:${userId}`, WRITES_PER_MINUTE, 60_000))) {
+      res.setHeader('Retry-After', '60');
+      res.status(429).json({ error: 'Too many requests. Please wait a minute and try again.' });
+      return null;
+    }
   }
   return userId;
 }

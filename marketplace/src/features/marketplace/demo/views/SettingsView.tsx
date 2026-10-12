@@ -252,136 +252,24 @@ export default function SettingsView({
         {/* ── CREATOR-ONLY SETTINGS ── */}
         {role !== 'brand' && (<>
 
-          {/* Availability */}
-          <div style={{ marginBottom: '56px' }}>
-            <div style={{ fontSize: '14px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '16px' }}>
-              Availability
-            </div>
-            <div style={{ fontSize: '13px', color: C.textSecondary, marginBottom: '16px', lineHeight: 1.7 }}>
-              You are assumed available for deals at all times. Set dates below only if you are taking a break.
-            </div>
-            <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: '10px', padding: '28px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: C.textMuted, textTransform: 'uppercase', marginBottom: '16px' }}>Not available from</div>
-              <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '12px', color: C.textMuted, marginBottom: '4px' }}>From</div>
-                  <input type="date" value={notAvailableFrom} onChange={e => setNotAvailableFrom(e.target.value)}
-                    style={{ width: '100%', background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px', color: C.text, padding: '14px 16px', fontSize: '14px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' as const }} />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '12px', color: C.textMuted, marginBottom: '4px' }}>To</div>
-                  <input type="date" value={notAvailableTo} onChange={e => setNotAvailableTo(e.target.value)}
-                    style={{ width: '100%', background: C.bg, border: `1px solid ${C.border}`, borderRadius: '8px', color: C.text, padding: '14px 16px', fontSize: '14px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' as const }} />
-                </div>
-              </div>
-              {(notAvailableFrom || notAvailableTo) && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ fontSize: '13px', color: 'var(--c-warning)' }}>
-                    You will appear as unavailable during this period.
-                  </div>
-                  <button onClick={() => { setNotAvailableFrom(''); setNotAvailableTo(''); }}
-                    style={{ background: 'none', border: `1px solid ${C.border}`, borderRadius: '6px', padding: '4px 10px', fontSize: '12px', color: C.textSecondary, cursor: 'pointer' }}>
-                    Clear
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* ── INBOX & SAFETY ── */}
-          <div style={{ marginBottom: '16px' }}>
-            <button onClick={() => setCreatorShowSafetySettings(p => !p)} style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: C.card, border: `1px solid ${C.border}`, borderRadius: creatorShowSafetySettings ? '10px 10px 0 0' : '10px', padding: '12px 14px', cursor: 'pointer', color: C.text }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={C.textMuted} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <span style={{ fontSize: '14px', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase', color: C.textMuted }}>Inbox & Safety</span>
-              </div>
-              <span style={{ fontSize: '16px', color: C.textMuted }}>{creatorShowSafetySettings ? '\u25B2' : '\u25BC'}</span>
-            </button>
-            {creatorShowSafetySettings && (
-              <div style={{ background: C.card, border: `1px solid ${C.border}`, borderTop: 'none', borderRadius: '0 0 10px 10px', padding: '28px' }}>
-                {/* ── [v1 COMMENTED OUT] Brand-niche filters — v1 is niche-agnostic (lifestyle & fashion only). See Things-Commented-Out.md. */}
-                  {false && <div style={{ marginBottom: '16px' }}>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, marginBottom: '6px', textTransform: 'uppercase' }}>Only accept proposals from these brand niches</div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
-                    {['Fashion & Beauty Organisation', 'F&B Organisation', 'Travel Organisation', 'Music Organisation', 'Tech Organisation', 'Education Organisation', 'Entertainment Organisation'].map(n => {
-                      const active = creatorAllowedNiches.includes(n);
-                      return (
-                        <button key={n} onClick={() => setCreatorAllowedNiches(prev => active ? prev.filter(x => x !== n) : [...prev, n])}
-                          style={{ padding: '3px 9px', borderRadius: '12px', fontSize: '13px', cursor: 'pointer', fontWeight: 600,
-                            background: active ? `${withAlpha(C.primary, 0x20)}` : C.bg,
-                            color: active ? C.primary : C.textSecondary,
-                            border: `1px solid ${active ? C.primary : C.border}`,
-                          }}>{n}</button>
-                      );
-                    })}
-                  </div>
-                  {creatorAllowedNiches.length === 0 && (
-                    <div style={{ fontSize: '12px', color: C.textMuted, marginTop: '4px' }}>None selected = all niches allowed</div>
-                  )}
-                </div>}
-                <div style={{ marginBottom: '4px' }}>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: C.textMuted, marginBottom: '6px', textTransform: 'uppercase' }}>Blocked Brands</div>
-                  {creatorBlockedBrands.length === 0 ? (
-                    <div style={{ fontSize: '13px', color: C.textMuted, padding: '8px', background: C.bg, borderRadius: '7px', textAlign: 'center' }}>No brands blocked</div>
-                  ) : (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
-                      {creatorBlockedBrands.map(b => (
-                        <span key={b} style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '3px 8px', borderRadius: '12px', fontSize: '13px', background: 'rgba(176, 65, 62,0.1)', color: C.textMuted, border: '1px solid var(--c-error)' }}>
-                          {b}
-                          <button onClick={() => setCreatorBlockedBrands(prev => prev.filter(x => x !== b))} style={{ background: 'none', border: 'none', color: C.textMuted, cursor: 'pointer', fontSize: '14px', padding: 0, lineHeight: 1 }}>x</button>
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  <button onClick={() => { const name = prompt('Block brand name:'); if (name?.trim()) setCreatorBlockedBrands(prev => [...prev, name.trim()]); }}
-                    style={{ marginTop: '6px', padding: '5px 10px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, background: 'transparent', border: `1px solid ${C.border}`, color: C.textSecondary, cursor: 'pointer' }}>
-                    + Block a brand
-                  </button>
-                </div>
-                <div style={{ marginTop: '12px', padding: '13px 26px', background: 'var(--c-surface-container)', borderRadius: '7px', fontSize: '12px', color: C.textSecondary, lineHeight: 1.6 }}>
-                  Platform-level limits set by Meta also apply and cannot be turned off by you. These are your <em>personal</em> controls on top.
-                </div>
-              </div>
-            )}
-          </div>
-
           {/* Text, saved to the account. Was a photo kept in the browser. */}
           <PitchText role="creator" />
 
         </>)}
         {/* ── END CREATOR-ONLY SETTINGS ── */}
 
-        {/* Privacy & Data Controls */}
+        {/* Your data: the page that actually exports it and takes deletion requests. */}
         <div style={{ marginBottom: '16px' }}>
           <div style={{ fontSize: '14px', fontWeight: 700, color: C.textMuted, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '16px' }}>
-            Privacy & Data Controls
+            Your data
           </div>
-          <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: '12px', overflow: 'hidden' }}>
-            {[
-              { label: 'Download My Data', sub: 'Export all your data in JSON format', action: () => alert('Data export initiated, you will receive an email with download link within 24 hours'), color: C.primary, icon: 'DL' },
-              { label: 'Request Data Deletion', sub: 'Permanently erase your account (GDPR Art. 17), 30 day process', action: () => alert('Data deletion request submitted.\n\nYour account will be anonymized within 30 days as required by GDPR.\nYou can cancel this request within 24 hours.'), color: C.textMuted, icon: 'DEL' },
-            ].map(({ label, sub, action, color, icon }, i) => (
-              <div
-                key={label}
-                onClick={action}
-                style={{
-                  padding: '14px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px',
-                  borderBottom: i === 0 ? `1px solid ${C.border}` : 'none',
-                  transition: 'background 0.15s',
-                }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--c-surface-container)'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
-              >
-                <span style={{ fontSize: '18px' }}>{icon}</span>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '15px', fontWeight: 600, color }}>{label}</div>
-                  <div style={{ fontSize: '13px', color: C.textSecondary, marginTop: '1px' }}>{sub}</div>
-                </div>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={C.textMuted} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </div>
-            ))}
+          <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: '12px', padding: '28px' }}>
+            <div style={{ fontSize: '15px', color: C.textSecondary, lineHeight: 1.7, marginBottom: '16px' }}>
+              Download a copy of your data, or ask for your account to be deleted.
+            </div>
+            <a href="/account/data" style={{ color: C.text, fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }}>
+              Open your data page
+            </a>
           </div>
         </div>
 
