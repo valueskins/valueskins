@@ -33,8 +33,9 @@ export function getRateLimitStatus(key: string): { remaining: number; resetTime:
   };
 }
 
-// Cleanup old entries every hour
-setInterval(() => {
+// Cleanup old entries every hour. unref: this timer must never be the thing
+// that keeps a process (or a test run) alive.
+const sweep = setInterval(() => {
   const now = Date.now();
   for (const [key, entry] of store.entries()) {
     if (now > entry.resetTime) {
@@ -42,6 +43,7 @@ setInterval(() => {
     }
   }
 }, 60 * 60 * 1000);
+if (typeof sweep === 'object' && sweep && 'unref' in sweep) (sweep as { unref: () => void }).unref();
 
 /**
  * A limit counted in the database, so it is one limit for the whole site and
