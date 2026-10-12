@@ -13,6 +13,7 @@
 // advance can sit up to 24 hours. If that becomes the bottleneck, drive
 // /api/cron/process-payouts from an external scheduler on a tighter interval,
 // or move the schedule here to a Vercel paid plan.
+import { clearExpiredRateLimits } from '@/lib/rate-limit';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import {
   closeExpiredApplications,
@@ -49,6 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     ['applications_closed', closeExpiredApplications],
     ['overdue_notified', notifyOverdueContent],
     ['payouts', runPayoutBatch],
+    ['rate_limits_cleared', clearExpiredRateLimits],
     ['instagram_synced', async () => {
       const stale = await findStaleInstagramProfiles(200);
       for (const p of stale) await markInstagramSynced(p.id);
