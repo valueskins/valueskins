@@ -23,10 +23,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     client_id: INSTAGRAM_CLIENT_ID,
     redirect_uri: INSTAGRAM_REDIRECT_URI,
     response_type: 'code',
-    // instagram_business_basic = identity + read the creator's own profile and media (Virtual Resume data).
-    // NOTE: instagram_business_manage_insights (analytics) requires Advanced Access approval.
-    // Once app is approved by Meta, add it back: scope: 'instagram_business_basic,instagram_business_manage_insights'
-    scope: 'instagram_business_basic',
+    // instagram_business_basic: identity, account type, followers, bio, picture.
+    // instagram_business_manage_insights: reach and accounts engaged, which
+    // become the engagement rate a brand sees on a creator's resume.
+    scope: 'instagram_business_basic,instagram_business_manage_insights',
     state,
   });
 

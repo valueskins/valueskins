@@ -57,6 +57,9 @@ jest.mock('@/lib/oauth', () => {
       user_id: code.replace('code-', ''),
     })),
     getInstagramIdentity: jest.fn(async () => ({ ...identity })),
+    getInstagramStats: jest.fn(async () => ({
+      followers: null, bio: '', profilePicUrl: '', engagementRate: null,
+    })),
   };
 });
 

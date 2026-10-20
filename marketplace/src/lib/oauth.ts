@@ -361,6 +361,86 @@ export async function getInstagramIdentity(
   return { username, accountType: '' };
 }
 
+export interface InstagramStats {
+  followers: number | null;
+  bio: string;
+  profilePicUrl: string;
+  // Percentage of accounts reached in the last 28 days that interacted with
+  // the account's content. null when Instagram would not give insights.
+  engagementRate: number | null;
+}
+
+// The numbers a brand sees on a creator's resume, read at sign-in.
+//
+// Profile fields need instagram_business_basic; reach and accounts_engaged
+// need instagram_business_manage_insights. Each half is asked for on its own,
+// so a token without insights still refreshes the profile. Both are bounded
+// and never throw: sign-in must not depend on them.
+export async function getInstagramStats(
+  accessToken: string,
+  instagramUserId: string
+): Promise<InstagramStats> {
+  const ATTEMPT_MS = 3500;
+
+  const profile = (async () => {
+    try {
+      const params = new URLSearchParams({
+        fields: 'followers_count,biography,profile_picture_url',
+        access_token: accessToken,
+      });
+      const response = await fetch(`https://graph.instagram.com/me?${params.toString()}`, {
+        signal: AbortSignal.timeout(ATTEMPT_MS),
+      });
+      return response.ok ? ((await response.json()) as any) : null;
+    } catch {
+      return null;
+    }
+  })();
+
+  const engagement = (async (): Promise<number | null> => {
+    try {
+      // total_value over a range is how Meta reports these two metrics; the
+      // range may be at most 30 days.
+      const until = Math.floor(Date.now() / 1000);
+      const params = new URLSearchParams({
+        metric: 'reach,accounts_engaged',
+        period: 'day',
+        metric_type: 'total_value',
+        since: String(until - 28 * 24 * 60 * 60),
+        until: String(until),
+        access_token: accessToken,
+      });
+      const response = await fetch(
+        `https://graph.instagram.com/${encodeURIComponent(instagramUserId)}/insights?${params.toString()}`,
+        { signal: AbortSignal.timeout(ATTEMPT_MS) }
+      );
+      if (!response.ok) return null;
+      const body: any = await response.json();
+      const values: Record<string, number> = {};
+      for (const item of Array.isArray(body?.data) ? body.data : []) {
+        const value = Number(item?.total_value?.value ?? item?.values?.[0]?.value);
+        if (typeof item?.name === 'string' && Number.isFinite(value)) values[item.name] = value;
+      }
+      if (!(values.reach > 0) || !(values.accounts_engaged >= 0)) return null;
+      return Math.round((values.accounts_engaged / values.reach) * 1000) / 10;
+    } catch {
+      return null;
+    }
+  })();
+
+  const [p, engagementRate] = await Promise.all([profile, engagement]);
+  const followers = Number(p?.followers_count);
+  return {
+    followers: p && Number.isInteger(followers) && followers >= 0 ? followers : null,
+    bio: typeof p?.biography === 'string' ? p.biography.slice(0, 500) : '',
+    profilePicUrl:
+      typeof p?.profile_picture_url === 'string' && p.profile_picture_url.startsWith('https://')
+        ? p.profile_picture_url
+        : '',
+    engagementRate,
+  };
+}
+
 /**
  * Instagram account type -> ValueSkins role. Instagram reports "BUSINESS" for a
  * Business account and "MEDIA_CREATOR" for a Creator account. Anything else is
