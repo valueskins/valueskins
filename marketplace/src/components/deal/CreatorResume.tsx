@@ -143,9 +143,9 @@ export default function CreatorResume({ username }: { username: string }) {
       <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 20 }}>
         {[
           ['Followers', ig.followers.toLocaleString('en-IN')],
-          // Zero here means Meta has not approved the analytics scope rather
-          // than that the creator has no engagement, so it is not shown as 0%.
-          ['Engagement', ig.engagement_rate ? `${ig.engagement_rate}%` : '-'],
+          // Zero means Instagram has not given us insights for this creator,
+          // not that they have no engagement, so it is not shown as 0%.
+          ['Engagement', Number(ig.engagement_rate) ? `${Number(ig.engagement_rate)}%` : '-'],
           ['Completed', String(stats.completed_deals)],
           ['Earned', stats.total_value ? `₹${Math.round(stats.total_value).toLocaleString('en-IN')}` : '-'],
         ].map(([k, v]) => (
@@ -155,6 +155,14 @@ export default function CreatorResume({ username }: { username: string }) {
           </div>
         ))}
       </div>
+
+      {Number(ig.engagement_rate) > 0 && (
+        <div style={{ fontSize: 12, color: C.outline, lineHeight: 1.6, marginTop: -12, marginBottom: 20 }}>
+          Engagement is the share of accounts this creator reached in the last 28 days that liked,
+          commented on, saved or shared their content. It comes from Instagram Insights and is
+          updated each time the creator signs in.
+        </div>
+      )}
 
       <div style={{ fontSize: 11, color: C.outline, textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: 4 }}>
         Recent completed deals

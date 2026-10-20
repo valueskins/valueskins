@@ -1,8 +1,13 @@
-// v1 Launch: Instagram OAuth login without API calls
-// Account type auto-detected from Instagram token response
+// Instagram Login callback: signs the user in, sets the role from the Instagram
+// account type, and refreshes the resume numbers (followers, engagement).
 import type { NextApiRequest, NextApiResponse } from 'next';
 import crypto from 'crypto';
-import { exchangeInstagramCode, getInstagramIdentity, roleFromInstagramAccountType } from '@/lib/oauth';
+import {
+  exchangeInstagramCode,
+  getInstagramIdentity,
+  getInstagramStats,
+  roleFromInstagramAccountType,
+} from '@/lib/oauth';
 import { placeholderUsername } from '@/lib/handle';
 import { query } from '@/lib/db';
 import { SESSION_IDLE_TIMEOUT_MS, SESSION_ABSOLUTE_TIMEOUT_MS } from '@/config/constants';
@@ -34,12 +39,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // v1 LAUNCH: Instagram OAuth login only (no API calls).
-    // Meta rejected our app for instagram_business_manage_insights (analytics).
-    // For v1, we just verify OAuth succeeded and get the Instagram ID.
-    // User enters username/followers/bio manually in onboarding.
-    // Once Meta approves v2, replace this with getInstagramUserInfo() to auto-fetch.
-
     // 1. Exchange auth code for access token
     // The response includes user_id + account_type (no extra API call needed)
     const short = await exchangeInstagramCode(code);
@@ -158,6 +157,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       );
       if (!created.rows[0]) throw new Error('Failed to create user');
       userId = created.rows[0].id;
+    }
+
+    // 2. Refresh the numbers on the resume from Instagram. Each value is kept
+    // as it was when Instagram does not return it, so a refused insights
+    // permission never wipes an earlier reading. Sign-in goes on regardless.
+    try {
+      const stats = await getInstagramStats(short.access_token, instagramUserId);
+      await query(
+        `UPDATE users
+            SET followers_count = COALESCE($2, followers_count),
+                instagram_bio = COALESCE(NULLIF($3, ''), instagram_bio),
+                instagram_profile_pic_url = COALESCE(NULLIF($4, ''), instagram_profile_pic_url),
+                engagement_rate = COALESCE($5, engagement_rate),
+                instagram_last_synced = NOW()
+          WHERE id = $1`,
+        [userId, stats.followers, stats.bio, stats.profilePicUrl, stats.engagementRate]
+      );
+    } catch (statsError) {
+      console.warn('[oauth] instagram stats refresh failed', statsError);
     }
 
     // 3. Create session
