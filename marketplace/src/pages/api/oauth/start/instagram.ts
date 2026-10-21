@@ -24,9 +24,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     redirect_uri: INSTAGRAM_REDIRECT_URI,
     response_type: 'code',
     // instagram_business_basic: identity, account type, followers, bio, picture.
-    // instagram_business_manage_insights: reach and accounts engaged, which
-    // become the engagement rate a brand sees on a creator's resume.
-    scope: 'instagram_business_basic,instagram_business_manage_insights',
+    // Asking for instagram_business_manage_insights as well made Instagram
+    // reject every sign-in with "Invalid redirect_uri" (2026-10-21), because
+    // the app's OAuth redirect URI will not save in the Meta dashboard. Add it
+    // back once that setting saves; the callback already reads insights when
+    // the token carries them.
+    scope: 'instagram_business_basic',
     state,
   });
 
